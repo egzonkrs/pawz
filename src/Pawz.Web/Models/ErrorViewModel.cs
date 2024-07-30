@@ -1,4 +1,4 @@
-namespace Web.Models;
+namespace Pawz.Web.Models;
 
 public class ErrorViewModel
 {

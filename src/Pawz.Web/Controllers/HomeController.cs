@@ -1,8 +1,9 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Web.Models;
+using Microsoft.Extensions.Logging;
+using Pawz.Web.Models;
 
-namespace Web.Controllers;
+namespace Pawz.Web.Controllers;
 
 public class HomeController : Controller
 {
