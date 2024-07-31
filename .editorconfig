@@ -1,0 +1,20 @@
+root = true
+
+[*]
+end_of_line = lf
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+max_line_length = 160
+
+[*.csproj]
+max_line_length = 130
+
+[*.cs]
+dotnet_diagnostic.IDE0161.severity = error
+dotnet_sort_system_directives_first = false
+csharp_style_namespace_declarations = file_scoped
+csharp_space_before_colon_in_inheritance_clause = true
+csharp_space_after_colon_in_inheritance_clause = true
