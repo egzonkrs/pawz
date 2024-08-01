@@ -1,27 +1,19 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System;
+using System.Collections.Generic;
 
+namespace Pawz.Domain.Entities;
 
-namespace Pawz.Domain.Entities
-{
     public class Users
     {
-        [Key]
+
         public int Id { get; set; }
-
-        [Required]
         public string Username { get; set; }
-
-        [Required]
         public string Email { get; set; }
-
-        [Required]
         public string PasswordHash { get; set; }
-
         public string Role { get; set; }
-
         public DateTime CreatedAt { get; set; }
-
+        public ICollection<Pets> Pets { get; set; }
+        public ICollection<AdoptionRequests> AdoptionRequests { get; set; }
+        public ICollection<Payments> Payments { get; set; }
 
     }
-}
