@@ -13,7 +13,7 @@ max_line_length = 160
 max_line_length = 130
 
 [*.cs]
-dotnet_diagnostic.IDE0161.severity = error
+dotnet_diagnostic.IDE0161.severity = suggestion
 dotnet_sort_system_directives_first = false
 csharp_style_namespace_declarations = file_scoped
 csharp_space_before_colon_in_inheritance_clause = true
