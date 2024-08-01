@@ -5,7 +5,6 @@ namespace Pawz.Domain.Entities;
 
     public class Pets
     {
-
         public int Id { get; set; }
         public string Name { get; set; }
         public int SpeciesId { get; set; }
@@ -24,5 +23,4 @@ namespace Pawz.Domain.Entities;
         public Breeds Breeds { get; set; }
         public ICollection<PetImages> PetsImages { get; set; }
         public ICollection<AdoptionRequests> AdoptionRequests { get; set; }
-
     }

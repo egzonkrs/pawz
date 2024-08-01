@@ -4,7 +4,6 @@ namespace Pawz.Domain.Entities;
 
     public class Payments
     {
-
         public int Id { get; set; }
         public int AdoptionId { get; set; }
         public Adoptions Adoptions { get; set; }
@@ -15,5 +14,4 @@ namespace Pawz.Domain.Entities;
         public string PaymentStatus { get; set; }
         public DateTime PaymentDate { get; set; }
         public string StripePaymentId { get; set; }
-
     }

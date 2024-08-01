@@ -5,7 +5,6 @@ namespace Pawz.Domain.Entities;
 
     public class Users
     {
-
         public int Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
@@ -15,5 +14,4 @@ namespace Pawz.Domain.Entities;
         public ICollection<Pets> Pets { get; set; }
         public ICollection<AdoptionRequests> AdoptionRequests { get; set; }
         public ICollection<Payments> Payments { get; set; }
-
     }
