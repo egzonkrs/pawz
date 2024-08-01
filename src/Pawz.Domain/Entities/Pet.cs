@@ -1,14 +1,8 @@
+using Pawz.Domain.Enum;
 using System;
 using System.Collections.Generic;
 
 namespace Pawz.Domain.Entities;
-
-public enum PetStatus
-{
-    Pending,
-    Approved,
-    Rejected
-}
 
 public class Pet
 {
