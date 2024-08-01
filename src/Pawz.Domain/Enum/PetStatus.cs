@@ -1,4 +1,5 @@
 namespace Pawz.Domain.Enum;
+
 public enum PetStatus
 {
     Pending = 1,
