@@ -3,7 +3,14 @@ using System.Collections.Generic;
 
 namespace Pawz.Domain.Entities;
 
-public class Pets
+public enum PetStatus
+{
+    Pending,
+    Approved,
+    Rejected
+}
+
+public class Pet
 {
     /// <summary>
     /// The Id of the pet
@@ -48,7 +55,7 @@ public class Pets
     /// <summary>
     /// Status of the pet (e.g., 'Pending', 'Approved', 'Rejected')
     /// </summary>
-    public string Status { get; set; }
+    public PetStatus Status { get; set; }
 
     /// <summary>
     /// The date and time when the pet was created
@@ -63,7 +70,7 @@ public class Pets
     /// <summary>
     /// The location where the pet is located
     /// </summary>
-    public Locations Locations { get; set; }
+    public Location Locations { get; set; }
 
     /// <summary>
     /// The species of the pet
@@ -73,15 +80,15 @@ public class Pets
     /// <summary>
     /// The breed of the pet
     /// </summary>
-    public Breeds Breeds { get; set; }
+    public Breed Breeds { get; set; }
 
     /// <summary>
     /// Images of the pet
     /// </summary>
-    public ICollection<PetImages> PetsImages { get; set; }
+    public ICollection<PetImage> PetsImages { get; set; }
 
     /// <summary>
     /// Adoption requests for the pet
     /// </summary>
-    public ICollection<AdoptionRequests> AdoptionRequests { get; set; }
+    public ICollection<AdoptionRequest> AdoptionRequests { get; set; }
 }

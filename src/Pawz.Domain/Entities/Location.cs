@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Pawz.Domain.Entities;
 
-public class Locations
+public class Location
 {
     /// <summary>
     /// The Id of the location
@@ -32,5 +32,5 @@ public class Locations
     /// <summary>
     /// The pets located at this location
     /// </summary>
-    public ICollection<Pets> Pets { get; set; }
+    public ICollection<Pet> Pets { get; set; }
 }

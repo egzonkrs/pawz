@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Pawz.Domain.Entities;
 
-public class Breeds
+public class Breed
 {
     /// <summary>
     /// The Id of the breed
@@ -27,5 +27,5 @@ public class Breeds
     /// <summary>
     /// The pets of this breed
     /// </summary>
-    public ICollection<Pets> Pets { get; set; }
+    public ICollection<Pet> Pets { get; set; }
 }

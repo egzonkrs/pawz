@@ -2,7 +2,7 @@ using System;
 
 namespace Pawz.Domain.Entities;
 
-public class PetImages
+public class PetImage
 {
     /// <summary>
     /// The Id of the pet image
@@ -37,5 +37,5 @@ public class PetImages
     /// <summary>
     /// The pet associated with this image
     /// </summary>
-    public Pets Pets { get; set; }
+    public Pet Pets { get; set; }
 }

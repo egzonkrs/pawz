@@ -2,7 +2,7 @@ using System;
 
 namespace Pawz.Domain.Entities;
 
-public class AdoptionRequests
+public class AdoptionRequest
 {
     /// <summary>
     /// The Id of the adoption request
@@ -32,10 +32,10 @@ public class AdoptionRequests
     /// <summary>
     /// The pet associated with this adoption request
     /// </summary>
-    public Pets Pets { get; set; }
+    public Pet Pets { get; set; }
 
     /// <summary>
     /// The adoption related to this request, if applicable
     /// </summary>
-    public Adoptions Adoptions { get; set; }
+    public Adoption Adoption { get; set; }
 }
