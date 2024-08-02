@@ -64,7 +64,7 @@ public class Pet
     /// <summary>
     /// The location where the pet is located
     /// </summary>
-    public Location Locations { get; set; }
+    public Location Location { get; set; }
 
     /// <summary>
     /// The species of the pet
@@ -74,15 +74,15 @@ public class Pet
     /// <summary>
     /// The breed of the pet
     /// </summary>
-    public Breed Breeds { get; set; }
+    public Breed Breed { get; set; }
 
     /// <summary>
     /// Images of the pet
     /// </summary>
-    public ICollection<PetImage> PetsImages { get; set; }
+    public ICollection<PetImage> PetImages { get; set; }
 
     /// <summary>
     /// Adoption requests for the pet
     /// </summary>
-    public ICollection<AdoptionRequest> AdoptionRequests { get; set; }
+    public ICollection<AdoptionRequest> AdoptionRequests { get; set; } = new List<AdoptionRequest>();
 }

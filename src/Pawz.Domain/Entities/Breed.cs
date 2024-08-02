@@ -10,6 +10,11 @@ public class Breed
     public int Id { get; set; }
 
     /// <summary>
+    /// The Id of the species to which this breed belongs
+    /// </summary>
+    public int SpeciesId { get; set; }
+
+    /// <summary>
     /// The species to which this breed belongs
     /// </summary>
     public Species Species { get; set; }
@@ -27,5 +32,5 @@ public class Breed
     /// <summary>
     /// The pets of this breed
     /// </summary>
-    public ICollection<Pet> Pets { get; set; }
+    public ICollection<Pet> Pets { get; set; } = new List<Pet>();
 }
