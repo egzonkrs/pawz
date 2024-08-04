@@ -28,10 +28,10 @@ public class Species
     /// <summary>
     /// The breeds associated with this species
     /// </summary>
-    public ICollection<Breed> Breeds { get; set; }
+    public ICollection<Breed> Breeds { get; set; } = new List<Breed>();
 
     /// <summary>
     /// The pets belonging to this species
     /// </summary>
-    public ICollection<Pet> Pets { get; set; }
+    public ICollection<Pet> Pets { get; set; } = new List<Pet>();
 }

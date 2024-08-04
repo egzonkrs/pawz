@@ -32,5 +32,5 @@ public class Location
     /// <summary>
     /// The pets located at this location
     /// </summary>
-    public ICollection<Pet> Pets { get; set; }
+    public ICollection<Pet> Pets { get; set; } = new List<Pet>();
 }

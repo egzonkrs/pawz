@@ -1,6 +1,96 @@
-﻿@{
+@{
     ViewData["Title"] = "Privacy Policy";
 }
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pawz - Shop</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="Style.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="logo.png" alt="Pawz Logo" style="height: 40px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="home.html">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="shop.html">Shop</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="home.html#adopt">Adopt</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Sign in</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-secondary" href="#">Register</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Shop Section -->
+    <section class="shop-section py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center">Our Shop</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="shop4.jpeg" class="card-img-top" alt="Product 1">
+                        <div class="card-body">
+                            <h5 class="card-title">Friendly Dog</h5>
+                            <p class="card-text">Energetic and playful, this dog loves to interact and is great for active families. Enjoys playing and going for walks.</p>
+                            <a href="#" class="btn btn-primary">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="shop2.jpeg" class="card-img-top" alt="Product 2">
+                        <div class="card-body">
+                            <h5 class="card-title">Charming Dog</h5>
+                            <p class="card-text">Smart and friendly, this dog has a pleasant demeanor and fits well into various lifestyles, whether active or relaxed.</p>
+                            <a href="#" class="btn btn-primary">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="shop3.jpeg" class="card-img-top" alt="Product 3">
+                        <div class="card-body">
+                            <h5 class="card-title">Gentle Dog</h5>
+                            <p class="card-text">Affectionate and calm, this dog is great with children and adjusts well to family life. A loving and loyal companion.</p>
+                            <a href="#" class="btn btn-primary">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4 bg-light">
+        <div class="container text-center">
+            <p>&copy; 2024 Your Company | <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a></p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
