@@ -7,8 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Pawz.Domain\Pawz.Domain.csproj" />
-    <ProjectReference Include="..\Pawz.Infrastructure\Pawz.Infrastructure.csproj" />
+    <ProjectReference Include="..\Pawz.Domain\Pawz.Domain.csproj">
+      <TreatAsUsed>true</TreatAsUsed>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
