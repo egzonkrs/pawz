@@ -22,9 +22,19 @@ public class Pet
     public int SpeciesId { get; set; }
 
     /// <summary>
+    /// The species of the pet
+    /// </summary>
+    public Species Species { get; set; }
+
+    /// <summary>
     /// The Id of the breed of the pet
     /// </summary>
     public int BreedId { get; set; }
+
+    /// <summary>
+    /// The breed of the pet
+    /// </summary>
+    public Breed Breed { get; set; }
 
     /// <summary>
     /// The age of the pet in years
@@ -67,6 +77,7 @@ public class Pet
     public Location Locations { get; set; }
 
     /// <summary>
+<<<<<<< Updated upstream
     /// The species of the pet
     /// </summary>
     public Species Species { get; set; }
@@ -77,6 +88,8 @@ public class Pet
     public Breed Breeds { get; set; }
 
     /// <summary>
+=======
+>>>>>>> Stashed changes
     /// Images of the pet
     /// </summary>
     public ICollection<PetImage> PetsImages { get; set; }
