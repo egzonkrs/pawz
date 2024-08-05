@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Pawz.Application\Pawz.Application.csproj" />
     <ProjectReference Include="..\Pawz.Domain\Pawz.Domain.csproj" />
   </ItemGroup>
 
