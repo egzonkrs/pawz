@@ -9,29 +9,31 @@ namespace Pawz.Infrastructure.Repos
     {
         protected readonly AppDbContext _dbContext = context;
 
-        public async Task<TEntity> GetById(int id)
+        public async Task<TEntity> GetByIdAsync(int id)
         {
             return await _dbContext.Set<TEntity>().FindAsync(id);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await _dbContext.Set<TEntity>().ToListAsync();
         }
 
-        public async Task Add(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
             await _dbContext.Set<TEntity>().AddAsync(entity);
         }
 
-        public void Delete(TEntity entity)
+        public async Task DeleteAsync(TEntity entity)
         {
             _dbContext.Set<TEntity>().Remove(entity);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void Update(TEntity entity)
+        public async Task UpdateAsync(TEntity entity)
         {
             _dbContext.Set<TEntity>().Update(entity);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
