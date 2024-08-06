@@ -32,7 +32,7 @@ public class AdoptionRequest
     /// <summary>
     /// The pet associated with this adoption request
     /// </summary>
-    public Pet Pets { get; set; }
+    public Pet Pet { get; set; }
 
     /// <summary>
     /// The adoption related to this request, if applicable
