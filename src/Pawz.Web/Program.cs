@@ -8,6 +8,7 @@ using Pawz.Domain.Interfaces;
 using Pawz.Application.Interfaces;
 using Pawz.Infrastructure;
 using Pawz.Infrastructure.Services;
+using Pawz.Infrastructure.Repos;
 
 
 var builder = WebApplication.CreateBuilder(args);

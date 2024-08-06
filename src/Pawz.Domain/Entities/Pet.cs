@@ -77,19 +77,6 @@ public class Pet
     public Location Locations { get; set; }
 
     /// <summary>
-<<<<<<< Updated upstream
-    /// The species of the pet
-    /// </summary>
-    public Species Species { get; set; }
-
-    /// <summary>
-    /// The breed of the pet
-    /// </summary>
-    public Breed Breeds { get; set; }
-
-    /// <summary>
-=======
->>>>>>> Stashed changes
     /// Images of the pet
     /// </summary>
     public ICollection<PetImage> PetsImages { get; set; }
