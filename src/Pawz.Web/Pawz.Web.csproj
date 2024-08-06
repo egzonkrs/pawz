@@ -8,9 +8,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Pawz.Application\Pawz.Application.csproj" />
+    <ProjectReference Include="..\Pawz.Infrastructure\Pawz.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

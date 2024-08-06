@@ -1,11 +1,15 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Pawz.Domain.Entities;
 using System.Reflection;
 
-namespace Pawz.Infrastructure.Data;
+namespace Pawz.Infrastructure;
 
-public class AppDbContext(DbContextOptions options) : DbContext(options)
+public class AppDbContext : IdentityDbContext<IdentityUser>
 {
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
     public DbSet<Adoption> Adoptions { get; set; }
     public DbSet<AdoptionRequest> AdoptionRequests { get; set; }
     public DbSet<Breed> Breeds { get; set; }
