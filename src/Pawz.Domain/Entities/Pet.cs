@@ -85,4 +85,14 @@ public class Pet
     /// Adoption requests for the pet
     /// </summary>
     public ICollection<AdoptionRequest> AdoptionRequests { get; set; } = new List<AdoptionRequest>();
+
+    /// <summary>
+    /// The ID of the user who posted the pet.
+    /// </summary>
+    public int PostedByUserId { get; set; }
+
+    /// <summary>
+    /// The user who made the request.
+    /// </summary>
+    public ApplicationUser User { get; set; }
 }
