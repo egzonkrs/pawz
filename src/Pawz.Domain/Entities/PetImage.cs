@@ -15,6 +15,11 @@ public class PetImage
     public int PetId { get; set; }
 
     /// <summary>
+    /// The pet associated with this image
+    /// </summary>
+    public Pet Pet { get; set; }
+
+    /// <summary>
     /// The URL of the pet image
     /// </summary>
     public string ImageUrl { get; set; }
@@ -33,9 +38,4 @@ public class PetImage
     /// The date and time when the image was uploaded
     /// </summary>
     public DateTime UploadedAt { get; set; }
-
-    /// <summary>
-    /// The pet associated with this image
-    /// </summary>
-    public Pet Pets { get; set; }
 }
