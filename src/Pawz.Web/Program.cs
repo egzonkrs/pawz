@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Pawz.Infrastructure;
+using Pawz.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
