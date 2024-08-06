@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Pawz.Domain.Entities;
 using System.Reflection;
 
-namespace Pawz.Infrastructure;
+namespace Pawz.Infrastructure.Data;
 
 public class AppDbContext : IdentityDbContext<IdentityUser>
 {
