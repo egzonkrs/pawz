@@ -17,33 +17,36 @@ public class UsersController : Controller
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
-        AddModelErrorIfEmpty(model.Email, nameof(model.Email), "Email is required.");
-        AddModelErrorIfEmpty(model.Password, nameof(model.Password), "Password is required.");
-        AddModelErrorIfEmpty(model.FirstName, nameof(model.FirstName), "First Name is required.");
-        AddModelErrorIfEmpty(model.LastName, nameof(model.LastName), "Last Name is required.");
-
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            var user = new ApplicationUser
-            {
-                UserName = model.Email,
-                Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName
-            };
+            AddModelErrorIfEmpty(model.Email, nameof(model.Email), "Email is required.");
+            AddModelErrorIfEmpty(model.Password, nameof(model.Password), "Password is required.");
+            AddModelErrorIfEmpty(model.FirstName, nameof(model.FirstName), "First Name is required.");
+            AddModelErrorIfEmpty(model.LastName, nameof(model.LastName), "Last Name is required.");
 
-            var result = await _identityService.RegisterAsync(user, model.Password);
-
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(error.Code, error.Description);
-            }
+            return View(model);
         }
+
+        var user = new ApplicationUser
+        {
+            UserName = model.Email,
+            Email = model.Email,
+            FirstName = model.FirstName,
+            LastName = model.LastName
+        };
+
+        var result = await _identityService.RegisterAsync(user, model.Password);
+
+        if (result.Succeeded)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(error.Code, error.Description);
+        }
+
         return View(model);
     }
 
