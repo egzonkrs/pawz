@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Pawz.Web.Models;
 
-public class RegisterVM
+public class RegisterViewModel
 {
     /// <summary>
     /// Gets or sets the email address of the user.
@@ -42,11 +42,4 @@ public class RegisterVM
     /// </summary>
     [Required(ErrorMessage = "Last Name is required.")]
     public string LastName { get; set; }
-
-    /// <summary>
-    /// Gets or sets the address of the user.
-    /// This is optional.
-    /// </summary>
-    public string Address { get; set; }
-
 }
