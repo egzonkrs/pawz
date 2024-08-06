@@ -1,32 +1,16 @@
 using Pawz.Domain.Interfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Repos
 {
-    //  IPetRepo petRep
     public class UnitOfWork(AppDbContext dbContext) : IUnitOfWork
     {
         private readonly AppDbContext _dbContext = dbContext;
-        
-        // public IPetRepo Pets { get; } = petRepo;
 
-        public int Save()
+        public async Task<int> SaveAsync()
         {
-            return _dbContext.SaveChanges();
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _dbContext.Dispose();
-            }
+            return await _dbContext.SaveChangesAsync();
         }
     }
 }

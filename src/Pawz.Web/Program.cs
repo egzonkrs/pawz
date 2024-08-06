@@ -17,7 +17,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(connectionString));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-// builder.Services.AddScoped<IPetRepo, PetRepo>();
 
 var app = builder.Build();
 

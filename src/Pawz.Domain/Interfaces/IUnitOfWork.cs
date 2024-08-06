@@ -1,11 +1,9 @@
-using System;
+using System.Threading.Tasks;
 
 namespace Pawz.Domain.Interfaces
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork
     {
-        // IPetRepo Pets { get; }
-
-        int Save();
+        Task<int> SaveAsync();
     }
 }
