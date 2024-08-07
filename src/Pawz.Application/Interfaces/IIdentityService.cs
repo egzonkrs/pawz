@@ -16,6 +16,6 @@ public interface IIdentityService
     /// Logs in a user with the provided credentials.
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
-    Task LoginAsync();
+    Task<SignInResult> LoginAsync(string email, string password);
 }
 
