@@ -32,10 +32,20 @@ public class AdoptionRequest
     /// <summary>
     /// The pet associated with this adoption request
     /// </summary>
-    public Pet Pets { get; set; }
+    public Pet Pet { get; set; }
 
     /// <summary>
     /// The adoption related to this request, if applicable
     /// </summary>
     public Adoption Adoption { get; set; }
+
+    /// <summary>
+    /// The ID of the user who made the request.
+    /// </summary>
+    public int RequesterUserId { get; set; }
+
+    /// <summary>
+    /// The user who made the request.
+    /// </summary>
+    public ApplicationUser User { get; set; }
 }
