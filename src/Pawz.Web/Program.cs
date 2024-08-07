@@ -6,9 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Pawz.Domain.Interfaces;
 using Pawz.Application.Interfaces;
-using Pawz.Infrastructure;
 using Pawz.Infrastructure.Services;
 using Pawz.Infrastructure.Repos;
+using Pawz.Infrastructure.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);

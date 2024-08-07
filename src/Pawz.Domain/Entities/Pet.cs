@@ -77,16 +77,6 @@ public class Pet
     public Location Location { get; set; }
 
     /// <summary>
-    /// The species of the pet
-    /// </summary>
-    public Species Species { get; set; }
-
-    /// <summary>
-    /// The breed of the pet
-    /// </summary>
-    public Breed Breed { get; set; }
-
-    /// <summary>
     /// Images of the pet
     /// </summary>
     public ICollection<PetImage> PetImages { get; set; }
