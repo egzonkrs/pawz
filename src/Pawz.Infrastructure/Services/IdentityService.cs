@@ -8,16 +8,18 @@ namespace Pawz.Infrastructure.Services;
 public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public IdentityService(UserManager<ApplicationUser> userManager)
+    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
     {
         _userManager = userManager;
+        _signInManager = signInManager;
     }
 
-    public Task LoginAsync()
+    public async Task<SignInResult> LoginAsync(string email, string password)
     {
-        //TODO:
-        return Task.CompletedTask;
+        var result = await _signInManager.PasswordSignInAsync(email, password, false, false);
+        return result;
     }
 
     public async Task<IdentityResult> RegisterAsync(ApplicationUser user, string password)
