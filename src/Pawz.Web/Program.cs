@@ -22,6 +22,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddScoped<IPetRepository, PetRepository>();
+
 builder.Services.AddIdentityCore<IdentityUser>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
