@@ -62,49 +62,19 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ml-auto main-nav ">
-                            <li class="nav-item active">
-                                <a class="nav-link">Home</a>
+                        <ul class="navbar-nav ml-auto main-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item dropdown dropdown-slide @@dashboard">
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown">
-                                    Dashboard
-                                    <span>
-                                        <i class="fa fa-angle-down"></i>
-                                    </span>
+                                <a class="nav-link dropdown-toggle" asp-controller="Home" asp-action="Shop">
+                                    Shop
                                 </a>
-
-                                <!-- Dropdown list -->
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="dropdown-item @@dashboardPage">Dashboard</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@dashboardMyAds" asp-controller="Home" asp-action="Shop">Dashboard My Ads</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@dashboardFavouriteAds">Dashboard Favourite Ads</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@dashboardArchivedAds">Dashboard Archived Ads</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@dashboardPendingAds">Dashboard Pending Ads</a>
-                                    </li>
-
-                                    <li class="dropdown dropdown-submenu dropright">
-                                        <a class="dropdown-item dropdown-toggle" id="dropdown0501" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sub Menu</a>
-
-                                        <ul class="dropdown-menu" aria-labelledby="dropdown0501">
-                                            <li>
-                                                <a class="dropdown-item">Submenu 01</a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item">Submenu 02</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
+                            </li>
+                            <li class="nav-item dropdown dropdown-slide @@dashboard">
+                                <a class="nav-link dropdown-toggle" asp-controller="Home" asp-action="Adopt">
+                                    Adopt
+                                </a>
                             </li>
                             <li class="nav-item dropdown dropdown-slide @@pages">
                                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -116,66 +86,17 @@
                                 <!-- Dropdown list -->
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="dropdown-item @@about">About Us</a>
+                                        <a class="dropdown-item @@about" asp-controller="Home" asp-action="AboutUs">About Us</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item @@contact">Contact Us</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@profile">User Profile</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@404">404 Page</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@package">Package</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@singlePage">Single Page</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@store">Store Single</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@blog">Blog</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@singleBlog">Blog Details</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@terms">Terms &amp; Conditions</a>
+                                        <a class="dropdown-item @@contact" href="#">Contact Us</a>
                                     </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown dropdown-slide @@listing">
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Listing
-                                    <span>
-                                        <i class="fa fa-angle-down"></i>
-                                    </span>
+                            <li class="nav-item dropdown dropdown-slide @@dashboard">
+                                <a class="nav-link dropdown-toggle" asp-controller="Home" asp-action="WishList">
+                                    Wish list
                                 </a>
-                                <!-- Dropdown list -->
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="dropdown-item @@category">Ad-Gird View</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@listView">Ad-List View</a>
-                                    </li>
-
-                                    <li class="dropdown dropdown-submenu dropleft">
-                                        <a class="dropdown-item dropdown-toggle" id="dropdown0201" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sub Menu</a>
-
-                                        <ul class="dropdown-menu" aria-labelledby="dropdown0201">
-                                            <li>
-                                                <a class="dropdown-item">Submenu 01</a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item">Submenu 02</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
                             </li>
                         </ul>
                         <ul class="navbar-nav ml-auto mt-10">

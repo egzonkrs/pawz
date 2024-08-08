@@ -18,12 +18,19 @@ public class HomeController : Controller
     {
         return View();
     }
-
-    public IActionResult Privacy()
+    public IActionResult Shop()
     {
         return View();
     }
-    public IActionResult Shop()
+    public IActionResult Adopt()
+    {
+        return View();
+    }
+    public IActionResult AboutUs()
+    {
+        return View();
+    }
+    public IActionResult WishList()
     {
         return View();
     }
