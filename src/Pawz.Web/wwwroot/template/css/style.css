@@ -8,19 +8,19 @@
 /*=== MEDIA QUERY ===*/
 @import url("https://fonts.googleapis.com/css?family=Muli:300,400,600,700,800,900");
 body {
-  line-height: 1.5;
-  font-family: "Muli", sans-serif;
+    line-height: 1.5;
+    font-family: "Poppins", sans-serif;
 }
 
 p, li, input, select, button {
-  font-family: "Muli", sans-serif;
+  font-family: "Poppins", sans-serif;
   color: #666;
   font-size: 14px;
   font-weight: 400;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Muli", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 600;
   color: #333;
 }
@@ -668,7 +668,7 @@ ul.pagination .active a {
 }
 
 .add-button {
-  background: #28a745;
+  background: #5672f9;
   color: #fff;
   padding: 8px 20px !important;
   display: inline-block;
@@ -770,7 +770,7 @@ ul.pagination .active a {
 .dropleft .dropdown-toggle::before,
 .dropright .dropdown-toggle::after {
   font-weight: bold;
-  font-family: "FontAwesome";
+  font-family: "Poppins";
   border: 0;
 }
 
