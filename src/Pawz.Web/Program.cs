@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Pawz.Domain.Interfaces;
 using Pawz.Application.Interfaces;
-using Pawz.Infrastructure;
 using Pawz.Infrastructure.Services;
+using Pawz.Infrastructure.Repos;
+using Pawz.Infrastructure.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(connectionString));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddIdentityCore<IdentityUser>()
                 .AddEntityFrameworkStores<AppDbContext>();
