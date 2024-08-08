@@ -605,7 +605,7 @@ ul.pagination .active a {
 }
 
 .bg-1 {
-  background: url("../images/home/hero.jpg");
+  background: url("../images/hero.jpg");
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -617,7 +617,7 @@ ul.pagination .active a {
 }
 
 .bg-3 {
-  background: url(../images/call-to-action/cta-background.jpg);
+  background: url(../images/cta-background.jpg);
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -1320,9 +1320,7 @@ ul.pagination .active a {
   right: -15px;
 }
 
-.arrow-left {
-  left: -15 px;
-}
+
 
 .product-item {
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);

@@ -62,7 +62,7 @@
     }, 500);
     return false;
   });
-    
+
   // -----------------------------
   //  Video Replace
   // -----------------------------
@@ -86,7 +86,7 @@
     fade: true
   });
 
-  // Client Slider 
+  // Client Slider
   $('.category-slider').slick({
     dots: false,
     slidesToShow: 5,
@@ -125,7 +125,7 @@
     ]
   });
 
-  // trending-ads-slide 
+  // trending-ads-slide
 
   $('.trending-ads-slide').slick({
     dots: false,
@@ -133,7 +133,7 @@
     slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 800,
+    autoplaySpeed: 1000,
     responsive: [{
       breakpoint: 1024,
       settings: {
@@ -144,14 +144,14 @@
       }
     },
     {
-      breakpoint: 600,
+      breakpoint: 800,
       settings: {
         slidesToShow: 2,
         slidesToScroll: 1
       }
     },
     {
-      breakpoint: 480,
+      breakpoint: 680,
       settings: {
         slidesToShow: 1,
         slidesToScroll: 1
