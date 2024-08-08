@@ -1,34 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Pawz.Application.Interfaces;
 using Pawz.Domain.Entities;
-using Pawz.Domain.Interfaces;
 using System.Threading.Tasks;
 
 namespace Pawz.Web.Controllers
 {
     public class PetController : Controller
     {
-        private readonly IPetRepository _petRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        public PetController(IPetRepository petRepository, IUnitOfWork unitOfWork)
+        private readonly ILogger<PetController> _logger;
+        private readonly IPetService _petService;
+        public PetController(ILogger<PetController> logger, IPetService petService)
         {
-            _petRepository = petRepository;
-            _unitOfWork = unitOfWork;
+            _logger = logger;
+            _petService = petService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var pets = await _petRepository.GetAllAsync();
+            var pets = await _petService.GetAllPetsAsync();
             return View(pets);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var pet = await _petRepository.GetByIdAsync(id);
-            if (pet is null)
-            {
-                return NotFound();
-            }
+            var pet = await _petService.GetPetByIdAsync(id);
             return View(pet);
         }
 
@@ -39,69 +35,29 @@ namespace Pawz.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Breed,Age")] Pet pet)
+        public async Task<IActionResult> Create(Pet pet)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(pet);
-            }
-
-            await _petRepository.AddAsync(pet);
-            await _unitOfWork.SaveChangesAsync();
+            await _petService.CreatePetAsync(pet);
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var pet = await _petRepository.GetByIdAsync(id);
-            if (pet is null)
-            {
-                return NotFound();
-            }
+            var pet = await _petService.GetPetByIdAsync(id);
             return View(pet);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Pet pet)
+        public async Task<IActionResult> Edit(Pet pet)
         {
-            if (id != pet.Id)
-            {
-                return NotFound();
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View(pet);
-            }
-
-            try
-            {
-                await _petRepository.UpdateAsync(pet);
-                await _unitOfWork.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await PetExists(pet.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            await _petService.UpdatePetAsync(pet);
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var pet = await _petRepository.GetByIdAsync(id);
-            if (pet is null)
-            {
-                return NotFound();
-            }
+            var pet = await _petService.GetPetByIdAsync(id);
             return View(pet);
         }
 
@@ -109,19 +65,8 @@ namespace Pawz.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pet = await _petRepository.GetByIdAsync(id);
-            if (pet != null)
-            {
-                await _petRepository.DeleteAsync(pet);
-                await _unitOfWork.SaveChangesAsync();
-            }
+            await _petService.DeletePetAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private async Task<bool> PetExists(int id)
-        {
-            var pet = await _petRepository.GetByIdAsync(id);
-            return pet != null;
         }
     }
 }
