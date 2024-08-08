@@ -6,10 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Pawz.Web.Controllers
 {
-    public class PetController(IPetRepository petRepository, IUnitOfWork unitOfWork) : Controller
+    public class PetController : Controller
     {
-        private readonly IPetRepository _petRepository = petRepository;
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IPetRepository _petRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        public PetController(IPetRepository petRepository, IUnitOfWork unitOfWork)
+        {
+            _petRepository = petRepository;
+            _unitOfWork = unitOfWork;
+        }
 
         public async Task<IActionResult> Index()
         {
@@ -42,7 +47,7 @@ namespace Pawz.Web.Controllers
             }
 
             await _petRepository.AddAsync(pet);
-            await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -73,7 +78,7 @@ namespace Pawz.Web.Controllers
             try
             {
                 await _petRepository.UpdateAsync(pet);
-                await _unitOfWork.SaveAsync();
+                await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -108,7 +113,7 @@ namespace Pawz.Web.Controllers
             if (pet != null)
             {
                 await _petRepository.DeleteAsync(pet);
-                await _unitOfWork.SaveAsync();
+                await _unitOfWork.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
         }

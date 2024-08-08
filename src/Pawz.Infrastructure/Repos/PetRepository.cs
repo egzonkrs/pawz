@@ -4,7 +4,10 @@ using Pawz.Infrastructure.Data;
 
 namespace Pawz.Infrastructure.Repos
 {
-    public class PetRepository(AppDbContext context) : GenericRepository<Pet>(context), IPetRepository
+    public class PetRepository : GenericRepository<Pet>, IPetRepository
     {
+        public PetRepository(AppDbContext context) : base(context)
+        {
+        }
     }
 }

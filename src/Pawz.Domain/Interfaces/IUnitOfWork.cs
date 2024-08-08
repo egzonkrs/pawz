@@ -11,6 +11,6 @@ namespace Pawz.Domain.Interfaces
         /// A task that represents the asynchronous save operation. The task result contains
         /// the number of state entries written to the underlying database.
         /// </returns>
-        Task<int> SaveAsync();
+        Task<int> SaveChangesAsync();
     }
 }
