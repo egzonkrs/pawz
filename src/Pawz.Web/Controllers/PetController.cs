@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Pawz.Domain.Interfaces;
-using Pawz.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Pawz.Domain.Entities;
+using Pawz.Domain.Interfaces;
+using System.Threading.Tasks;
 
 namespace Pawz.Web.Controllers
 {
@@ -25,7 +25,7 @@ namespace Pawz.Web.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var pet = await _petRepository.GetByIdAsync(id);
-            if (pet == null)
+            if (pet is null)
             {
                 return NotFound();
             }
@@ -54,7 +54,7 @@ namespace Pawz.Web.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var pet = await _petRepository.GetByIdAsync(id);
-            if (pet == null)
+            if (pet is null)
             {
                 return NotFound();
             }
@@ -63,7 +63,7 @@ namespace Pawz.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Breed,Age")] Pet pet)
+        public async Task<IActionResult> Edit(int id, Pet pet)
         {
             if (id != pet.Id)
             {
@@ -98,7 +98,7 @@ namespace Pawz.Web.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var pet = await _petRepository.GetByIdAsync(id);
-            if (pet == null)
+            if (pet is null)
             {
                 return NotFound();
             }
