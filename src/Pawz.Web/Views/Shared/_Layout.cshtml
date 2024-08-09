@@ -5,19 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Agency HTML Template">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="author" content="Themefisher">
-    <meta name="generator" content="Themefisher Classified Marketplace Template v1.0">
 
-    <!-- theme meta -->
-    <meta name="theme-name" content="classimax"/>
-
-    <!-- favicon -->
+    <!-- Icon -->
     <link href="~/template/images/favicon.png" rel="shortcut icon">
 
-    <title>@ViewData["Title"] - Pawz.Web</title>
-    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Pawz.Web.styles.css" asp-append-version="true" />*@
+    <title>Pawz - @ViewData["Title"]</title>
+
     <link href="~/template/plugins/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="~/template/plugins/bootstrap/bootstrap-slider.css" rel="stylesheet">
     <link href="~/template/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -32,208 +25,27 @@
     <link href="~/template/css/style.css" rel="stylesheet">
 </head>
 <body class="body-wrapper">
-@*<header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Pawz.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>*@
+
+<!--NavBar-->
 <header>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <nav class="navbar navbar-expand-lg navbar-light navigation">
-                    <a class="navbar-brand">
-                        <img src="~/template/images/pawz.png" alt="" width="55" height="55">
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ml-auto main-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item dropdown dropdown-slide @@dashboard">
-                                <a class="nav-link dropdown-toggle" asp-controller="Home" asp-action="Adopt">
-                                    Adopt
-                                </a>
-                            </li>
-                            <li class="nav-item dropdown dropdown-slide @@pages">
-                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Pages
-                                    <span>
-                                        <i class="fa fa-angle-down"></i>
-                                    </span>
-                                </a>
-                                <!-- Dropdown list -->
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="dropdown-item @@about" asp-controller="Home" asp-action="AboutUs">About Us</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@contact" href="#">Contact Us</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown dropdown-slide @@dashboard">
-                                <a class="nav-link dropdown-toggle" asp-controller="Home" asp-action="WishList">
-                                    Wish list
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav ml-auto mt-10">
-                            <li class="nav-item">
-                                <a class="nav-link login-button" href="#">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white add-button" href="#">Register</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </div>
-    </div>
+    @Html.Partial("Navbar-Footer/_Navbar")
 </header>
 
 <main role="main">
     @RenderBody()
 </main>
 
-
-@*<footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Pawz.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>*@
+<!-- Footer-Top -->
 <footer class="footer section section-sm">
-    <!-- Container Start -->
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-7 offset-md-1 offset-lg-0 mb-4 mb-lg-0">
-                <!-- About -->
-                <div class="block about">
-
-                    <p class="alt-color"></p>
-                </div>
-            </div>
-            <!-- Link list -->
-            <div class="col-lg-2 offset-lg-1 col-md-3 col-6 mb-4 mb-lg-0">
-                <div class="block">
-                    <h4>Site Pages</h4>
-                    <ul>
-                        <li>
-                            <a>My Ads</a>
-                        </li>
-                        <li>
-                            <a>Favourite Ads</a>
-                        </li>
-                        <li>
-                            <a>Archived Ads</a>
-                        </li>
-                        <li>
-                            <a>Pending Ads</a>
-                        </li>
-                        <li>
-                            <a>Terms & Conditions</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <!-- Link list -->
-            <div class="col-lg-2 col-md-3 offset-md-1 offset-lg-0 col-6 mb-4 mb-md-0">
-                <div class="block">
-                    <h4>Admin Pages</h4>
-                    <ul>
-                        <li>
-                            <a>Category</a>
-                        </li>
-                        <li>
-                            <a>Single Page</a>
-                        </li>
-                        <li>
-                            <a>Store Single</a>
-                        </li>
-                        <li>
-                            <a>Single Post</a>
-                        </li>
-                        <li>
-                            <a>Blog</a>
-                        </li>
-
-
-                    </ul>
-                </div>
-            </div>
-            <!-- Promotion -->
-            <div class="col-lg-4 col-md-7">
-
-            </div>
-        </div>
-    </div>
-    <!-- Container End -->
+    @Html.Partial("Navbar-Footer/_FooterTop")
 </footer>
-<!-- Footer Bottom -->
+
+<!-- Footer-Bottom -->
 <footer class="footer-bottom">
-    <!-- Container Start -->
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 text-center text-lg-left mb-3 mb-lg-0">
-                <!-- Copyright -->
-                <div class="copyright">
-                    <p>
-                        Copyright &copy; <script>
-                            var CurrentYear = new Date().getFullYear()
-                            document.write(CurrentYear)
-                        </script>. Designed & Developed by <a class="text-white">Pawz</a>
-                    </p>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <!-- Social Icons -->
-                <ul class="social-media-icons text-center text-lg-right">
-                    <li>
-                        <a class="fa fa-facebook" href="https://www.facebook.com/themefisher"></a>
-                    </li>
-                    <li>
-                        <a class="fa fa-twitter" href="https://www.twitter.com/themefisher"></a>
-                    </li>
-                    <li>
-                        <a class="fa fa-pinterest-p" href="https://www.pinterest.com/themefisher"></a>
-                    </li>
-                    <li>
-                        <a class="fa fa-github-alt" href="https://www.github.com/themefisher"></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <!-- Container End -->
-    <!-- To Top -->
-    <div class="scroll-top-to">
-        <i class="fa fa-angle-up"></i>
-    </div>
+    @Html.Partial("Navbar-Footer/_FooterBottom")
 </footer>
-<!--
-Essential Scripts
-=====================================-->
+
+<!--=================Essential Scripts====================-->
 <script src="~/template/plugins/jquery/jquery.min.js"></script>
 <script src="~/template/plugins/bootstrap/popper.min.js"></script>
 <script src="~/template/plugins/bootstrap/bootstrap.min.js"></script>
@@ -242,14 +54,12 @@ Essential Scripts
 <script src="~/template/plugins/raty/jquery.raty-fa.js"></script>
 <script src="~/template/plugins/slick/slick.min.js"></script>
 <script src="~/template/plugins/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+
 <!-- google map -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU" defer></script>
 <script src="~/template/plugins/google-map/map.js" defer></script>
 
 <script src="~/template/js/script.js"></script>
-@*<script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>*@
 
 @await RenderSectionAsync("Scripts", required: false)
 </body>
