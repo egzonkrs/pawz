@@ -1,5 +1,6 @@
 using Pawz.Domain.Entities;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Pawz.Application.Interfaces
@@ -7,37 +8,42 @@ namespace Pawz.Application.Interfaces
     public interface IPetService
     {
         /// <summary>
-        /// Asynchronously creates a new pet.
+        /// Creates a new pet.
         /// </summary>
         /// <param name="pet">The pet entity to create.</param>
-        /// <returns>A task representing the asynchronous operation. The task result contains a boolean indicating success or failure.</returns>
-        Task<bool> CreatePetAsync(Pet pet);
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+        /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
+        Task<bool> CreatePetAsync(Pet pet, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Asynchronously retrieves all pets.
+        /// Retrieves all pets.
         /// </summary>
-        /// <returns>A task representing the asynchronous operation. The task result contains a collection of pet entities.</returns>
-        Task<IEnumerable<Pet>> GetAllPetsAsync();
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+        /// <returns>A task representing the operation. The task result contains a collection of pet entities.</returns>
+        Task<IEnumerable<Pet>> GetAllPetsAsync(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Asynchronously retrieves a pet by its ID.
+        /// Retrieves a pet by its ID.
         /// </summary>
         /// <param name="petId">The ID of the pet to retrieve.</param>
-        /// <returns>A task representing the asynchronous operation. The task result contains the pet entity.</returns>
-        Task<Pet> GetPetByIdAsync(int petId);
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+        /// <returns>A task representing the operation. The task result contains the pet entity.</returns>
+        Task<Pet> GetPetByIdAsync(int petId, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Asynchronously updates an existing pet.
+        /// Updates an existing pet.
         /// </summary>
         /// <param name="pet">The pet entity to update.</param>
-        /// <returns>A task representing the asynchronous operation. The task result contains a boolean indicating success or failure.</returns>
-        Task<bool> UpdatePetAsync(Pet pet);
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+        /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
+        Task<bool> UpdatePetAsync(Pet pet, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Asynchronously deletes a pet by its ID.
+        /// Deletes a pet by its ID.
         /// </summary>
         /// <param name="petId">The ID of the pet to delete.</param>
-        /// <returns>A task representing the asynchronous operation. The task result contains a boolean indicating success or failure.</returns>
-        Task<bool> DeletePetAsync(int petId);
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+        /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
+        Task<bool> DeletePetAsync(int petId, CancellationToken cancellationToken);
     }
 }
