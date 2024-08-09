@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Pawz.Domain.Interfaces
 {
-    public interface IGenericRepository<TEntity> where TEntity : class
+    public interface IGenericRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
         /// <summary>
         /// Asynchronously retrieves an entity by its primary key.
@@ -20,11 +20,12 @@ namespace Pawz.Domain.Interfaces
         Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Asynchronously adds a new entity to the context.
+        /// Asynchronously adds a new entity to the context and returns the primary key of the added entity.
         /// </summary>
         /// <param name="entity">The entity to add.</param>
-        /// <returns>A task that represents the asynchronous add operation.</returns>
-        Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);
+        /// <param name="cancellationToken">The cancellation token to observe.</param>
+        /// <returns>A task that represents the asynchronous add operation. The task result contains the primary key of the added entity.</returns>
+        Task<TKey> InsertAsync(TEntity entity, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously deletes an entity from the context.

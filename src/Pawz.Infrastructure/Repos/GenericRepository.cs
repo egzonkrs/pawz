@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Repos
 {
-    public abstract class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+    public abstract class GenericRepository<TEntity, TKey> : IGenericRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
         protected readonly AppDbContext _dbContext;
         protected readonly DbSet<TEntity> _dbSet;
@@ -28,21 +28,20 @@ namespace Pawz.Infrastructure.Repos
             return await _dbSet.ToListAsync(cancellationToken);
         }
 
-        public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public async Task<TKey> InsertAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             await _dbSet.AddAsync(entity, cancellationToken);
+            return entity.Id;
         }
 
-        public Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             _dbSet.Remove(entity);
-            return Task.CompletedTask;
         }
 
-        public Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             _dbSet.Update(entity);
-            return Task.CompletedTask;
         }
     }
 }
