@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Pawz.Domain.Interfaces;
 using Pawz.Application.Interfaces;
-using Pawz.Infrastructure.Services;
-using Pawz.Infrastructure.Repos;
+using Pawz.Domain.Entities;
+using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
+using Pawz.Infrastructure.Repos;
+using Pawz.Infrastructure.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +25,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 
 builder.Services.AddIdentityCore<IdentityUser>()
+
+builder.Services.AddIdentityCore<ApplicationUser>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddScoped<IIdentityService, IdentityService>();

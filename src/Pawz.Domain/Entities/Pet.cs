@@ -1,10 +1,11 @@
 using Pawz.Domain.Enum;
+using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 
 namespace Pawz.Domain.Entities;
 
-public class Pet
+public class Pet : IEntity<int>
 {
     /// <summary>
     /// The Id of the pet
@@ -89,7 +90,7 @@ public class Pet
     /// <summary>
     /// The ID of the user who posted the pet.
     /// </summary>
-    public int PostedByUserId { get; set; }
+    public string PostedByUserId { get; set; }
 
     /// <summary>
     /// The user who made the request.
