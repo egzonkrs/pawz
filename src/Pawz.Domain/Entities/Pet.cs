@@ -90,7 +90,7 @@ public class Pet : IEntity<int>
     /// <summary>
     /// The ID of the user who posted the pet.
     /// </summary>
-    public int PostedByUserId { get; set; }
+    public string PostedByUserId { get; set; }
 
     /// <summary>
     /// The user who made the request.
