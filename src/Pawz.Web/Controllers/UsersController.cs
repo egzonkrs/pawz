@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
-using Pawz.Domain.Entities;
+using Pawz.Application.Models;
 using Pawz.Web.Models;
 using System.Threading.Tasks;
 
@@ -22,15 +22,15 @@ public class UsersController : Controller
             return View(model);
         }
 
-        var user = new ApplicationUser
+        var user = new RegisterRequest
         {
-            UserName = model.Email,
             Email = model.Email,
+            Password = model.Password,
             FirstName = model.FirstName,
             LastName = model.LastName
         };
 
-        var result = await _identityService.RegisterAsync(user, model.Password);
+        var result = await _identityService.RegisterAsync(user);
 
         if (result.Succeeded)
         {
