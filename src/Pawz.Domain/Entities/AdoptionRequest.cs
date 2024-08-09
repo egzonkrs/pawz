@@ -42,7 +42,7 @@ public class AdoptionRequest
     /// <summary>
     /// The ID of the user who made the request.
     /// </summary>
-    public int RequesterUserId { get; set; }
+    public string RequesterUserId { get; set; }
 
     /// <summary>
     /// The user who made the request.

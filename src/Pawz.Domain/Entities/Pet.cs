@@ -22,9 +22,19 @@ public class Pet
     public int SpeciesId { get; set; }
 
     /// <summary>
+    /// The species of the pet
+    /// </summary>
+    public Species Species { get; set; }
+
+    /// <summary>
     /// The Id of the breed of the pet
     /// </summary>
     public int BreedId { get; set; }
+
+    /// <summary>
+    /// The breed of the pet
+    /// </summary>
+    public Breed Breed { get; set; }
 
     /// <summary>
     /// The age of the pet in years
@@ -67,16 +77,6 @@ public class Pet
     public Location Location { get; set; }
 
     /// <summary>
-    /// The species of the pet
-    /// </summary>
-    public Species Species { get; set; }
-
-    /// <summary>
-    /// The breed of the pet
-    /// </summary>
-    public Breed Breed { get; set; }
-
-    /// <summary>
     /// Images of the pet
     /// </summary>
     public ICollection<PetImage> PetImages { get; set; }
@@ -89,7 +89,7 @@ public class Pet
     /// <summary>
     /// The ID of the user who posted the pet.
     /// </summary>
-    public int PostedByUserId { get; set; }
+    public string PostedByUserId { get; set; }
 
     /// <summary>
     /// The user who made the request.

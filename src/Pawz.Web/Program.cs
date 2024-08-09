@@ -5,9 +5,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Pawz.Application.Interfaces;
-using Pawz.Infrastructure;
+using Pawz.Domain.Entities;
+using Pawz.Domain.Interfaces;
+using Pawz.Infrastructure.Data;
+using Pawz.Infrastructure.Repos;
 using System;
 using Pawz.Infrastructure.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +24,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddIdentityCore<IdentityUser>()
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddIdentityCore<ApplicationUser>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddScoped<IIdentityService, IdentityService>();
