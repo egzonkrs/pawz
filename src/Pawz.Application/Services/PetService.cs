@@ -28,7 +28,7 @@ namespace Pawz.Application.Services
             {
                 _logger.LogInformation("Started creating a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
 
-                await _petRepository.AddAsync(pet, cancellationToken);
+                await _petRepository.InsertAsync(pet, cancellationToken);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
 
                 _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
