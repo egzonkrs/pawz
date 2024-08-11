@@ -9,8 +9,8 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
 using Pawz.Infrastructure.Repos;
-using System;
 using Pawz.Infrastructure.Services;
+using System;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,11 +23,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(connectionString));
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddIdentityCore<IdentityUser>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddIdentityCore<ApplicationUser>()
-                .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 
