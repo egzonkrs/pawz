@@ -36,14 +36,12 @@ namespace Pawz.Infrastructure.Repos
 
         public Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            _dbSet.Remove(entity);
-            return Task.CompletedTask;
+            return Task.FromResult(_dbSet.Remove(entity));
         }
 
         public Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            _dbSet.Remove(entity);
-            return Task.CompletedTask;
+            return Task.FromResult(_dbSet.Update(entity));
         }
     }
 }
