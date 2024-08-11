@@ -1,10 +1,11 @@
 using Pawz.Domain.Enum;
+using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 
 namespace Pawz.Domain.Entities;
 
-public class Pet
+public class Pet : IEntity<int>
 {
     /// <summary>
     /// The Id of the pet
