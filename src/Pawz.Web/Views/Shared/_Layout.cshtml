@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -28,7 +29,7 @@
 
 <!--NavBar-->
 <header>
-    @Html.Partial("Navbar-Footer/_Navbar")
+    <partial name="Navbar"/>
 </header>
 
 <main role="main">
@@ -37,12 +38,13 @@
 
 <!-- Footer-Top -->
 <footer class="footer section section-sm">
-    @Html.Partial("Navbar-Footer/_FooterTop")
+    <partial name="FooterTop"/>
+
 </footer>
 
 <!-- Footer-Bottom -->
 <footer class="footer-bottom">
-    @Html.Partial("Navbar-Footer/_FooterBottom")
+    <partial name="FooterBottom"/>
 </footer>
 
 <!--=================Essential Scripts====================-->
