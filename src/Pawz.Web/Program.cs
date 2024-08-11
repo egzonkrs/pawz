@@ -10,6 +10,7 @@ using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
 using Pawz.Infrastructure.Repos;
 using Pawz.Infrastructure.Services;
+using System;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,14 +22,15 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(connectionString));
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 
-builder.Services.AddIdentityCore<IdentityUser>();
-
-builder.Services.AddIdentityCore<ApplicationUser>()
-                .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 
