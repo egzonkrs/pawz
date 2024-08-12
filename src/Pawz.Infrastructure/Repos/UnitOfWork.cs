@@ -1,5 +1,6 @@
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Repos
@@ -12,10 +13,9 @@ namespace Pawz.Infrastructure.Repos
         {
             _dbContext = dbContext;
         }
-        
-        public async Task<int> SaveChangesAsync()
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            return await _dbContext.SaveChangesAsync();
+            return await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }
