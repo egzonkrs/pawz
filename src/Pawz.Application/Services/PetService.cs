@@ -38,13 +38,13 @@ namespace Pawz.Application.Services
                     return Result<bool>.Success(true);
                 }
                 _logger.LogWarning("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
-                return Result<bool>.Failure(new Error("Database.Failure", "Pet creation failed. No changes were made to the database."));
+                return Result<bool>.Failure(PetErrors.CreationFailed);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to create a Pet for the UserId: {UserId}",
                                  nameof(PetService), pet.PostedByUserId);
-                return Result<bool>.Failure(new Error("Exception", "An unexpected error occurred during pet creation."));
+                return Result<bool>.Failure(PetErrors.CreationUnexpectedError);
             }
         }
 
@@ -63,7 +63,7 @@ namespace Pawz.Application.Services
             {
                 _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets.",
                                  nameof(PetService));
-                return Result<IEnumerable<Pet>>.Failure(new Error("Exception", "An error occurred while retrieving the list of pets."));
+                return Result<IEnumerable<Pet>>.Failure(PetErrors.RetrievalError);
             }
         }
 
@@ -78,7 +78,7 @@ namespace Pawz.Application.Services
                 if (pet is null)
                 {
                     _logger.LogWarning("Pet with Id: {PetId} was not found.", petId);
-                    return Result<Pet>.Failure(new Error("NotFound", $"Pet with Id: {petId} was not found."));
+                    return Result<Pet>.Failure(PetErrors.NotFound(petId));
                 }
 
                 _logger.LogInformation("Successfully retrieved Pet with Id: {PetId}", petId);
@@ -88,7 +88,7 @@ namespace Pawz.Application.Services
             {
                 _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve Pet with Id: {PetId}",
                                  nameof(PetService), petId);
-                return Result<Pet>.Failure(new Error("Exception", "An unexpected error occurred while retrieving the pet."));
+                return Result<Pet>.Failure(PetErrors.RetrievalError);
             }
         }
 
@@ -107,13 +107,13 @@ namespace Pawz.Application.Services
                     return Result<bool>.Success(true);
                 }
                 _logger.LogWarning("Failed to update Pet with Id: {PetId} from UserId: {UserId}. No changes were detected.", pet.Id, pet.PostedByUserId);
-                return Result<bool>.Failure(new Error("Database.Failure", "No changes were detected during the update operation."));
+                return Result<bool>.Failure(PetErrors.NoChangesDetected);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to update Pet with Id: {PetId} for the UserId: {UserId}",
                                  nameof(PetService), pet.Id, pet.PostedByUserId);
-                return Result<bool>.Failure(new Error("Exception", "An unexpected error occurred during the update operation."));
+                return Result<bool>.Failure(PetErrors.UpdateUnexpectedError);
             }
         }
 
@@ -127,7 +127,7 @@ namespace Pawz.Application.Services
                 if (pet is null)
                 {
                     _logger.LogWarning("Pet with Id: {PetId} was not found.", petId);
-                    return Result<bool>.Failure(new Error("NotFound", $"Pet with Id: {petId} was not found."));
+                    return Result<bool>.Failure(PetErrors.NotFound(petId));
                 }
 
                 await _petRepository.DeleteAsync(pet, cancellationToken);
@@ -139,13 +139,13 @@ namespace Pawz.Application.Services
                     return Result<bool>.Success(true);
                 }
                 _logger.LogWarning("Failed to delete Pet with Id: {PetId}. No changes were detected.", petId);
-                return Result<bool>.Failure(new Error("Database.Failure", "No changes were detected during the deletion operation."));
+                return Result<bool>.Failure(PetErrors.NoChangesDetected);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to delete Pet with Id: {PetId}",
                                  nameof(PetService), petId);
-                return Result<bool>.Failure(new Error("Exception", "An unexpected error occurred during the deletion operation."));
+                return Result<bool>.Failure(PetErrors.DeletionUnexpectedError);
             }
         }
     }

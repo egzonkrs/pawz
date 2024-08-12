@@ -6,7 +6,7 @@ namespace Pawz.Domain.Common
     {
         private readonly List<Error> _errors = new();
         public bool IsSuccess { get; }
-        public T Value { get; }
+        public T? Value { get; }
         public IReadOnlyList<Error> Errors => _errors.AsReadOnly();
 
         private Result(bool isSuccess, T value, IEnumerable<Error> errors)
