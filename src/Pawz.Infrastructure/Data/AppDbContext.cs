@@ -15,13 +15,26 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<PetImage> PetImages { get; set; }
     public DbSet<Species> Species { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer("Server=DESKTOP-O50J359;Database=PetAdoption;Trusted_Connection=True; TrustServerCertificate=true;");
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // To-do:
-        // One-to-One: An adoption has one payment
-        // One-to-Many: A user can make multiple payments
+        // Define precision and scale for decimal properties
+        modelBuilder.Entity<Adoption>()
+            .Property(a => a.AdoptionFee)
+            .HasColumnType("decimal(18,2)"); // Adjust precision and scale as needed
 
+        modelBuilder.Entity<Pet>()
+            .Property(p => p.Price)
+            .HasColumnType("decimal(18,2)"); // Adjust precision and scale as needed
+
+        // Apply configurations from the assembly
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        // Call the base method
         base.OnModelCreating(modelBuilder);
     }
+
 }
