@@ -1,3 +1,4 @@
+using Pawz.Domain.Enum;
 using Pawz.Domain.Interfaces;
 using System;
 
@@ -18,7 +19,7 @@ public class AdoptionRequest : IEntity<int>
     /// <summary>
     /// The status of the adoption request
     /// </summary>
-    public string Status { get; set; }
+    public AdoptionRequestStatus Status { get; set; }
 
     /// <summary>
     /// The date when the adoption request was made
