@@ -2,7 +2,8 @@ namespace Pawz.Domain.Enum;
 
 public enum PetStatus
 {
-    Pending = 1,
-    Approved = 2,
-    Rejected = 3
+    Available = 1,
+    Pending = 2,
+    Approved = 3,
+    Rejected = 4
 }
