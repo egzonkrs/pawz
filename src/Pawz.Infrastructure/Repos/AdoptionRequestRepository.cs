@@ -9,16 +9,17 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Repos;
+
 public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>, IAdoptionRequestRepository
 {
     public AdoptionRequestRepository(AppDbContext context) : base(context)
     {
     }
 
-    public async Task<IEnumerable<AdoptionRequest>> GetRequestsByStatusAsync(PetStatus status, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<AdoptionRequest>> GetRequestsByStatusAsync(AdoptionRequestStatus status, CancellationToken cancellationToken = default)
     {
         return await _dbSet
-            .Where(ar => ar.Status == status.ToString())
+            .Where(ar => ar.Status == status)
             .ToListAsync(cancellationToken);
     }
 
