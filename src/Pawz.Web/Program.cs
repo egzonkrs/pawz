@@ -1,39 +1,29 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Pawz.Application.Interfaces;
+using Pawz.Application.Extensions;
+using Pawz.Application.Services;
 using Pawz.Domain.Entities;
-using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
+using Pawz.Infrastructure.Modules;
 using Pawz.Infrastructure.Repos;
-using Pawz.Infrastructure.Services;
 using System;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(connectionString));
-
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddModule<DataModule>();
+builder.Services.AddModule<ModuleRepository>();
+builder.Services.AddModule<ModuleService>();
 
-builder.Services.AddScoped<IPetRepository, PetRepository>();
-builder.Services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
+builder.Services.AddControllersWithViews();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
-
-builder.Services.AddScoped<IIdentityService, IdentityService>();
 
 var app = builder.Build();
 
