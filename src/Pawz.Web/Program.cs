@@ -62,7 +62,7 @@ try
     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
     var unitOfWork = services.GetRequiredService<IUnitOfWork>();
     await context.Database.MigrateAsync();
-    await Seed.SeedData(context, unitOfWork, userManager);
+    await DataSeeder.SeedData(context, unitOfWork, userManager);
 }
 catch (Exception ex)
 {
