@@ -9,9 +9,10 @@ namespace Pawz.Infrastructure.Data.Seed
     {
         public static async Task SeedPetData(AppDbContext context)
         {
-            if (!await context.Pets.AnyAsync())
-            {
+            var petsDoNotExist = await context.Pets.AnyAsync() is false;
 
+            if (petsDoNotExist)
+            {
                 var userJohn = await context.Users.FirstOrDefaultAsync(u => u.UserName == "john");
                 var userJane = await context.Users.FirstOrDefaultAsync(u => u.UserName == "jane");
 

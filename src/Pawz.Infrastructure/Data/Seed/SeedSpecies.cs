@@ -7,7 +7,9 @@ namespace Pawz.Infrastructure.Data.Seed
     {
         public static async Task SeedSpeciesData(AppDbContext context)
         {
-            if (!await context.Species.AnyAsync())
+            var speciesDoNotExist = await context.Species.AnyAsync() is false;
+
+            if (speciesDoNotExist)
             {
                 await context.Database.ExecuteSqlRawAsync(@"
                     INSERT INTO Species (Id, Name, Description, CreatedAt) VALUES 

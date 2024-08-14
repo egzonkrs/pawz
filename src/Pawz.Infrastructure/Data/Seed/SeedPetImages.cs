@@ -9,7 +9,9 @@ namespace Pawz.Infrastructure.Data.Seed
     {
         public static async Task SeedPetImageData(AppDbContext context)
         {
-            if (!await context.PetImages.AnyAsync())
+            var petImagesDoNotExist = await context.PetImages.AnyAsync() is false;
+
+            if (petImagesDoNotExist)
             {
                 string[] dogImageUrls =
                 {
@@ -23,8 +25,6 @@ namespace Pawz.Infrastructure.Data.Seed
                     "https://picsum.photos/id/240/200/300"
                 };
 
-                DateTime now = DateTime.UtcNow;
-
                 await context.Database.ExecuteSqlRawAsync(@"
                     INSERT INTO PetImages (Id, PetId, ImageUrl, IsPrimary, UploadedAt) VALUES
                     (1, 1, @dogUrl1, 1, @uploadedAt),
@@ -35,7 +35,7 @@ namespace Pawz.Infrastructure.Data.Seed
                     new SqliteParameter("@dogUrl2", dogImageUrls[1]),
                     new SqliteParameter("@catUrl1", catImageUrls[0]),
                     new SqliteParameter("@catUrl2", catImageUrls[1]),
-                    new SqliteParameter("@uploadedAt", now)
+                    new SqliteParameter("@uploadedAt", DateTime.UtcNow)
                 );
             }
         }

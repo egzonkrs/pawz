@@ -7,7 +7,9 @@ namespace Pawz.Infrastructure.Data.Seed
     {
         public static async Task SeedLocationData(AppDbContext context)
         {
-            if (!await context.Locations.AnyAsync())
+            var locationsDoNotExist = await context.Locations.AnyAsync() is false;
+
+            if (locationsDoNotExist)
             {
                 await context.Database.ExecuteSqlRawAsync(@"
                     INSERT INTO Locations (Id, City, State, Country, PostalCode) VALUES
