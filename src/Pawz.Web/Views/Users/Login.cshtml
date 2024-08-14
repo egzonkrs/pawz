@@ -1,15 +1,15 @@
-@model RegisterViewModel
+﻿@model LoginViewModel
 
 @{
-ViewData["Title"] = "Register";
+ViewData["Title"] = "Login";
 }
 
 <section class="login py-5 border-top-1">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-5 col-md-8 align-item-center">
-                <div class="border border mb-4">
-                    <h3 class="bg-gray p-4">Register Now</h3>
+                <div class="border border">
+                    <h3 class="bg-gray p-4">Login</h3>
                     <form method="post">
                         <fieldset class="p-4">
                             <div class="mb-3">
@@ -17,23 +17,11 @@ ViewData["Title"] = "Register";
                                 <input asp-for="Email" class="form-control" placeholder="Email" />
                             </div>
                             <div class="mb-3">
-                                <label asp-for="FirstName" class="form-label"></label>
-                                <input asp-for="FirstName" class="form-control" placeholder="First Name" />
-                            </div>
-                            <div class="mb-3">
-                                <label asp-for="LastName" class="form-label"></label>
-                                <input asp-for="LastName" class="form-control" placeholder="Last Name" />
-                            </div>
-                            <div class="mb-3">
                                 <label asp-for="Password" class="form-label"></label>
                                 <input asp-for="Password" class="form-control" placeholder="Password" />
                             </div>
-                            <div class="mb-3">
-                                <label asp-for="ConfirmPassword" class="form-label"></label>
-                                <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
-                            </div>
                             <div class="d-flex justify-content-end mt-3">
-                                <button type="submit" class="btn btn-primary font-weight-bold">Register Now</button>
+                                <button type="submit" class="btn btn-primary font-weight-bold">Login</button>
                             </div>
                         </fieldset>
                     </form>
