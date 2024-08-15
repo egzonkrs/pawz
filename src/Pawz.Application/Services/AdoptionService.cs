@@ -30,13 +30,14 @@ namespace Pawz.Application.Services
                 _logger.LogInformation("Started creating an Adoption with Id: {AdoptionId} from UserId: {UserId}", adoption.Id, adoption.AdoptionRequestId);
 
                 await _adoptionRepository.InsertAsync(adoption, cancellationToken);
-                var adoptionCreated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
+                var isAdoptionCreated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
-                if (adoptionCreated)
+                if (isAdoptionCreated)
                 {
-                    _logger.LogInformation("Started creating an Adoption with Id: {AdoptionId} from UserId: {UserId}", adoption.Id, adoption.AdoptionRequestId);
-                    return Result<bool>.Success(true);
+                    _logger.LogInformation("Created an Adoption with Id: {AdoptionId} for UserId: {UserId}", adoption.Id, adoption.AdoptionRequestId);
+                    return Result<bool>.Success();
                 }
+
                 _logger.LogWarning("Failed to create an Adoption with Id: {AdoptionId} from UserId: {UserId}", adoption.Id, adoption.AdoptionRequestId);
                 return Result<bool>.Failure(AdoptionErrors.CreationFailed);
             }

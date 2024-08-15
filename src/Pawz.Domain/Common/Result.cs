@@ -13,6 +13,7 @@ namespace Pawz.Domain.Common
         {
             IsSuccess = isSuccess;
             Value = value;
+
             if (errors is not null)
             {
                 _errors.AddRange(errors);

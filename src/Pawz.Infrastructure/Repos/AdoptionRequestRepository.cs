@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Pawz.Domain.Entities;
-using Pawz.Domain.Enum;
+using Pawz.Domain.Enums;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
 using System.Collections.Generic;
