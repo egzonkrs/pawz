@@ -39,10 +39,37 @@ public class UsersController : Controller
 
         return View(model);
     }
-
-    [HttpPost("login")]
-    public async Task<IActionResult> Login()
+    public IActionResult Register()
     {
-        return Ok();
+        return View();
+    }
+
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var loginRequest = new LoginRequest
+        {
+            Email = model.Email,
+            Password = model.Password
+        };
+
+        var result = await _identityService.LoginAsync(loginRequest);
+
+        if (result.Succeeded)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+        return View(model);
     }
 }
