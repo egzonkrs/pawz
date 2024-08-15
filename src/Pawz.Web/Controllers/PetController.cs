@@ -66,5 +66,10 @@ namespace Pawz.Web.Controllers
             await _petService.DeletePetAsync(id, cancellationToken);
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult PetDetails()
+        {
+            return View();
+        }
     }
 }
