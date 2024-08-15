@@ -20,15 +20,13 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(connectionString).AddInterceptors(new SoftDeleteInterceptor())
-);
+    options.UseSqlite(connectionString).AddInterceptors(new SoftDeleteInterceptor()));
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IPetRepository, PetRepository>();
-builder.Services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
