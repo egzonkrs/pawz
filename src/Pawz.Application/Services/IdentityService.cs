@@ -23,16 +23,16 @@ public class IdentityService : IIdentityService
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null)
         {
-            return Result<bool>.Failure("The email address is not registered.");
+            return Result<bool>.Failure(UsersErrors.IncorrectEmailOrPassword);
         }
 
         var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
         if (result.Succeeded)
         {
-            return Result<bool>.Success(true);
+            return Result<bool>.Success();
         }
 
-        return Result<bool>.Failure("Login attempt was unsuccessful due to an incorrect password.");
+        return Result<bool>.Failure(UsersErrors.IncorrectEmailOrPassword);
     }
 
     public async Task<IdentityResult> RegisterAsync(RegisterRequest request)
