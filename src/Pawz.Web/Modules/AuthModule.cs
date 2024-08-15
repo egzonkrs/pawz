@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Pawz.Application.Interfaces;
+using Pawz.Application.Services;
 using Pawz.Domain.Abstractions;
 using Pawz.Domain.Entities;
 using Pawz.Infrastructure.Data;
-using Pawz.Infrastructure.Services;
 
 namespace Pawz.Web.Modules;
 
