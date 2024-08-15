@@ -19,7 +19,8 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseSqlite(connectionString).AddInterceptors(new SoftDeleteInterceptor())
+);
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
