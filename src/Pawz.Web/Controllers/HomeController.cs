@@ -19,7 +19,21 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Privacy()
+    public IActionResult Adopt()
+    {
+        return View();
+    }
+
+    public IActionResult AboutUs()
+    {
+        return View();
+    }
+
+    public IActionResult WishList()
+    {
+        return View();
+    }
+    public IActionResult ContactUs()
     {
         return View();
     }
