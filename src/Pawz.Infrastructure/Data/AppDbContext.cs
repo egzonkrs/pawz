@@ -39,6 +39,30 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         // One-to-One: An adoption has one payment
         // One-to-Many: A user can make multiple payments
 
+        modelBuilder.Entity<Pet>()
+            .HasQueryFilter(x => x.IsDeleted == false);
+
+        modelBuilder.Entity<Adoption>()
+            .HasQueryFilter(x => x.IsDeleted == false);
+
+        modelBuilder.Entity<AdoptionRequest>()
+            .HasQueryFilter(x => x.IsDeleted == false);
+
+        modelBuilder.Entity<ApplicationUser>()
+            .HasQueryFilter(x => x.IsDeleted == false);
+
+        modelBuilder.Entity<Breed>()
+            .HasQueryFilter(x => x.IsDeleted == false);
+
+        modelBuilder.Entity<Location>()
+            .HasQueryFilter(x => x.IsDeleted == false);
+
+        modelBuilder.Entity<PetImage>()
+            .HasQueryFilter(x => x.IsDeleted == false);
+
+        modelBuilder.Entity<Species>()
+            .HasQueryFilter(x => x.IsDeleted == false);
+
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(modelBuilder);
     }
