@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Pawz.Domain.Entities;
 
-public class Species : IEntity<int>
+public class Species : IEntity<int>, ISoftDeletion
 {
     /// <summary>
     /// The Id of the species
@@ -35,4 +35,16 @@ public class Species : IEntity<int>
     /// The pets belonging to this species
     /// </summary>
     public ICollection<Pet> Pets { get; set; } = new List<Pet>();
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the entity is soft-deleted.
+    /// This property is implemented from the <see cref="ISoftDelete"/> interface.
+    /// </summary>
+    public bool IsDeleted { get; set; }
+
+    /// <summary>
+    /// Gets or sets the timestamp of when the entity was soft-deleted.
+    /// This property is implemented from the <see cref="ISoftDelete"/> interface.
+    /// </summary>
+    public DateTimeOffset? DeletedAt { get; set; }
 }

@@ -1,8 +1,10 @@
+using Pawz.Domain.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace Pawz.Domain.Entities;
 
-public class Location
+public class Location : IEntity<int>, ISoftDeletion
 {
     /// <summary>
     /// The Id of the location
@@ -33,4 +35,16 @@ public class Location
     /// The pets located at this location
     /// </summary>
     public ICollection<Pet> Pets { get; set; } = new List<Pet>();
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the entity is soft-deleted.
+    /// This property is implemented from the <see cref="ISoftDelete"/> interface.
+    /// </summary>
+    public bool IsDeleted { get; set; }
+
+    /// <summary>
+    /// Gets or sets the timestamp of when the entity was soft-deleted.
+    /// This property is implemented from the <see cref="ISoftDelete"/> interface.
+    /// </summary>
+    public DateTimeOffset? DeletedAt { get; set; }
 }
