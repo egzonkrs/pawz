@@ -1,4 +1,3 @@
-using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
@@ -16,13 +15,11 @@ public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly IValidator<RegisterRequest> _validator;
 
-    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IValidator<RegisterRequest> validator)
+    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
-        _validator = validator;
     }
 
     public async Task<SignInResult> LoginAsync(LoginRequest request)
@@ -38,20 +35,12 @@ public class IdentityService : IIdentityService
 
     public async Task<Result<IdentityResult>> RegisterAsync(RegisterRequest request)
     {
-        var validationResult = await _validator.ValidateAsync(request);
-        if (!validationResult.IsValid)
-        {
-            return Result<IdentityResult>.Failure(
-                    validationResult.Errors.Select(e => new Error(e.PropertyName, e.ErrorMessage)).ToArray()
-                    );
-        }
-
         try
         {
             var existingUser = await _userManager.FindByEmailAsync(request.Email);
             if (existingUser != null)
             {
-                return Result<IdentityResult>.Failure();
+                return Result<IdentityResult>.Failure("This email is already in use.");
             }
 
             var user = new ApplicationUser
@@ -70,7 +59,7 @@ public class IdentityService : IIdentityService
                 return Result<IdentityResult>.Failure(result.Errors.Select(e => new Error(e.Code, e.Description)).ToArray());
             }
 
-            List<Claim> claims = new List<Claim>
+            var userClaims = new List<Claim>
                 {
                      new Claim(ClaimTypes.NameIdentifier, user.Id),
                      new Claim(ClaimTypes.Email, user.Email),
@@ -78,7 +67,7 @@ public class IdentityService : IIdentityService
                      new Claim(ClaimTypes.Role, "User")
                 };
 
-            var claimResult = await _userManager.AddClaimsAsync(user, claims);
+            var claimResult = await _userManager.AddClaimsAsync(user, userClaims);
 
             if (!claimResult.Succeeded)
             {
