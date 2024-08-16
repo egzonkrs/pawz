@@ -1,8 +1,9 @@
+using Pawz.Domain.Interfaces;
 using System;
 
 namespace Pawz.Domain.Entities;
 
-public class PetImage
+public class PetImage : IEntity<int>, ISoftDeletion
 {
     /// <summary>
     /// The Id of the pet image
@@ -38,4 +39,16 @@ public class PetImage
     /// The date and time when the image was uploaded
     /// </summary>
     public DateTime UploadedAt { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the entity is soft-deleted.
+    /// This property is implemented from the <see cref="ISoftDelete"/> interface.
+    /// </summary>
+    public bool IsDeleted { get; set; }
+
+    /// <summary>
+    /// Gets or sets the timestamp of when the entity was soft-deleted.
+    /// This property is implemented from the <see cref="ISoftDelete"/> interface.
+    /// </summary>
+    public DateTimeOffset? DeletedAt { get; set; }
 }
