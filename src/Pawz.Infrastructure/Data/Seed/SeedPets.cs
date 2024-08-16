@@ -1,6 +1,6 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Pawz.Domain.Enum;
+using Pawz.Domain.Enums;
 using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Data.Seed
