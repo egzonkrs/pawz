@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
@@ -15,11 +16,13 @@ public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly IValidator<RegisterRequest> _validator;
 
-    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IValidator<RegisterRequest> validator)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _validator = validator;
     }
 
     public async Task<SignInResult> LoginAsync(LoginRequest request)
@@ -35,12 +38,20 @@ public class IdentityService : IIdentityService
 
     public async Task<Result<IdentityResult>> RegisterAsync(RegisterRequest request)
     {
+        var validationResult = await _validator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return Result<IdentityResult>.Failure(
+                    validationResult.Errors.Select(e => new Error(e.PropertyName, e.ErrorMessage)).ToArray()
+                    );
+        }
+
         try
         {
             var existingUser = await _userManager.FindByEmailAsync(request.Email);
             if (existingUser != null)
             {
-                return Result<IdentityResult>.Failure($"Email is already in use.");
+                return Result<IdentityResult>.Failure();
             }
 
             var user = new ApplicationUser
