@@ -5,28 +5,6 @@ using Pawz.Web.Modules;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options
-        .UseSqlite(connectionString)
-        .AddInterceptors(new SoftDeleteInterceptor())
-);
-
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-builder.Services.AddScoped<IPetRepository, PetRepository>();
-
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
-
-builder.Services.AddScoped<IIdentityService, IdentityService>();
-
 builder.Services.AddModule(new CoreModule());
 builder.Services.AddModule(new AuthModule());
 builder.Services.AddModule(new DataModule(builder.Configuration));
