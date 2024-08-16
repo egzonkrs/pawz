@@ -1,9 +1,10 @@
+using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 
 namespace Pawz.Domain.Entities;
 
-public class Species
+public class Species : IEntity<int>
 {
     /// <summary>
     /// The Id of the species
