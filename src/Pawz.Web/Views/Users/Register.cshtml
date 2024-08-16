@@ -1,7 +1,7 @@
 @model RegisterViewModel
 
 @{
-ViewData["Title"] = "Register";
+    ViewData["Title"] = "Register";
 }
 
 <section class="login py-5 border-top-1">
@@ -11,29 +11,37 @@ ViewData["Title"] = "Register";
                 <div class="border border mb-4">
                     <h3 class="bg-gray p-4">Register Now</h3>
                     <form asp-action="Register" method="post">
-                        <div asp-validation-summary="All" class="text-danger"></div>
                         <fieldset class="p-4">
-                            <div class="mb-3">
-                                <label asp-for="Email" class="form-label"></label>
+                            <div class="">
+                                <label asp-for="Email" class="form-label">Email</label>
                                 <input asp-for="Email" class="form-control" placeholder="Email" />
+                                <span asp-validation-for="Email" class="form-label input-error-text"></span>
                             </div>
-                            <div class="mb-3">
-                                <label asp-for="FirstName" class="form-label"></label>
+                            <div class="">
+                                <label asp-for="FirstName" class="form-label">First Name</label>
                                 <input asp-for="FirstName" class="form-control" placeholder="First Name" />
+                                <span asp-validation-for="FirstName" class="form-label input-error-text"></span>
                             </div>
-                            <div class="mb-3">
-                                <label asp-for="LastName" class="form-label"></label>
+                            <div class="">
+                                <label asp-for="LastName" class="form-label">Last Name</label>
                                 <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+                                <span asp-validation-for="LastName" class="form-label input-error-text"></span>
                             </div>
-                            <div class="mb-3">
-                                <label asp-for="Password" class="form-label"></label>
+                            <div class="">
+                                <label asp-for="Password" class="form-label">Password</label>
                                 <input asp-for="Password" class="form-control" placeholder="Password" />
+                                <span asp-validation-for="Password" class="form-label input-error-text"></span>
                             </div>
-                            <div class="mb-3">
-                                <label asp-for="ConfirmPassword" class="form-label"></label>
+                            <div class="">
+                                <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
                                 <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                                <span asp-validation-for="ConfirmPassword" class="form-label input-error-text"></span>
                             </div>
-                            <div class="d-flex justify-content-end mt-3">
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <a href="/Users/Login" class="text-sm">
+                                    <span class="text-dark">Already a member?</span>
+                                    <span class="text-primary">Log In</span>
+                                </a>
                                 <button type="submit" class="btn btn-primary font-weight-bold">Register Now</button>
                             </div>
                         </fieldset>
