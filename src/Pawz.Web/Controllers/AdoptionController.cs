@@ -31,6 +31,11 @@ namespace Pawz.Web.Controllers
             return View();
         }
 
+        public IActionResult AdoptionRequest()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Adoption adoption, CancellationToken cancellationToken)

@@ -67,7 +67,7 @@ namespace Pawz.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult PetDetails()
+        public IActionResult Details()
         {
             return View();
         }
