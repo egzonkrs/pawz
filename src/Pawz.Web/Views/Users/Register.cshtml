@@ -37,6 +37,19 @@
                                 <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
                                 <span asp-validation-for="ConfirmPassword" class="form-label input-error-text"></span>
                             </div>
+
+                            @if (ViewData.ModelState.IsValid is false && ViewData.ModelState[string.Empty]?.Errors.Count > 0)
+                            {
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach (var error in ViewData.ModelState[string.Empty]!.Errors)
+                                        {
+                                            <li>@error.ErrorMessage</li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+
                             <div class="d-flex justify-content-between align-items-center mt-3">
                                 <a href="/Users/Login" class="text-sm">
                                     <span class="text-dark">Already a member?</span>
