@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
@@ -9,10 +10,12 @@ namespace Pawz.Web.Controllers;
 public class UsersController : Controller
 {
     private readonly IIdentityService _identityService;
+    private readonly IValidator<RegisterRequest> _registerRequestValidator;
 
-    public UsersController(IIdentityService identityService)
+    public UsersController(IIdentityService identityService, IValidator<RegisterRequest> registerRequestValidator)
     {
         _identityService = identityService;
+        _registerRequestValidator = registerRequestValidator;
     }
 
     [HttpGet]
@@ -29,34 +32,40 @@ public class UsersController : Controller
             return View(model);
         }
 
+        var user = new RegisterRequest
+        {
+            Email = model.Email,
+            Password = model.Password,
+            FirstName = model.FirstName,
+            LastName = model.LastName,
+        };
+
+        var validationResult = await _registerRequestValidator.ValidateAsync(user);
+
+        if (!validationResult.IsValid)
+        {
+            return View(model);
+        }
+
         try
         {
-            var user = new RegisterRequest
-            {
-                Email = model.Email,
-                Password = model.Password,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-            };
-
             var result = await _identityService.RegisterAsync(user);
 
-            if (result.IsSuccess)
+            if (!result.IsSuccess)
             {
-                return RedirectToAction("Login", "Users");
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return View(model);
             }
-
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
+            return RedirectToAction("Login", "Users");
         }
         catch (Exception ex)
         {
             ModelState.AddModelError("", "An unexpected error occurred. Please try again later.");
+            return View(model);
         }
-
-        return View(model);
     }
 
     public IActionResult Login()
