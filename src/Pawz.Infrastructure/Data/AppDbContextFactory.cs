@@ -11,7 +11,7 @@ namespace Pawz.Infrastructure.Data
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
