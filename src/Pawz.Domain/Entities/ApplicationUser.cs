@@ -19,7 +19,7 @@ public class ApplicationUser : IdentityUser
     /// <summary>
     /// The user's address.
     /// </summary>
-    public string Address { get; set; }
+    public string? Address { get; set; }
 
     /// <summary>
     /// The date and time when the user was created.
