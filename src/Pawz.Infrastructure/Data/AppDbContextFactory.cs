@@ -20,7 +20,7 @@ namespace Pawz.Infrastructure.Data
             builder.EnableSensitiveDataLogging(true);
             builder.UseSqlite(connectionString);
 
-            return new AppDbContext(builder.Options);
+            return new AppDbContext(builder.Options, configuration);
         }
     }
 }
