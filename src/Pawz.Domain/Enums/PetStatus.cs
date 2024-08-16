@@ -1,4 +1,4 @@
-namespace Pawz.Domain.Enum;
+namespace Pawz.Domain.Enums;
 
 public enum PetStatus
 {
