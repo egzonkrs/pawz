@@ -1,17 +1,7 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Pawz.Application.Interfaces;
-using Pawz.Domain.Entities;
-using Pawz.Domain.Interfaces;
-using Pawz.Infrastructure.Data;
-using Pawz.Infrastructure.Repos;
-using Pawz.Infrastructure.Services;
-using System;
-
+using Pawz.Web.Extensions;
+using Pawz.Web.Modules;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +27,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 
+builder.Services.AddModule(new CoreModule());
+builder.Services.AddModule(new AuthModule());
+builder.Services.AddModule(new DataModule(builder.Configuration));
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -47,13 +41,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

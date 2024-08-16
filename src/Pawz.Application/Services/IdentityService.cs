@@ -4,7 +4,7 @@ using Pawz.Application.Models;
 using Pawz.Domain.Entities;
 using System.Threading.Tasks;
 
-namespace Pawz.Infrastructure.Services;
+namespace Pawz.Application.Services;
 
 public class IdentityService : IIdentityService
 {

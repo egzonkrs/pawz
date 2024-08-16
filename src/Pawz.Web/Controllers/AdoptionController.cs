@@ -9,9 +9,10 @@ namespace Pawz.Web.Controllers
     public class AdoptionController : Controller
     {
         private readonly IAdoptionService _adoptionService;
-        public AdoptionController(IAdoptionService _adoptionService)
+
+        public AdoptionController(IAdoptionService adoptionService)
         {
-            _adoptionService = _adoptionService;
+            _adoptionService = adoptionService;
         }
 
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
