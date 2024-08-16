@@ -5,7 +5,6 @@ using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -33,16 +32,10 @@ public class IdentityService : IIdentityService
         return await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
     }
 
-    public async Task<Result<IdentityResult>> RegisterAsync(RegisterRequest request)
+    public async Task<Result<bool>> RegisterAsync(RegisterRequest request)
     {
         try
         {
-            var existingUser = await _userManager.FindByEmailAsync(request.Email);
-            if (existingUser != null)
-            {
-                return Result<IdentityResult>.Failure("This email is already in use.");
-            }
-
             var user = new ApplicationUser
             {
                 UserName = request.Email,
@@ -56,7 +49,7 @@ public class IdentityService : IIdentityService
 
             if (!result.Succeeded)
             {
-                return Result<IdentityResult>.Failure(result.Errors.Select(e => new Error(e.Code, e.Description)).ToArray());
+                return Result<bool>.Failure(UserErrors.CreationFailed);
             }
 
             var userClaims = new List<Claim>
@@ -69,16 +62,11 @@ public class IdentityService : IIdentityService
 
             var claimResult = await _userManager.AddClaimsAsync(user, userClaims);
 
-            if (!claimResult.Succeeded)
-            {
-                return Result<IdentityResult>.Failure("Failed to set up user claims.");
-            }
-
-            return Result<IdentityResult>.Success(result);
+            return claimResult.Succeeded ? Result<bool>.Success() : Result<bool>.Failure(UserErrors.ClaimFailed);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result<IdentityResult>.Failure("An unexpected error occurred during registration. Please try again later.");
+            return Result<bool>.Failure(UserErrors.UnexpectedError);
         }
     }
 }
