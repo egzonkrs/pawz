@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
 using Pawz.Web.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace Pawz.Web.Controllers;
@@ -14,6 +15,12 @@ public class UsersController : Controller
         _identityService = identityService;
     }
 
+    [HttpGet]
+    public IActionResult Register()
+    {
+        return View();
+    }
+
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
@@ -22,26 +29,34 @@ public class UsersController : Controller
             return View(model);
         }
 
-        var user = new RegisterRequest
+        try
         {
-            Email = model.Email,
-            Password = model.Password,
-            FirstName = model.FirstName,
-            LastName = model.LastName
-        };
+            var user = new RegisterRequest
+            {
+                Email = model.Email,
+                Password = model.Password,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+            };
 
-        var result = await _identityService.RegisterAsync(user);
+            var result = await _identityService.RegisterAsync(user);
 
-        if (result.Succeeded)
+            if (result.IsSuccess)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        }
+        catch (Exception ex)
         {
-            return RedirectToAction("Index", "Home");
+            ModelState.AddModelError("", "An unexpected error occurred. Please try again later.");
         }
 
         return View(model);
-    }
-    public IActionResult Register()
-    {
-        return View();
     }
 
     public IActionResult Login()
