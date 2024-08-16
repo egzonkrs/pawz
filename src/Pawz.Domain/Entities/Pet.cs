@@ -1,4 +1,4 @@
-using Pawz.Domain.Enum;
+using Pawz.Domain.Enums;
 using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;

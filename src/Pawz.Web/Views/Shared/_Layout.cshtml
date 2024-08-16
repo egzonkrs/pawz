@@ -1,49 +1,68 @@
-﻿<!DOCTYPE html>
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Pawz.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Pawz.Web.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Pawz.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Agency HTML Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Pawz.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <!-- Icon -->
+    <link href="~/template/images/favicon.png" rel="shortcut icon">
+
+    <title>Pawz - @ViewData["Title"]</title>
+
+    <link href="~/template/plugins/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="~/template/plugins/bootstrap/bootstrap-slider.css" rel="stylesheet">
+    <link href="~/template/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/template/plugins/slick/slick.css" rel="stylesheet">
+    <link href="~/template/plugins/slick/slick-theme.css" rel="stylesheet">
+    <link href="~/template/plugins/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <link href="~/template/css/style.css" rel="stylesheet">
+</head>
+<body class="body-wrapper">
+
+<!--NavBar-->
+<header>
+    <partial name="Navbar"/>
+</header>
+
+<main role="main">
+    @RenderBody()
+</main>
+
+<!-- Footer-Top -->
+<footer class="footer section section-sm">
+    <partial name="FooterTop"/>
+
+</footer>
+
+<!-- Footer-Bottom -->
+<footer class="footer-bottom">
+    <partial name="FooterBottom"/>
+</footer>
+
+<!--=================Essential Scripts====================-->
+<script src="~/template/plugins/jquery/jquery.min.js"></script>
+<script src="~/template/plugins/bootstrap/popper.min.js"></script>
+<script src="~/template/plugins/bootstrap/bootstrap.min.js"></script>
+<script src="~/template/plugins/bootstrap/bootstrap-slider.js"></script>
+<script src="~/template/plugins/tether/js/tether.min.js"></script>
+<script src="~/template/plugins/raty/jquery.raty-fa.js"></script>
+<script src="~/template/plugins/slick/slick.min.js"></script>
+<script src="~/template/plugins/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+
+<!-- google map -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU" defer></script>
+<script src="~/template/plugins/google-map/map.js" defer></script>
+
+<script src="~/template/js/script.js"></script>
+
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

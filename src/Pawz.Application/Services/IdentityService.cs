@@ -4,21 +4,28 @@ using Pawz.Application.Models;
 using Pawz.Domain.Entities;
 using System.Threading.Tasks;
 
-namespace Pawz.Infrastructure.Services;
+namespace Pawz.Application.Services;
 
 public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public IdentityService(UserManager<ApplicationUser> userManager)
+    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
     {
         _userManager = userManager;
+        _signInManager = signInManager;
     }
 
-    public Task LoginAsync()
+    public async Task<SignInResult> LoginAsync(LoginRequest request)
     {
-        //TODO:
-        return Task.CompletedTask;
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
+        {
+            return SignInResult.Failed;
+        }
+
+        return await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
     }
 
     public async Task<IdentityResult> RegisterAsync(RegisterRequest request)

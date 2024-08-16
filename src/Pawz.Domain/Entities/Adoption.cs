@@ -1,8 +1,9 @@
+using Pawz.Domain.Interfaces;
 using System;
 
 namespace Pawz.Domain.Entities;
 
-public class Adoption
+public class Adoption : IEntity<int>
 {
     /// <summary>
     /// The Id of the adoption

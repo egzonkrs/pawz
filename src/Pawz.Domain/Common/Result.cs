@@ -13,13 +13,14 @@ namespace Pawz.Domain.Common
         {
             IsSuccess = isSuccess;
             Value = value;
+
             if (errors is not null)
             {
                 _errors.AddRange(errors);
             }
         }
 
-        public static Result<T> Success(T value)
+        public static Result<T> Success(T value = default)
         {
             return new Result<T>(true, value, null);
         }
@@ -30,11 +31,6 @@ namespace Pawz.Domain.Common
         }
 
         public static Result<T> Failure(params Error[] errors)
-        {
-            return new Result<T>(false, default, errors);
-        }
-
-        public static Result<T> Failure(IEnumerable<Error> errors)
         {
             return new Result<T>(false, default, errors);
         }
