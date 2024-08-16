@@ -11,6 +11,7 @@ ViewData["Title"] = "Register";
                 <div class="border border mb-4">
                     <h3 class="bg-gray p-4">Register Now</h3>
                     <form asp-action="Register" method="post">
+                        <div asp-validation-summary="All" class="text-danger"></div>
                         <fieldset class="p-4">
                             <div class="mb-3">
                                 <label asp-for="Email" class="form-label"></label>
