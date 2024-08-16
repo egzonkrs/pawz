@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Pawz.Domain.Entities;
 using System.Reflection;
+using System.Configuration;
 
 namespace Pawz.Infrastructure.Data;
 
@@ -24,13 +25,18 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (!optionsBuilder.IsConfigured)
+        if (optionsBuilder.IsConfigured) return;
+
+        var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+        if (string.IsNullOrEmpty(connectionString))
         {
-            var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            optionsBuilder
-                .UseSqlite(connectionString)
-                .AddInterceptors(new SoftDeleteInterceptor());
+            throw new ConfigurationErrorsException("The connection string 'DefaultConnection' is missing or empty in the configuration.");
         }
+
+        optionsBuilder
+            .UseSqlite(connectionString)
+            .AddInterceptors(new SoftDeleteInterceptor());
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

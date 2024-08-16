@@ -20,7 +20,10 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(connectionString).AddInterceptors(new SoftDeleteInterceptor()));
+    options
+        .UseSqlite(connectionString)
+        .AddInterceptors(new SoftDeleteInterceptor())
+);
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

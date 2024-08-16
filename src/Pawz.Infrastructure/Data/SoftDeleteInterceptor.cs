@@ -7,9 +7,7 @@ namespace Pawz.Infrastructure.Data;
 
 public class SoftDeleteInterceptor : SaveChangesInterceptor
 {
-    public override InterceptionResult<int> SavingChanges(
-        DbContextEventData eventData,
-        InterceptionResult<int> result)
+    public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
         if (eventData.Context is null) return result;
 
