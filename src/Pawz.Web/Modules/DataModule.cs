@@ -27,7 +27,11 @@ public class DataModule : IModule
             throw new ConfigurationErrorsException("Cannot find 'DefaultConnection' section inside the configuration");
         }
 
-        services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
+        services.AddDbContext<AppDbContext>(options =>
+            options
+                .UseSqlite(connectionString)
+                .AddInterceptors(new SoftDeleteInterceptor())
+        );
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IPetRepository, PetRepository>();
