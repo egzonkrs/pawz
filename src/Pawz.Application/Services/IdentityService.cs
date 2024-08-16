@@ -1,7 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
+using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Pawz.Application.Services;
@@ -28,18 +33,52 @@ public class IdentityService : IIdentityService
         return await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
     }
 
-    public async Task<IdentityResult> RegisterAsync(RegisterRequest request)
+    public async Task<Result<IdentityResult>> RegisterAsync(RegisterRequest request)
     {
-        var user = new ApplicationUser
+        try
         {
-            UserName = request.Email,
-            Email = request.Email,
-            FirstName = request.FirstName,
-            LastName = request.LastName
-        };
+            var existingUser = await _userManager.FindByEmailAsync(request.Email);
+            if (existingUser != null)
+            {
+                return Result<IdentityResult>.Failure($"Email is already in use.");
+            }
 
-        var result = await _userManager.CreateAsync(user, request.Password);
+            var user = new ApplicationUser
+            {
+                UserName = request.Email,
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                CreatedAt = DateTime.UtcNow,
+            };
 
-        return result;
+            var result = await _userManager.CreateAsync(user, request.Password);
+
+            if (!result.Succeeded)
+            {
+                return Result<IdentityResult>.Failure(result.Errors.Select(e => new Error(e.Code, e.Description)).ToArray());
+            }
+
+            List<Claim> claims = new List<Claim>
+                {
+                     new Claim(ClaimTypes.NameIdentifier, user.Id),
+                     new Claim(ClaimTypes.Email, user.Email),
+                     new Claim(ClaimTypes.Name, user.UserName),
+                     new Claim(ClaimTypes.Role, "User")
+                };
+
+            var claimResult = await _userManager.AddClaimsAsync(user, claims);
+
+            if (!claimResult.Succeeded)
+            {
+                return Result<IdentityResult>.Failure("Failed to set up user claims.");
+            }
+
+            return Result<IdentityResult>.Success(result);
+        }
+        catch (Exception ex)
+        {
+            return Result<IdentityResult>.Failure("An unexpected error occurred during registration. Please try again later.");
+        }
     }
 }
