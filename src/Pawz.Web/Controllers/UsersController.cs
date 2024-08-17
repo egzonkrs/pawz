@@ -1,8 +1,6 @@
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
-using Pawz.Web.Extensions;
 using Pawz.Web.Models;
 using System;
 using System.Threading.Tasks;
@@ -11,12 +9,10 @@ namespace Pawz.Web.Controllers;
 public class UsersController : Controller
 {
     private readonly IIdentityService _identityService;
-    private readonly IValidator<RegisterRequest> _validator;
 
-    public UsersController(IIdentityService identityService, IValidator<RegisterRequest> validator)
+    public UsersController(IIdentityService identityService)
     {
         _identityService = identityService;
-        _validator = validator;
     }
 
     [HttpGet]
@@ -40,14 +36,6 @@ public class UsersController : Controller
             FirstName = model.FirstName,
             LastName = model.LastName,
         };
-
-        var validationResult = await _validator.ValidateAsync(user);
-
-        if (!validationResult.IsValid)
-        {
-            validationResult.AddToModelState(ModelState);
-            return View(model);
-        }
 
         try
         {
