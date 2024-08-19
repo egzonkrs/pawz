@@ -32,7 +32,7 @@ public class UsersController : Controller
 
         if (validationResult.IsValid is false)
         {
-            validationResult.AddToModelState(ModelState);
+            validationResult.AddErrorsToModelState(ModelState);
             return View(registerViewModel);
         }
 

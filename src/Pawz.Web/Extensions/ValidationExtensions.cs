@@ -6,7 +6,7 @@ namespace Pawz.Web.Extensions;
 
 public static class ValidationExtensions
 {
-    public static void AddToModelState(this ValidationResult result, ModelStateDictionary modelState)
+    public static void AddErrorsToModelState(this ValidationResult result, ModelStateDictionary modelState)
     {
         foreach (var error in result.Errors)
         {
