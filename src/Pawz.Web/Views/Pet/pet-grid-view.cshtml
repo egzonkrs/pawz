@@ -1,0 +1,28 @@
+@model IEnumerable<Pawz.Domain.Entities.Pet>
+
+<div class="product-grid-list">
+    <div class="row mt-30">
+        @foreach (var pet in Model)
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="product-item">
+                    <div class="product-thumb">
+                        <img class="img-fluid"
+                            src="@(pet.PetImages != null && pet.PetImages.Any() ? pet.PetImages.FirstOrDefault()?.ImageUrl : "/images/default-image.webp")"
+                            alt="Pet Image" />
+                    </div>
+                    <div class="product-content">
+                        <h4>@pet.Name</h4>
+                        <p>@pet.About</p>
+                        <ul class="list-inline">
+                            <li><strong>Category:</strong> @(pet.Species)</li>
+                            <li><strong>Age:</strong> @pet.AgeYears years and @pet.AgeMonths months</li>
+                            <li><strong>Date:</strong> @pet.CreatedAt.ToString("d MMMM yyyy")</li>
+                            <li><strong>Price:</strong> @pet.Price.ToString("C")</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

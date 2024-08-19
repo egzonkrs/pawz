@@ -1064,6 +1064,9 @@ ul.pagination .active a {
 .dashboard-container .product-details .status.active {
   color: #59d659;
 }
+.product-content{
+  padding: 1rem;
+}
 .dashboard-container .product-category {
   width: 15%;
   text-align: center;
