@@ -11,7 +11,7 @@ public interface IIdentityService
     /// Registers a new user with the provided details.
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
-    Task<IdentityResult> RegisterAsync(RegisterRequest request);
+    Task<Result<bool>> RegisterAsync(RegisterRequest request);
 
     /// <summary>
     /// Logs in a user with the provided credentials.
