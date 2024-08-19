@@ -1,5 +1,4 @@
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
@@ -33,7 +32,7 @@ public class UsersController : Controller
 
         if (validationResult.IsValid is false)
         {
-            validationResult.AddValidationErrorsToModelState(ModelState);
+            validationResult.AddToModelState(ModelState);
             return View(registerViewModel);
         }
 
@@ -49,7 +48,7 @@ public class UsersController : Controller
 
         if (registerResult.IsSuccess is false)
         {
-            registerResult.AddToModelState(ModelState);
+            registerResult.AddErrorsToModelState(ModelState);
             return View(registerViewModel);
         }
 
