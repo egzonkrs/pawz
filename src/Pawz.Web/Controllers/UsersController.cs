@@ -65,9 +65,14 @@ public class UsersController : Controller
 
         var result = await _identityService.LoginAsync(loginRequest);
 
-        if (result.Succeeded)
+        if (result.IsSuccess)
         {
             return RedirectToAction("Index", "Home");
+        }
+
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(string.Empty, error.Description);
         }
 
         return View(model);

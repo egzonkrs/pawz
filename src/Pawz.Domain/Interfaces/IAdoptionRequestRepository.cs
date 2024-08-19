@@ -1,8 +1,9 @@
 using Pawz.Domain.Entities;
-using Pawz.Domain.Enum;
+using Pawz.Domain.Enums;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+
 namespace Pawz.Domain.Interfaces;
 
 public interface IAdoptionRequestRepository : IGenericRepository<AdoptionRequest, int>

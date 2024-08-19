@@ -1,13 +1,17 @@
 namespace Pawz.Application.Models;
+
+/// <summary>
+/// The Login Request initiated by the user of the application.
+/// </summary>
 public class LoginRequest
 {
     /// <summary>
-    /// Gets or sets the user's email address.
+    /// The email of the user that is trying to log in.
     /// </summary>
     public string Email { get; set; }
 
     /// <summary>
-    /// Gets or sets the user's password.
+    /// The password of the user that is trying to log in.
     /// </summary>
     public string Password { get; set; }
 }
