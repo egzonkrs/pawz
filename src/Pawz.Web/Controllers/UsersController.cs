@@ -1,18 +1,22 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
+using Pawz.Web.Extensions;
 using Pawz.Web.Models;
-using System;
 using System.Threading.Tasks;
 
 namespace Pawz.Web.Controllers;
 public class UsersController : Controller
 {
     private readonly IIdentityService _identityService;
+    private readonly IValidator<RegisterViewModel> _validator;
 
-    public UsersController(IIdentityService identityService)
+    public UsersController(IIdentityService identityService, IValidator<RegisterViewModel> validator)
     {
         _identityService = identityService;
+        _validator = validator;
     }
 
     [HttpGet]
@@ -22,40 +26,33 @@ public class UsersController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register(RegisterViewModel model)
+    public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {
-        if (!ModelState.IsValid)
+        var validationResult = await _validator.ValidateAsync(registerViewModel);
+
+        if (validationResult.IsValid is false)
         {
-            return View(model);
+            validationResult.AddToModelState(ModelState);
+            return View(registerViewModel);
         }
 
-        var user = new RegisterRequest
+        var registerRequest = new RegisterRequest
         {
-            Email = model.Email,
-            Password = model.Password,
-            FirstName = model.FirstName,
-            LastName = model.LastName,
+            FirstName = registerViewModel.FirstName,
+            LastName = registerViewModel.LastName,
+            Email = registerViewModel.Email,
+            Password = registerViewModel.Password
         };
 
-        try
-        {
-            var result = await _identityService.RegisterAsync(user);
+        var registerResult = await _identityService.RegisterAsync(registerRequest);
 
-            if (!result.IsSuccess)
-            {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-                return View(model);
-            }
-            return RedirectToAction("Login", "Users");
-        }
-        catch (Exception ex)
+        if (registerResult.IsSuccess is false)
         {
-            ModelState.AddModelError("", "An unexpected error occurred. Please try again later.");
-            return View(model);
+            registerResult.AddToModelState(ModelState);
+            return View(registerViewModel);
         }
+
+        return RedirectToAction("Login", "Users");
     }
 
     public IActionResult Login()
