@@ -11,11 +11,13 @@ public class UsersController : Controller
 {
     private readonly IIdentityService _identityService;
     private readonly IValidator<RegisterViewModel> _validator;
+    private readonly IValidator<LoginViewModel> _loginModelValidator;
 
-    public UsersController(IIdentityService identityService, IValidator<RegisterViewModel> validator)
+    public UsersController(IIdentityService identityService, IValidator<RegisterViewModel> validator, IValidator<LoginViewModel> loginModelValidator)
     {
         _identityService = identityService;
         _validator = validator;
+        _loginModelValidator = loginModelValidator;
     }
 
     [HttpGet]
@@ -63,8 +65,11 @@ public class UsersController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
-        if (!ModelState.IsValid)
+        var validationResult = await _loginModelValidator.ValidateAsync(model);
+
+        if (!validationResult.IsValid)
         {
+            validationResult.AddErrorsToModelState(ModelState);
             return View(model);
         }
 
