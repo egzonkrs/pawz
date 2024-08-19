@@ -26,13 +26,14 @@ public class UsersController : Controller
     }
 
     [HttpPost]
+    [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {
         var validationResult = await _validator.ValidateAsync(registerViewModel);
 
         if (validationResult.IsValid is false)
         {
-            validationResult.AddToModelState(ModelState);
+            validationResult.AddValidationErrorsToModelState(ModelState);
             return View(registerViewModel);
         }
 
