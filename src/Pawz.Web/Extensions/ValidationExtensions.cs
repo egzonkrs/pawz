@@ -14,7 +14,7 @@ public static class ValidationExtensions
         }
     }
 
-    public static void AddErrorsToModelState(this Result<bool> result, ModelStateDictionary modelState)
+    public static void AddErrorsToModelState<T>(this Result<T> result, ModelStateDictionary modelState)
     {
         foreach (var error in result.Errors)
         {
