@@ -12,7 +12,11 @@
                             alt="Pet Image" />
                     </div>
                     <div class="card-body">
-                        <h4 class="card-title"> <a href=""> @pet.Name </a> </h4>
+                        <h4 class="card-title">
+                            <a href="@Url.Action("Details", "Pet", new { id = pet.Id })">
+                                @pet.Name
+                            </a>
+                        </h4>
                         <p class="card-text">@pet.About</p>
                         <ul class="list-inline">
                             <li><strong>Species:</strong> @(pet.Species)</li>

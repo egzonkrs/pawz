@@ -3,7 +3,7 @@
 @foreach (var pet in Model)
 {
     <div class="ad-listing-list mt-20">
-        <a href="single.html" class="text-decoration-none text-dark">
+        <a href="@Url.Action("Details", "Pet", new { id = pet.Id })" class="text-decoration-none text-dark">
             <div class="row p-lg-3 p-sm-5 p-4">
                 <div class="col-lg-4 align-self-center">
                     <img src="@(pet.PetImages != null && pet.PetImages.Any() ? pet.PetImages.FirstOrDefault()?.ImageUrl : "/images/default-image.webp")"
@@ -13,9 +13,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-10">
                             <div class="ad-listing-content">
-                                <div>
-                                    <span class="font-weight-bold">@pet.Name</span>
-                                </div>
+                                <span class="font-weight-bold">@pet.Name</span>
                                 <ul class="list-inline mt-2 mb-3">
                                     <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>
                                             @(pet.Species)</span></li>

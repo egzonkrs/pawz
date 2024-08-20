@@ -1,0 +1,23 @@
+@model Pawz.Domain.Common.Result<Pawz.Domain.Entities.Pet>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>@Model.Value.Name</h2> <!-- Accessing the Pet entity inside Result -->
+            <img class="img-fluid mb-3"
+                src="@(Model.Value.PetImages != null && Model.Value.PetImages.Any() ? Model.Value.PetImages.FirstOrDefault()?.ImageUrl : "/images/default-image.webp")"
+                alt="Pet Image" />
+
+            <ul class="list-unstyled">
+                <li><strong>Species:</strong> @(Model.Value.Species?.Name ?? "Unknown")</li>
+                <li><strong>Breed:</strong> @(Model.Value.Breed?.Name ?? "Unknown")</li>
+                <li><strong>Age:</strong> @Model.Value.AgeYears years and @Model.Value.AgeMonths months</li>
+                <li><strong>Date Listed:</strong> @Model.Value.CreatedAt.ToString("d MMMM yyyy")</li>
+                <li><strong>Price:</strong> @Model.Value.Price.ToString("C")</li>
+            </ul>
+
+            <h4>About</h4>
+            <p>@Model.Value.About</p>
+        </div>
+    </div>
+</div>
