@@ -48,7 +48,7 @@ public sealed class IdentityService : IIdentityService
         {
             var user = new ApplicationUser
             {
-                UserName = request.Email,
+                UserName = request.FirstName,
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
