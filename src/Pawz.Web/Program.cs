@@ -12,6 +12,8 @@ builder.Services.AddModule(new DataModule(builder.Configuration));
 
 var app = builder.Build();
 
+await app.UseDataSeeder();
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
