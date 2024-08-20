@@ -63,34 +63,31 @@ public class UsersController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(LoginViewModel model)
+    public async Task<IActionResult> Login(LoginViewModel loginViewModel)
     {
-        var validationResult = await _loginModelValidator.ValidateAsync(model);
+        var validationResult = await _loginModelValidator.ValidateAsync(loginViewModel);
 
-        if (!validationResult.IsValid)
+        if (validationResult.IsValid is false)
         {
             validationResult.AddErrorsToModelState(ModelState);
-            return View(model);
+            return View(loginViewModel);
         }
 
         var loginRequest = new LoginRequest
         {
-            Email = model.Email,
-            Password = model.Password
+            Email = loginViewModel.Email,
+            Password = loginViewModel.Password
         };
 
-        var result = await _identityService.LoginAsync(loginRequest);
+        var loginResult = await _identityService.LoginAsync(loginRequest);
 
-        if (result.IsSuccess)
+        if (loginResult.IsSuccess is false)
         {
-            return RedirectToAction("Index", "Home");
+            loginResult.AddErrorsToModelState(ModelState);
+            //ModelState.AddModelError(string.Empty, UsersErrors.IncorrectEmailOrPassword.Description);
+            return View(loginViewModel);
         }
 
-        foreach (var error in result.Errors)
-        {
-            ModelState.AddModelError(string.Empty, error.Description);
-        }
-
-        return View(model);
+        return RedirectToAction("Index", "Home");
     }
 }
