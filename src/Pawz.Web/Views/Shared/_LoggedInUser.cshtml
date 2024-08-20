@@ -1,0 +1,36 @@
+@inject Pawz.Application.Interfaces.IUserAccessor UserAccessor
+
+@if (UserAccessor.IsUserAuthenticated())
+{
+    <li class="nav-item dropdown dropdown-slide">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="navbar-text custom-navbar-text">
+                <img src="~/template/images/user/userAvatar.jpg" alt="@UserAccessor.GetUserName()'s Profile Picture" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;" />
+                Hi, @UserAccessor.GetUserName()!
+          
+            </span>
+        </a>
+        <!-- Dropdown list -->
+        <ul class="dropdown-menu">
+            <li>
+                <a class="dropdown-item nav-link" asp-controller="" asp-action="">
+                    <i class="fa fa-user p-2"></i> Account
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item nav-link" asp-controller="" asp-action="">
+                    <i class="fa fa-sign-out p-2"></i>  Logout
+                </a >
+            </li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link login-button" asp-controller="Users" asp-action="Login">Login</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white add-button" asp-controller="Users" asp-action="Register">Register</a>
+    </li>
+}
