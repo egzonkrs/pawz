@@ -22,13 +22,23 @@ ViewData["Title"] = "Login";
                                 <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
                                 <span asp-validation-for="Password" class="form-label input-error-text"></span>
                             </div>
-                            @if (ViewData.ModelState.IsValid is false && ViewData.ModelState[string.Empty]?.Errors.Count > 0)
+                            @if (ViewData.ModelState.IsValid is false)
                             {
                                 <div class="alert alert-danger">
                                     <ul>
-                                        @foreach (var error in ViewData.ModelState[string.Empty]!.Errors)
+                                        @foreach (var state in ViewData.ModelState)
                                         {
-                                            <li>@error.ErrorMessage</li>
+                                            foreach (var error in state.Value.Errors)
+                                            {
+                                                if (state.Key == "Users.Error")
+                                                {
+                                                    <li>@error.ErrorMessage</li>
+                                                }
+                                                else
+                                                {
+                                                    <li>@error.ErrorMessage</li>
+                                                }
+                                            }
                                         }
                                     </ul>
                                 </div>
