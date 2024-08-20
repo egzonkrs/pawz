@@ -12,6 +12,8 @@ builder.Services.AddModule(new DataModule(builder.Configuration));
 
 var app = builder.Build();
 
+await app.UseDataSeeder();
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -24,7 +26,5 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
-
-await DataModule.ApplyMigrationsAndSeedDataAsync(app);
 
 app.Run();
