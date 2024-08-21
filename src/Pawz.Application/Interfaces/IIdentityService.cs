@@ -19,6 +19,10 @@ public interface IIdentityService
     /// <returns>A task representing the asynchronous operation.</returns>
     Task<Result<bool>> LoginAsync(LoginRequest request);
 
+    /// <summary>
+    /// Logs out the currently authenticated user.
+    /// </summary>
+    /// <returns>A task representing the asynchronous operation.</returns>
     Task LogoutAsync();
 }
 
