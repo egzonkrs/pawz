@@ -42,7 +42,6 @@ namespace Pawz.Web.Controllers
             return View(pet);
         }
 
-        [Authorize]
         public async Task<IActionResult> Create(CancellationToken cancellationToken)
         {
             var petCreateViewModel = new PetCreateViewModel
