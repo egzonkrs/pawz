@@ -18,5 +18,7 @@ public interface IIdentityService
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
     Task<Result<bool>> LoginAsync(LoginRequest request);
+
+    Task LogoutAsync();
 }
 

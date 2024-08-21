@@ -90,4 +90,9 @@ public sealed class IdentityService : IIdentityService
             return Result<bool>.Failure(UserErrors.UnexpectedError);
         }
     }
+
+       public async Task LogoutAsync()
+    {
+         await _signInManager.SignOutAsync();
+    }
 }
