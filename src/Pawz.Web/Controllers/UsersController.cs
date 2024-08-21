@@ -11,11 +11,13 @@ public class UsersController : Controller
 {
     private readonly IIdentityService _identityService;
     private readonly IValidator<RegisterViewModel> _validator;
+    private readonly IValidator<LoginViewModel> _loginModelValidator;
 
-    public UsersController(IIdentityService identityService, IValidator<RegisterViewModel> validator)
+    public UsersController(IIdentityService identityService, IValidator<RegisterViewModel> validator, IValidator<LoginViewModel> loginModelValidator)
     {
         _identityService = identityService;
         _validator = validator;
+        _loginModelValidator = loginModelValidator;
     }
 
     [HttpGet]
@@ -61,31 +63,30 @@ public class UsersController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(LoginViewModel model)
+    public async Task<IActionResult> Login(LoginViewModel loginViewModel)
     {
-        if (!ModelState.IsValid)
+        var validationResult = await _loginModelValidator.ValidateAsync(loginViewModel);
+
+        if (validationResult.IsValid is false)
         {
-            return View(model);
+            validationResult.AddErrorsToModelState(ModelState);
+            return View(loginViewModel);
         }
 
         var loginRequest = new LoginRequest
         {
-            Email = model.Email,
-            Password = model.Password
+            Email = loginViewModel.Email,
+            Password = loginViewModel.Password
         };
 
-        var result = await _identityService.LoginAsync(loginRequest);
+        var loginResult = await _identityService.LoginAsync(loginRequest);
 
-        if (result.IsSuccess)
+        if (loginResult.IsSuccess is false)
         {
-            return RedirectToAction("Index", "Home");
+            loginResult.AddErrorsToModelState(ModelState);
+            return View(loginViewModel);
         }
 
-        foreach (var error in result.Errors)
-        {
-            ModelState.AddModelError(string.Empty, error.Description);
-        }
-
-        return View(model);
+        return RedirectToAction("Index", "Home");
     }
 }
