@@ -9,7 +9,6 @@ using Pawz.Web.Extensions;
 using Pawz.Web.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,12 +21,15 @@ public class PetController : Controller
     private readonly ISpeciesService _speciesService;
     private readonly IBreedService _breedService;
     private readonly IValidator<PetCreateViewModel> _validator;
-    public PetController(IPetService petService, ISpeciesService speciesService, IBreedService breedService, IValidator<PetCreateViewModel> validator)
+    private readonly IUserAccessor _userAccessor;
+
+    public PetController(IPetService petService, ISpeciesService speciesService, IBreedService breedService, IValidator<PetCreateViewModel> validator, IUserAccessor userAccessor)
     {
         _petService = petService;
         _speciesService = speciesService;
         _breedService = breedService;
         _validator = validator;
+        _userAccessor = userAccessor;
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -79,7 +81,7 @@ public class PetController : Controller
             Price = petCreateViewModel.Price,
             LocationId = petCreateViewModel.LocationId,
             Status = petCreateViewModel.Status,
-            PostedByUserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            PostedByUserId = _userAccessor.GetUserId()
         };
 
         var petCreateResult = await _petService.CreatePetAsync(petCreateRequest, cancellationToken);
