@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
+using Pawz.Application.Services;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models;
 using System.Threading.Tasks;
@@ -89,4 +90,11 @@ public class UsersController : Controller
 
         return RedirectToAction("Index", "Home");
     }
+
+    public async Task<IActionResult> Logout()
+    {
+        await _identityService.LogoutAsync();
+        return RedirectToAction("Index", "Home");
+    }
+
 }
