@@ -1,3 +1,4 @@
+using Pawz.Application.Models;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace Pawz.Application.Interfaces
         /// <param name="pet">The pet entity to create.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
         /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
-        Task<Result<bool>> CreatePetAsync(Pet pet, CancellationToken cancellationToken);
+        Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken);
 
         /// <summary>
         /// Retrieves all pets.
