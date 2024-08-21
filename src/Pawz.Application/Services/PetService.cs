@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
@@ -16,12 +17,14 @@ namespace Pawz.Application.Services
         private readonly IPetRepository _petRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<PetService> _logger;
+        private readonly IMapper _mapper;
 
-        public PetService(IPetRepository petRepository, IUnitOfWork unitOfWork, ILogger<PetService> logger)
+        public PetService(IPetRepository petRepository, IUnitOfWork unitOfWork, ILogger<PetService> logger, IMapper mapper)
         {
             _petRepository = petRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public async Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken)
@@ -30,7 +33,7 @@ namespace Pawz.Application.Services
             {
                 _logger.LogInformation("Started creating a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
 
-                var pet = MapToPetEntity(petCreateRequest);
+                var pet = _mapper.Map<Pet>(petCreateRequest);
                 await _petRepository.InsertAsync(pet, cancellationToken);
                 var petCreated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
@@ -48,23 +51,6 @@ namespace Pawz.Application.Services
                                  nameof(PetService), petCreateRequest.PostedByUserId);
                 return Result<bool>.Failure(PetErrors.CreationUnexpectedError);
             }
-        }
-
-        private Pet MapToPetEntity(PetCreateRequest request)
-        {
-            return new Pet
-            {
-                Name = request.Name,
-                SpeciesId = request.SpeciesId,
-                BreedId = request.BreedId,
-                AgeYears = request.AgeYears,
-                AgeMonths = request.AgeMonths,
-                About = request.About,
-                Price = request.Price,
-                LocationId = request.LocationId,
-                PostedByUserId = request.PostedByUserId,
-                Status = request.Status
-            };
         }
 
         public async Task<Result<IEnumerable<Pet>>> GetAllPetsAsync(CancellationToken cancellationToken)
