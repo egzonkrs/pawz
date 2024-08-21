@@ -18,7 +18,7 @@ public static class ValidationExtensions
     {
         foreach (var error in result.Errors)
         {
-            modelState.AddModelError(error.Code, error.Description);
+            modelState.AddModelError(string.Empty, error.Description);
         }
     }
 }

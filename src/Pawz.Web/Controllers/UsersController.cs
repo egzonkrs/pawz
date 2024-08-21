@@ -84,7 +84,6 @@ public class UsersController : Controller
         if (loginResult.IsSuccess is false)
         {
             loginResult.AddErrorsToModelState(ModelState);
-            //ModelState.AddModelError(string.Empty, UsersErrors.IncorrectEmailOrPassword.Description);
             return View(loginViewModel);
         }
 
