@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Domain.Entities;
+using Pawz.Web.Models;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,9 +16,15 @@ namespace Pawz.Web.Controllers
             _petService = petService;
         }
 
+        // public async Task<IActionResult> Index(CancellationToken cancellationToken)
+        // {
+        //     var pets = await _petService.GetAllPetsAsync(cancellationToken);
+        //     return View("Index", pets);
+        // }
+
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var pets = await _petService.GetAllPetsAsync(cancellationToken);
+            var pets = await _petService.GetAllPetsWithRelatedEntities(cancellationToken);
             return View(pets);
         }
 

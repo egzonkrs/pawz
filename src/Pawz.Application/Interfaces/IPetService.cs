@@ -46,5 +46,12 @@ namespace Pawz.Application.Interfaces
         /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
         /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
         Task<Result<bool>> DeletePetAsync(int petId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Retrieves all pets along with their associated related entities.
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
+        /// <returns>A task representing the operation. The task result contains an <see cref="IEnumerable{Pet}"/> with all pets and their related entities, or an error if the operation fails.</returns>
+        Task<Result<IEnumerable<Pet>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
     }
 }

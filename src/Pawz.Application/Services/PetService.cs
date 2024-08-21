@@ -148,5 +148,24 @@ namespace Pawz.Application.Services
                 return Result<bool>.Failure(PetErrors.DeletionUnexpectedError);
             }
         }
+
+        public async Task<Result<IEnumerable<Pet>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                _logger.LogInformation("Started retrieving all pets with related entities.");
+
+                var pets = await _petRepository.GetAllPetsWithRelatedEntities(cancellationToken);
+
+                _logger.LogInformation("Successfully retrieved all pets with related entities.");
+                return Result<IEnumerable<Pet>>.Success(pets);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets with related entities.",
+                                 nameof(PetService));
+                return Result<IEnumerable<Pet>>.Failure(PetErrors.RetrievalError);
+            }
+        }
     }
 }
