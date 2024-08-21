@@ -32,23 +32,24 @@ public sealed class IdentityService : IIdentityService
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
-                _logger.LogWarning($"Login failed for Email: {request.Email} - User not found.");
+                _logger.LogError("Login failed for Email: {Email} - User not found.",request.Email);
                 return Result<bool>.Failure(UsersErrors.IncorrectEmailOrPassword);
             }
 
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                _logger.LogInformation($"Login succeeded for User with Email: {request.Email}");
+                _logger.LogInformation("Login succeeded for User with Email: {Email} ",request.Email);
                 return Result<bool>.Success();
             }
 
-            _logger.LogWarning($"Login failed for Email: {request.Email} - Incorrect password.");
+            _logger.LogError("Login failed for Email: {Email} - Incorrect password.",request.Email);
             return Result<bool>.Failure(UsersErrors.IncorrectEmailOrPassword);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An error occurred in {nameof(IdentityService)} while attempting to log in User with Email: {request.Email}");
+            _logger.LogError(ex, "An error occurred in {ServiceName} while attempting to log in User with Email: {Email}",
+                             nameof(IdentityService),request.Email);
             return Result<bool>.Failure(UserErrors.UnexpectedError);
         }
     }
@@ -66,7 +67,7 @@ public sealed class IdentityService : IIdentityService
                 CreatedAt = DateTime.UtcNow,
             };
 
-            _logger.LogInformation($"Started registering User with Email: {request.Email} and CreatedAt: {user.CreatedAt}");
+            _logger.LogInformation("Started registering User with Email: {Email} and CreatedAt: {CreatedAt}" , request.Email,user.CreatedAt);
 
             var result = await _userManager.CreateAsync(user, request.Password);
 
@@ -87,17 +88,19 @@ public sealed class IdentityService : IIdentityService
 
             if (claimResult.Succeeded is false)
             {
-                _logger.LogError($"Failed to create user claims for the User with Email: {user.Email} " +
-                                 $"with Errors: {string.Join(",", claimResult.Errors.Select(x => x.Description))}");
+                _logger.LogError("User creation failed for Email: {Email} with Errors: {Errors}",
+                                 request.Email, string.Join(",", result.Errors.Select(x => x.Description)));
 
                 return Result<bool>.Failure(UserErrors.ClaimFailed);
             }
 
+            _logger.LogInformation("User registered successfully with Email: {Email}", request.Email);
             return Result<bool>.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An error occured in the {nameof(IdentityService)} while attempting to register User with Email: {request.Email}");
+            _logger.LogError(ex, "An error occurred in {ServiceName} while attempting to register User with Email: {Email}",
+                             nameof(IdentityService), request.Email);
             return Result<bool>.Failure(UserErrors.UnexpectedError);
         }
     }
