@@ -36,13 +36,13 @@
 
                             <div class="">
                                 <label asp-for="AgeYears" class="form-label">Age in Years</label>
-                                <input asp-for="AgeYears" class="form-control" placeholder="Age in Years"/>
+                                <input asp-for="AgeYears" class="form-control" placeholder="Age in Years" type="number" min="0" />
                                 <span asp-validation-for="AgeYears" class="form-label input-error-text"></span>
                             </div>
 
                             <div class="">
                                 <label asp-for="AgeMonths" class="form-label">Age in Months</label>
-                                <input asp-for="AgeMonths" class="form-control" placeholder="Age in Months"/>
+                                <input asp-for="AgeMonths" class="form-control" placeholder="Age in Months" type="number" min="0" />
                                 <span asp-validation-for="AgeMonths" class="form-label input-error-text"></span>
                             </div>
 
@@ -54,7 +54,7 @@
 
                             <div class="">
                                 <label asp-for="Price" class="form-label">Price</label>
-                                <input asp-for="Price" class="form-control" placeholder="Price" />
+                                <input asp-for="Price" class="form-control" placeholder="Price" type="number" min="0" />
                                 <span asp-validation-for="Price" class="form-label input-error-text"></span>
                             </div>
 
