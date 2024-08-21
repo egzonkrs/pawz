@@ -90,6 +90,7 @@ public class UsersController : Controller
 
         return RedirectToAction("Index", "Home");
     }
+
     public async Task<IActionResult> Logout()
     {
         await _identityService.LogoutAsync();

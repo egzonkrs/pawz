@@ -27,19 +27,30 @@ public sealed class IdentityService : IIdentityService
 
     public async Task<Result<bool>> LoginAsync(LoginRequest request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user == null)
+        try
         {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                _logger.LogWarning($"Login failed for Email: {request.Email} - User not found.");
+                return Result<bool>.Failure(UsersErrors.IncorrectEmailOrPassword);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation($"Login succeeded for User with Email: {request.Email}");
+                return Result<bool>.Success();
+            }
+
+            _logger.LogWarning($"Login failed for Email: {request.Email} - Incorrect password.");
             return Result<bool>.Failure(UsersErrors.IncorrectEmailOrPassword);
         }
-
-        var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
-        if (result.Succeeded)
+        catch (Exception ex)
         {
-            return Result<bool>.Success();
+            _logger.LogError(ex, $"An error occurred in {nameof(IdentityService)} while attempting to log in User with Email: {request.Email}");
+            return Result<bool>.Failure(UserErrors.UnexpectedError);
         }
-
-        return Result<bool>.Failure(UsersErrors.IncorrectEmailOrPassword);
     }
 
     public async Task<Result<bool>> RegisterAsync(RegisterRequest request)
@@ -91,8 +102,16 @@ public sealed class IdentityService : IIdentityService
         }
     }
 
-       public async Task LogoutAsync()
+    public async Task LogoutAsync()
     {
-         await _signInManager.SignOutAsync();
+        try
+        {
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User logged out successfully.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while logging out the user.");
+        }
     }
 }
