@@ -1,10 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Pawz.Application.Interfaces;
+using Pawz.Application.Services;
 using Pawz.Domain.Abstractions;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
 using Pawz.Infrastructure.Repos;
+using Pawz.Web.Controllers;
 using System.Configuration;
 
 namespace Pawz.Web.Modules;
@@ -34,8 +37,11 @@ public class DataModule : IModule
         );
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IPetService, PetService>();
         services.AddScoped<IPetRepository, PetRepository>();
         services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
+        services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
+        services.AddScoped<IAdoptionService, AdoptionService>();
         services.AddScoped<IBreedRepository, BreedRepository>();
         services.AddScoped<ISpeciesRepository, SpeciesRepository>();
     }

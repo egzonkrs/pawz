@@ -6,40 +6,6 @@ ViewBag.Title = "Page";
 Layout = "_Layout";
 }
 
-<section class="page-search">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Advance Search -->
-                <div class="advance-search nice-select-white">
-                    <form>
-                        <div class="form-row align-items-center">
-                            <div class="form-group col-xl-4 col-lg-3 col-md-6">
-                                <input type="text" class="form-control my-2 my-lg-0" id="inputtext4" placeholder="What are you looking for">
-                            </div>
-                            <div class="form-group col-lg-3 col-md-6">
-                                <select class="w-100 form-control my-2 my-lg-0">
-                                    <option>Category</option>
-                                    <option value="1">Dogs</option>
-                                    <option value="2">Cats</option>
-                                    <option value="4">Birds</option>
-                                    <option value="4">Other</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-lg-3 col-md-6">
-                                <input type="text" class="form-control my-2 my-lg-0" id="inputLocation4" placeholder="Location">
-                            </div>
-                            <div class="form-group col-xl-2 col-lg-3 col-md-6">
-
-                                <button type="submit" class="btn btn-primary active w-100">Search Now</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 <!--===================================
 =            Store Section            =
 ====================================-->
@@ -130,8 +96,8 @@ Layout = "_Layout";
                                         <td>Healthy</td>
                                     </tr>
                                     <tr>
-                                        <td>Whelped</td>
-                                        <td>2017</td>
+                                        <td>Age</td>
+                                        <td>3</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -151,9 +117,11 @@ Layout = "_Layout";
                         <img class="rounded-circle img-fluid mb-5 px-5" src="~/template/images/user/user-thumb.jpg" alt="">
                         <h4><a href="#">Jonathon Andrew</a></h4>
                         <p class="member-time">Member Since Jun 27, 2017</p>
-                        <ul class="list-inline mt-20">
-                            <li class="list-inline-item"><a asp-controller="Adoption" asp-action="AdoptionRequest" class="btn btn-offer d-inline-block btn-primary ml-n1 my-1 px-lg-4 px-md-3">Adopt Now</a></li>
-                        </ul>
+                    </div>
+                    <!-- Adoption Request -->
+                    <div class="widget coupon text-center">
+                        <!-- Submit button -->
+                        <a asp-controller="Adoption" asp-action="AdoptionRequest" class="btn btn-transparent-white">Adoption Request</a>
                     </div>
                     <!-- Safety tips widget -->
                     <div class="widget disclaimer">
@@ -164,13 +132,6 @@ Layout = "_Layout";
                             <li>Pay only after collecting the item</li>
                             <li>Pay only after collecting the item</li>
                         </ul>
-                    </div>
-                    <!-- Coupon Widget -->
-                    <div class="widget coupon text-center">
-                        <!-- Coupon description -->
-                        <p>Want to know more about us?</p>
-                        <!-- Submii button -->
-                        <a asp-controller="Home" asp-action="AboutUs" class="btn btn-transparent-white">Click here</a>
                     </div>
                 </div>
             </div>
