@@ -10,35 +10,34 @@ using Pawz.Infrastructure.Data.Seed;
 using System;
 using System.Threading.Tasks;
 
-namespace Pawz.Web.Extensions
+namespace Pawz.Web.Extensions;
+
+public static class ApplicationBuilderExtensions
 {
-    public static class ApplicationBuilderExtensions
+    public static async Task UseDataSeeder(this IApplicationBuilder app)
     {
-        public static async Task UseDataSeeder(this IApplicationBuilder app)
+        using var scope = app.ApplicationServices.CreateScope();
+        var services = scope.ServiceProvider;
+
+        try
         {
-            using var scope = app.ApplicationServices.CreateScope();
-            var services = scope.ServiceProvider;
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            logger.LogInformation("Starting database migration and data seeding.");
 
-            try
-            {
-                var logger = services.GetRequiredService<ILogger<Program>>();
-                logger.LogInformation("Starting database migration and data seeding.");
+            var context = services.GetRequiredService<AppDbContext>();
+            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+            var unitOfWork = services.GetRequiredService<IUnitOfWork>();
 
-                var context = services.GetRequiredService<AppDbContext>();
-                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-                var unitOfWork = services.GetRequiredService<IUnitOfWork>();
+            await context.Database.MigrateAsync();
+            logger.LogInformation("Database migration completed.");
 
-                await context.Database.MigrateAsync();
-                logger.LogInformation("Database migration completed.");
-
-                await DataSeeder.SeedData(context, unitOfWork, userManager);
-                logger.LogInformation("Data seeding completed.");
-            }
-            catch (Exception ex)
-            {
-                var logger = services.GetRequiredService<ILogger<Program>>();
-                logger.LogError(ex, "An error occurred during migration");
-            }
+            await DataSeeder.SeedData(context, unitOfWork, userManager);
+            logger.LogInformation("Data seeding completed.");
+        }
+        catch (Exception ex)
+        {
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            logger.LogError(ex, "An error occurred during migration");
         }
     }
 }

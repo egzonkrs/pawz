@@ -1,38 +1,37 @@
-namespace Pawz.Application.Interfaces
+namespace Pawz.Application.Interfaces;
+
+/// <summary>
+/// Interface to access user-specific information from the current HTTP context.
+/// </summary>
+public interface IUserAccessor
 {
     /// <summary>
-    /// Interface to access user-specific information from the current HTTP context.
+    /// Gets the user's unique identifier (ID).
     /// </summary>
-    public interface IUserAccessor
-    {
-        /// <summary>
-        /// Gets the user's unique identifier (ID).
-        /// </summary>
-        /// <returns>The user's ID as a string.</returns>
-        string GetUserId();
+    /// <returns>The user's ID as a string.</returns>
+    string GetUserId();
 
-        /// <summary>
-        /// Gets the user's email address.
-        /// </summary>
-        /// <returns>The user's email address as a string.</returns>
-        string GetEmail();
+    /// <summary>
+    /// Gets the user's email address.
+    /// </summary>
+    /// <returns>The user's email address as a string.</returns>
+    string GetEmail();
 
-        /// <summary>
-        /// Gets the user's name.
-        /// </summary>
-        /// <returns>The user's name as a string.</returns>
-        string GetUserName();
+    /// <summary>
+    /// Gets the user's name.
+    /// </summary>
+    /// <returns>The user's name as a string.</returns>
+    string GetUserName();
 
-        /// <summary>
-        /// Gets the user's role.
-        /// </summary>
-        /// <returns>The user's role as a string.</returns>
-        string GetUserRole();
+    /// <summary>
+    /// Gets the user's role.
+    /// </summary>
+    /// <returns>The user's role as a string.</returns>
+    string GetUserRole();
 
-        /// <summary>
-        /// Determines whether the user is authenticated.
-        /// </summary>
-        /// <returns>True if the user is authenticated, otherwise false.</returns>
-        bool IsUserAuthenticated();
-    }
+    /// <summary>
+    /// Determines whether the user is authenticated.
+    /// </summary>
+    /// <returns>True if the user is authenticated, otherwise false.</returns>
+    bool IsUserAuthenticated();
 }
