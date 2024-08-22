@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Pawz.Domain.Entities;
-using System.Reflection;
 using System.Configuration;
+using System.Reflection;
 
 namespace Pawz.Infrastructure.Data;
 
@@ -35,7 +35,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         }
 
         optionsBuilder
-            .UseSqlite(connectionString)
+            .UseSqlServer(connectionString)
             .AddInterceptors(new SoftDeleteInterceptor());
     }
 
