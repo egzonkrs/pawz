@@ -20,7 +20,8 @@ namespace Pawz.Infrastructure.Data.Seed
                 UserName = "john",
                 Email = "john@example.com",
                 FirstName = "john",
-                LastName = "doe"
+                LastName = "doe",
+                IsDeleted = false
             };
 
             var userBob = new ApplicationUser
@@ -28,7 +29,8 @@ namespace Pawz.Infrastructure.Data.Seed
                 UserName = "bob",
                 Email = "bob@example.com",
                 FirstName = "bob",
-                LastName = "doe"
+                LastName = "doe",
+                IsDeleted = false
             };
 
             var userJane = new ApplicationUser
@@ -36,7 +38,8 @@ namespace Pawz.Infrastructure.Data.Seed
                 UserName = "jane",
                 Email = "jane@example.com",
                 FirstName = "jane",
-                LastName = "doe"
+                LastName = "doe",
+                IsDeleted = false
             };
 
             await userManager.CreateAsync(userJohn, "Password@123");

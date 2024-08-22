@@ -21,7 +21,9 @@
                         <ul class="list-inline">
                             <li><strong>Species:</strong> @(pet.Species?.Name)</li>
                             <li><strong>Breed:</strong> @(pet.Breed?.Name)</li>
+                            <li><strong>Location:</strong> @(pet.Location.Country) @(pet.Location.State) @(pet.Location.City) @(pet.Location.PostalCode) </li>
                             <li><strong>Age:</strong> @pet.AgeYears years and @pet.AgeMonths months</li>
+                            <li><strong>Posted by:</strong> @(pet.User.FirstName) @(pet.User.LastName) </li>
                             <li><strong>Date:</strong> @pet.CreatedAt.ToString("d MMMM yyyy")</li>
                             <li><strong>Price:</strong> @pet.Price.ToString("C")</li>
                         </ul>

@@ -24,7 +24,7 @@ namespace Pawz.Infrastructure.Repos
                 .Include(b => b.Breed)
                 .Include(u => u.User)
                 .Include(l => l.Location)
-                .Include(ar => ar.AdoptionRequests)
+                // .Include(ar => ar.AdoptionRequests)
                 .ToListAsync(cancellationToken);
         }
     }
