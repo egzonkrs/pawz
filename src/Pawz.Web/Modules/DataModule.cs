@@ -29,7 +29,7 @@ public class DataModule : IModule
 
         services.AddDbContext<AppDbContext>(options =>
             options
-                .UseSqlite(connectionString)
+                .UseSqlServer(connectionString)
                 .AddInterceptors(new SoftDeleteInterceptor())
         );
 
