@@ -18,7 +18,7 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 
         var builder = new DbContextOptionsBuilder<AppDbContext>();
         builder.EnableSensitiveDataLogging(true);
-        builder.UseSqlite(connectionString);
+        builder.UseSqlServer(connectionString);
 
         return new AppDbContext(builder.Options, configuration);
     }
