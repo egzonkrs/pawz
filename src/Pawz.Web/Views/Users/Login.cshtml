@@ -12,22 +12,27 @@ ViewData["Title"] = "Login";
                     <h3 class="bg-gray p-4">Login</h3>
                     <form method="post">
                         <fieldset class="p-4">
-                            @if (!ViewData.ModelState.IsValid)
-                            {
-                                <div class="alert alert-danger">
-                                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-                                </div>
-                            }
                             <div class="mb-3">
                                 <label asp-for="Email" class="form-label"></label>
                                 <input asp-for="Email" class="form-control" placeholder="Email" />
-                                <span asp-validation-for="Email" class="text-danger"></span>
+                                <span asp-validation-for="Email" class="form-label input-error-text"></span>
                             </div>
                             <div class="mb-3">
                                 <label asp-for="Password" class="form-label"></label>
                                 <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
-                                <span asp-validation-for="Password" class="text-danger"></span>
+                                <span asp-validation-for="Password" class="form-label input-error-text"></span>
                             </div>
+                            @if (ViewData.ModelState.IsValid is false && ViewData.ModelState[string.Empty]?.Errors.Count > 0)
+                            {
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach (var error in ViewData.ModelState[string.Empty]!.Errors)
+                                        {
+                                            <li>@error.ErrorMessage</li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
                             <div class="d-flex justify-content-end mt-3">
                                 <button type="submit" class="btn btn-primary font-weight-bold">Login</button>
                             </div>

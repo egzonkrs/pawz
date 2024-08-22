@@ -160,6 +160,12 @@ namespace Pawz.Infrastructure.Migrations
                     b.Property<int>("AdoptionRequestId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AdoptionRequestId")
@@ -174,6 +180,12 @@ namespace Pawz.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("PetId")
                         .HasColumnType("INTEGER");
 
@@ -181,13 +193,14 @@ namespace Pawz.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RequesterUserId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ResponseDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -216,6 +229,9 @@ namespace Pawz.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
@@ -224,9 +240,14 @@ namespace Pawz.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
@@ -280,10 +301,18 @@ namespace Pawz.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Description")
+                    b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SpeciesId")
@@ -303,15 +332,25 @@ namespace Pawz.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Country")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("PostalCode")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("State")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -326,6 +365,7 @@ namespace Pawz.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("About")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("AgeMonths")
@@ -340,13 +380,21 @@ namespace Pawz.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("LocationId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PostedByUserId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Price")
@@ -377,11 +425,19 @@ namespace Pawz.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsPrimary")
                         .HasColumnType("INTEGER");
@@ -408,10 +464,18 @@ namespace Pawz.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
+                    b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -491,7 +555,9 @@ namespace Pawz.Infrastructure.Migrations
 
                     b.HasOne("Pawz.Domain.Entities.ApplicationUser", "User")
                         .WithMany("AdoptionRequests")
-                        .HasForeignKey("RequesterUserId");
+                        .HasForeignKey("RequesterUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Pet");
 
@@ -525,7 +591,9 @@ namespace Pawz.Infrastructure.Migrations
 
                     b.HasOne("Pawz.Domain.Entities.ApplicationUser", "User")
                         .WithMany("Pets")
-                        .HasForeignKey("PostedByUserId");
+                        .HasForeignKey("PostedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Pawz.Domain.Entities.Species", "Species")
                         .WithMany("Pets")
@@ -555,7 +623,8 @@ namespace Pawz.Infrastructure.Migrations
 
             modelBuilder.Entity("Pawz.Domain.Entities.AdoptionRequest", b =>
                 {
-                    b.Navigation("Adoption");
+                    b.Navigation("Adoption")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Pawz.Domain.Entities.ApplicationUser", b =>

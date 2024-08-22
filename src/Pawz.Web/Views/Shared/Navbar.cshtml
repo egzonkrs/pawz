@@ -1,8 +1,8 @@
  <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <nav class="navbar navbar-expand-lg navbar-light navigation">
-                    <a class="navbar-brand">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a href="@Url.Action("Index","Home")" class="navbar-brand">
                         <img src="~/template/images/pawz.png" alt="" width="55" height="55">
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -12,15 +12,15 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ml-auto main-nav">
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link font-weight-bold text-dark" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item dropdown dropdown-slide @@dashboard">
-                                <a class="nav-link dropdown-toggle" asp-controller="Home" asp-action="Adopt">
+                            <a class="nav-link dropdown-toggle font-weight-bold text-dark" asp-controller="Home" asp-action="Adopt">
                                     Adopt
                                 </a>
                             </li>
                             <li class="nav-item dropdown dropdown-slide @@pages">
-                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle font-weight-bold text-dark" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Pages
                                     <span>
                                         <i class="fa fa-angle-down"></i>
@@ -37,18 +37,13 @@
                                 </ul>
                             </li>
                             <li class="nav-item dropdown dropdown-slide @@dashboard">
-                                <a class="nav-link dropdown-toggle" asp-controller="Home" asp-action="WishList">
+                            <a class="nav-link dropdown-toggle font-weight-bold text-dark" asp-controller="Home" asp-action="WishList">
                                     Wish list
                                 </a>
                             </li>
                         </ul>
                         <ul class="navbar-nav ml-auto mt-10">
-                            <li class="nav-item">
-                                <a class="nav-link login-button" asp-controller="Users" asp-action="Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white add-button" asp-controller="Users" asp-action="Register">Register</a>
-                            </li>
+                        @await Html.PartialAsync("_LoggedInUser")
                         </ul>
                     </div>
                 </nav>

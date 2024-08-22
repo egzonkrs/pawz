@@ -1,39 +1,65 @@
 using Pawz.Domain.Entities;
 using System.Collections.Generic;
 
-namespace Pawz.Domain.Common
+namespace Pawz.Domain.Common;
+
+public class Result<T>
 {
-    public class Result<T>
+    private readonly List<Error> _errors = new();
+
+    /// <summary>
+    /// Gets a value indicating whether the operation was successful.
+    /// </summary>
+    public bool IsSuccess { get; }
+
+    /// <summary>
+    /// Gets the value produced by the operation, if it was successful.
+    /// </summary>
+    public T? Value { get; }
+
+    /// <summary>
+    /// Gets the list of errors associated with the operation, if it was not successful.
+    /// </summary>
+    public IReadOnlyList<Error> Errors => _errors.AsReadOnly();
+
+    private Result(bool isSuccess, T value, IEnumerable<Error> errors)
     {
-        private readonly List<Error> _errors = new();
-        public bool IsSuccess { get; }
-        public T? Value { get; }
-        public IReadOnlyList<Error> Errors => _errors.AsReadOnly();
+        IsSuccess = isSuccess;
+        Value = value;
 
-        private Result(bool isSuccess, T value, IEnumerable<Error> errors)
+        if (errors is not null)
         {
-            IsSuccess = isSuccess;
-            Value = value;
-
-            if (errors is not null)
-            {
-                _errors.AddRange(errors);
-            }
+            _errors.AddRange(errors);
         }
+    }
 
-        public static Result<T> Success(T value = default)
-        {
-            return new Result<T>(true, value, null);
-        }
+    /// <summary>
+    /// Creates a successful result with the specified value.
+    /// </summary>
+    /// <param name="value">The value to return in the result.</param>
+    /// <returns>A successful <see cref="Result{T}"/> instance.</returns>
+    public static Result<T> Success(T value = default)
+    {
+        return new Result<T>(true, value, null);
+    }
 
-        public static Result<T> Failure(string error)
-        {
-            return new Result<T>(false, default, new List<Error> { new Error("General.Error", error) });
-        }
+    /// <summary>
+    /// Creates a failed result with a general error message.
+    /// </summary>
+    /// <param name="error">The error message to include in the result.</param>
+    /// <returns>A failed <see cref="Result{T}"/> instance with the specified error message.</returns>
+    public static Result<T> Failure(string error)
+    {
+        return new Result<T>(false, default, new List<Error> { new Error("General.Error", error) });
+    }
 
-        public static Result<T> Failure(params Error[] errors)
-        {
-            return new Result<T>(false, default, errors);
-        }
+    /// <summary>
+    /// Creates a failed result with one or more specific errors.
+    /// </summary>
+    /// <param name="errors">The errors to include in the result.</param>
+    /// <returns>A failed <see cref="Result{T}"/> instance with the specified errors.</returns>
+    public static Result<T> Failure(params Error[] errors)
+    {
+        return new Result<T>(false, default, errors);
     }
 }
