@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Pawz.Web.Models;
 
 public class LoginViewModel

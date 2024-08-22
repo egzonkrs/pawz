@@ -1,4 +1,5 @@
 namespace Pawz.Application.Models;
+
 public class RegisterRequest
 {
     /// <summary>
