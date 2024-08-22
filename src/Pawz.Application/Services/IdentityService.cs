@@ -25,6 +25,11 @@ public sealed class IdentityService : IIdentityService
         _logger = logger;
     }
 
+    /// <summary>
+    /// Handles user login operations.
+    /// </summary>
+    /// <param name="request">The login request containing email and password.</param>
+    /// <returns>A result indicating success or failure of the login operation.</returns>
     public async Task<Result<bool>> LoginAsync(LoginRequest request)
     {
         try
@@ -54,6 +59,11 @@ public sealed class IdentityService : IIdentityService
         }
     }
 
+    /// <summary>
+    /// Handles user registration operations.
+    /// </summary>
+    /// <param name="request">The registration request containing user details and password.</param>
+    /// <returns>A result indicating success or failure of the registration operation.</returns>
     public async Task<Result<bool>> RegisterAsync(RegisterRequest request)
     {
         try
@@ -105,6 +115,9 @@ public sealed class IdentityService : IIdentityService
         }
     }
 
+    /// <summary>
+    /// Logs out the currently authenticated user.
+    /// </summary>
     public async Task LogoutAsync()
     {
         try

@@ -8,6 +8,7 @@ using Pawz.Web.Models;
 using System.Threading.Tasks;
 
 namespace Pawz.Web.Controllers;
+
 public class UsersController : Controller
 {
     private readonly IIdentityService _identityService;
