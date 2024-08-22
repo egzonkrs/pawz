@@ -38,10 +38,9 @@ public class DataModule : IModule
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IPetService, PetService>();
+        services.AddScoped<IAdoptionRequestService, AdoptionRequestService>();
         services.AddScoped<IPetRepository, PetRepository>();
         services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
-        services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
-        services.AddScoped<IAdoptionService, AdoptionService>();
         services.AddScoped<IBreedRepository, BreedRepository>();
         services.AddScoped<ISpeciesRepository, SpeciesRepository>();
     }
