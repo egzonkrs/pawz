@@ -11,11 +11,11 @@ public class SeedBreeds
         if (breedsExists) return;
 
         await context.Database.ExecuteSqlRawAsync(@"
-                    INSERT INTO Breeds (Id, SpeciesId, Name, Description) VALUES 
-                    (1, 1, 'Golden Retriever', 'Friendly and tolerant breed.'), 
-                    (2, 1, 'Labrador Retriever', 'Outgoing and even-tempered breed.'), 
-                    (3, 2, 'Persian', 'Affectionate and quiet breed with long fur.'), 
-                    (4, 2, 'Siamese', 'Social and intelligent breed with striking blue eyes.')"
+            INSERT INTO Breeds (SpeciesId, Name, Description, IsDeleted, DeletedAt) VALUES
+            (1, 'Golden Retriever', 'Friendly and tolerant breed.', 0, NULL),
+            (1, 'Labrador Retriever', 'Outgoing and even-tempered breed.', 0, NULL),
+            (2, 'Persian', 'Affectionate and quiet breed with long fur.', 0, NULL),
+            (2, 'Siamese', 'Social and intelligent breed with striking blue eyes.', 0, NULL)"
         );
     }
 }
