@@ -12,19 +12,19 @@ public class PetEntityTypeConfiguration : IEntityTypeConfiguration<Pet>
             .HasOne(p => p.Species)
             .WithMany(s => s.Pets)
             .HasForeignKey(p => p.SpeciesId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder
             .HasOne(p => p.Breed)
             .WithMany(b => b.Pets)
             .HasForeignKey(p => p.BreedId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder
             .HasOne(p => p.Location)
             .WithMany(l => l.Pets)
             .HasForeignKey(p => p.LocationId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder
             .Property(p => p.Price)

@@ -12,6 +12,6 @@ public class PetImageEntityTypeConfiguration : IEntityTypeConfiguration<PetImage
             .HasOne(pi => pi.Pet)
             .WithMany(p => p.PetImages)
             .HasForeignKey(pi => pi.PetId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }
