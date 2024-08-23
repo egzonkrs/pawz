@@ -22,7 +22,7 @@ namespace Pawz.Infrastructure.Repos
                 .Include(p => p.PetImages)
                 .Include(s => s.Species)
                 .Include(b => b.Breed)
-                .Include(u => u.User)
+                // .Include(u => u.User)
                 .Include(l => l.Location)
                 // .Include(ar => ar.AdoptionRequests)
                 .ToListAsync(cancellationToken);
