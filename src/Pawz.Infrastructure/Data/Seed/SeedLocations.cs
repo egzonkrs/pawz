@@ -11,12 +11,16 @@ public class SeedLocations
         if (locationsExists) return;
 
         await context.Database.ExecuteSqlRawAsync(@"
-            INSERT INTO Locations (City, State, Country, PostalCode, IsDeleted, DeletedAt) VALUES
-            ('New York', 'NY', 'USA', '10001', 0, NULL),
-            ('Los Angeles', 'CA', 'USA', '90001', 0, NULL),
-            ('Chicago', 'IL', 'USA', '60601', 0, NULL),
-            ('Houston', 'TX', 'USA', '77001', 0, NULL),
-            ('Toronto', 'ON', 'Canada', 'M5H 2N2', 0, NULL)"
+            SET IDENTITY_INSERT Locations ON;
+
+            INSERT INTO Locations (Id, City, State, Country, PostalCode, IsDeleted, DeletedAt) VALUES
+            (1, 'New York', 'NY', 'USA', '10001', 0, NULL),
+            (2, 'Los Angeles', 'CA', 'USA', '90001', 0, NULL),
+            (3, 'Chicago', 'IL', 'USA', '60601', 0, NULL),
+            (4, 'Houston', 'TX', 'USA', '77001', 0, NULL),
+            (5, 'Toronto', 'ON', 'Canada', 'M5H 2N2', 0, NULL);
+
+            SET IDENTITY_INSERT Locations OFF;"
         );
     }
 }
