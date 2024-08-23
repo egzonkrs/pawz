@@ -1,14 +1,10 @@
 ﻿@model dynamic
 
-
 @{
 ViewBag.Title = "Page";
 Layout = "_Layout";
 }
 
-<!--===================================
-=            Store Section            =
-====================================-->
 <section class="section bg-gray">
     <!-- Container Start -->
     <div class="container">
@@ -23,8 +19,7 @@ Layout = "_Layout";
                             <li class="list-inline-item"><i class="fa fa-location-arrow"></i> Location<a href="#">Ferizaj</a></li>
                         </ul>
                     </div>
-
-                    <!-- product slider -->
+                    <!-- Pet slider -->
                     <div class="product-slider mt-4">
                         <div class="product-slider-item my-4" data-image="/template/images/products/products-1.jpg">
                             <img class="img-fluid w-100" src="~/template/images/products/products-1.jpg" alt="product-img">
@@ -42,13 +37,12 @@ Layout = "_Layout";
                             <img class="d-block img-fluid w-100" src="~/template/images/products/products-2.jpg" alt="Third slide">
                         </div>
                     </div>
-                    <!-- product slider -->
-
+                    <!-- Pet slider -->
                     <div class="content mt-5 pt-5">
                         <ul class="nav nav-pills  justify-content-center" id="pills-tab" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home"
-                                   aria-selected="true">Product Details</a>
+                                   aria-selected="true">Pet Description</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile"
@@ -57,7 +51,7 @@ Layout = "_Layout";
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                                <h3 class="tab-title">Product Description</h3>
+                                <h3 class="tab-title">Pet Description</h3>
                                 <p>Golden Retrievers are one of the most popular dog breeds due to their friendly, tolerant attitude.
                                     They are intelligent, easy to train, and eager to please, making them ideal family pets. With their warm,
                                     golden coats and expressive eyes, they are as beautiful as they are loving. Golden Retrievers are known for
@@ -65,20 +59,11 @@ Layout = "_Layout";
                                     highly versatile and can be trained for a variety of roles, including therapy, search and rescue, and service work.
                                     Their love for outdoor activities, especially swimming, makes them a great choice for active families. Overall,
                                     Golden Retrievers are loyal, affectionate, and incredibly social, thriving on human interaction and always eager to be a part of the family.</p>
-
                             </div>
                             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                                <h3 class="tab-title">Product Specifications</h3>
+                                <h3 class="tab-title">Pet Specifications</h3>
                                 <table class="table table-bordered product-table">
                                     <tbody>
-                                    <tr>
-                                        <td>Seller Price</td>
-                                        <td>$450</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Added</td>
-                                        <td>26th December</td>
-                                    </tr>
                                     <tr>
                                         <td>Location</td>
                                         <td>Kosova,Gjilan</td>
@@ -119,9 +104,11 @@ Layout = "_Layout";
                         <p class="member-time">Member Since Jun 27, 2017</p>
                     </div>
                     <!-- Adoption Request -->
-                    <div class="widget coupon text-center">
-                        <!-- Submit button -->
-                        <a asp-controller="AdoptionRequest" asp-action="AdoptionRequest" class="btn btn-transparent-white">Adoption Request</a>
+                    <div class="text-center">
+                        <!-- Adoption Request Button -->
+                        <button class="btn btn-primary btn-lg mb-4 custom-square-button" data-toggle="modal" data-target="#adoptionRequestModal">
+                            Adoption Request
+                        </button>
                     </div>
                     <!-- Safety tips widget -->
                     <div class="widget disclaimer">
@@ -135,7 +122,31 @@ Layout = "_Layout";
                     </div>
                 </div>
             </div>
-
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="adoptionRequestModal" tabindex="-1" role="dialog" aria-labelledby="adoptionRequestModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="adoptionRequestModalLabel">Adoption Request</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="adoptionRequestForm">
+                            <div class="form-group">
+                                <label for="location">Location</label>
+                                <input type="text" class="form-control" id="location" name="location" placeholder="Enter your location">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="submitAdoptionRequest()">Submit</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- Container End -->

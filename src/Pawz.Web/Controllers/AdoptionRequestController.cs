@@ -33,11 +33,6 @@ public class AdoptionRequestController : Controller
             return View();
         }
 
-        public IActionResult AdoptionRequest()
-        {
-            return View();
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(AdoptionRequest adoptionRequest, CancellationToken cancellationToken)
