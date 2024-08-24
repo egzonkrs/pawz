@@ -30,4 +30,8 @@
     <ProjectReference Include="..\Pawz.Domain\Pawz.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

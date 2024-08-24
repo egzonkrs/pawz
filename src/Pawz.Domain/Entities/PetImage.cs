@@ -48,7 +48,7 @@ public class PetImage : IEntity<int>, ISoftDeletion
 
     /// <summary>
     /// Gets or sets the timestamp of when the entity was soft-deleted.
-    /// This property is implemented from the <see cref="ISoftDelete"/> interface.
+    /// This property is implemented from the <see cref="ISoftDeletion"/> interface.
     /// </summary>
     public DateTimeOffset? DeletedAt { get; set; }
 }

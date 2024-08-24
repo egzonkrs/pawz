@@ -9,12 +9,6 @@ public class PetEntityTypeConfiguration : IEntityTypeConfiguration<Pet>
     public void Configure(EntityTypeBuilder<Pet> builder)
     {
         builder
-            .HasOne(p => p.Species)
-            .WithMany(s => s.Pets)
-            .HasForeignKey(p => p.SpeciesId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        builder
             .HasOne(p => p.Breed)
             .WithMany(b => b.Pets)
             .HasForeignKey(p => p.BreedId)
@@ -23,8 +17,7 @@ public class PetEntityTypeConfiguration : IEntityTypeConfiguration<Pet>
         builder
             .HasOne(p => p.Location)
             .WithMany(l => l.Pets)
-            .HasForeignKey(p => p.LocationId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .HasForeignKey(p => p.LocationId);
 
         builder
             .Property(p => p.Price)

@@ -11,7 +11,6 @@ public class AdoptionRequestEntityTypeConfiguration : IEntityTypeConfiguration<A
         builder
             .HasOne(ar => ar.Pet)
             .WithMany(p => p.AdoptionRequests)
-            .HasForeignKey(ar => ar.PetId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .HasForeignKey(ar => ar.PetId);
     }
 }
