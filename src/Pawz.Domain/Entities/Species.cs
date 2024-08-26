@@ -38,13 +38,13 @@ public class Species : IEntity<int>, ISoftDeletion
 
     /// <summary>
     /// Gets or sets a value indicating whether the entity is soft-deleted.
-    /// This property is implemented from the <see cref="ISoftDelete"/> interface.
+    /// This property is implemented from the <see cref="ISoftDeletion"/> interface.
     /// </summary>
     public bool IsDeleted { get; set; }
 
     /// <summary>
     /// Gets or sets the timestamp of when the entity was soft-deleted.
-    /// This property is implemented from the <see cref="ISoftDelete"/> interface.
+    /// This property is implemented from the <see cref="ISoftDeletion"/> interface.
     /// </summary>
     public DateTimeOffset? DeletedAt { get; set; }
 }

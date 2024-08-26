@@ -9,13 +9,13 @@ public class DataSeeder
 {
     public static async Task SeedData(AppDbContext context, IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
     {
+        await SeedUsers.SeedUserData(userManager);
+
         await SeedSpecies.SeedSpeciesData(context);
 
         await SeedBreeds.SeedBreedData(context);
 
         await SeedLocations.SeedLocationData(context);
-
-        await SeedUsers.SeedUserData(userManager);
 
         await SeedPets.SeedPetData(context);
 
