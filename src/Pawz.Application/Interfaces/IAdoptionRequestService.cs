@@ -9,12 +9,12 @@ namespace Pawz.Application.Interfaces;
 public interface IAdoptionRequestService
 {
     /// <summary>
-        /// Creates a new adoption.
-        /// </summary>
-        /// <param name="adoptionRequest">The pet entity to create.</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-        /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
-        Task<Result<bool>> CreateAdoptionRequestAsync(AdoptionRequest adoptionRequest, CancellationToken cancellationToken);
+    /// Creates a new adoption.
+    /// </summary>
+    /// <param name="adoptionRequest">The pet entity to create.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+    /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
+    Task<Result<bool>> CreateAdoptionRequestAsync(AdoptionRequest adoptionRequest, CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves all adoptions.
@@ -31,19 +31,19 @@ public interface IAdoptionRequestService
     /// <returns>A task representing the operation. The task result contains the adoption entity.</returns>
     Task<Result<AdoptionRequest>> GetAdoptionRequestByIdAsync(int adoptionRequestId, CancellationToken cancellationToken);
 
-        /// <summary>
-        /// Updates an existing adoption.
-        /// </summary>
-        /// <param name="adoptionRequest">The adoption entity to update.</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-        /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
-        Task<Result<bool>> UpdateAdoptionRequestAsync(AdoptionRequest adoptionRequest, CancellationToken cancellationToken);
+    /// <summary>
+    /// Updates an existing adoption.
+    /// </summary>
+    /// <param name="adoptionRequest">The adoption entity to update.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+    /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
+    Task<Result<bool>> UpdateAdoptionRequestAsync(AdoptionRequest adoptionRequest, CancellationToken cancellationToken);
 
-        /// <summary>
-        /// Deletes an adoption by its ID.
-        /// </summary>
-        /// <param name="adoptionRequestId">The ID of the adoption to delete.</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-        /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
-        Task<Result<bool>> DeleteAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken);
-    }
+    /// <summary>
+    /// Deletes an adoption by its ID.
+    /// </summary>
+    /// <param name="adoptionRequestId">The ID of the adoption to delete.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+    /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
+    Task<Result<bool>> DeleteAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken);
+}

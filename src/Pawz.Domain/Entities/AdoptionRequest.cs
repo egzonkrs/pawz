@@ -7,7 +7,7 @@ namespace Pawz.Domain.Entities;
 public class AdoptionRequest : IEntity<int>, ISoftDeletion
 {
     /// <summary>
-    /// The Id of the adoption request
+    /// The ID of the adoption request
     /// </summary>
     public int Id { get; set; }
 
@@ -25,7 +25,6 @@ public class AdoptionRequest : IEntity<int>, ISoftDeletion
     /// The date when the adoption request was responded to
     /// </summary>
     public DateTime ResponseDate { get; set; }
-
 
     /// <summary>
     /// The Id of the pet associated with this adoption request
