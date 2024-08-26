@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Pawz.Domain.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Data.Seed;
@@ -10,17 +12,56 @@ public class SeedLocations
         var locationsExists = await context.Locations.AnyAsync();
         if (locationsExists) return;
 
-        await context.Database.ExecuteSqlRawAsync(@"
-            SET IDENTITY_INSERT Locations ON;
+        var locations = new List<Location>
+        {
+            new Location
+            {
+                City = "New York",
+                State = "NY",
+                Country = "USA",
+                PostalCode = "10001",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new Location
+            {
+                City = "Los Angeles",
+                State = "CA",
+                Country = "USA",
+                PostalCode = "90001",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new Location
+            {
+                City = "Chicago",
+                State = "IL",
+                Country = "USA",
+                PostalCode = "60601",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new Location
+            {
+                City = "Houston",
+                State = "TX",
+                Country = "USA",
+                PostalCode = "77001",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new Location
+            {
+                City = "Toronto",
+                State = "ON",
+                Country = "Canada",
+                PostalCode = "M5H 2N2",
+                IsDeleted = false,
+                DeletedAt = null
+            }
+        };
 
-            INSERT INTO Locations (Id, City, State, Country, PostalCode, IsDeleted, DeletedAt) VALUES
-            (1, 'New York', 'NY', 'USA', '10001', 0, NULL),
-            (2, 'Los Angeles', 'CA', 'USA', '90001', 0, NULL),
-            (3, 'Chicago', 'IL', 'USA', '60601', 0, NULL),
-            (4, 'Houston', 'TX', 'USA', '77001', 0, NULL),
-            (5, 'Toronto', 'ON', 'Canada', 'M5H 2N2', 0, NULL);
-
-            SET IDENTITY_INSERT Locations OFF;"
-        );
+        context.Locations.AddRange(locations);
+        await context.SaveChangesAsync();
     }
 }
