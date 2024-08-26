@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Pawz.Domain.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Data.Seed;
@@ -10,16 +12,43 @@ public class SeedBreeds
         var breedsExists = await context.Breeds.AnyAsync();
         if (breedsExists) return;
 
-        await context.Database.ExecuteSqlRawAsync(@"
-            SET IDENTITY_INSERT Breeds ON;
+        var breeds = new List<Breed>
+        {
+            new Breed
+            {
+                SpeciesId = 1,
+                Name = "Golden Retriever",
+                Description = "Friendly and tolerant breed.",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new Breed
+            {
+                SpeciesId = 1,
+                Name = "Labrador Retriever",
+                Description = "Outgoing and even-tempered breed.",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new Breed
+            {
+                SpeciesId = 2,
+                Name = "Persian",
+                Description = "Affectionate and quiet breed with long fur.",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new Breed
+            {
+                SpeciesId = 2,
+                Name = "Siamese",
+                Description = "Social and intelligent breed with striking blue eyes.",
+                IsDeleted = false,
+                DeletedAt = null
+            }
+        };
 
-            INSERT INTO Breeds (Id, SpeciesId, Name, Description, IsDeleted, DeletedAt) VALUES
-            (1, 1, 'Golden Retriever', 'Friendly and tolerant breed.', 0, NULL),
-            (2, 1, 'Labrador Retriever', 'Outgoing and even-tempered breed.', 0, NULL),
-            (3, 2, 'Persian', 'Affectionate and quiet breed with long fur.', 0, NULL),
-            (4, 2, 'Siamese', 'Social and intelligent breed with striking blue eyes.', 0, NULL);
-
-            SET IDENTITY_INSERT Breeds OFF;"
-        );
+        context.Breeds.AddRange(breeds);
+        await context.SaveChangesAsync();
     }
 }
