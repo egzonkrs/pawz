@@ -200,7 +200,7 @@ namespace Pawz.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PetId")
+                    b.Property<int?>("PetId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("RequestDate")
@@ -422,7 +422,7 @@ namespace Pawz.Infrastructure.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("SpeciesId")
+                    b.Property<int?>("SpeciesId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -575,14 +575,12 @@ namespace Pawz.Infrastructure.Migrations
                 {
                     b.HasOne("Pawz.Domain.Entities.Pet", "Pet")
                         .WithMany("AdoptionRequests")
-                        .HasForeignKey("PetId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("PetId");
 
                     b.HasOne("Pawz.Domain.Entities.ApplicationUser", "User")
                         .WithMany("AdoptionRequests")
                         .HasForeignKey("RequesterUserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Pet");
@@ -606,32 +604,28 @@ namespace Pawz.Infrastructure.Migrations
                     b.HasOne("Pawz.Domain.Entities.Breed", "Breed")
                         .WithMany("Pets")
                         .HasForeignKey("BreedId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Pawz.Domain.Entities.Location", "Location")
                         .WithMany("Pets")
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Pawz.Domain.Entities.ApplicationUser", "User")
                         .WithMany("Pets")
                         .HasForeignKey("PostedByUserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Pawz.Domain.Entities.Species", "Species")
+                    b.HasOne("Pawz.Domain.Entities.Species", null)
                         .WithMany("Pets")
-                        .HasForeignKey("SpeciesId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("SpeciesId");
 
                     b.Navigation("Breed");
 
                     b.Navigation("Location");
-
-                    b.Navigation("Species");
 
                     b.Navigation("User");
                 });
@@ -641,7 +635,7 @@ namespace Pawz.Infrastructure.Migrations
                     b.HasOne("Pawz.Domain.Entities.Pet", "Pet")
                         .WithMany("PetImages")
                         .HasForeignKey("PetId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Pet");
