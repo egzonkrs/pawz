@@ -1,8 +1,16 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Pawz.Domain.Entities;
+using Pawz.Domain.Interfaces;
+using Pawz.Infrastructure.Data;
+using Pawz.Infrastructure.Data.Seed;
 using Pawz.Web.Extensions;
 using Pawz.Web.Modules;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,5 +37,24 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+
+try
+{
+    var context = services.GetRequiredService<AppDbContext>();
+    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+    var unitOfWork = services.GetRequiredService<IUnitOfWork>();
+    await context.Database.MigrateAsync();
+    await DataSeeder.SeedData(context, unitOfWork, userManager);
+}
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occured during migration");
+}
+
+app.Run();
 
 app.Run();
