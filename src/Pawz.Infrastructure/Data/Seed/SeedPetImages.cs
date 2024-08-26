@@ -9,7 +9,7 @@ namespace Pawz.Infrastructure.Data.Seed
     {
         public static async Task SeedPetImageData(AppDbContext context)
         {
-            var petImagesExist = await context.Breeds.AnyAsync();
+            var petImagesExist = await context.PetImages.AnyAsync();
             if (petImagesExist) return;
 
             string[] dogImageUrls =
@@ -25,18 +25,20 @@ namespace Pawz.Infrastructure.Data.Seed
             };
 
             await context.Database.ExecuteSqlRawAsync(@"
-                    INSERT INTO PetImages (Id, PetId, ImageUrl, IsPrimary, UploadedAt) VALUES
-                    (1, 1, @dogUrl1, 1, @uploadedAt),
-                    (2, 1, @dogUrl2, 1, @uploadedAt),
-                    (3, 2, @catUrl1, 1, @uploadedAt),
-                    (4, 2, @catUrl2, 1, @uploadedAt)",
+                INSERT INTO PetImages (Id, PetId, ImageUrl, IsPrimary, UploadedAt, isDeleted, Description) VALUES
+                (1, 1, @dogUrl1, 1, @uploadedAt1, false, 'test'),
+                (2, 1, @dogUrl2, 1, @uploadedAt2, false, 'test'),
+                (3, 2, @catUrl1, 1, @uploadedAt3, false, 'test'),
+                (4, 2, @catUrl2, 1, @uploadedAt4, false, 'test')",
                 new SqliteParameter("@dogUrl1", dogImageUrls[0]),
                 new SqliteParameter("@dogUrl2", dogImageUrls[1]),
                 new SqliteParameter("@catUrl1", catImageUrls[0]),
                 new SqliteParameter("@catUrl2", catImageUrls[1]),
-                new SqliteParameter("@uploadedAt", DateTime.UtcNow)
+                new SqliteParameter("@uploadedAt1", DateTime.UtcNow),
+                new SqliteParameter("@uploadedAt2", DateTime.UtcNow),
+                new SqliteParameter("@uploadedAt3", DateTime.UtcNow),
+                new SqliteParameter("@uploadedAt4", DateTime.UtcNow)
             );
         }
     }
 }
-

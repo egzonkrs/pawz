@@ -56,5 +56,3 @@ catch (Exception ex)
 }
 
 app.Run();
-
-app.Run();

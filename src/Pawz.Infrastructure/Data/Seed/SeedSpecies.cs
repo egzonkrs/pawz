@@ -7,13 +7,13 @@ namespace Pawz.Infrastructure.Data.Seed
     {
         public static async Task SeedSpeciesData(AppDbContext context)
         {
-            var speciesExist = await context.Breeds.AnyAsync();
+            var speciesExist = await context.Species.AnyAsync();
             if (speciesExist) return;
 
             await context.Database.ExecuteSqlRawAsync(@"
-                    INSERT INTO Species (Id, Name, Description, CreatedAt) VALUES 
-                    (1, 'Dog', 'Domesticated carnivorous mammal', datetime('now')), 
-                    (2, 'Cat', 'Small domesticated carnivorous mammal', datetime('now'))"
+                    INSERT INTO Species (Id, Name, Description, CreatedAt, isDeleted) VALUES 
+                    (1, 'Dog', 'Domesticated carnivorous mammal', datetime('now'), false), 
+                    (2, 'Cat', 'Small domesticated carnivorous mammal', datetime('now'), false)"
             );
         }
     }
