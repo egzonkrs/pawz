@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Pawz.Domain.Entities;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Data.Seed;
@@ -10,14 +13,25 @@ public class SeedSpecies
         var speciesExist = await context.Species.AnyAsync();
         if (speciesExist) return;
 
-        await context.Database.ExecuteSqlRawAsync(@"
-            SET IDENTITY_INSERT Species ON;
-        
-            INSERT INTO Species (Id, Name, Description, CreatedAt, IsDeleted) VALUES 
-            (1, 'Dog', 'Domesticated carnivorous mammal', GETDATE(), 0), 
-            (2, 'Cat', 'Small domesticated carnivorous mammal', GETDATE(), 0);
-        
-            SET IDENTITY_INSERT Species OFF;"
-        );
+        var species = new List<Species>
+        {
+            new Species
+            {
+                Name = "Dog",
+                Description = "Domesticated carnivorous mammal",
+                CreatedAt = DateTime.UtcNow,
+                IsDeleted = false
+            },
+            new Species
+            {
+                Name = "Cat",
+                Description = "Small domesticated carnivorous mammal",
+                CreatedAt = DateTime.UtcNow,
+                IsDeleted = false
+            }
+        };
+
+        context.Species.AddRange(species);
+        await context.SaveChangesAsync();
     }
 }
