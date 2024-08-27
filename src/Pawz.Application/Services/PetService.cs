@@ -180,7 +180,7 @@ namespace Pawz.Application.Services
 
                 var pets = await _petRepository.GetAllPetsWithRelatedEntities(cancellationToken);
 
-                if (pets == null || !pets.Any())
+                if (pets is null)
                 {
                     _logger.LogWarning("No pets were found with related entities.");
                     return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());

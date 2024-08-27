@@ -19,6 +19,11 @@ public class PetRequest
     public int SpeciesId { get; set; }
 
     /// <summary>
+    /// The name of the species of the pet
+    /// </summary>
+    public string SpeciesName { get; set; }
+
+    /// <summary>
     /// The Id of the breed of the pet
     /// </summary>
     public int BreedId { get; set; }

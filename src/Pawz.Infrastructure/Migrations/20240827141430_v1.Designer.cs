@@ -11,7 +11,7 @@ using Pawz.Infrastructure.Data;
 namespace Pawz.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240826130715_v1")]
+    [Migration("20240827141430_v1")]
     partial class v1
     {
         /// <inheritdoc />

@@ -9,7 +9,7 @@ public class MappingProfiles : Profile
     {
         CreateMap<PetRequest, Pet>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.Species, opt => opt.Ignore())
+            .ForMember(dest => dest.Species, opt => opt.MapFrom(src => src.SpeciesName))
             .ForMember(dest => dest.Breed, opt => opt.Ignore())
             .ForMember(dest => dest.Location, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
@@ -23,9 +23,6 @@ public class MappingProfiles : Profile
             .ForMember(dest => dest.Species, opt => opt.MapFrom(src => src.Species.Name))
             .ForMember(dest => dest.Breed, opt => opt.MapFrom(src => src.Breed.Name))
             .ForMember(dest => dest.Location, opt => opt.MapFrom(src => $"{src.Location.City}, {src.Location.State}, {src.Location.Country}, {src.Location.PostalCode}"))
-            .ForMember(dest => dest.Species, opt => opt.Ignore())
-            .ForMember(dest => dest.Breed, opt => opt.Ignore())
-            .ForMember(dest => dest.Location, opt => opt.Ignore())
             .ReverseMap();
     }
 }
