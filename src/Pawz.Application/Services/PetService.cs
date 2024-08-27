@@ -177,4 +177,35 @@ public class PetService : IPetService
             return Result<bool>.Failure(PetErrors.DeletionUnexpectedError);
         }
     }
+
+    /// <summary>
+    /// Retrieves all pets associated with a specific user by their unique user ID.
+    /// </summary>
+    /// <param name="userId">The ID of the user whose pets are to be retrieved.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A result containing a collection of pets associated with the user, or an error if not found.</returns>
+    public async Task<Result<IEnumerable<Pet>>> GetPetsByUserIdAsync(string userId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            _logger.LogInformation("Started retrieving pets for UserId: {UserId}", userId);
+
+            var pets = await _petRepository.GetByUserIdAsync(userId, cancellationToken);
+
+            if (pets is null)
+            {
+                _logger.LogWarning("No pets found for UserId: {UserId}", userId);
+                return Result<IEnumerable<Pet>>.Failure(PetErrors.NoPetsFoundForUser(userId));
+            }
+
+            _logger.LogInformation("Successfully retrieved pets for UserId: {UserId}", userId);
+            return Result<IEnumerable<Pet>>.Success(pets);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve pets for UserId: {UserId}",
+                             nameof(PetService), userId);
+            return Result<IEnumerable<Pet>>.Failure(PetErrors.RetrievalError);
+        }
+    }
 }
