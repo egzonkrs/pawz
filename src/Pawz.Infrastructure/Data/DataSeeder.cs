@@ -15,6 +15,10 @@ public class DataSeeder
 
         await SeedBreeds.SeedBreedData(context);
 
+        await SeedCountries.SeedCountryData(context);
+
+        await SeedCities.SeedCityData(context);
+
         await SeedLocations.SeedLocationData(context);
 
         await SeedPets.SeedPetData(context);
