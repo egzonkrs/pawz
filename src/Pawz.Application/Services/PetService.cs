@@ -10,48 +10,48 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Pawz.Application.Services
+namespace Pawz.Application.Services;
+
+public class PetService : IPetService
 {
-    public class PetService : IPetService
+    private readonly IPetRepository _petRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<PetService> _logger;
+    private readonly IMapper _mapper;
+
+    public PetService(IPetRepository petRepository, IUnitOfWork unitOfWork, ILogger<PetService> logger, IMapper mapper)
     {
-        private readonly IPetRepository _petRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger<PetService> _logger;
-        private readonly IMapper _mapper;
+        _petRepository = petRepository;
+        _unitOfWork = unitOfWork;
+        _logger = logger;
+        _mapper = mapper;
+    }
 
-        public PetService(IPetRepository petRepository, IUnitOfWork unitOfWork, ILogger<PetService> logger, IMapper mapper)
+    public async Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken)
+    {
+        try
         {
-            _petRepository = petRepository;
-            _unitOfWork = unitOfWork;
-            _logger = logger;
-            _mapper = mapper;
-        }
+            _logger.LogInformation("Started creating a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
 
-        public async Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken)
+            var pet = _mapper.Map<Pet>(petCreateRequest);
+            await _petRepository.InsertAsync(pet, cancellationToken);
+            var petCreated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
+
+            if (petCreated)
+            {
+                _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
+                return Result<bool>.Success(true);
+            }
+            _logger.LogWarning("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
+            return Result<bool>.Failure(PetErrors.CreationFailed);
+        }
+        catch (Exception ex)
         {
-            try
-            {
-                _logger.LogInformation("Started creating a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
-
-                var pet = _mapper.Map<Pet>(petCreateRequest);
-                await _petRepository.InsertAsync(pet, cancellationToken);
-                var petCreated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
-
-                if (petCreated)
-                {
-                    _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
-                    return Result<bool>.Success(true);
-                }
-                _logger.LogWarning("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
-                return Result<bool>.Failure(PetErrors.CreationFailed);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to create a Pet for the UserId: {UserId}",
-                                 nameof(PetService), petCreateRequest.PostedByUserId);
-                return Result<bool>.Failure(PetErrors.CreationUnexpectedError);
-            }
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to create a Pet for the UserId: {UserId}",
+                             nameof(PetService), petCreateRequest.PostedByUserId);
+            return Result<bool>.Failure(PetErrors.CreationUnexpectedError);
         }
+    }
 
     /// <summary>
     /// Retrieves all pets from the system.
