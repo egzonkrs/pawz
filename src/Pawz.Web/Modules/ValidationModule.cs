@@ -12,5 +12,6 @@ public class ValidationModule : IModule
     {
         services.AddValidatorsFromAssemblyContaining<RegisterViewModel>();
         services.AddScoped<IValidator<RegisterViewModel>, RegisterViewModelValidator>();
+        services.AddScoped<IValidator<LoginViewModel>,LoginModelValidator>();
     }
 }

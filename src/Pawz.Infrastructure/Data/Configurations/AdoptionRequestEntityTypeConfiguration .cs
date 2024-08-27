@@ -1,17 +1,16 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Pawz.Domain.Entities;
-using System;
 
-namespace Pawz.Infrastructure.Data.Configurations
+namespace Pawz.Infrastructure.Data.Configurations;
+
+public class AdoptionRequestEntityTypeConfiguration : IEntityTypeConfiguration<AdoptionRequest>
 {
-    public class AdoptionRequestEntityTypeConfiguration : IEntityTypeConfiguration<AdoptionRequest>
+    public void Configure(EntityTypeBuilder<AdoptionRequest> builder)
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<AdoptionRequest> builder)
-        {
-            builder
-                .HasOne(ar => ar.Pet)
-                .WithMany(p => p.AdoptionRequests)
-                .HasForeignKey(ar => ar.PetId);
-        }
+        builder
+            .HasOne(ar => ar.Pet)
+            .WithMany(p => p.AdoptionRequests)
+            .HasForeignKey(ar => ar.PetId);
     }
 }

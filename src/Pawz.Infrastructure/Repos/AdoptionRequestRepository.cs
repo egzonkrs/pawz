@@ -16,6 +16,12 @@ public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>
     {
     }
 
+    /// <summary>
+    /// Retrieves adoption requests based on their status.
+    /// </summary>
+    /// <param name="status">The status of the adoption requests to filter by.</param>
+    /// <param name="cancellationToken">A cancellation token for asynchronous operation.</param>
+    /// <returns>A list of adoption requests matching the specified status.</returns>
     public async Task<IEnumerable<AdoptionRequest>> GetRequestsByStatusAsync(AdoptionRequestStatus status, CancellationToken cancellationToken = default)
     {
         return await _dbSet
@@ -23,6 +29,12 @@ public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>
             .ToListAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// Retrieves all adoption requests associated with a specific pet by its Id.
+    /// </summary>
+    /// <param name="petId">The Id of the pet whose adoption requests should be retrieved.</param>
+    /// <param name="cancellationToken">A cancellation token for asynchronous operation.</param>
+    /// <returns>A list of adoption requests associated with the specified pet.</returns>
     public async Task<IEnumerable<AdoptionRequest>> GetByPetIdAsync(int petId, CancellationToken cancellationToken = default)
     {
         return await _dbSet
@@ -30,6 +42,12 @@ public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>
             .ToListAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// Retrieves all adoption requests submitted by a specific user based on their user Id.
+    /// </summary>
+    /// <param name="userId">The Id of the user whose adoption requests should be retrieved.</param>
+    /// <param name="cancellationToken">A cancellation token for asynchronous operation.</param>
+    /// <returns>A list of adoption requests submitted by the specified user.</returns>
     public async Task<IEnumerable<AdoptionRequest>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
     {
         return await _dbSet

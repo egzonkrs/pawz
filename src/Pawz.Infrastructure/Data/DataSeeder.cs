@@ -3,25 +3,28 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
 using System.Threading.Tasks;
 
-namespace Pawz.Infrastructure.Data.Seed
+namespace Pawz.Infrastructure.Data.Seed;
+
+public class DataSeeder
 {
-    public class DataSeeder
+    public static async Task SeedData(AppDbContext context, IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
     {
-        public static async Task SeedData(AppDbContext context, IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
-        {
-            await SeedSpecies.SeedSpeciesData(context);
+        await SeedUsers.SeedUserData(userManager);
 
-            await SeedBreeds.SeedBreedData(context);
+        await SeedSpecies.SeedSpeciesData(context);
 
-            await SeedLocations.SeedLocationData(context);
+        await SeedBreeds.SeedBreedData(context);
 
-            await SeedUsers.SeedUserData(userManager);
+        await SeedCountries.SeedCountryData(context);
 
-            await SeedPets.SeedPetData(context);
+        await SeedCities.SeedCityData(context);
 
-            await SeedPetImages.SeedPetImageData(context);
+        await SeedLocations.SeedLocationData(context);
 
-            await unitOfWork.SaveChangesAsync();
-        }
+        await SeedPets.SeedPetData(context);
+
+        await SeedPetImages.SeedPetImageData(context);
+
+        await unitOfWork.SaveChangesAsync();
     }
 }

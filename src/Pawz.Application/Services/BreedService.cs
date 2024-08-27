@@ -23,6 +23,12 @@ public class BreedService : IBreedService
         _logger = logger;
     }
 
+    /// <summary>
+    /// Creates a new breed entity.
+    /// </summary>
+    /// <param name="breed">The breed entity to create.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+    /// <returns>A result indicating success or failure of the operation.</returns>
     public async Task<Result<bool>> CreateBreedAsync(Breed breed, CancellationToken cancellationToken)
     {
         try
@@ -35,7 +41,7 @@ public class BreedService : IBreedService
             if (breedCreated)
             {
                 _logger.LogInformation("Successfully created a Breed with Id: {BreedId}", breed.Id);
-                return Result<bool>.Success(true);
+                return Result<bool>.Success();
             }
             _logger.LogWarning("Failed to create a Breed with Id: {BreedId}", breed.Id);
             return Result<bool>.Failure(BreedErrors.CreationFailed);
@@ -48,6 +54,11 @@ public class BreedService : IBreedService
         }
     }
 
+    /// <summary>
+    /// Retrieves all breed entities.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+    /// <returns>A result containing a collection of breed entities.</returns>
     public async Task<Result<IEnumerable<Breed>>> GetAllBreedsAsync(CancellationToken cancellationToken)
     {
         try
@@ -67,6 +78,12 @@ public class BreedService : IBreedService
         }
     }
 
+    /// <summary>
+    /// Retrieves a breed entity by its identifier.
+    /// </summary>
+    /// <param name="breedId">The identifier of the breed to retrieve.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+    /// <returns>A result containing the breed entity if found, otherwise an error.</returns>
     public async Task<Result<Breed>> GetBreedByIdAsync(int breedId, CancellationToken cancellationToken)
     {
         try
@@ -92,6 +109,12 @@ public class BreedService : IBreedService
         }
     }
 
+    /// <summary>
+    /// Updates an existing breed entity.
+    /// </summary>
+    /// <param name="breed">The breed entity to update.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+    /// <returns>A result indicating success or failure of the update operation.</returns>
     public async Task<Result<bool>> UpdateBreedAsync(Breed breed, CancellationToken cancellationToken)
     {
         try
@@ -104,7 +127,7 @@ public class BreedService : IBreedService
             if (breedUpdated)
             {
                 _logger.LogInformation("Successfully updated Breed with Id: {BreedId}", breed.Id);
-                return Result<bool>.Success(true);
+                return Result<bool>.Success();
             }
             _logger.LogWarning("Failed to update Breed with Id: {BreedId}. No changes were detected.", breed.Id);
             return Result<bool>.Failure(BreedErrors.NoChangesDetected);
@@ -117,6 +140,12 @@ public class BreedService : IBreedService
         }
     }
 
+    /// <summary>
+    /// Deletes a breed entity by its identifier.
+    /// </summary>
+    /// <param name="breedId">The identifier of the breed to delete.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+    /// <returns>A result indicating success or failure of the delete operation.</returns>
     public async Task<Result<bool>> DeleteBreedAsync(int breedId, CancellationToken cancellationToken)
     {
         try
@@ -136,7 +165,7 @@ public class BreedService : IBreedService
             if (breedDeleted)
             {
                 _logger.LogInformation("Successfully deleted Breed with Id: {BreedId}", breedId);
-                return Result<bool>.Success(true);
+                return Result<bool>.Success();
             }
             _logger.LogWarning("Failed to delete Breed with Id: {BreedId}. No changes were detected.", breedId);
             return Result<bool>.Failure(BreedErrors.NoChangesDetected);
