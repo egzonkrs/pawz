@@ -1,42 +1,65 @@
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Pawz.Domain.Entities;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Pawz.Infrastructure.Data.Seed
+namespace Pawz.Infrastructure.Data.Seed;
+
+public class SeedPetImages
 {
-    public class SeedPetImages
+    public static async Task SeedPetImageData(AppDbContext context)
     {
-        public static async Task SeedPetImageData(AppDbContext context)
+        var petImagesExist = await context.PetImages.AnyAsync();
+        if (petImagesExist) return;
+
+        var uploadedAt = DateTime.UtcNow;
+
+        var petImages = new List<PetImage>
         {
-            var petImagesExist = await context.Breeds.AnyAsync();
-            if (petImagesExist) return;
-
-            string[] dogImageUrls =
+            new PetImage
             {
-                    "https://picsum.photos/id/237/200/300",
-                    "https://picsum.photos/id/238/200/300"
-                };
-
-            string[] catImageUrls =
+                PetId = 1,
+                ImageUrl = "https://picsum.photos/id/237/200/300",
+                IsPrimary = true,
+                UploadedAt = uploadedAt,
+                Description = "Dog Image 1",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new PetImage
             {
-                    "https://picsum.photos/id/239/200/300",
-                    "https://picsum.photos/id/240/200/300"
-                };
+                PetId = 2,
+                ImageUrl = "https://picsum.photos/id/238/200/300",
+                IsPrimary = false,
+                UploadedAt = uploadedAt,
+                Description = "Dog Image 2",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new PetImage
+            {
+                PetId = 3,
+                ImageUrl = "https://picsum.photos/id/239/200/300",
+                IsPrimary = true,
+                UploadedAt = uploadedAt,
+                Description = "Cat Image 1",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new PetImage
+            {
+                PetId = 4,
+                ImageUrl = "https://picsum.photos/id/240/200/300",
+                IsPrimary = false,
+                UploadedAt = uploadedAt,
+                Description = "Cat Image 2",
+                IsDeleted = false,
+                DeletedAt = null
+            }
+        };
 
-            await context.Database.ExecuteSqlRawAsync(@"
-                    INSERT INTO PetImages (Id, PetId, ImageUrl, IsPrimary, UploadedAt) VALUES
-                    (1, 1, @dogUrl1, 1, @uploadedAt),
-                    (2, 1, @dogUrl2, 0, @uploadedAt),
-                    (3, 2, @catUrl1, 1, @uploadedAt),
-                    (4, 2, @catUrl2, 0, @uploadedAt)",
-                new SqliteParameter("@dogUrl1", dogImageUrls[0]),
-                new SqliteParameter("@dogUrl2", dogImageUrls[1]),
-                new SqliteParameter("@catUrl1", catImageUrls[0]),
-                new SqliteParameter("@catUrl2", catImageUrls[1]),
-                new SqliteParameter("@uploadedAt", DateTime.UtcNow)
-            );
-        }
+        context.PetImages.AddRange(petImages);
+        await context.SaveChangesAsync();
     }
 }
-

@@ -1,22 +1,54 @@
 using Microsoft.EntityFrameworkCore;
+using Pawz.Domain.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Pawz.Infrastructure.Data.Seed
-{
-    public class SeedBreeds
-    {
-        public static async Task SeedBreedData(AppDbContext context)
-        {
-            var breedsExists = await context.Breeds.AnyAsync();
-            if (breedsExists) return;
+namespace Pawz.Infrastructure.Data.Seed;
 
-            await context.Database.ExecuteSqlRawAsync(@"
-                    INSERT INTO Breeds (Id, SpeciesId, Name, Description) VALUES 
-                    (1, 1, 'Golden Retriever', 'Friendly and tolerant breed.'), 
-                    (2, 1, 'Labrador Retriever', 'Outgoing and even-tempered breed.'), 
-                    (3, 2, 'Persian', 'Affectionate and quiet breed with long fur.'), 
-                    (4, 2, 'Siamese', 'Social and intelligent breed with striking blue eyes.')"
-            );
-        }
+public class SeedBreeds
+{
+    public static async Task SeedBreedData(AppDbContext context)
+    {
+        var breedsExists = await context.Breeds.AnyAsync();
+        if (breedsExists) return;
+
+        var breeds = new List<Breed>
+        {
+            new Breed
+            {
+                SpeciesId = 1,
+                Name = "Golden Retriever",
+                Description = "Friendly and tolerant breed.",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new Breed
+            {
+                SpeciesId = 1,
+                Name = "Labrador Retriever",
+                Description = "Outgoing and even-tempered breed.",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new Breed
+            {
+                SpeciesId = 2,
+                Name = "Persian",
+                Description = "Affectionate and quiet breed with long fur.",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new Breed
+            {
+                SpeciesId = 2,
+                Name = "Siamese",
+                Description = "Social and intelligent breed with striking blue eyes.",
+                IsDeleted = false,
+                DeletedAt = null
+            }
+        };
+
+        context.Breeds.AddRange(breeds);
+        await context.SaveChangesAsync();
     }
 }

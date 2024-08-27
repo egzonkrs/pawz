@@ -61,7 +61,4 @@ public class UserErrors
     /// <returns>An <see cref="Error"/> indicating that an unexpected error occurred.</returns>
     public static Error UnexpectedError => new Error("UnexpectedError", "An unexpected error occurred.");
 
-
-
-
 }
