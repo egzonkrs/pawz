@@ -53,4 +53,16 @@ public static class UsersErrors
     /// </summary>
     /// <returns>An <see cref="Error"/> indicating that the email or password is incorrect.</returns>
     public static Error IncorrectEmailOrPassword => new Error("Users.Error", "Incorrect email or password.");
+
+    /// <summary>
+    /// Returns an error indicating that the assignment of claims to the user failed.
+    /// </summary>
+    /// <returns>An <see cref="Error"/> indicating that the assignment of claims to the user failed.</returns>
+    public static Error ClaimFailed => new Error("Users.Claim", "Failed to assign claims to the user.");
+
+    /// <summary>
+    /// Returns an error indicating that an unexpected error occurred.
+    /// </summary>
+    /// <returns>An <see cref="Error"/> indicating that an unexpected error occurred.</returns>
+    public static Error UnexpectedError => new Error("Users.UnexpectedError", "An unexpected error occurred.");
 }

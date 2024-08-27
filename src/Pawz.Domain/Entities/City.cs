@@ -4,41 +4,41 @@ using System.Collections.Generic;
 
 namespace Pawz.Domain.Entities;
 
-public class Species : IEntity<int>, ISoftDeletion
+public class City : IEntity<int>, ISoftDeletion
 {
     /// <summary>
-    /// The Id of the species
+    /// The Id of the city.
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// The name of the species
+    /// The name of the city.
     /// </summary>
     public string Name { get; set; }
 
     /// <summary>
-    /// Description of the species
+    /// The Id of the country to which this city belongs.
     /// </summary>
-    public string Description { get; set; }
+    public int CountryId { get; set; }
 
     /// <summary>
-    /// The date and time when the species record was created
+    /// The country to which this city belongs.
     /// </summary>
-    public DateTime CreatedAt { get; set; }
+    public Country Country { get; set; }
 
     /// <summary>
-    /// The breeds associated with this species
+    /// The collection of locations within this city.
     /// </summary>
-    public ICollection<Breed> Breeds { get; set; } = new List<Breed>();
+    public ICollection<Location> Locations { get; set; } = new List<Location>();
 
     /// <summary>
-    /// Gets or sets a value indicating whether the entity is soft-deleted.
+    /// Indicates whether the entity is soft-deleted.
     /// This property is implemented from the <see cref="ISoftDeletion"/> interface.
     /// </summary>
     public bool IsDeleted { get; set; }
 
     /// <summary>
-    /// Gets or sets the timestamp of when the entity was soft-deleted.
+    /// The timestamp of when the entity was soft-deleted.
     /// This property is implemented from the <see cref="ISoftDeletion"/> interface.
     /// </summary>
     public DateTimeOffset? DeletedAt { get; set; }
