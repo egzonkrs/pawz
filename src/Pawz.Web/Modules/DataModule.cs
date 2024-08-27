@@ -38,5 +38,6 @@ public class DataModule : IModule
         services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
         services.AddScoped<IBreedRepository, BreedRepository>();
         services.AddScoped<ISpeciesRepository, SpeciesRepository>();
+        services.AddScoped<IPetImageRepository, PetImageRepository>();
     }
 }
