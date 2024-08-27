@@ -2,35 +2,21 @@
 
 namespace Pawz.Web.Models;
 
-public class AdoptionRequest
+public class AdoptionRequestViewModel
 {
     /// <summary>
-    /// Gets or sets the first name of the user that is requesting to adopt.
-    /// This is required.
+    /// Gets or sets the Country of the user that is requesting to adopt.
     /// </summary>
-    [Required(ErrorMessage = "First Name is required")]
-    public string FirstName { get; set; }
+    public string Country { get; set; }
 
     /// <summary>
-    /// Gets or sets the last name of the user that is requesting to adopt.
-    /// This is required.
+    /// Gets or sets the City of the user that is requesting to adopt.
     /// </summary>
-    [Required(ErrorMessage = "Last Name is required")]
-    public string LastName { get; set; }
+    public string City { get; set; }
 
     /// <summary>
-    /// Gets or sets the email address of the user that is requesting to adopt.
-    /// This is required and must be a valid email address.
+    /// Gets or sets the Address of the user that is requesting to adopt.
     /// </summary>
-    [Required(ErrorMessage = "Email is required.")]
-    [EmailAddress(ErrorMessage = "Invalid email address.")]
-    public string Email { get; set; }
-
-    /// <summary>
-    /// Gets or sets the location of the user that is requesting to adopt.
-    /// This is required.
-    /// </summary>
-    [Required(ErrorMessage = "Location is required")]
-    public string Location { get; set; }
+    public string Address { get; set; }
 
 }

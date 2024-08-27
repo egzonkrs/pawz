@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
+using Pawz.Application.Models;
 using Pawz.Domain.Entities;
+using Pawz.Web.Extensions;
+using Pawz.Web.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,10 +13,13 @@ namespace Pawz.Web.Controllers;
 public class AdoptionRequestController : Controller
 {
     private readonly IAdoptionRequestService _adoptionRequestService;
+    private readonly IValidator<AdoptionRequestViewModel> _validator;
 
-    public AdoptionRequestController(IAdoptionRequestService adoptionRequestService)
+    public AdoptionRequestController(IAdoptionRequestService adoptionRequestService,
+        IValidator<AdoptionRequestViewModel> validator)
     {
         _adoptionRequestService = adoptionRequestService;
+        _validator = validator;
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -66,5 +73,24 @@ public class AdoptionRequestController : Controller
     {
         await _adoptionRequestService.DeleteAdoptionRequestAsync(id, cancellationToken);
         return RedirectToAction(nameof(Index));
+    }
+    public async Task<IActionResult> AdoptionRequestModal(AdoptionRequestViewModel adoptionRequestViewModel)
+    {
+        var validationResult = await _validator.ValidateAsync(adoptionRequestViewModel);
+
+        if (validationResult.IsValid is false)
+        {
+            validationResult.AddErrorsToModelState(ModelState);
+            return View(adoptionRequestViewModel);
+        }
+
+        var modalRequest = new ModalRequest()
+        {
+            Country = adoptionRequestViewModel.Country,
+            City = adoptionRequestViewModel.City,
+            Address = adoptionRequestViewModel.Address
+        };
+
+        return RedirectToAction("Index", "Home");
     }
 }
