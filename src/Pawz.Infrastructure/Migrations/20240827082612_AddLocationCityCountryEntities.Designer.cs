@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pawz.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Pawz.Infrastructure.Data;
 namespace Pawz.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240827082612_AddLocationCityCountryEntities")]
+    partial class AddLocationCityCountryEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -470,6 +473,9 @@ namespace Pawz.Infrastructure.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("SpeciesId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -480,6 +486,8 @@ namespace Pawz.Infrastructure.Migrations
                     b.HasIndex("LocationId");
 
                     b.HasIndex("PostedByUserId");
+
+                    b.HasIndex("SpeciesId");
 
                     b.ToTable("Pets");
                 });
@@ -684,6 +692,10 @@ namespace Pawz.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Pawz.Domain.Entities.Species", null)
+                        .WithMany("Pets")
+                        .HasForeignKey("SpeciesId");
+
                     b.Navigation("Breed");
 
                     b.Navigation("Location");
@@ -745,6 +757,8 @@ namespace Pawz.Infrastructure.Migrations
             modelBuilder.Entity("Pawz.Domain.Entities.Species", b =>
                 {
                     b.Navigation("Breeds");
+
+                    b.Navigation("Pets");
                 });
 #pragma warning restore 612, 618
         }
