@@ -91,7 +91,7 @@ public class PetController : Controller
             Name = pet.Name,
             CreatedAt = pet.CreatedAt,
             Status = pet.Status,
-            LocationName = pet.Location?.City,
+            LocationName = pet.Location?.City.ToString(),
             PhotoUrl = pet.PetImages.FirstOrDefault()?.ImageUrl,
             BreedName = pet.Breed?.Name
         }).ToList();
