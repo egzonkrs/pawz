@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Pawz.Domain.Common;
+using Pawz.Application.Models.Pet;
+using AutoMapper;
+using System.Linq;
 
 namespace Pawz.Application.Services
 {
@@ -15,6 +18,7 @@ namespace Pawz.Application.Services
         private readonly IPetRepository _petRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<PetService> _logger;
+        private readonly IMapper _mapper;
 
         public PetService(IPetRepository petRepository, IUnitOfWork unitOfWork, ILogger<PetService> logger)
         {
@@ -23,10 +27,12 @@ namespace Pawz.Application.Services
             _logger = logger;
         }
 
-        public async Task<Result<bool>> CreatePetAsync(Pet pet, CancellationToken cancellationToken)
+        public async Task<Result<PetResponse>> CreatePetAsync(PetRequest petRequest, CancellationToken cancellationToken)
         {
             try
             {
+                var pet = _mapper.Map<Pet>(petRequest);
+
                 _logger.LogInformation("Started creating a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
 
                 await _petRepository.InsertAsync(pet, cancellationToken);
@@ -35,20 +41,23 @@ namespace Pawz.Application.Services
                 if (petCreated)
                 {
                     _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
-                    return Result<bool>.Success(true);
+
+                    var petResponse = _mapper.Map<PetResponse>(pet);
+
+                    return Result<PetResponse>.Success(petResponse);
                 }
+
                 _logger.LogWarning("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
-                return Result<bool>.Failure(PetErrors.CreationFailed);
+                return Result<PetResponse>.Failure(PetErrors.CreationFailed);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to create a Pet for the UserId: {UserId}",
-                                 nameof(PetService), pet.PostedByUserId);
-                return Result<bool>.Failure(PetErrors.CreationUnexpectedError);
+                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to create a Pet for the UserId: {UserId}", nameof(PetService), petRequest.PostedByUserId);
+                return Result<PetResponse>.Failure(PetErrors.CreationUnexpectedError);
             }
         }
 
-        public async Task<Result<IEnumerable<Pet>>> GetAllPetsAsync(CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsAsync(CancellationToken cancellationToken)
         {
             try
             {
@@ -56,18 +65,19 @@ namespace Pawz.Application.Services
 
                 var pets = await _petRepository.GetAllAsync(cancellationToken);
 
+                var petResponses = _mapper.Map<IEnumerable<PetResponse>>(pets);
+
                 _logger.LogInformation("Successfully retrieved all pets.");
-                return Result<IEnumerable<Pet>>.Success(pets);
+                return Result<IEnumerable<PetResponse>>.Success(petResponses);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets.",
-                                 nameof(PetService));
-                return Result<IEnumerable<Pet>>.Failure(PetErrors.RetrievalError);
+                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets.", nameof(PetService));
+                return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
             }
         }
 
-        public async Task<Result<Pet>> GetPetByIdAsync(int petId, CancellationToken cancellationToken)
+        public async Task<Result<PetResponse>> GetPetByIdAsync(int petId, CancellationToken cancellationToken)
         {
             try
             {
@@ -78,46 +88,57 @@ namespace Pawz.Application.Services
                 if (pet is null)
                 {
                     _logger.LogWarning("Pet with Id: {PetId} was not found.", petId);
-                    return Result<Pet>.Failure(PetErrors.NotFound(petId));
+                    return Result<PetResponse>.Failure(PetErrors.NotFound(petId));
                 }
 
+                var petResponse = _mapper.Map<PetResponse>(pet);
+
                 _logger.LogInformation("Successfully retrieved Pet with Id: {PetId}", petId);
-                return Result<Pet>.Success(pet);
+                return Result<PetResponse>.Success(petResponse);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve Pet with Id: {PetId}",
-                                 nameof(PetService), petId);
-                return Result<Pet>.Failure(PetErrors.RetrievalError);
+                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve Pet with Id: {PetId}", nameof(PetService), petId);
+                return Result<PetResponse>.Failure(PetErrors.RetrievalError);
             }
         }
 
-        public async Task<Result<bool>> UpdatePetAsync(Pet pet, CancellationToken cancellationToken)
+        public async Task<Result<PetResponse>> UpdatePetAsync(int petId, PetRequest petRequest, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation("Started updating Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
+                _logger.LogInformation("Started updating Pet with Id: {PetId}", petId);
 
-                await _petRepository.UpdateAsync(pet, cancellationToken);
+                var existingPet = await _petRepository.GetByIdAsync(petId, cancellationToken);
+                if (existingPet is null)
+                {
+                    _logger.LogWarning("Pet with Id: {PetId} was not found.", petId);
+                    return Result<PetResponse>.Failure(PetErrors.NotFound(petId));
+                }
+
+                _mapper.Map(petRequest, existingPet);
+
+                await _petRepository.UpdateAsync(existingPet, cancellationToken);
                 var petUpdated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
                 if (petUpdated)
                 {
-                    _logger.LogInformation("Successfully updated Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
-                    return Result<bool>.Success(true);
+                    var petResponse = _mapper.Map<PetResponse>(existingPet);
+                    _logger.LogInformation("Successfully updated Pet with Id: {PetId}", petId);
+                    return Result<PetResponse>.Success(petResponse);
                 }
-                _logger.LogWarning("Failed to update Pet with Id: {PetId} from UserId: {UserId}. No changes were detected.", pet.Id, pet.PostedByUserId);
-                return Result<bool>.Failure(PetErrors.NoChangesDetected);
+
+                _logger.LogWarning("Failed to update Pet with Id: {PetId}. No changes were detected.", petId);
+                return Result<PetResponse>.Failure(PetErrors.NoChangesDetected);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to update Pet with Id: {PetId} for the UserId: {UserId}",
-                                 nameof(PetService), pet.Id, pet.PostedByUserId);
-                return Result<bool>.Failure(PetErrors.UpdateUnexpectedError);
+                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to update Pet with Id: {PetId}", nameof(PetService), petId);
+                return Result<PetResponse>.Failure(PetErrors.UpdateUnexpectedError);
             }
         }
 
-        public async Task<Result<bool>> DeletePetAsync(int petId, CancellationToken cancellationToken)
+        public async Task<Result<PetResponse>> DeletePetAsync(int petId, CancellationToken cancellationToken)
         {
             try
             {
@@ -127,8 +148,10 @@ namespace Pawz.Application.Services
                 if (pet is null)
                 {
                     _logger.LogWarning("Pet with Id: {PetId} was not found.", petId);
-                    return Result<bool>.Failure(PetErrors.NotFound(petId));
+                    return Result<PetResponse>.Failure(PetErrors.NotFound(petId));
                 }
+
+                var petResponse = _mapper.Map<PetResponse>(pet);
 
                 await _petRepository.DeleteAsync(pet, cancellationToken);
                 var petDeleted = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
@@ -136,20 +159,20 @@ namespace Pawz.Application.Services
                 if (petDeleted)
                 {
                     _logger.LogInformation("Successfully deleted Pet with Id: {PetId}", petId);
-                    return Result<bool>.Success(true);
+                    return Result<PetResponse>.Success(petResponse);
                 }
+
                 _logger.LogWarning("Failed to delete Pet with Id: {PetId}. No changes were detected.", petId);
-                return Result<bool>.Failure(PetErrors.NoChangesDetected);
+                return Result<PetResponse>.Failure(PetErrors.NoChangesDetected);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to delete Pet with Id: {PetId}",
-                                 nameof(PetService), petId);
-                return Result<bool>.Failure(PetErrors.DeletionUnexpectedError);
+                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to delete Pet with Id: {PetId}", nameof(PetService), petId);
+                return Result<PetResponse>.Failure(PetErrors.DeletionUnexpectedError);
             }
         }
 
-        public async Task<Result<IEnumerable<Pet>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default)
+        public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default)
         {
             try
             {
@@ -157,14 +180,21 @@ namespace Pawz.Application.Services
 
                 var pets = await _petRepository.GetAllPetsWithRelatedEntities(cancellationToken);
 
+                if (pets == null || !pets.Any())
+                {
+                    _logger.LogWarning("No pets were found with related entities.");
+                    return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
+                }
+
+                var petResponses = _mapper.Map<IEnumerable<PetResponse>>(pets);
+
                 _logger.LogInformation("Successfully retrieved all pets with related entities.");
-                return Result<IEnumerable<Pet>>.Success(pets);
+                return Result<IEnumerable<PetResponse>>.Success(petResponses);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets with related entities.",
-                                 nameof(PetService));
-                return Result<IEnumerable<Pet>>.Failure(PetErrors.RetrievalError);
+                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets with related entities.", nameof(PetService));
+                return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
             }
         }
     }

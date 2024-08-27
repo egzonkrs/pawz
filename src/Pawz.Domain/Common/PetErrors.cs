@@ -13,6 +13,12 @@ namespace Pawz.Domain.Common
         public static Error NotFound(int id) => new Error("Pets.NotFound", $"Pet with ID {id} was not found.");
 
         /// <summary>
+        /// Returns an error indicating that no pets were found.
+        /// </summary>
+        /// <returns>An <see cref="Error"/> indicating that the pets were not found.</returns>
+        public static Error NoPetsFound() => new Error("Pets.NoPetsFound", "No pets were found.");
+
+        /// <summary>
         /// Returns an error indicating that no changes were detected during the operation.
         /// </summary>
         /// <returns>An <see cref="Error"/> indicating that no changes were detected.</returns>

@@ -1,4 +1,4 @@
-namespace Pawz.Application.Models;
+namespace Pawz.Application.Models.Identity;
 
 /// <summary>
 /// The Login Request initiated by the user of the application.

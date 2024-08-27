@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Pawz.Application.Interfaces;
-using Pawz.Application.Models;
+using Pawz.Application.Models.Identity;
 using Pawz.Domain.Entities;
 using System.Threading.Tasks;
 

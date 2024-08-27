@@ -27,9 +27,9 @@ namespace Pawz.Infrastructure.Data.Seed
             await context.Database.ExecuteSqlRawAsync(@"
                 INSERT INTO PetImages (Id, PetId, ImageUrl, IsPrimary, UploadedAt, isDeleted, Description) VALUES
                 (1, 1, @dogUrl1, 1, @uploadedAt1, false, 'test'),
-                (2, 1, @dogUrl2, 1, @uploadedAt2, false, 'test'),
-                (3, 2, @catUrl1, 1, @uploadedAt3, false, 'test'),
-                (4, 2, @catUrl2, 1, @uploadedAt4, false, 'test')",
+                (2, 2, @dogUrl2, 1, @uploadedAt2, false, 'test'),
+                (3, 3, @catUrl1, 1, @uploadedAt3, false, 'test'),
+                (4, 4, @catUrl2, 1, @uploadedAt4, false, 'test')",
                 new SqliteParameter("@dogUrl1", dogImageUrls[0]),
                 new SqliteParameter("@dogUrl2", dogImageUrls[1]),
                 new SqliteParameter("@catUrl1", catImageUrls[0]),

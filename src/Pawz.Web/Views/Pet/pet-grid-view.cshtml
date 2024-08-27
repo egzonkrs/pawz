@@ -1,4 +1,4 @@
-@model IEnumerable<Pawz.Domain.Entities.Pet>
+@model IEnumerable<Pawz.Web.Models.PetViewModel>
 
 <div class="product-grid-list">
     <div class="row mt-30">
@@ -8,7 +8,7 @@
                 <div class="product-item">
                     <div class="card">
                         <img class="card-img-top img-fluid"
-                            src="@(pet.PetImages != null && pet.PetImages.Any() ? pet.PetImages.FirstOrDefault()?.ImageUrl : "/images/default-image.webp")"
+                            src="@(string.IsNullOrEmpty(pet.ImageUrl) ? "/images/default-image.webp" : pet.ImageUrl)"
                             alt="Pet Image" />
                     </div>
                     <div class="card-body">
@@ -19,11 +19,11 @@
                         </h4>
                         <p class="card-text">@pet.About</p>
                         <ul class="list-inline">
-                            <li><strong>Species:</strong> @(pet.Species?.Name)</li>
-                            <li><strong>Breed:</strong> @(pet.Breed?.Name)</li>
-                            <li><strong>Location:</strong> @(pet.Location?.Country) @(pet.Location?.State) @(pet.Location?.City) @(pet.Location?.PostalCode) </li>
+                            <li><strong>Species:</strong> @(pet.SpeciesName)</li>
+                            <li><strong>Breed:</strong> @(pet.BreedName)</li>
+                            <li><strong>Location:</strong> @(pet.Location) </li>
                             <li><strong>Age:</strong> @pet.AgeYears years and @pet.AgeMonths months</li>
-                            <li><strong>Posted by:</strong> @(pet.User?.FirstName) @(pet.User?.LastName) </li>
+                            <li><strong>Posted by:</strong> @(pet.PostedBy) </li>
                             <li><strong>Date:</strong> @pet.CreatedAt.ToString("d MMMM yyyy")</li>
                             <li><strong>Price:</strong> @pet.Price.ToString("C")</li>
                         </ul>

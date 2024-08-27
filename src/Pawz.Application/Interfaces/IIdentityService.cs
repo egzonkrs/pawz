@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Identity;
-using Pawz.Application.Models;
+using Pawz.Application.Models.Identity;
 using System.Threading.Tasks;
 
 namespace Pawz.Application.Interfaces;

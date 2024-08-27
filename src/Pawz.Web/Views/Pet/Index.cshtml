@@ -1,3 +1,5 @@
+@model IEnumerable<Pawz.Web.Models.PetViewModel>
+
 <script>
     document.addEventListener("DOMContentLoaded", function ()
     {
@@ -72,35 +74,24 @@
                     </div>
                 </div>
 
-                <div id="pet-grid-view-container">
-                    @if (Model.IsSuccess)
-                    {
-                        @Html.Partial("pet-grid-view", (IEnumerable<Pawz.Domain.Entities.Pet>)Model.Value)
-                    }
-                    else
-                    {
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="alert alert-danger text-center">
-                                An error occurred while displaying the pets. Please try again later.
-                            </div>
+                @if (Model == null || !Model.Any())
+                {
+                    <div class="d-flex justify-content-center align-items-center mt-3">
+                        <div class="alert alert-danger text-center">
+                            No pets available. Please try again later.
                         </div>
-                    }
-                </div>
+                    </div>
+                }
+                else
+                {
+                    <div id="pet-grid-view-container">
+                        @Html.Partial("pet-grid-view", Model)
+                    </div>
 
-                <div id="pet-list-view-container" style="display:none; margin-bottom: 1rem;">
-                    @if (Model.IsSuccess)
-                    {
-                        @Html.Partial("pet-list-view", (IEnumerable<Pawz.Domain.Entities.Pet>)Model.Value)
-                    }
-                    else
-                    {
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="alert alert-danger text-center">
-                                An error occurred while displaying the pets. Please try again later.
-                            </div>
-                        </div>
-                    }
-                </div>
+                    <div id="pet-grid-list-container">
+                        @Html.Partial("pet-grid-view", Model)
+                    </div>
+                }
 
                 <div class="pagination justify-content-center">
                     <nav aria-label="Page navigation example">
