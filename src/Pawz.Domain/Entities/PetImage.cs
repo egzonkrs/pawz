@@ -26,11 +26,6 @@ public class PetImage : IEntity<int>, ISoftDeletion
     public string ImageUrl { get; set; }
 
     /// <summary>
-    /// Description of the pet image
-    /// </summary>
-    public string Description { get; set; }
-
-    /// <summary>
     /// Indicates if the image is the primary one for the pet
     /// </summary>
     public bool IsPrimary { get; set; }
