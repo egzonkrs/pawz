@@ -71,12 +71,12 @@ public class PetService : IPetService
                     return Result<bool>.Failure(combinedErrors); // Or handle the error as needed
                 }
 
-                var imagePath = uploadResult.Value;
+                var fileName = uploadResult.Value;
 
                 var petImage = new PetImage
                 {
                     PetId = pet.Id,
-                    ImageUrl = imagePath,
+                    ImageUrl = fileName,
                     IsPrimary = false,
                     UploadedAt = DateTime.UtcNow
                 };

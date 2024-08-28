@@ -49,6 +49,7 @@ public class FileUploaderService : IFileUploaderService
             }
 
             var fileExtension = Path.GetExtension(file.FileName).ToLower();
+
             if (!allowedExtensions.Contains(fileExtension))
             {
                 _logger?.LogWarning("File upload failed: file extension {FileExtension} is not allowed.", fileExtension);
@@ -62,16 +63,17 @@ public class FileUploaderService : IFileUploaderService
             {
                 Directory.CreateDirectory(directory);
             }
+
             _logger.LogInformation("Starting file upload: {FileName}", fileName);
 
             using (var stream = new FileStream(fullPath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
-            var relativePath = Path.Combine(directory, fileName).Replace("\\", "/");
-            _logger.LogInformation("File uploaded successfully: {FilePath}", relativePath);
 
-            return Result<string>.Success(relativePath);
+            _logger.LogInformation("File uploaded successfully: {FilePath}", fileName);
+
+            return Result<string>.Success(fileName);
         }
         catch (Exception ex)
         {
