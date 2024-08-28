@@ -41,7 +41,7 @@ public class SpeciesService : ISpeciesService
             if (speciesCreated)
             {
                 _logger.LogInformation("Successfully created a Species with Id: {SpeciesId}", species.Id);
-                return Result<bool>.Success(true);
+                return Result<bool>.Success();
             }
             _logger.LogWarning("Failed to create a Species with Id: {SpeciesId}", species.Id);
             return Result<bool>.Failure(SpeciesErrors.CreationFailed);
@@ -127,7 +127,7 @@ public class SpeciesService : ISpeciesService
             if (speciesUpdated)
             {
                 _logger.LogInformation("Successfully updated Species with Id: {SpeciesId}", species.Id);
-                return Result<bool>.Success(true);
+                return Result<bool>.Success();
             }
             _logger.LogWarning("Failed to update Species with Id: {SpeciesId}. No changes were detected.", species.Id);
             return Result<bool>.Failure(SpeciesErrors.NoChangesDetected);
@@ -165,7 +165,7 @@ public class SpeciesService : ISpeciesService
             if (speciesDeleted)
             {
                 _logger.LogInformation("Successfully deleted Species with Id: {SpeciesId}", speciesId);
-                return Result<bool>.Success(true);
+                return Result<bool>.Success();
             }
             _logger.LogWarning("Failed to delete Species with Id: {SpeciesId}. No changes were detected.", speciesId);
             return Result<bool>.Failure(SpeciesErrors.NoChangesDetected);
