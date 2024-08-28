@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Domain.Entities;
+using Pawz.Infrastructure.Services;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ public class PetController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Pet pet, List<IFormFile> imageFiles, CancellationToken cancellationToken)
     {
-        string directory = "wwwroot/images/pets";
+        string directory = FileUploaderService.PetImagesDirectory;
 
         var result = await _petService.CreatePetAsync(pet, imageFiles, directory, cancellationToken);
 
