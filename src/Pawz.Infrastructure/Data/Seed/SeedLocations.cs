@@ -9,53 +9,32 @@ public class SeedLocations
 {
     public static async Task SeedLocationData(AppDbContext context)
     {
-        var locationsExists = await context.Locations.AnyAsync();
-        if (locationsExists) return;
+        var locationsExist = await context.Locations.AnyAsync();
+        if (locationsExist) return;
 
         var locations = new List<Location>
         {
             new Location
             {
-                City = "New York",
-                State = "NY",
-                Country = "USA",
-                PostalCode = "10001",
+                CityId = 1,
+                Address = "Bulevardi Nënë Tereza 1",
+                PostalCode = "10000",
                 IsDeleted = false,
                 DeletedAt = null
             },
             new Location
             {
-                City = "Los Angeles",
-                State = "CA",
-                Country = "USA",
-                PostalCode = "90001",
+                CityId = 1,
+                Address = "Rruga Dardania 3",
+                PostalCode = "12000",
                 IsDeleted = false,
                 DeletedAt = null
             },
             new Location
             {
-                City = "Chicago",
-                State = "IL",
-                Country = "USA",
-                PostalCode = "60601",
-                IsDeleted = false,
-                DeletedAt = null
-            },
-            new Location
-            {
-                City = "Houston",
-                State = "TX",
-                Country = "USA",
-                PostalCode = "77001",
-                IsDeleted = false,
-                DeletedAt = null
-            },
-            new Location
-            {
-                City = "Toronto",
-                State = "ON",
-                Country = "Canada",
-                PostalCode = "M5H 2N2",
+                CityId = 2,
+                Address = "Rruga e Dajti 5",
+                PostalCode = "1001",
                 IsDeleted = false,
                 DeletedAt = null
             }

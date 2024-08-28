@@ -71,7 +71,7 @@ public class SeedPets
                 Price = 200.00m,
                 Status = PetStatus.Pending,
                 CreatedAt = DateTime.UtcNow,
-                LocationId = 4,
+                LocationId = 1,
                 PostedByUserId = userJane.Id,
                 IsDeleted = false
             }

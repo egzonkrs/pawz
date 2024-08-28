@@ -19,6 +19,8 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<AdoptionRequest> AdoptionRequests { get; set; }
     public DbSet<Breed> Breeds { get; set; }
     public DbSet<Location> Locations { get; set; }
+    public DbSet<Country> Countries { get; set; }
+    public DbSet<City> Cities { get; set; }
     public DbSet<Pet> Pets { get; set; }
     public DbSet<PetImage> PetImages { get; set; }
     public DbSet<Species> Species { get; set; }
@@ -61,6 +63,12 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
             .HasQueryFilter(x => x.IsDeleted == false);
 
         modelBuilder.Entity<Location>()
+            .HasQueryFilter(x => x.IsDeleted == false);
+
+        modelBuilder.Entity<Country>()
+            .HasQueryFilter(x => x.IsDeleted == false);
+
+        modelBuilder.Entity<City>()
             .HasQueryFilter(x => x.IsDeleted == false);
 
         modelBuilder.Entity<PetImage>()
