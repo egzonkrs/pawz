@@ -24,6 +24,7 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     public async Task<IEnumerable<Pet>> GetByUserIdAsync(string userId, CancellationToken cancellationToken)
     {
         return await _dbSet
+            .AsNoTracking()
             .Where(pet => pet.PostedByUserId == userId)
             .Include(pet => pet.Location)
             .Include(pet => pet.Breed)
