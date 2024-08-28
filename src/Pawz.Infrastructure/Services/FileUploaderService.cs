@@ -39,13 +39,13 @@ public class FileUploaderService : IFileUploaderService
         {
             if (file is null || file.Length is 0)
             {
-                _logger.LogWarning("File upload failed: no file was provided.");
+                _logger.LogError("File upload failed: no file was provided.");
                 return Result<string>.Failure("Please upload a valid file.");
             }
 
             if (file.Length > maxFileSize)
             {
-                _logger.LogWarning("File upload failed: file size {FileSize} exceeds the maximum allowed size of {MaxFileSize}.", file.Length, maxFileSize);
+                _logger.LogError("File upload failed: file size {FileSize} exceeds the maximum allowed size of {MaxFileSize}.", file.Length, maxFileSize);
                 return Result<string>.Failure($"File size exceeds the maximum allowed size of {maxFileSize / (1024 * 1024)} MB.");
             }
 
@@ -53,7 +53,7 @@ public class FileUploaderService : IFileUploaderService
 
             if (!allowedExtensions.Contains(fileExtension))
             {
-                _logger.LogWarning("File upload failed: file extension {FileExtension} is not allowed.", fileExtension);
+                _logger.LogError("File upload failed: file extension {FileExtension} is not allowed.", fileExtension);
                 return Result<string>.Failure("File type is not allowed. Allowed types are: " + string.Join(", ", allowedExtensions));
             }
 
