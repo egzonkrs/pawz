@@ -54,7 +54,7 @@ public class PetService : IPetService
 
             if (petCreated is false)
             {
-                _logger.LogWarning("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
+                _logger.LogError("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
                 return Result<bool>.Failure(PetErrors.CreationFailed);
             }
 
@@ -66,7 +66,7 @@ public class PetService : IPetService
                 {
                     var combinedErrors = string.Join("; ", uploadResult.Errors.Select(e => e.Description));
 
-                    _logger.LogWarning("Failed to upload image for Pet with Id: {PetId} from UserId: {UserId}. Error: {Error}",
+                    _logger.LogError("Failed to upload image for Pet with Id: {PetId} from UserId: {UserId}. Error: {Error}",
                                         pet.Id, pet.PostedByUserId, combinedErrors);
                     return Result<bool>.Failure(combinedErrors); // Or handle the error as needed
                 }
@@ -88,12 +88,12 @@ public class PetService : IPetService
 
             if (arePetImagesSaved is false)
             {
-                _logger.LogWarning("log that images are not saved and we cannot create the pet");
+                _logger.LogError("Failed to save pet images; the pet creation process cannot be completed.");
                 return Result<bool>.Failure(PetErrors.CreationFailed);
             }
 
             _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
-            return Result<bool>.Success(true);
+            return Result<bool>.Success();
         }
         catch (Exception ex)
         {
