@@ -1,12 +1,14 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
+using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Pawz.Domain.Common;
 
 namespace Pawz.Application.Services;
 
@@ -15,12 +17,23 @@ public class PetService : IPetService
     private readonly IPetRepository _petRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<PetService> _logger;
+    private readonly IFileUploaderService _fileUploaderService;
+    private readonly IPetImageRepository _petImageRepository;
+    private readonly IUserAccessor _userAccessor;
 
-    public PetService(IPetRepository petRepository, IUnitOfWork unitOfWork, ILogger<PetService> logger)
+    public PetService(IPetRepository petRepository,
+                      IUnitOfWork unitOfWork,
+                      ILogger<PetService> logger,
+                      IFileUploaderService fileUploaderService,
+                      IPetImageRepository petImageRepository,
+                      IUserAccessor userAccessor)
     {
         _petRepository = petRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
+        _fileUploaderService = fileUploaderService;
+        _petImageRepository = petImageRepository;
+        _userAccessor = userAccessor;
     }
 
     /// <summary>
@@ -29,22 +42,58 @@ public class PetService : IPetService
     /// <param name="pet">The pet entity to create.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A result indicating whether the creation was successful.</returns>
-    public async Task<Result<bool>> CreatePetAsync(Pet pet, CancellationToken cancellationToken)
+    public async Task<Result<bool>> CreatePetAsync(Pet pet, IEnumerable<IFormFile> imageFiles, string directory, CancellationToken cancellationToken)
     {
         try
         {
+            pet.PostedByUserId = _userAccessor.GetUserId();
             _logger.LogInformation("Started creating a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
 
-            await _petRepository.InsertAsync(pet, cancellationToken);
+            var petId = await _petRepository.InsertAsync(pet, cancellationToken);
             var petCreated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
-            if (petCreated)
+            if (petCreated is false)
             {
-                _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
-                return Result<bool>.Success(true);
+                _logger.LogWarning("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
+                return Result<bool>.Failure(PetErrors.CreationFailed);
             }
-            _logger.LogWarning("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
-            return Result<bool>.Failure(PetErrors.CreationFailed);
+
+            foreach (var imageFile in imageFiles)
+            {
+                var uploadResult = await _fileUploaderService.UploadFileAsync(imageFile, directory);
+
+                if (!uploadResult.IsSuccess)
+                {
+                    var combinedErrors = string.Join("; ", uploadResult.Errors.Select(e => e.Description));
+
+                    _logger.LogWarning("Failed to upload image for Pet with Id: {PetId} from UserId: {UserId}. Error: {Error}",
+                                        pet.Id, pet.PostedByUserId, combinedErrors);
+                    return Result<bool>.Failure(combinedErrors); // Or handle the error as needed
+                }
+
+                var imagePath = uploadResult.Value;
+
+                var petImage = new PetImage
+                {
+                    PetId = pet.Id,
+                    ImageUrl = imagePath,
+                    IsPrimary = false,
+                    UploadedAt = DateTime.UtcNow
+                };
+
+                await _petImageRepository.InsertAsync(petImage, cancellationToken);
+            }
+
+            var arePetImagesSaved = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
+
+            if (arePetImagesSaved is false)
+            {
+                _logger.LogWarning("log that images are not saved and we cannot create the pet");
+                return Result<bool>.Failure(PetErrors.CreationFailed);
+            }
+
+            _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
+            return Result<bool>.Success(true);
         }
         catch (Exception ex)
         {
