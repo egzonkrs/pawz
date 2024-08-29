@@ -1,4 +1,4 @@
-@model IEnumerable<Pawz.Domain.Entities.Pet>
+@model IEnumerable<Pawz.Web.Models.PetViewModel>
 
 @foreach (var pet in Model)
 {
@@ -6,7 +6,7 @@
         <a href="@Url.Action("Details", "Pet", new { id = pet.Id })" class="text-decoration-none text-dark">
             <div class="row p-lg-3 p-sm-5 p-4">
                 <div class="col-lg-4 align-self-center">
-                    <img src="@(pet.PetImages != null && pet.PetImages.Any() ? pet.PetImages.FirstOrDefault()?.ImageUrl : "/images/default-image.webp")"
+                    <img src="@(string.IsNullOrEmpty(pet.ImageUrl) ? "/images/default-image.webp" : pet.ImageUrl)"
                         class="img-fluid w-100" style="height: 200px; object-fit: cover;" alt="@pet.Name">
                 </div>
                 <div class="col-lg-8" style="display: flex; align-items: center; justify-content: space-between;">
@@ -16,12 +16,12 @@
                                 <span class="font-weight-bold">@pet.Name</span>
                                 <ul class="list-inline mt-2 mb-3">
                                     <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>
-                                            @(pet.Species?.Name)</span></li>
+                                            @(pet.SpeciesName)</span></li>
                                     <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>
-                                            @(pet.Breed?.Name)</span></li>
+                                            @(pet.BreedName)</span></li>
                                     <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>
-                                            @(pet.Location?.Country) @(pet.Location?.State) @(pet.Location?.City)
-                                            @(pet.Location?.PostalCode)</span></li>
+                                            @(pet.Location) 
+                                        </span></li>
                                     <li class="list-inline-item"><span><i class="fa fa-calendar"></i>
                                             @pet.CreatedAt.ToString("d MMMM yyyy")</span></li>
                                 </ul>

@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Pawz.Domain.Common;
 using Pawz.Application.Models.Pet;
 using AutoMapper;
-using System.Linq;
 
 namespace Pawz.Application.Services
 {
@@ -20,11 +19,12 @@ namespace Pawz.Application.Services
         private readonly ILogger<PetService> _logger;
         private readonly IMapper _mapper;
 
-        public PetService(IPetRepository petRepository, IUnitOfWork unitOfWork, ILogger<PetService> logger)
+        public PetService(IPetRepository petRepository, IUnitOfWork unitOfWork, ILogger<PetService> logger, IMapper mapper)
         {
             _petRepository = petRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public async Task<Result<PetResponse>> CreatePetAsync(PetRequest petRequest, CancellationToken cancellationToken)
