@@ -12,6 +12,6 @@ public class CoreModule : IModule
     {
         services.AddControllersWithViews();
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        services.AddAutoMapper(typeof(MappingProfiles).Assembly, typeof(WebMappProfile).Assembly);
+        services.AddAutoMapper(typeof(MappingProfiles).Assembly, typeof(WebMappingProfile).Assembly);
     }
 }
