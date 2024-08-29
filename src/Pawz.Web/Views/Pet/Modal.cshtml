@@ -1,4 +1,6 @@
-﻿<!---Modal--->
+﻿@using Pawz.Web.Controllers
+@model AdoptionRequestViewModel
+<!---Modal--->
 
 <div class="modal fade" id="adoptionRequestModal" tabindex="-1" role="dialog" aria-labelledby="adoptionRequestModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -10,36 +12,34 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="adoptionRequestForm">
+                <form asp-action="Index" id="adoptionRequestForm">
                     <!-- Country select field -->
                     <div class="form-group">
-                        <select class="form-control" id="country" name="country">
+                        <select asp-for="Country" class="form-control" id="country" name="country">
                             <option value="">Select your country</option>
-                            <option value="KOSOVA">Kosova</option>
-                            <!-- Add more countries as needed -->
                         </select>
-                        <select class="form-control ml-2" id="city" name="city">
+                        <!-- City select field -->
+                        <select asp-for="City" class="form-control ml-2" id="city" name="city">
                             <option value="">Select your city</option>
-                            <option value="PRISTINA">Pristina</option>
+                            <option value="PRISTINA">Prishtina</option>
                             <option value="PRIZREN">Prizren</option>
                             <option value="PEJA">Peja</option>
                             <option value="GJAKOVA">Gjakova</option>
                             <option value="MITROVICA">Mitrovica</option>
                             <option value="FERIZAJ">Ferizaj</option>
                             <option value="VUSHTRRI">Vushtrri</option>
-                            <!-- Options for cities can be dynamically populated based on the selected country -->
                         </select>
                     </div>
                     <!-- Address input field -->
                     <div class="form-group">
-                        <label for="address">Address</label>
-                        <input type="text" class="form-control" id="address" name="address" placeholder="Enter your address">
+                        <label asp-for="Address">Address</label>
+                        <input asp-for="Address" class="form-control" id="address" placeholder="Enter your address">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="submitAdoptionRequest()">Submit</button>
+                <button asp-controller="AdoptionRequest" asp-action="Create" type="submit" class="btn btn-primary" onclick="submitAdoptionRequest()">Submit</button>
             </div>
         </div>
     </div>
