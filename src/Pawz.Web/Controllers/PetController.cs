@@ -1,5 +1,7 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
+using Pawz.Application.Models.Pet;
 using Pawz.Application.Services;
 using Pawz.Domain.Entities;
 using Pawz.Web.Models;
@@ -14,11 +16,13 @@ public class PetController : Controller
 {
     private readonly IPetService _petService;
     private readonly IUserAccessor _userAccessor;
+    private readonly IMapper _mapper;
 
-    public PetController(IPetService petService, IUserAccessor userAccessor)
+    public PetController(IPetService petService, IUserAccessor userAccessor,IMapper mapper)
     {
         _petService = petService;
         _userAccessor = userAccessor;
+        _mapper = mapper;
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -76,26 +80,11 @@ public class PetController : Controller
 
     public async Task<IActionResult> MyPets(CancellationToken cancellationToken)
     {
-        var userId = _userAccessor.GetUserId();
-        var result = await _petService.GetPetsByUserIdAsync(userId, cancellationToken);
+        var result = await _petService.GetPetsByUserIdAsync(cancellationToken);
 
-        if (!result.IsSuccess)
-        {
-            return View(new List<UserPetViewModel>());
-        }
         var pets = result.Value;
 
-        var petViewModels = pets.Select(pet => new UserPetViewModel
-        {
-            Id = pet.Id,
-            Name = pet.Name,
-            CreatedAt = pet.CreatedAt,
-            Status = pet.Status,
-            LocationName = pet.Location?.City.ToString(),
-            PhotoUrl = pet.PetImages.FirstOrDefault()?.ImageUrl,
-            BreedName = pet.Breed?.Name
-        }).ToList();
-
-        return View(petViewModels);
+        var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
+        return View(petResponses);
     }
 }
