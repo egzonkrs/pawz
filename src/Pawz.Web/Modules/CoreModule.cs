@@ -10,6 +10,6 @@ public class CoreModule : IModule
     public void Load(IServiceCollection services)
     {
         services.AddControllersWithViews();
-        services.AddAutoMapper(typeof(MappingProfiles).Assembly, typeof(WebMappingProfiles).Assembly);
+        services.AddAutoMapper(typeof(ApplicationMappingProfiles).Assembly, typeof(WebMappingProfiles).Assembly);
     }
 }

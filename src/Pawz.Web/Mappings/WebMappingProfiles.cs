@@ -1,5 +1,5 @@
 using AutoMapper;
-using Pawz.Application.Models.Pet;
+using Pawz.Application.Models.PetModels;
 using Pawz.Web.Models;
 
 namespace Pawz.Web.Mappings;

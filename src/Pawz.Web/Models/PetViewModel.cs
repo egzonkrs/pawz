@@ -10,7 +10,7 @@ public class PetViewModel
     public string ImageUrl { get; set; }
     public string SpeciesName { get; set; }
     public string BreedName { get; set; }
-    public string Location { get; set; }
+    public string LocationCity { get; set; }
     public int AgeYears { get; set; }
     public int AgeMonths { get; set; }
     public string PostedBy { get; set; }

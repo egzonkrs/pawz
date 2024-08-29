@@ -7,8 +7,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Pawz.Domain.Common;
-using Pawz.Application.Models.Pet;
 using AutoMapper;
+using Pawz.Application.Models.PetModels;
 
 namespace Pawz.Application.Services
 {

@@ -3,7 +3,7 @@ using Pawz.Domain.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace Pawz.Application.Models.Pet;
+namespace Pawz.Application.Models.PetModels;
 
 /// <summary>
 /// Represents the data required to create or update a Pet entity.

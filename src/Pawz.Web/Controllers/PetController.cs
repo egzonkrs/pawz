@@ -1,7 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
-using Pawz.Application.Models.Pet;
+using Pawz.Application.Models.PetModels;
 using Pawz.Web.Models;
 using System.Collections.Generic;
 using System.Threading;

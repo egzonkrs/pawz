@@ -1,4 +1,4 @@
-using Pawz.Application.Models.Pet;
+using Pawz.Application.Models.PetModels;
 using Pawz.Domain.Common;
 using System.Collections.Generic;
 using System.Threading;
