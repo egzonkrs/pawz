@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
@@ -68,6 +69,13 @@ public sealed class IdentityService : IIdentityService
     {
         try
         {
+            var userExists = await _userManager.Users.AnyAsync(x => x.Email == request.Email);
+            if (userExists)
+            {
+                _logger.LogError("Registration failed for Email: {Email} - User already exists.", request.Email);
+                return Result<bool>.Failure("An account with this email address already exists.");
+            }
+
             var user = new ApplicationUser
             {
                 UserName = request.FirstName,
