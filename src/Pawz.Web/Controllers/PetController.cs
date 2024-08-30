@@ -1,6 +1,9 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
+using Pawz.Application.Models.Pet;
 using Pawz.Domain.Entities;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,10 +12,12 @@ namespace Pawz.Web.Controllers;
 public class PetController : Controller
 {
     private readonly IPetService _petService;
+    private readonly IMapper _mapper;
 
-    public PetController(IPetService petService)
+    public PetController(IPetService petService,IMapper mapper)
     {
         _petService = petService;
+        _mapper = mapper;
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
