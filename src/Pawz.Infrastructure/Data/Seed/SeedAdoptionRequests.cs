@@ -23,34 +23,44 @@ public class SeedAdoptionRequests
         {
             new AdoptionRequest
             {
-                Status=AdoptionRequestStatus.Pending,
-                RequestDate=DateTime.UtcNow,
-                ResponseDate=DateTime.UtcNow,
-                PetId=1,
-                RequesterUserId=userJane.Id,
+                Status = AdoptionRequestStatus.Pending,
+                RequestDate = DateTime.UtcNow,
+                ResponseDate = DateTime.UtcNow,
+                PetId = 1,
+                RequesterUserId = userJane.Id,
                 IsDeleted = false,
                 DeletedAt = null
             },
             new AdoptionRequest
             {
-                Status=AdoptionRequestStatus.Pending,
-                RequestDate=DateTime.UtcNow,
-                ResponseDate=DateTime.UtcNow,
-                PetId=2,
-                RequesterUserId=userJohn.Id,
+                Status = AdoptionRequestStatus.Pending,
+                RequestDate = DateTime.UtcNow,
+                ResponseDate = DateTime.UtcNow,
+                PetId = 2,
+                RequesterUserId = userJohn.Id,
                 IsDeleted = false,
                 DeletedAt = null
             },
             new AdoptionRequest
             {
-                Status=AdoptionRequestStatus.Rejected,
-                RequestDate=DateTime.UtcNow,
-                ResponseDate=DateTime.UtcNow,
-                PetId=3,
-                RequesterUserId=userJane.Id,
+                Status = AdoptionRequestStatus.Approved,
+                RequestDate = DateTime.UtcNow,
+                ResponseDate = DateTime.UtcNow,
+                PetId = 3,
+                RequesterUserId = userJane.Id,
                 IsDeleted = false,
                 DeletedAt = null
             },
+            new AdoptionRequest
+            {
+                Status = AdoptionRequestStatus.Approved,
+                RequestDate = DateTime.UtcNow,
+                ResponseDate = DateTime.UtcNow,
+                PetId = 4,
+                RequesterUserId = userJohn.Id,
+                IsDeleted = false,
+                DeletedAt = null
+            }
         };
 
         context.AdoptionRequests.AddRange(adoptionRequests);

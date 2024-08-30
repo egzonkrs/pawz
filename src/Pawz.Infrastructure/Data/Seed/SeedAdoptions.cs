@@ -20,25 +20,17 @@ public class SeedAdoptions
         {
             new Adoption
             {
-                AdoptionRequestId=1,
-                AdoptionDate=DateTime.UtcNow,
-                AdoptionFee=1,
+                AdoptionRequestId = 3,
+                AdoptionDate = DateTime.UtcNow,
+                AdoptionFee = 2,
                 IsDeleted = false,
                 DeletedAt = null
             },
             new Adoption
             {
-                AdoptionRequestId=2,
-                AdoptionDate=DateTime.UtcNow,
-                AdoptionFee=2,
-                IsDeleted = false,
-                DeletedAt = null
-            },
-            new Adoption
-            {
-                AdoptionRequestId=3,
-                AdoptionDate=DateTime.UtcNow,
-                AdoptionFee=3,
+                AdoptionRequestId = 4,
+                AdoptionDate = DateTime.UtcNow,
+                AdoptionFee = 3,
                 IsDeleted = false,
                 DeletedAt = null
             },
