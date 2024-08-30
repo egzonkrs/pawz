@@ -1,6 +1,12 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
+using Pawz.Application.Models.Pet;
+using Pawz.Application.Services;
 using Pawz.Domain.Entities;
+using Pawz.Web.Models;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,10 +15,14 @@ namespace Pawz.Web.Controllers;
 public class PetController : Controller
 {
     private readonly IPetService _petService;
+    private readonly IUserAccessor _userAccessor;
+    private readonly IMapper _mapper;
 
-    public PetController(IPetService petService)
+    public PetController(IPetService petService, IUserAccessor userAccessor,IMapper mapper)
     {
         _petService = petService;
+        _userAccessor = userAccessor;
+        _mapper = mapper;
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -66,5 +76,15 @@ public class PetController : Controller
     {
         await _petService.DeletePetAsync(id, cancellationToken);
         return RedirectToAction(nameof(Index));
+    }
+
+    public async Task<IActionResult> MyPets(CancellationToken cancellationToken)
+    {
+        var result = await _petService.GetPetsByUserIdAsync(cancellationToken);
+
+        var pets = result.Value;
+
+        var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
+        return View(petResponses);
     }
 }
