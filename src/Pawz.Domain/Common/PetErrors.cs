@@ -47,4 +47,11 @@ public static class PetErrors
     /// </summary>
     /// <returns>An <see cref="Error"/> indicating that an unexpected error occurred during the pet deletion process.</returns>
     public static Error DeletionUnexpectedError => new Error("Pets.DeletionUnexpectedError", "An unexpected error occurred during the deletion operation.");
+
+    /// <summary>
+    /// Returns an error indicating that no pets were found for the specified user.
+    /// </summary>
+    /// <param name="userId">The ID of the user for whom no pets were found.</param>
+    /// <returns>An <see cref="Error"/> indicating that no pets were found for the user.</returns>
+    public static Error NoPetsFoundForUser(string userId) => new Error("Pets.NoPetsFoundForUser", $"No pets were found for user with ID {userId}.");
 }
