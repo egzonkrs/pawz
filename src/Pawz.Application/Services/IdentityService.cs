@@ -73,7 +73,7 @@ public sealed class IdentityService : IIdentityService
             if (userExists)
             {
                 _logger.LogError("Registration failed for Email: {Email} - User already exists.", request.Email);
-                return Result<bool>.Failure("An account with this email address already exists.");
+                return Result<bool>.Failure(UsersErrors.UserAlreadyExists(request.Email));
             }
 
             var user = new ApplicationUser
