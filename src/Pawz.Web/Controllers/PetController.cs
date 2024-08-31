@@ -94,5 +94,18 @@ namespace Pawz.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        // public async Task<IActionResult> PetCount(CancellationToken cancellationToken)
+        // {
+        //     var petCount = await _petService.CountPetsAsync(cancellationToken);
+        //     return Ok(petCount);
+        // }
+
+        // public async Task<IActionResult> PetCountView(CancellationToken cancellationToken)
+        // {
+        //     var petCount = await _petService.CountPetsAsync(cancellationToken);
+        //     ViewBag.PetCount = petCount;
+        //     return View(petCount);
+        // }
     }
 }

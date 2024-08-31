@@ -27,5 +27,10 @@ namespace Pawz.Infrastructure.Repos
                 // .Include(ar => ar.AdoptionRequests)
                 .ToListAsync(cancellationToken);
         }
+        
+        public async Task<int> CountPetsAsync(CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.CountAsync(cancellationToken);
+        }
     }
 }

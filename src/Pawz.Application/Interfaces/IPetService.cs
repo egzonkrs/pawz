@@ -53,5 +53,12 @@ namespace Pawz.Application.Interfaces
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
         /// <returns>A task representing the operation. The task result contains an <see cref="IEnumerable{Pet}"/> with all pets and their related entities, or an error if the operation fails.</returns>
         Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Counts the total number of pets present in the database.
+        /// </summary>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
+        /// <returns> The total count of <see cref="Pet"/> objects in the database as an <see cref="int"/>. </returns>
+        Task<int> CountPetsAsync(CancellationToken cancellationToken = default);
     }
 }

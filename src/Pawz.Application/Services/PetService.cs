@@ -197,5 +197,23 @@ namespace Pawz.Application.Services
                 return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
             }
         }
+
+        public async Task<int> CountPetsAsync(CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                _logger.LogInformation("Started counting the number of pets in the database.");
+
+                var count = await _petRepository.CountPetsAsync(cancellationToken);
+
+                _logger.LogInformation("Successfully counted the number of pets in the database. Total count: {Count}", count);
+                return count;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to count the number of pets.", nameof(PetService));
+                throw;
+            }
+        }
     }
 }
