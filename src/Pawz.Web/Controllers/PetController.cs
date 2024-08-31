@@ -13,6 +13,7 @@ namespace Pawz.Web.Controllers
     {
         private readonly IPetService _petService;
         private readonly IMapper _mapper;
+
         public PetController(IPetService petService, IMapper mapper)
         {
             _petService = petService;
@@ -22,18 +23,14 @@ namespace Pawz.Web.Controllers
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             var result = await _petService.GetAllPetsWithRelatedEntities(cancellationToken);
-
             var viewModel = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
-
             return View(viewModel);
         }
 
         public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
         {
             var result = await _petService.GetPetByIdAsync(id, cancellationToken);
-
             var viewModel = _mapper.Map<PetViewModel>(result.Value);
-
             return View(viewModel);
         }
 
@@ -57,9 +54,7 @@ namespace Pawz.Web.Controllers
         public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
         {
             var result = await _petService.GetPetByIdAsync(id, cancellationToken);
-
             var viewModel = _mapper.Map<PetViewModel>(result.Value);
-
             return View(viewModel);
         }
 
@@ -78,9 +73,7 @@ namespace Pawz.Web.Controllers
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
             var result = await _petService.GetPetByIdAsync(id, cancellationToken);
-
             var viewModel = _mapper.Map<PetViewModel>(result.Value);
-
             return View(viewModel);
         }
 
@@ -89,9 +82,7 @@ namespace Pawz.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id, PetViewModel petViewModel, CancellationToken cancellationToken)
         {
             var petRequest = _mapper.Map<PetRequest>(petViewModel);
-
             await _petService.DeletePetAsync(id, cancellationToken);
-
             return RedirectToAction(nameof(Index));
         }
 
@@ -108,4 +99,5 @@ namespace Pawz.Web.Controllers
         //     return View(petCount);
         // }
     }
+
 }
