@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Pawz.Web.Models;
 
@@ -7,7 +8,7 @@ public class PetViewModel
     public int Id { get; set; }
     public string Name { get; set; }
     public string About { get; set; }
-    public string ImageUrl { get; set; }
+    public ICollection<PetImageViewModel> PetImages { get; set; }  = new List<PetImageViewModel>();
     public string SpeciesName { get; set; }
     public string BreedName { get; set; }
     public string LocationCity { get; set; }

@@ -22,7 +22,6 @@
             listViewContainer.style.display = "block";
         });
     });
-
 </script>
 
 <section class="section-sm">
@@ -74,24 +73,35 @@
                     </div>
                 </div>
 
-                @if (Model == null || !Model.Any())
-                {
-                    <div class="d-flex justify-content-center align-items-center mt-3">
-                        <div class="alert alert-danger text-center">
-                            No pets available. Please try again later.
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <div id="pet-grid-view-container">
+                <div id="pet-grid-view-container">
+                    @if (Model is not null || Model.Any())
+                    {
                         @Html.Partial("pet-grid-view", Model)
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="alert alert-danger text-center">
+                                An error occurred while displaying the pets. Please try again later.
+                            </div>
+                        </div>
+                    }
+                </div>
 
-                    <div id="pet-grid-list-container">
+                <div id="pet-list-view-container" style="display:none; margin-bottom: 1rem;">
+                    @if (Model is not null || Model.Any())
+                    {
                         @Html.Partial("pet-list-view", Model)
-                    </div>
-                }
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="alert alert-danger text-center">
+                                An error occurred while displaying the pets. Please try again later.
+                            </div>
+                        </div>
+                    }
+                </div>
 
                 <div class="pagination justify-content-center">
                     <nav aria-label="Page navigation example">

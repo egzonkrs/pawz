@@ -1,3 +1,4 @@
+using Pawz.Application.Models.PetImagesModels;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
 using System;
@@ -21,7 +22,7 @@ public class PetResponse
     public DateTime CreatedAt { get; set; }
     public int LocationId { get; set; }
     public Location Location { get; set; }
-    public ICollection<PetImage> PetImages { get; set; }
+    public ICollection<PetImageResponse> PetImages { get; set; }  = new List<PetImageResponse>();
     public ICollection<AdoptionRequest> AdoptionRequests { get; set; } = new List<AdoptionRequest>();
     public string PostedByUserId { get; set; }
     public ApplicationUser User { get; set; }

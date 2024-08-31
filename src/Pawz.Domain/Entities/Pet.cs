@@ -80,7 +80,7 @@ public class Pet : IEntity<int>, ISoftDeletion
     /// <summary>
     /// Images of the pet
     /// </summary>
-    public ICollection<PetImage> PetImages { get; set; }
+    public ICollection<PetImage> PetImages { get; set; }  = new List<PetImage>();
 
     /// <summary>
     /// Adoption requests for the pet

@@ -8,7 +8,7 @@
                 <div class="product-item">
                     <div class="card">
                         <img class="card-img-top img-fluid"
-                            src="@(string.IsNullOrEmpty(pet.ImageUrl) ? "/images/default-image.webp" : pet.ImageUrl)"
+                            src="@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")"
                             alt="Pet Image" />
                     </div>
                     <div class="card-body">
