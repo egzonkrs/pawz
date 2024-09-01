@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
+using Pawz.Application.Models.Pet;
 using Pawz.Domain.Entities;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models;
