@@ -47,7 +47,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-lg-8">
                 <!-- Div for Partial View -->
                 <div class="widget dashboard-container my-adslist">
@@ -88,21 +87,10 @@
             $('.partial-view-link').click(function (e) {
                 e.preventDefault();
                 var url = $(this).data('url');
+                var title = $(this).text().trim(); 
+
                 $('#partialViewContainer').load(url);
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $('.partial-view-link').click(function (e) {
-                e.preventDefault();
-
-                var url = $(this).data('url');
-                var title = $(this).text().trim(); // Merr tekstin e linkut për titullin
-
-                $('#partialViewContainer').load(url); // Ngarkon përmbajtjen
-                $('#viewTitle').text(title); // Ndryshon titullin
+                $('#viewTitle').text(title); 
             });
         });
     </script>
