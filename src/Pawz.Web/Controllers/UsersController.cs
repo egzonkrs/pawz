@@ -131,6 +131,7 @@ public class UsersController : Controller
     {
         return PartialView("Adoptions");
     }
+
     [HttpGet]
     public IActionResult MyAdoptions()
     {
