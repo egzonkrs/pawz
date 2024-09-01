@@ -4,61 +4,62 @@
     ViewData["Title"] = "Create Pet";
 }
 
-<section class="pet-create py-5 border-top-1">
+<section class="create-pet py-5 border-top-1">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-5 col-md-8 align-item-center">
-                <div class="border border mb-4">
-                    <h3 class="bg-gray p-4">Create New Pet</h3>
+                <div class="border mb-4">
+                    <h3 class="bg-gray p-4">Create Pet</h3>
                     <form asp-action="Create" method="post">
                         <fieldset class="p-4">
-                            <div class="">
-                                <label asp-for="Name" class="form-label">Pet Name</label>
+                            <div class="form-group">
+                                <label asp-for="Name" class="form-label">Name</label>
                                 <input asp-for="Name" class="form-control" placeholder="Pet Name" />
                                 <span asp-validation-for="Name" class="form-label input-error-text"></span>
                             </div>
-
-                            <div class="">
+                            <div class="form-group">
                                 <label asp-for="SpeciesId" class="form-label">Species</label>
-                                <select asp-for="SpeciesId" class="form-select" asp-items="Model.Species">
-                                    <option disabled selected>--Select Species--</option>
+                                <select asp-for="SpeciesId" class="form-control" id="SpeciesId">
+                                    <option value="">Select Species</option>
+                                    @foreach (var species in Model.Species)
+                                    {
+                                        <option value="@species.Value">@species.Text</option>
+                                    }
                                 </select>
                                 <span asp-validation-for="SpeciesId" class="form-label input-error-text"></span>
                             </div>
-
-                            <div class="">
+                            <div class="form-group">
                                 <label asp-for="BreedId" class="form-label">Breed</label>
-                                <select asp-for="BreedId" class="form-select" asp-items="Model.Breeds">
-                                    <option disabled selected>--Select Breed--</option>
+                                <select asp-for="BreedId" class="form-control" id="BreedId">
+                                    <option value="">Select Breed</option>
+                                    @foreach (var breed in Model.Breeds)
+                                    {
+                                        <option value="@breed.Value">@breed.Text</option>
+                                    }
                                 </select>
                                 <span asp-validation-for="BreedId" class="form-label input-error-text"></span>
                             </div>
-
-                            <div class="">
-                                <label asp-for="AgeYears" class="form-label">Age in Years</label>
-                                <input asp-for="AgeYears" class="form-control" placeholder="Age in Years" type="number" min="0" />
+                            <div class="form-group">
+                                <label asp-for="AgeYears" class="form-label">Age (Years)</label>
+                                <input asp-for="AgeYears" class="form-control" />
                                 <span asp-validation-for="AgeYears" class="form-label input-error-text"></span>
                             </div>
-
-                            <div class="">
-                                <label asp-for="AgeMonths" class="form-label">Age in Months</label>
-                                <input asp-for="AgeMonths" class="form-control" placeholder="Age in Months" type="number" min="0" />
+                            <div class="form-group">
+                                <label asp-for="AgeMonths" class="form-label">Age (Months)</label>
+                                <input asp-for="AgeMonths" class="form-control" />
                                 <span asp-validation-for="AgeMonths" class="form-label input-error-text"></span>
                             </div>
-
-                            <div class="">
+                            <div class="form-group">
                                 <label asp-for="About" class="form-label">About</label>
-                                <textarea asp-for="About" class="form-control" placeholder="Description about the pet"></textarea>
+                                <textarea asp-for="About" class="form-control" placeholder="Tell us about the pet"></textarea>
                                 <span asp-validation-for="About" class="form-label input-error-text"></span>
                             </div>
-
-                            <div class="">
+                            <div class="form-group">
                                 <label asp-for="Price" class="form-label">Price</label>
-                                <input asp-for="Price" class="form-control" placeholder="Price" type="number" min="0" />
+                                <input asp-for="Price" class="form-control" placeholder="Price" />
                                 <span asp-validation-for="Price" class="form-label input-error-text"></span>
                             </div>
-
-                            <div class="">
+                            <div class="form-group">
                                 <label asp-for="Status" class="form-label">Status</label>
                                 <select asp-for="Status" class="form-select">
                                     <option disabled selected>--Select Status--</option>
@@ -69,23 +70,50 @@
                                 </select>
                                 <span asp-validation-for="Status" class="form-label input-error-text"></span>
                             </div>
-
-                            <div class="">
-                                <label asp-for="LocationId" class="form-label">Location</label>
-                                <select asp-for="LocationId" class="form-select">
-                                    <option disabled selected>--Select Location--</option>
-                                    <option value="1">Location 1</option>
-                                    <option value="2">Location 2</option>
-                                    <option value="3">Location 3</option>
-                                    <option value="4">Location 4</option>
+                            <div class="form-group">
+                                <label asp-for="CountryId" class="form-label">Country</label>
+                                <select asp-for="CountryId" class="form-control" id="CountryId">
+                                    <option value="">Select Country</option>
+                                    @foreach (var country in Model.Countries)
+                                    {
+                                        <option value="@country.Value">@country.Text</option>
+                                    }
                                 </select>
-                                <span asp-validation-for="LocationId" class="form-label input-error-text"></span>
+                                <span asp-validation-for="CountryId" class="form-label input-error-text"></span>
                             </div>
-
+                            <div class="form-group">
+                                <label asp-for="CityId" class="form-label">City</label>
+                                <select asp-for="CityId" class="form-control" id="CityId">
+                                    <option value="">Select City</option>
+                                    @foreach (var city in Model.Cities)
+                                    {
+                                        <option value="@city.Value">@city.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CityId" class="form-label input-error-text"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Address" class="form-label">Address</label>
+                                <input asp-for="Address" class="form-control" placeholder="Address" />
+                                <span asp-validation-for="Address" class="form-label input-error-text"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="PostalCode" class="form-label">Postal Code</label>
+                                <input asp-for="PostalCode" class="form-control" placeholder="Postal Code" />
+                                <span asp-validation-for="PostalCode" class="form-label input-error-text"></span>
+                            </div>
+                            @if (ViewData.ModelState.IsValid is false && ViewData.ModelState[string.Empty]?.Errors.Count > 0)
+                            {
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach (var error in ViewData.ModelState[string.Empty]!.Errors)
+                                        {
+                                            <li>@error.ErrorMessage</li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
                             <div class="d-flex justify-content-between align-items-center mt-3">
-                                <a href="@Url.Action("Index", "Pet")" class="text-sm">
-                                    <span class="text-dark">Back to List</span>
-                                </a>
                                 <button type="submit" class="btn btn-primary font-weight-bold">Create Pet</button>
                             </div>
                         </fieldset>
