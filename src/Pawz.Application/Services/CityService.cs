@@ -5,6 +5,7 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -179,6 +180,31 @@ public class CityService : ICityService
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to delete City with Id: {CityId}",
                              nameof(CityService), cityId);
             return Result<bool>.Failure(CityErrors.DeletionUnexpectedError);
+        }
+    }
+
+    public async Task<Result<IEnumerable<City>>> GetCitiesByCountryIdAsync(int countryId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            _logger.LogInformation("Started retrieving cities for Country with Id: {CountryId}", countryId);
+
+            var cities = await _cityRepository.GetCitiesByCountryIdAsync(countryId, cancellationToken);
+
+            if (cities == null || !cities.Any())
+            {
+                _logger.LogWarning("No cities found for Country with Id: {CountryId}", countryId);
+                return Result<IEnumerable<City>>.Failure(CityErrors.NotFound(countryId));
+            }
+
+            _logger.LogInformation("Successfully retrieved cities for Country with Id: {CountryId}", countryId);
+            return Result<IEnumerable<City>>.Success(cities);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve cities for Country with Id: {CountryId}",
+                             nameof(CityService), countryId);
+            return Result<IEnumerable<City>>.Failure(CityErrors.RetrievalError);
         }
     }
 }
