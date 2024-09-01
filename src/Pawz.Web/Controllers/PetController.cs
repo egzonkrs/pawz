@@ -1,3 +1,4 @@
+using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,6 @@ using Pawz.Domain.Entities;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,18 +18,27 @@ namespace Pawz.Web.Controllers;
 public class PetController : Controller
 {
     private readonly IPetService _petService;
-    private readonly ISpeciesService _speciesService;
     private readonly IBreedService _breedService;
+    private readonly ISpeciesService _speciesService;
+    private readonly ILocationService _locationService;
+    private readonly ICountryService _countryService;
+    private readonly ICityService _cityService;
     private readonly IValidator<PetCreateViewModel> _validator;
     private readonly IUserAccessor _userAccessor;
+    private readonly IMapper _mapper;
 
-    public PetController(IPetService petService, ISpeciesService speciesService, IBreedService breedService, IValidator<PetCreateViewModel> validator, IUserAccessor userAccessor)
+    public PetController(IPetService petService, IBreedService breedService, ISpeciesService speciesService, ILocationService locationService,
+        ICountryService countryService, ICityService cityService, IValidator<PetCreateViewModel> validator, IUserAccessor userAccessor, IMapper mapper)
     {
         _petService = petService;
-        _speciesService = speciesService;
         _breedService = breedService;
+        _speciesService = speciesService;
+        _locationService = locationService;
+        _countryService = countryService;
+        _cityService = cityService;
         _validator = validator;
         _userAccessor = userAccessor;
+        _mapper = mapper;
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -46,10 +55,18 @@ public class PetController : Controller
 
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
     {
+        var breedsResult = await _breedService.GetAllBreedsAsync(cancellationToken);
+        var speciesResult = await _speciesService.GetAllSpeciesAsync(cancellationToken);
+        var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
+        var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
+
         var petCreateViewModel = new PetCreateViewModel
         {
-            Species = await GetSpeciesSelectListItemsAsync(cancellationToken),
-            Breeds = await GetBreedsSelectListItemsAsync(cancellationToken)
+            Breeds = new SelectList(breedsResult.Value, "Id", "Name"),
+            Species = new SelectList(speciesResult.Value, "Id", "Name"),
+            Countries = new SelectList(countriesResult.Value, "Id", "Name"),
+            Cities = new SelectList(citiesResult.Value, "Id", "Name"),
+            Locations = new SelectList(new List<Location>(), "Id", "Address")
         };
 
         return View(petCreateViewModel);
@@ -59,41 +76,63 @@ public class PetController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(PetCreateViewModel petCreateViewModel, CancellationToken cancellationToken)
     {
-        petCreateViewModel.Species = await GetSpeciesSelectListItemsAsync(cancellationToken);
-        petCreateViewModel.Breeds = await GetBreedsSelectListItemsAsync(cancellationToken);
+        var validationResult = await _validator.ValidateAsync(petCreateViewModel, cancellationToken);
 
-        var validationResult = await _validator.ValidateAsync(petCreateViewModel);
-
-        if (validationResult.IsValid is false)
+        if (!validationResult.IsValid)
         {
+            var breedsResult = await _breedService.GetAllBreedsAsync(cancellationToken);
+            var speciesResult = await _speciesService.GetAllSpeciesAsync(cancellationToken);
+            var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
+            var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
+
+            petCreateViewModel.Breeds = new SelectList(breedsResult.Value, "Id", "Name");
+            petCreateViewModel.Species = new SelectList(speciesResult.Value, "Id", "Name");
+            petCreateViewModel.Countries = new SelectList(countriesResult.Value, "Id", "Name");
+            petCreateViewModel.Cities = new SelectList(citiesResult.Value, "Id", "Name");
+
             validationResult.AddErrorsToModelState(ModelState);
             return View(petCreateViewModel);
         }
 
-        var petCreateRequest = new PetCreateRequest
+        // Create Location first
+        var location = new Location
         {
-            Name = petCreateViewModel.Name,
-            SpeciesId = petCreateViewModel.SpeciesId,
-            BreedId = petCreateViewModel.BreedId,
-            AgeYears = petCreateViewModel.AgeYears,
-            AgeMonths = petCreateViewModel.AgeMonths,
-            About = petCreateViewModel.About,
-            Price = petCreateViewModel.Price,
-            LocationId = petCreateViewModel.LocationId,
-            Status = petCreateViewModel.Status,
-            PostedByUserId = _userAccessor.GetUserId()
+            CityId = petCreateViewModel.CityId,
+            Address = petCreateViewModel.Address,
+            PostalCode = petCreateViewModel.PostalCode
         };
+
+        var locationInsertResult = await _locationService.CreateLocationAsync(location, cancellationToken);
+
+        if (!locationInsertResult.IsSuccess)
+        {
+            ModelState.AddModelError("", "Failed to create location.");
+            return View(petCreateViewModel);
+        }
+
+        // Retrieve the created Location's Id
+        var createdLocation = locationInsertResult.Value;
+        if (createdLocation == null)
+        {
+            ModelState.AddModelError("", "Failed to retrieve created location.");
+            return View(petCreateViewModel);
+        }
+
+        var petCreateRequest = _mapper.Map<PetCreateRequest>(petCreateViewModel);
+        petCreateRequest.PostedByUserId = _userAccessor.GetUserId();
+        petCreateRequest.LocationId = createdLocation.Id;
 
         var petCreateResult = await _petService.CreatePetAsync(petCreateRequest, cancellationToken);
 
-        if (petCreateResult.IsSuccess is false)
+        if (!petCreateResult.IsSuccess)
         {
-            petCreateResult.AddErrorsToModelState(ModelState);
+            ModelState.AddModelError("", "Failed to create pet.");
             return View(petCreateViewModel);
         }
 
         return RedirectToAction("Index", "Home");
     }
+
 
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
@@ -121,34 +160,6 @@ public class PetController : Controller
     {
         await _petService.DeletePetAsync(id, cancellationToken);
         return RedirectToAction(nameof(Index));
-    }
-
-    private async Task<IEnumerable<SelectListItem>> GetSpeciesSelectListItemsAsync(CancellationToken cancellationToken)
-    {
-        var result = await _speciesService.GetAllSpeciesAsync(cancellationToken);
-        if (result.IsSuccess)
-        {
-            return result.Value.Select(species => new SelectListItem
-            {
-                Text = species.Name,
-                Value = species.Id.ToString(),
-            });
-        }
-        return Enumerable.Empty<SelectListItem>();
-    }
-
-    private async Task<IEnumerable<SelectListItem>> GetBreedsSelectListItemsAsync(CancellationToken cancellationToken)
-    {
-        var result = await _breedService.GetAllBreedsAsync(cancellationToken);
-        if (result.IsSuccess)
-        {
-            return result.Value.Select(breed => new SelectListItem
-            {
-                Value = breed.Id.ToString(),
-                Text = breed.Name
-            });
-        }
-        return Enumerable.Empty<SelectListItem>();
     }
 }
 
