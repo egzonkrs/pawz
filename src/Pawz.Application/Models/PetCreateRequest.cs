@@ -1,9 +1,8 @@
 using Pawz.Domain.Enums;
-using Pawz.Domain.Interfaces;
 
 namespace Pawz.Application.Models;
 
-public class PetCreateRequest : IEntity<int>
+public class PetCreateRequest
 {
     /// <summary>
     /// The Id of the pet
@@ -13,11 +12,6 @@ public class PetCreateRequest : IEntity<int>
     /// The name of the pet.
     /// </summary>
     public string Name { get; set; }
-
-    /// <summary>
-    /// The Id of the species of the pet.
-    /// </summary>
-    public int SpeciesId { get; set; }
 
     /// <summary>
     /// The Id of the breed of the pet.
@@ -47,7 +41,7 @@ public class PetCreateRequest : IEntity<int>
     /// <summary>
     /// The Id of the location where the pet is located.
     /// </summary>
-    public int LocationId { get; set; }
+    public int? LocationId { get; set; }
 
     /// <summary>
     /// The ID of the user who posted the pet.
