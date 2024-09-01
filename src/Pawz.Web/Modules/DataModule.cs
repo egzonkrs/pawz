@@ -40,9 +40,15 @@ public class DataModule : IModule
         services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
         services.AddScoped<IBreedRepository, BreedRepository>();
         services.AddScoped<ISpeciesRepository, SpeciesRepository>();
+        services.AddScoped<ILocationRepository, LocationRepository>();
+        services.AddScoped<ICountryRepository, CountryRepository>();
+        services.AddScoped<ICityRepository, CityRepository>();
 
         services.AddScoped<IPetService, PetService>();
         services.AddScoped<ISpeciesService, SpeciesService>();
         services.AddScoped<IBreedService, BreedService>();
+        services.AddScoped<ILocationService, LocationService>();
+        services.AddScoped<ICountryService, CountryService>();
+        services.AddScoped<ICityService, CityService>();
     }
 }
