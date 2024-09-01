@@ -61,22 +61,26 @@ public class CityService : ICityService
     /// </summary>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A result containing a collection of all cities.</returns>
-    public async Task<Result<IEnumerable<City>>> GetAllCitiesAsync(CancellationToken cancellationToken)
+    public async Task<Result<List<City>>> GetAllCitiesAsync(CancellationToken cancellationToken)
     {
         try
         {
             _logger.LogInformation("Started retrieving all cities.");
 
             var cities = await _cityRepository.GetAllAsync(cancellationToken);
+            if (cities is null)
+            {
+                _logger.LogInformation("Successfully retrieved all cities.");
+                return Result<List<City>>.Failure(CityErrors.RetrievalError);
+            }
 
             _logger.LogInformation("Successfully retrieved all cities.");
-            return Result<IEnumerable<City>>.Success(cities);
+            return Result<List<City>>.Success(cities.ToList());
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all cities.",
-                             nameof(CityService));
-            return Result<IEnumerable<City>>.Failure(CityErrors.RetrievalError);
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all cities.", nameof(CityService));
+            return Result<List<City>>.Failure(CityErrors.RetrievalError);
         }
     }
 
@@ -180,31 +184,6 @@ public class CityService : ICityService
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to delete City with Id: {CityId}",
                              nameof(CityService), cityId);
             return Result<bool>.Failure(CityErrors.DeletionUnexpectedError);
-        }
-    }
-
-    public async Task<Result<IEnumerable<City>>> GetCitiesByCountryIdAsync(int countryId, CancellationToken cancellationToken)
-    {
-        try
-        {
-            _logger.LogInformation("Started retrieving cities for Country with Id: {CountryId}", countryId);
-
-            var cities = await _cityRepository.GetCitiesByCountryIdAsync(countryId, cancellationToken);
-
-            if (cities == null || !cities.Any())
-            {
-                _logger.LogWarning("No cities found for Country with Id: {CountryId}", countryId);
-                return Result<IEnumerable<City>>.Failure(CityErrors.NotFound(countryId));
-            }
-
-            _logger.LogInformation("Successfully retrieved cities for Country with Id: {CountryId}", countryId);
-            return Result<IEnumerable<City>>.Success(cities);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve cities for Country with Id: {CountryId}",
-                             nameof(CityService), countryId);
-            return Result<IEnumerable<City>>.Failure(CityErrors.RetrievalError);
         }
     }
 }

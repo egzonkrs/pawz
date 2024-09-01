@@ -1,5 +1,6 @@
 using FluentValidation;
 using Pawz.Web.Models;
+using Pawz.Web.Models.Pet;
 
 namespace Pawz.Web.Validators;
 
@@ -35,14 +36,5 @@ public class PetCreateViewModelValidator : AbstractValidator<PetCreateViewModel>
         RuleFor(x => x.Price)
             .NotNull().WithMessage("Price is required.")
             .GreaterThanOrEqualTo(0).WithMessage("Price must be a positive value.");
-
-        //RuleFor(x => x.LocationId)
-        //    .NotNull()
-        //    .NotEmpty().WithMessage("Location is required.")
-        //    .GreaterThan(0).WithMessage("Location must be selected.");
-
-        RuleFor(x => x.Status)
-            .NotNull().WithMessage("Status is required.")
-            .IsInEnum().WithMessage("A valid pet status is required.");
     }
 }

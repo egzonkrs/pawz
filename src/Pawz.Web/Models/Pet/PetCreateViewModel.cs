@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Pawz.Domain.Enums;
+using Pawz.Web.Models.Breed;
+using Pawz.Web.Models.City;
+using System.Collections.Generic;
 
-namespace Pawz.Web.Models;
+namespace Pawz.Web.Models.Pet;
 
 public class PetCreateViewModel
 {
@@ -21,10 +23,6 @@ public class PetCreateViewModel
 
     public decimal Price { get; set; }
 
-    public PetStatus Status { get; set; }
-
-    public int LocationId { get; set; }
-
     public int CityId { get; set; }
 
     public int CountryId { get; set; }
@@ -38,4 +36,7 @@ public class PetCreateViewModel
     public SelectList Countries { get; set; }
     public SelectList Cities { get; set; }
     public SelectList Locations { get; set; }
+
+    public List<BreedViewModel> AllBreeds { get; set; }
+    public List<CityViewModel> AllCities { get; set; }
 }

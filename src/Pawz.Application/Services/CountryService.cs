@@ -5,6 +5,7 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -60,7 +61,7 @@ public class CountryService : ICountryService
     /// </summary>
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A result containing a list of countries.</returns>
-    public async Task<Result<IEnumerable<Country>>> GetAllCountriesAsync(CancellationToken cancellationToken)
+    public async Task<Result<List<Country>>> GetAllCountriesAsync(CancellationToken cancellationToken)
     {
         try
         {
@@ -68,14 +69,19 @@ public class CountryService : ICountryService
 
             var countries = await _countryRepository.GetAllAsync(cancellationToken);
 
+            if (countries is null)
+            {
+                _logger.LogError("No countries found");
+                return Result<List<Country>>.Failure(CountryErrors.RetrievalError);
+            }
+
             _logger.LogInformation("Successfully retrieved all countries.");
-            return Result<IEnumerable<Country>>.Success(countries);
+            return Result<List<Country>>.Success(countries.ToList());
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all countries.",
-                             nameof(CountryService));
-            return Result<IEnumerable<Country>>.Failure(CountryErrors.RetrievalError);
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all countries.", nameof(CountryService));
+            return Result<List<Country>>.Failure(CountryErrors.RetrievalError);
         }
     }
 
