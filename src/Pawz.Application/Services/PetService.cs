@@ -40,7 +40,7 @@ public class PetService : IPetService
             if (petCreated)
             {
                 _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
-                return Result<bool>.Success(true);
+                return Result<bool>.Success();
             }
             _logger.LogWarning("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
             return Result<bool>.Failure(PetErrors.CreationFailed);
