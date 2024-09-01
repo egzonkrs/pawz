@@ -1,4 +1,5 @@
 using Pawz.Application.Models;
+using Pawz.Application.Models.Pet;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using System.Collections.Generic;
@@ -47,6 +48,13 @@ public interface IPetService
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
     Task<Result<bool>> DeletePetAsync(int petId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Retrieves all pets created by a specific user.
+    /// </summary>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+    /// <returns>A task representing the operation. The task result contains a collection of pet entities.</returns>
+    Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(CancellationToken cancellationToken);
 }
 
 

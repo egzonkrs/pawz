@@ -25,6 +25,13 @@ public static class UsersErrors
     public static Error CreationFailed => new Error("Users.CreationFailed", "User creation failed. No changes were made to the database.");
 
     /// <summary>
+    /// Returns an error indicating that a user with the specified email already exists.
+    /// </summary>
+    /// <param name="email">The email of the user that already exists.</param>
+    /// <returns>An <see cref="Error"/> indicating that a user with the specified email already exists.</returns>
+    public static Error UserAlreadyExists(string email) => new Error("Users.UserAlreadyExists", $"An account with the email address {email} already exists.");
+
+    /// <summary>
     /// Returns an error indicating that an unexpected error occurred during the user creation process.
     /// </summary>
     /// <returns>An <see cref="Error"/> indicating that an unexpected error occurred during user creation.</returns>

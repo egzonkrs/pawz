@@ -161,5 +161,15 @@ public class PetController : Controller
         await _petService.DeletePetAsync(id, cancellationToken);
         return RedirectToAction(nameof(Index));
     }
+
+    public async Task<IActionResult> MyPets(CancellationToken cancellationToken)
+    {
+        var result = await _petService.GetPetsByUserIdAsync(cancellationToken);
+
+        var pets = result.Value;
+
+        var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
+        return View(petResponses);
+    }
 }
 

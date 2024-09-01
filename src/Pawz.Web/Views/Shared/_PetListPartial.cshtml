@@ -1,0 +1,62 @@
+@model IEnumerable<Pawz.Application.Models.Pet.UserPetResponse>
+
+@if(Model == null || !Model.Any())
+{
+    <p>You don't have any pets created.</p>
+}else{
+<table class="table table-responsive product-dashboard-table">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th style="padding-left: 30px;">Name</th>
+            <th class="text-center" style="padding-right: 50px;">Breed</th>
+            <th class="text-center" style="padding-right: 35px;">Status</th>
+            <th class="text-center">Location</th>
+            <th class="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pet in Model)
+        {
+            <tr>
+                <td class="product-thumb">
+                    <img src="@pet.PetImages.First().ImageUrl" alt="Pet Photo" class="rounded-circle" style="width: 100px; height: 100px;">
+                </td>
+                <td class="product-details" style="padding-left: 30px;">
+                    <h3 class="title" style="font-size: 16px;">@pet.Name</h3>
+                </td>
+                <td class="product-category" style="padding-right: 50px;">
+                    <span class="categories" style="font-size: 15px;">@pet.Breed.Name</span>
+                </td>
+                <td class="status text-center" style="padding-right: 35px;">
+                    <span style="font-size: 15px;">@pet.Status</span>
+                </td>
+                <td class="location text-center">
+                    <span style="font-size: 15px;">@pet.Location.City.Name</span>
+                </td>
+                <td class="action text-center" data-title="Action">
+                    <div class="">
+                        <ul class="list-inline justify-content-center" style="display: flex; justify-content: center; flex-direction:column gap: 10px;">
+                            <li class="list-inline-item">
+                                <a data-toggle="tooltip" data-placement="top" title="View" class="view" href="pet-details.html?id=@pet.Id" style="font-size: 12px;">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="edit" data-toggle="tooltip" data-placement="top" title="Edit" href="edit-pet.html?id=@pet.Id" style="font-size: 12px;">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="delete" data-toggle="tooltip" data-placement="top" title="Delete" href="delete-pet.html?id=@pet.Id" style="font-size: 12px;">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
