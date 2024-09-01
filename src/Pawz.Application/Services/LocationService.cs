@@ -29,7 +29,8 @@ public class LocationService : ILocationService
     /// <param name="location">The Location entity to create.</param>
     /// <param name="cancellationToken">Cancellation token for the operation.</param>
     /// <returns>A Result indicating success or failure.</returns>
-    public async Task<Result<bool>> CreateLocationAsync(Location location, CancellationToken cancellationToken)
+    ///
+    public async Task<Result<Location>> CreateLocationAsync(Location location, CancellationToken cancellationToken)
     {
         try
         {
@@ -41,17 +42,17 @@ public class LocationService : ILocationService
             if (locationCreated)
             {
                 _logger.LogInformation("Successfully created a Location with Id: {LocationId}", location.Id);
-                return Result<bool>.Success();
+                return Result<Location>.Success(location); // Return the created Location object
             }
 
             _logger.LogWarning("Failed to create a Location with Id: {LocationId}", location.Id);
-            return Result<bool>.Failure(LocationErrors.CreationFailed);
+            return Result<Location>.Failure(LocationErrors.CreationFailed);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to create a Location with Id: {LocationId}",
                              nameof(LocationService), location.Id);
-            return Result<bool>.Failure(LocationErrors.CreationUnexpectedError);
+            return Result<Location>.Failure(LocationErrors.CreationUnexpectedError);
         }
     }
 
