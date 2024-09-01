@@ -25,7 +25,7 @@ $(document).ready(function () {
                 success: function (breeds) {
                     console.log('Fetched Breeds:', breeds);
 
-                    $breedSelect.empty().append('<option value="">Select Breed</option>'); // Clear previous options
+                    $breedSelect.empty().append('<option value="">Select Breed</option>');
 
                     $.each(breeds, function (index, breed) {
                         const $option = $('<option>').val(breed.value).text(breed.text);
