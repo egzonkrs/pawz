@@ -13,6 +13,6 @@ public class ValidationModule : IModule
         services.AddValidatorsFromAssemblyContaining<RegisterViewModel>();
         services.AddScoped<IValidator<RegisterViewModel>, RegisterViewModelValidator>();
         services.AddScoped<IValidator<LoginViewModel>,LoginModelValidator>();
-        services.AddScoped<IValidator<AdoptionRequestViewModel>, ModalValidator>();
+        services.AddScoped<IValidator<AdoptionRequestCreateModel>, ModalValidator>();
     }
 }

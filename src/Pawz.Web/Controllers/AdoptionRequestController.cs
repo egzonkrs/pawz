@@ -13,10 +13,10 @@ namespace Pawz.Web.Controllers;
 public class AdoptionRequestController : Controller
 {
     private readonly IAdoptionRequestService _adoptionRequestService;
-    private readonly IValidator<AdoptionRequestViewModel> _validator;
+    private readonly IValidator<AdoptionRequestCreateModel> _validator;
 
     public AdoptionRequestController(IAdoptionRequestService adoptionRequestService,
-        IValidator<AdoptionRequestViewModel> validator)
+        IValidator<AdoptionRequestCreateModel> validator)
     {
         _adoptionRequestService = adoptionRequestService;
         _validator = validator;
@@ -73,24 +73,5 @@ public class AdoptionRequestController : Controller
     {
         await _adoptionRequestService.DeleteAdoptionRequestAsync(id, cancellationToken);
         return RedirectToAction(nameof(Index));
-    }
-    public async Task<IActionResult> AdoptionRequestModal(AdoptionRequestViewModel adoptionRequestViewModel)
-    {
-        var validationResult = await _validator.ValidateAsync(adoptionRequestViewModel);
-
-        if (validationResult.IsValid is false)
-        {
-            validationResult.AddErrorsToModelState(ModelState);
-            return View(adoptionRequestViewModel);
-        }
-
-        var modalRequest = new ModalRequest()
-        {
-            Country = adoptionRequestViewModel.Country,
-            City = adoptionRequestViewModel.City,
-            Address = adoptionRequestViewModel.Address
-        };
-
-        return RedirectToAction("Index", "Home");
     }
 }

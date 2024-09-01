@@ -3,7 +3,7 @@ using Pawz.Web.Models;
 
 namespace Pawz.Web.Validators;
 
-public class ModalValidator : AbstractValidator<AdoptionRequestViewModel>
+public class ModalValidator : AbstractValidator<AdoptionRequestCreateModel>
 {
     public ModalValidator()
     {

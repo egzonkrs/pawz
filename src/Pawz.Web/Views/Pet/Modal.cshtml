@@ -1,5 +1,4 @@
-﻿@using Pawz.Web.Controllers
-@model AdoptionRequestViewModel
+﻿@model AdoptionRequestCreateModel
 <!---Modal--->
 
 <div class="modal fade" id="adoptionRequestModal" tabindex="-1" role="dialog" aria-labelledby="adoptionRequestModalLabel" aria-hidden="true">
@@ -17,6 +16,7 @@
                     <div class="form-group">
                         <select asp-for="Country" class="form-control" id="country" name="country">
                             <option value="">Select your country</option>
+                            <option value="KOSOVO">Kosova</option>
                         </select>
                         <!-- City select field -->
                         <select asp-for="City" class="form-control ml-2" id="city" name="city">

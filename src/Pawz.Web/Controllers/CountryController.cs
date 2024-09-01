@@ -66,15 +66,4 @@ public class CountryController : Controller
         await _countryService.DeleteCountryAsync(id, cancellationToken);
         return RedirectToAction(nameof(Index));
     }
-
-    [HttpGet]
-    public async Task<IActionResult> GetCountries(CancellationToken cancellationToken)
-    {
-        var result = await _countryService.GetAllCountriesAsync(cancellationToken);
-        if (result.IsSuccess)
-        {
-            return Json(result.Value); // Return the list of countries as JSON
-        }
-        return StatusCode(500, "An error occurred while retrieving countries.");
-    }
 }

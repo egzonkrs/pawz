@@ -2,7 +2,7 @@
 
 namespace Pawz.Web.Models;
 
-public class AdoptionRequestViewModel
+public class AdoptionRequestCreateModel
 {
     /// <summary>
     /// Gets or sets the Country of the user that is requesting to adopt.

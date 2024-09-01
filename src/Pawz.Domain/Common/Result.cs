@@ -1,4 +1,3 @@
-using Pawz.Domain.Entities;
 using System.Collections.Generic;
 
 namespace Pawz.Domain.Common;

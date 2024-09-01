@@ -82,4 +82,10 @@ public class PetController : Controller
         var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
         return View(petResponses);
     }
+
+    public IActionResult PetDetails()
+    {
+        return View();
+    }
 }
+

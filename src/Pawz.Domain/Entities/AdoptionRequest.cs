@@ -7,7 +7,7 @@ namespace Pawz.Domain.Entities;
 public class AdoptionRequest : IEntity<int>, ISoftDeletion
 {
     /// <summary>
-    /// The ID of the adoption request
+    /// The Id of the adoption request
     /// </summary>
     public int Id { get; set; }
 
