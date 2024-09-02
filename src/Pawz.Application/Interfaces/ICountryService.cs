@@ -21,7 +21,7 @@ public interface ICountryService
     /// </summary>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a collection of country entities.</returns>
-    Task<Result<IEnumerable<Country>>> GetAllCountriesAsync(CancellationToken cancellationToken);
+    Task<Result<List<Country>>> GetAllCountriesAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves a country by its ID.

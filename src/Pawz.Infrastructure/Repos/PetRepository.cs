@@ -27,6 +27,7 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .AsNoTracking()
             .Where(pet => pet.PostedByUserId == userId)
             .Include(pet => pet.Location)
+            .ThenInclude(location => location.City)
             .Include(pet => pet.Breed)
             .Include(pet => pet.PetImages)
             .ToListAsync(cancellationToken);

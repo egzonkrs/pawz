@@ -1,4 +1,4 @@
-namespace Pawz.Application.Models;
+namespace Pawz.Application.Models.Identity;
 
 public class RegisterRequest
 {

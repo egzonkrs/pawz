@@ -1,7 +1,10 @@
+using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
+using Pawz.Application.Models;
+using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -30,33 +33,28 @@ public class PetService : IPetService
         _mapper = mapper;
     }
 
-    /// <summary>
-    /// Creates a new pet in the system.
-    /// </summary>
-    /// <param name="pet">The pet entity to create.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A result indicating whether the creation was successful.</returns>
-    public async Task<Result<bool>> CreatePetAsync(Pet pet, CancellationToken cancellationToken)
+    public async Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken)
     {
         try
         {
-            _logger.LogInformation("Started creating a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
+            _logger.LogInformation("Started creating a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
 
+            var pet = _mapper.Map<Pet>(petCreateRequest);
             await _petRepository.InsertAsync(pet, cancellationToken);
             var petCreated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
             if (petCreated)
             {
-                _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
-                return Result<bool>.Success(true);
+                _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
+                return Result<bool>.Success();
             }
-            _logger.LogWarning("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
+            _logger.LogWarning("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
             return Result<bool>.Failure(PetErrors.CreationFailed);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to create a Pet for the UserId: {UserId}",
-                             nameof(PetService), pet.PostedByUserId);
+                             nameof(PetService), petCreateRequest.PostedByUserId);
             return Result<bool>.Failure(PetErrors.CreationUnexpectedError);
         }
     }

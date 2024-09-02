@@ -25,6 +25,10 @@ public class DataSeeder
 
         await SeedPetImages.SeedPetImageData(context);
 
+        await SeedAdoptionRequests.SeedAdoptionRequestData(context);
+
+        await SeedAdoptions.SeedAdoptionData(context);
+
         await unitOfWork.SaveChangesAsync();
     }
 }
