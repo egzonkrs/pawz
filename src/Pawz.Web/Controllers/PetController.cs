@@ -8,6 +8,9 @@ using Pawz.Application.Models;
 using Pawz.Application.Models.Pet;
 using Pawz.Domain.Entities;
 using Pawz.Web.Extensions;
+using Pawz.Web.Models.Breed;
+using Pawz.Web.Models.City;
+using Pawz.Web.Models.Pet;
 using Pawz.Web.Models;
 using Pawz.Web.Models.Breed;
 using Pawz.Web.Models.City;
@@ -25,27 +28,32 @@ public class PetController : Controller
     private readonly IPetService _petService;
     private readonly IBreedService _breedService;
     private readonly ISpeciesService _speciesService;
+    private readonly ILocationService _locationService;
     private readonly ICountryService _countryService;
     private readonly ICityService _cityService;
     private readonly IValidator<PetCreateViewModel> _validator;
+    private readonly IUserAccessor _userAccessor;
     private readonly IMapper _mapper;
 
     public PetController(
         IPetService petService,
         IBreedService breedService,
         ISpeciesService speciesService,
+        ILocationService locationService,
         ICountryService countryService,
         ICityService cityService,
         IValidator<PetCreateViewModel> validator,
-        IMapper mapper
-        )
+        IUserAccessor userAccessor,
+        IMapper mapper)
     {
         _petService = petService;
         _breedService = breedService;
         _speciesService = speciesService;
+        _locationService = locationService;
         _countryService = countryService;
         _cityService = cityService;
         _validator = validator;
+        _userAccessor = userAccessor;
         _mapper = mapper;
     }
 
@@ -161,6 +169,7 @@ public class PetController : Controller
 
         return RedirectToAction("Index", "Home");
     }
+
 
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {

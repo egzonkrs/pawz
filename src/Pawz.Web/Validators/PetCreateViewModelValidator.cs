@@ -18,6 +18,11 @@ public class PetCreateViewModelValidator : AbstractValidator<PetCreateViewModel>
             .NotEmpty().WithMessage("Breed is required.")
             .GreaterThan(0).WithMessage("Breed must be selected.");
 
+        RuleFor(x => x.SpeciesId)
+                .NotNull()
+                .NotEmpty().WithMessage("Species is required.")
+                .GreaterThan(0).WithMessage("Species must be selected.");
+
         RuleFor(x => x.AgeYears)
             .NotNull().WithMessage("Age in years is required.")
             .GreaterThanOrEqualTo(0).WithMessage("Age in years must be 0 or greater.")
@@ -36,5 +41,23 @@ public class PetCreateViewModelValidator : AbstractValidator<PetCreateViewModel>
         RuleFor(x => x.Price)
             .NotNull().WithMessage("Price is required.")
             .GreaterThanOrEqualTo(0).WithMessage("Price must be a positive value.");
+
+        RuleFor(x => x.CityId)
+            .NotNull()
+            .GreaterThan(0).WithMessage("City must be selected.");
+
+        RuleFor(x => x.CountryId)
+            .NotNull()
+            .GreaterThan(0).WithMessage("Country must be selected.");
+
+        RuleFor(x => x.Address)
+            .NotNull()
+            .NotEmpty().WithMessage("Address is required.")
+            .MaximumLength(200).WithMessage("Address must be 200 characters or fewer.");
+
+        RuleFor(x => x.PostalCode)
+            .NotNull()
+            .NotEmpty().WithMessage("Postal code is required.")
+            .MaximumLength(10).WithMessage("Postal code must be 10 characters or fewer.");
     }
 }

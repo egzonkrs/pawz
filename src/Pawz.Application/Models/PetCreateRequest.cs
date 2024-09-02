@@ -41,7 +41,22 @@ public class PetCreateRequest
     /// <summary>
     /// The Id of the location where the pet is located.
     /// </summary>
-    public int? LocationId { get; set; }
+    public int LocationId { get; set; }
+
+    /// <summary>
+    /// The Id of the city where the pet is located.
+    /// </summary>
+    public int CityId { get; set; }
+
+    /// <summary>
+    /// The address where the pet is located.
+    /// </summary>
+    public string Address { get; set; }
+
+    /// <summary>
+    /// The postal code of the location where the pet is located.
+    /// </summary>
+    public string PostalCode { get; set; }
 
     /// <summary>
     /// The ID of the user who posted the pet.
