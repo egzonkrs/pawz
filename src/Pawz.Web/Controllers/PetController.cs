@@ -13,8 +13,6 @@ using Pawz.Web.Models.City;
 using Pawz.Web.Models.Pet;
 using System.Collections.Generic;
 using System.Linq;
-using Pawz.Infrastructure.Services;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -136,7 +134,7 @@ public class PetController : Controller
         }
 
         var petCreateRequest = _mapper.Map<PetCreateRequest>(petCreateViewModel);
-        var petCreateResult = await _petService.CreatePetAsync(petCreateRequest, cancellationToken);
+        var petCreateResult = await _petService.CreatePetAsync(petCreateRequest, null, null, cancellationToken);
 
         if (petCreateResult.IsSuccess is false)
         {
@@ -166,20 +164,9 @@ public class PetController : Controller
         }
 
         return RedirectToAction("Index", "Home");
-    public async Task<IActionResult> Create(Pet pet, List<IFormFile> imageFiles, CancellationToken cancellationToken)
-    {
-        string directory = FileUploaderService.PetImagesDirectory;
 
-        var result = await _petService.CreatePetAsync(pet, imageFiles, directory, cancellationToken);
 
-        if (result.IsSuccess)
-        {
-            return RedirectToAction("Index", "Home");
-        }
-
-        return View(pet);
     }
-
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
         var pet = await _petService.GetPetByIdAsync(id, cancellationToken);
