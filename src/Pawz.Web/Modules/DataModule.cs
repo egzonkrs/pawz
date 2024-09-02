@@ -22,7 +22,7 @@ public class DataModule : IModule
 
     public void Load(IServiceCollection services)
     {
-        var connectionString = _configuration.GetConnectionString("DefaultConnection");
+        var connectionString = _configuration.GetConnectionString("DockerConnection");
 
         if (connectionString is null)
         {
