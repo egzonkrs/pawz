@@ -3,21 +3,16 @@ using Pawz.Domain.Entities;
 using Pawz.Application.Models.PetModels;
 using Pawz.Application.Models.BreedModels;
 using Pawz.Application.Models.PetImagesModels;
+using Pawz.Application.Models.SpeciesModels;
 
 namespace Pawz.Application.Mappings;
 public class ApplicationMappingProfiles : Profile
 {
     public ApplicationMappingProfiles()
     {
-        CreateMap<PetRequest, Pet>()
-            .ForMember(dest => dest.PetImages, opt => opt.MapFrom(src => src.PetImages))
-            .ReverseMap();
-        CreateMap<Pet, PetResponse>()
-            .ForMember(dest => dest.PetImages, opt => opt.MapFrom(src => src.PetImages))
-            .ReverseMap();
-        CreateMap<PetRequest, PetResponse>()
-            .ForMember(dest => dest.PetImages, opt => opt.MapFrom(src => src.PetImages))
-            .ReverseMap();
+        CreateMap<PetRequest, Pet>().ReverseMap();
+        CreateMap<Pet, PetResponse>().ReverseMap();
+        CreateMap<PetRequest, PetResponse>().ReverseMap();
 
         CreateMap<BreedRequest, Breed>().ReverseMap();
         CreateMap<Breed, BreedResponse>().ReverseMap();
@@ -26,5 +21,9 @@ public class ApplicationMappingProfiles : Profile
         CreateMap<PetImageRequest, PetImage>().ReverseMap();
         CreateMap<PetImage, PetImageResponse>().ReverseMap();
         CreateMap<PetImageRequest, PetImageResponse>().ReverseMap();
+
+        CreateMap<SpeciesRequest, Species>().ReverseMap();
+        CreateMap<Species, SpeciesResponse>().ReverseMap();
+        CreateMap<SpeciesRequest, SpeciesResponse>().ReverseMap();
     }
 }

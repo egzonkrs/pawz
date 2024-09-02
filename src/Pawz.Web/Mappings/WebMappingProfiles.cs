@@ -2,6 +2,7 @@ using AutoMapper;
 using Pawz.Application.Models.BreedModels;
 using Pawz.Application.Models.PetImagesModels;
 using Pawz.Application.Models.PetModels;
+using Pawz.Application.Models.SpeciesModels;
 using Pawz.Domain.Entities;
 using Pawz.Web.Models;
 
@@ -18,9 +19,16 @@ public class WebMappingProfiles : Profile
         CreateMap<BreedResponse, BreedViewModel>().ReverseMap();
         CreateMap<BreedRequest, BreedViewModel>().ReverseMap();
 
+        CreateMap<Breed, BreedViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
+
         CreateMap<PetImageResponse, PetImageViewModel>().ReverseMap();
         CreateMap<PetImageRequest, PetImageViewModel>().ReverseMap();
 
         CreateMap<PetImage, PetImageViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
+
+        CreateMap<SpeciesResponse, SpeciesViewModel>().ReverseMap();
+        CreateMap<SpeciesRequest, SpeciesViewModel>().ReverseMap();
+
+        CreateMap<Species, SpeciesViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
     }
 }

@@ -20,10 +20,10 @@ public class PetViewModel
     public ICollection<PetImageViewModel> PetImages { get; set; } = new List<PetImageViewModel>();
 
     [Required(ErrorMessage = "The SpeciesName field is required.")]
-    public string SpeciesName { get; set; }
+    public SpeciesViewModel Species { get; set; }
 
     [Required(ErrorMessage = "The BreedName field is required.")]
-    public string BreedName { get; set; }
+    public BreedViewModel Breed { get; set; }
 
     [Required(ErrorMessage = "The LocationCity field is required.")]
     public string LocationCity { get; set; }
