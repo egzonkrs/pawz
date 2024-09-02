@@ -1,5 +1,5 @@
 using FluentValidation;
-using Pawz.Web.Models;
+using Pawz.Web.Models.Pet;
 
 namespace Pawz.Web.Validators;
 
@@ -16,6 +16,11 @@ public class PetCreateViewModelValidator : AbstractValidator<PetCreateViewModel>
             .NotNull()
             .NotEmpty().WithMessage("Breed is required.")
             .GreaterThan(0).WithMessage("Breed must be selected.");
+
+        RuleFor(x => x.SpeciesId)
+                .NotNull()
+                .NotEmpty().WithMessage("Species is required.")
+                .GreaterThan(0).WithMessage("Species must be selected.");
 
         RuleFor(x => x.AgeYears)
             .NotNull().WithMessage("Age in years is required.")
@@ -36,13 +41,22 @@ public class PetCreateViewModelValidator : AbstractValidator<PetCreateViewModel>
             .NotNull().WithMessage("Price is required.")
             .GreaterThanOrEqualTo(0).WithMessage("Price must be a positive value.");
 
-        //RuleFor(x => x.LocationId)
-        //    .NotNull()
-        //    .NotEmpty().WithMessage("Location is required.")
-        //    .GreaterThan(0).WithMessage("Location must be selected.");
+        RuleFor(x => x.CityId)
+            .NotNull()
+            .GreaterThan(0).WithMessage("City must be selected.");
 
-        RuleFor(x => x.Status)
-            .NotNull().WithMessage("Status is required.")
-            .IsInEnum().WithMessage("A valid pet status is required.");
+        RuleFor(x => x.CountryId)
+            .NotNull()
+            .GreaterThan(0).WithMessage("Country must be selected.");
+
+        RuleFor(x => x.Address)
+            .NotNull()
+            .NotEmpty().WithMessage("Address is required.")
+            .MaximumLength(200).WithMessage("Address must be 200 characters or fewer.");
+
+        RuleFor(x => x.PostalCode)
+            .NotNull()
+            .NotEmpty().WithMessage("Postal code is required.")
+            .MaximumLength(10).WithMessage("Postal code must be 10 characters or fewer.");
     }
 }
