@@ -8,7 +8,7 @@ public class WebMappingProfile : Profile
 {
     public WebMappingProfile()
     {
-        CreateMap<UserPetResponse,UserPetViewModel>().ReverseMap();
-        CreateMap<UserPetRequest,UserPetViewModel>().ReverseMap();
+        CreateMap<UserPetResponse, UserPetViewModel>().ReverseMap();
+        CreateMap<UserPetRequest, UserPetViewModel>().ReverseMap();
     }
 }
