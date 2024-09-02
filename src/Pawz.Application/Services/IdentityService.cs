@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
-using Pawz.Application.Models;
+using Pawz.Application.Models.Identity;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using System;
