@@ -87,9 +87,6 @@ public class PetService : IPetService
         }
     }
 
-
-
-
     /// <summary>
     /// Retrieves all pets from the system.
     /// </summary>
