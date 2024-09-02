@@ -2,17 +2,16 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
+using Pawz.Application.Models.Pet;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Enums;
 using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Pawz.Domain.Common;
-using Pawz.Application.Models.Pet;
-using System.Linq;
-using AutoMapper;
 
 namespace Pawz.Application.Services;
 
@@ -23,14 +22,22 @@ public class PetService : IPetService
     private readonly ILogger<PetService> _logger;
     private readonly IUserAccessor _userAccessor;
     private readonly IMapper _mapper;
+    private readonly ILocationService _locationService;
 
-    public PetService(IPetRepository petRepository, IUnitOfWork unitOfWork, ILogger<PetService> logger,IUserAccessor userAccessor,IMapper mapper)
+    public PetService(
+        IPetRepository petRepository,
+        IUnitOfWork unitOfWork,
+        ILogger<PetService> logger,
+        IUserAccessor userAccessor,
+        IMapper mapper,
+        ILocationService locationService)
     {
         _petRepository = petRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
         _userAccessor = userAccessor;
         _mapper = mapper;
+        _locationService = locationService;
     }
 
     public async Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken)
@@ -39,25 +46,54 @@ public class PetService : IPetService
         {
             _logger.LogInformation("Started creating a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
 
+            var location = new Location
+            {
+                CityId = petCreateRequest.CityId,
+                Address = petCreateRequest.Address,
+                PostalCode = petCreateRequest.PostalCode
+            };
+
+            var locationInsertResult = await _locationService.CreateLocationAsync(location, cancellationToken);
+
+            // Check if location creation was successful
+            if (!locationInsertResult.IsSuccess)
+            {
+                _logger.LogWarning("Failed to create a location for the pet with Id: {PetId}", petCreateRequest.Id);
+                return Result<bool>.Failure(LocationErrors.CreationFailed);
+            }
+
+            // Step 2: Map the PetCreateRequest to the Pet entity
             var pet = _mapper.Map<Pet>(petCreateRequest);
+            pet.Location = locationInsertResult.Value; // Associate the location with the pet
+            pet.PostedByUserId = _userAccessor.GetUserId();
+            pet.Status = PetStatus.Available;
+            pet.CreatedAt = DateTime.UtcNow;
+
+
+            // Step 3: Insert the Pet into the repository
             await _petRepository.InsertAsync(pet, cancellationToken);
+
+            // Step 4: Save all changes
             var petCreated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
             if (petCreated)
             {
-                _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
-                return Result<bool>.Success();
+                _logger.LogInformation("Successfully created a Pet with Id: {PetId} for UserId: {UserId}", pet.Id, petCreateRequest.PostedByUserId);
+                return Result<bool>.Success(true);
             }
-            _logger.LogWarning("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
+
+            _logger.LogWarning("Failed to create a Pet for UserId: {UserId}", petCreateRequest.PostedByUserId);
             return Result<bool>.Failure(PetErrors.CreationFailed);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to create a Pet for the UserId: {UserId}",
-                             nameof(PetService), petCreateRequest.PostedByUserId);
+            _logger.LogError(ex, "An error occurred in {ServiceName} while attempting to create a Pet for UserId: {UserId}", nameof(PetService), petCreateRequest.PostedByUserId);
             return Result<bool>.Failure(PetErrors.CreationUnexpectedError);
         }
     }
+
+
+
 
     /// <summary>
     /// Retrieves all pets from the system.
