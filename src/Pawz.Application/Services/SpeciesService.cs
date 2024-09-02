@@ -5,6 +5,7 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -59,7 +60,7 @@ public class SpeciesService : ISpeciesService
     /// </summary>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A result containing a collection of all species.</returns>
-    public async Task<Result<IEnumerable<Species>>> GetAllSpeciesAsync(CancellationToken cancellationToken)
+    public async Task<Result<List<Species>>> GetAllSpeciesAsync(CancellationToken cancellationToken)
     {
         try
         {
@@ -67,14 +68,18 @@ public class SpeciesService : ISpeciesService
 
             var species = await _speciesRepository.GetAllAsync(cancellationToken);
 
+            if (species is null)
+            {
+                return Result<List<Species>>.Failure(SpeciesErrors.RetrievalError);
+            }
+
             _logger.LogInformation("Successfully retrieved all species.");
-            return Result<IEnumerable<Species>>.Success(species);
+            return Result<List<Species>>.Success(species.ToList());
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all species.",
-                             nameof(SpeciesService));
-            return Result<IEnumerable<Species>>.Failure(SpeciesErrors.RetrievalError);
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all species.", nameof(SpeciesService));
+            return Result<List<Species>>.Failure(SpeciesErrors.RetrievalError);
         }
     }
 
