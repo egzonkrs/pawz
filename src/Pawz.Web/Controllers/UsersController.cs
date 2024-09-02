@@ -1,9 +1,14 @@
+using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models.Identity;
+using Pawz.Application.Models;
+using Pawz.Application.Models.Pet;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Pawz.Web.Controllers;
@@ -13,12 +18,16 @@ public class UsersController : Controller
     private readonly IIdentityService _identityService;
     private readonly IValidator<RegisterViewModel> _validator;
     private readonly IValidator<LoginViewModel> _loginModelValidator;
+    private readonly IPetService _petService;
+    private readonly IMapper _mapper;
 
-    public UsersController(IIdentityService identityService, IValidator<RegisterViewModel> validator, IValidator<LoginViewModel> loginModelValidator)
+    public UsersController(IIdentityService identityService, IValidator<RegisterViewModel> validator, IValidator<LoginViewModel> loginModelValidator, IPetService petService, IMapper mapper)
     {
         _identityService = identityService;
         _validator = validator;
         _loginModelValidator = loginModelValidator;
+        _petService = petService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -27,7 +36,6 @@ public class UsersController : Controller
         return View();
     }
 
-    [HttpPost]
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {
@@ -95,6 +103,40 @@ public class UsersController : Controller
     {
         await _identityService.LogoutAsync();
         return RedirectToAction("Index", "Home");
+    }
+
+    public IActionResult Profile()
+    {
+        return View();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> MyPets(CancellationToken cancellationToken)
+    {
+        var result = await _petService.GetPetsByUserIdAsync(cancellationToken);
+
+        var pets = result.Value;
+
+        var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
+        return PartialView("MyPets", petResponses);
+    }
+
+    [HttpGet]
+    public IActionResult AdoptionRequest()
+    {
+        return PartialView("AdoptionRequest");
+    }
+
+    [HttpGet]
+    public IActionResult Adoptions()
+    {
+        return PartialView("Adoptions");
+    }
+
+    [HttpGet]
+    public IActionResult MyAdoptions()
+    {
+        return PartialView("MyAdoptions");
     }
 
 }
