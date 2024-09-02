@@ -1,63 +1,67 @@
- <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <nav class="navbar navbar-expand-lg navbar-light navigation">
-                    <a class="navbar-brand">
-                        <img src="~/template/images/pawz.png" alt="" width="55" height="55">
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ml-auto main-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item dropdown dropdown-slide @@dashboard">
-                                <a class="nav-link dropdown-toggle" asp-controller="Home" asp-action="Adopt">
-                                    Adopt
-                                </a>
-                            </li>
-                            <li class="nav-item dropdown dropdown-slide @@dashboard">
+@inject Pawz.Application.Interfaces.IUserAccessor UserAccessor
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a href="@Url.Action("Index","Home")" class="navbar-brand">
+                    <img src="~/template/images/pawz.png" alt="" width="55" height="55">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto main-nav">
+                        <li class="nav-item">
+                            <a class="nav-link font-weight-bold text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item dropdown dropdown-slide @@dashboard">
+                            <a class="nav-link dropdown-toggle font-weight-bold text-dark" asp-controller="Home" asp-action="Adopt">
+                                Adopt
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown dropdown-slide @@dashboard">
                                 <a class="nav-link dropdown-toggle" asp-controller="Pet" asp-action="Index">
                                     Pets
                                 </a>
                             </li>
-                            <li class="nav-item dropdown dropdown-slide @@pages">
-                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Pages
-                                    <span>
-                                        <i class="fa fa-angle-down"></i>
-                                    </span>
-                                </a>
-                                <!-- Dropdown list -->
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="dropdown-item @@about" asp-controller="Home" asp-action="AboutUs">About Us</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item @@contact" asp-controller="Home" asp-action="ContactUs">Contact Us</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown dropdown-slide @@dashboard">
-                                <a class="nav-link dropdown-toggle" asp-controller="Home" asp-action="WishList">
-                                    Wish list
+                        @if (UserAccessor.IsUserAuthenticated())
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold text-dark" asp-controller="Pet" asp-action="MyPets">
+                                    Dashboard
                                 </a>
                             </li>
-                        </ul>
-                        <ul class="navbar-nav ml-auto mt-10">
-                            <li class="nav-item">
-                                <a class="nav-link login-button" asp-controller="Users" asp-action="Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white add-button" asp-controller="Users" asp-action="Register">Register</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
+                        }
+                        <li class="nav-item dropdown dropdown-slide @@pages">
+                            <a class="nav-link dropdown-toggle font-weight-bold text-dark" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Pages
+                                <span>
+                                    <i class="fa fa-angle-down"></i>
+                                </span>
+                            </a>
+                            <!-- Dropdown list -->
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item @@about" asp-controller="Home" asp-action="AboutUs">About Us</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item @@contact" asp-controller="Home" asp-action="ContactUs">Contact Us</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown dropdown-slide @@dashboard">
+                            <a class="nav-link dropdown-toggle font-weight-bold text-dark" asp-controller="Home" asp-action="WishList">
+                                Wish list
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto mt-10">
+                        @await Html.PartialAsync("_LoggedInUser")
+                    </ul>
+                </div>
+            </nav>
         </div>
     </div>
-
+</div>

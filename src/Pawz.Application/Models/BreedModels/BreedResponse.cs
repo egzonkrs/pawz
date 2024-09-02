@@ -1,3 +1,4 @@
+using Pawz.Application.Models.PetModels;
 using Pawz.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ public class BreedResponse
     public Species Species { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public ICollection<Pet> Pets { get; set; } = new List<Pet>();
+    public ICollection<PetResponse> Pets { get; set; } = new List<PetResponse>();
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 }

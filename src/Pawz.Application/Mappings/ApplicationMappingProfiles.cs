@@ -4,6 +4,7 @@ using Pawz.Application.Models.PetModels;
 using Pawz.Application.Models.BreedModels;
 using Pawz.Application.Models.PetImagesModels;
 using Pawz.Application.Models.SpeciesModels;
+using Pawz.Application.Models.Pet;
 
 namespace Pawz.Application.Mappings;
 public class ApplicationMappingProfiles : Profile
@@ -25,5 +26,9 @@ public class ApplicationMappingProfiles : Profile
         CreateMap<SpeciesRequest, Species>().ReverseMap();
         CreateMap<Species, SpeciesResponse>().ReverseMap();
         CreateMap<SpeciesRequest, SpeciesResponse>().ReverseMap();
+
+        CreateMap<UserPetRequest, Pet>().ReverseMap();
+        CreateMap<Pet, UserPetResponse>().ReverseMap();
+        CreateMap<UserPetRequest, UserPetResponse>().ReverseMap();
     }
 }

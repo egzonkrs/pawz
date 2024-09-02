@@ -7,9 +7,9 @@ namespace Pawz.Web.Modules;
 
 public class CoreModule : IModule
 {
-    public void Load(IServiceCollection services)
-    {
-        services.AddControllersWithViews();
-        services.AddAutoMapper(typeof(ApplicationMappingProfiles).Assembly, typeof(WebMappingProfiles).Assembly);
-    }
+        public void Load(IServiceCollection services)
+        {
+                services.AddControllersWithViews();
+                services.AddAutoMapper(typeof(ApplicationMappingProfiles).Assembly, typeof(WebMappingProfiles).Assembly);
+        }
 }

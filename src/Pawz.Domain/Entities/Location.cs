@@ -7,44 +7,44 @@ namespace Pawz.Domain.Entities;
 public class Location : IEntity<int>, ISoftDeletion
 {
     /// <summary>
-    /// The Id of the location
+    /// The Id of the location.
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// The city of the location
+    /// The Id of the city where the location is situated.
     /// </summary>
-    public string City { get; set; }
+    public int CityId { get; set; }
 
     /// <summary>
-    /// The state or province of the location
+    /// The city where the location is situated.
     /// </summary>
-    public string State { get; set; }
+    public City City { get; set; }
 
     /// <summary>
-    /// The country of the location
+    /// The specific address of the location, such as street name or house number.
     /// </summary>
-    public string Country { get; set; }
+    public string Address { get; set; }
 
     /// <summary>
-    /// The postal or ZIP code of the location
+    /// The postal or ZIP code of the location.
     /// </summary>
     public string PostalCode { get; set; }
 
     /// <summary>
-    /// The pets located at this location
+    /// The collection of pets associated with this location.
     /// </summary>
     public ICollection<Pet> Pets { get; set; } = new List<Pet>();
 
     /// <summary>
-    /// Gets or sets a value indicating whether the entity is soft-deleted.
-    /// This property is implemented from the <see cref="ISoftDelete"/> interface.
+    /// Indicates whether the entity is soft-deleted.
+    /// This property is implemented from the <see cref="ISoftDeletion"/> interface.
     /// </summary>
     public bool IsDeleted { get; set; }
 
     /// <summary>
-    /// Gets or sets the timestamp of when the entity was soft-deleted.
-    /// This property is implemented from the <see cref="ISoftDelete"/> interface.
+    /// The timestamp of when the entity was soft-deleted.
+    /// This property is implemented from the <see cref="ISoftDeletion"/> interface.
     /// </summary>
     public DateTimeOffset? DeletedAt { get; set; }
 }

@@ -1,4 +1,4 @@
-using Pawz.Domain.Entities;
+using Pawz.Application.Models.PetModels;
 using System;
 
 namespace Pawz.Application.Models.PetImagesModels
@@ -7,7 +7,7 @@ namespace Pawz.Application.Models.PetImagesModels
     {
         public int Id { get; set; }
         public int PetId { get; set; }
-        public Pet Pet { get; set; }
+        public PetResponse Pet { get; set; }
         public string ImageUrl { get; set; }
         public string Description { get; set; }
         public bool IsPrimary { get; set; }

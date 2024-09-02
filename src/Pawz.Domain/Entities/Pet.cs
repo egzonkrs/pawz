@@ -18,16 +18,6 @@ public class Pet : IEntity<int>, ISoftDeletion
     public string Name { get; set; }
 
     /// <summary>
-    /// The Id of the species of the pet
-    /// </summary>
-    public int SpeciesId { get; set; }
-
-    /// <summary>
-    /// The species of the pet
-    /// </summary>
-    public Species Species { get; set; }
-
-    /// <summary>
     /// The Id of the breed of the pet
     /// </summary>
     public int BreedId { get; set; }

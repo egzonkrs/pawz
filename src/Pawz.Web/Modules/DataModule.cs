@@ -31,16 +31,16 @@ public class DataModule : IModule
 
         services.AddDbContext<AppDbContext>(options =>
             options
-                .UseSqlite(connectionString)
+                .UseSqlServer(connectionString)
                 .AddInterceptors(new SoftDeleteInterceptor())
         );
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IPetRepository, PetRepository>();
-        services.AddScoped<IPetService, PetService>();
-
         services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
-        // services.AddScoped<IAdoptionService, AdoptionService>();
+        services.AddScoped<IBreedRepository, BreedRepository>();
+        services.AddScoped<ISpeciesRepository, SpeciesRepository>();
+        services.AddScoped<IPetService, PetService>();
     }
 }

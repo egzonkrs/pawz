@@ -17,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddModule(new CoreModule());
 builder.Services.AddModule(new AuthModule());
+builder.Services.AddModule(new ValidationModule());
 builder.Services.AddModule(new DataModule(builder.Configuration));
 
 // Configure logging
@@ -25,6 +26,8 @@ builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
 var app = builder.Build();
+
+await app.UseDataSeeder();
 
 if (!app.Environment.IsDevelopment())
 {

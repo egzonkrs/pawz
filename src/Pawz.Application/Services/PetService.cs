@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Pawz.Domain.Common;
 using AutoMapper;
 using Pawz.Application.Models.PetModels;
+using Pawz.Application.Models.Pet;
+using System.Linq;
 
 namespace Pawz.Application.Services
 {
@@ -17,13 +19,15 @@ namespace Pawz.Application.Services
         private readonly IPetRepository _petRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<PetService> _logger;
+        private readonly IUserAccessor _userAccessor;
         private readonly IMapper _mapper;
 
-        public PetService(IPetRepository petRepository, IUnitOfWork unitOfWork, ILogger<PetService> logger, IMapper mapper)
+        public PetService(IPetRepository petRepository, IUnitOfWork unitOfWork, ILogger<PetService> logger, IUserAccessor userAccessor, IMapper mapper)
         {
             _petRepository = petRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _userAccessor = userAccessor;
             _mapper = mapper;
         }
 
@@ -213,6 +217,40 @@ namespace Pawz.Application.Services
             {
                 _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to count the number of pets.", nameof(PetService));
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves all pets associated with a specific user by their unique user ID.
+        /// </summary>
+        /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+        /// <returns>A result containing a collection of pets associated with the user, or an error if not found.</returns>
+        public async Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(CancellationToken cancellationToken)
+        {
+            string userId = null;
+            try
+            {
+                userId = _userAccessor.GetUserId();
+                _logger.LogInformation("Started retrieving pets for UserId: {UserId}", userId);
+
+                var pets = await _petRepository.GetByUserIdAsync(userId, cancellationToken);
+
+                if (pets is null || !pets.Any())
+                {
+                    _logger.LogWarning("No pets found for UserId: {UserId}", userId);
+                    return Result<IEnumerable<UserPetResponse>>.Failure(PetErrors.NoPetsFoundForUser(userId));
+                }
+
+                var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
+
+                _logger.LogInformation("Successfully retrieved pets for UserId: {UserId}", userId);
+                return Result<IEnumerable<UserPetResponse>>.Success(petResponses);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve pets for UserId: {UserId}",
+                                 nameof(PetService), userId);
+                return Result<IEnumerable<UserPetResponse>>.Failure(PetErrors.RetrievalError);
             }
         }
     }

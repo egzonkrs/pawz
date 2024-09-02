@@ -1,23 +1,46 @@
 using Microsoft.EntityFrameworkCore;
+using Pawz.Domain.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Pawz.Infrastructure.Data.Seed
-{
-    public class SeedLocations
-    {
-        public static async Task SeedLocationData(AppDbContext context)
-        {
-            var locationsExists = await context.Locations.AnyAsync();
-            if (locationsExists) return;
+namespace Pawz.Infrastructure.Data.Seed;
 
-            await context.Database.ExecuteSqlRawAsync(@"
-                    INSERT INTO Locations (Id, City, State, Country, PostalCode, isDeleted) VALUES
-                    (1, 'New York', 'NY', 'USA', '10001', false),
-                    (2, 'Los Angeles', 'CA', 'USA', '90001', false),
-                    (3, 'Chicago', 'IL', 'USA', '60601', false),
-                    (4, 'Houston', 'TX', 'USA', '77001', false),
-                    (5, 'Toronto', 'ON', 'Canada', 'M5H 2N2', false)"
-            );
-        }
+public class SeedLocations
+{
+    public static async Task SeedLocationData(AppDbContext context)
+    {
+        var locationsExist = await context.Locations.AnyAsync();
+        if (locationsExist) return;
+
+        var locations = new List<Location>
+        {
+            new Location
+            {
+                CityId = 1,
+                Address = "Bulevardi Nënë Tereza 1",
+                PostalCode = "10000",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new Location
+            {
+                CityId = 1,
+                Address = "Rruga Dardania 3",
+                PostalCode = "12000",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new Location
+            {
+                CityId = 2,
+                Address = "Rruga e Dajti 5",
+                PostalCode = "1001",
+                IsDeleted = false,
+                DeletedAt = null
+            }
+        };
+
+        context.Locations.AddRange(locations);
+        await context.SaveChangesAsync();
     }
 }
