@@ -21,7 +21,7 @@ public interface ICityService
     /// </summary>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a collection of city entities.</returns>
-    Task<Result<IEnumerable<City>>> GetAllCitiesAsync(CancellationToken cancellationToken);
+    Task<Result<List<City>>> GetAllCitiesAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves a city by its ID.
@@ -46,7 +46,4 @@ public interface ICityService
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
     Task<Result<bool>> DeleteCityAsync(int cityId, CancellationToken cancellationToken);
-
-
-    //Task<Result<IEnumerable<City>>> GetCitiesByCountryIdAsync(int countryId, CancellationToken cancellationToken);
 }
