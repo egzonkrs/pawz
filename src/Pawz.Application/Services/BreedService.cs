@@ -5,6 +5,7 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -59,7 +60,7 @@ public class BreedService : IBreedService
     /// </summary>
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
     /// <returns>A result containing a collection of breed entities.</returns>
-    public async Task<Result<IEnumerable<Breed>>> GetAllBreedsAsync(CancellationToken cancellationToken)
+    public async Task<Result<List<Breed>>> GetAllBreedsAsync(CancellationToken cancellationToken)
     {
         try
         {
@@ -67,14 +68,19 @@ public class BreedService : IBreedService
 
             var breeds = await _breedRepository.GetAllAsync(cancellationToken);
 
+            if (breeds is null)
+            {
+                return Result<List<Breed>>.Failure(BreedErrors.RetrievalError);
+            }
+
             _logger.LogInformation("Successfully retrieved all breeds.");
-            return Result<IEnumerable<Breed>>.Success(breeds);
+
+            return Result<List<Breed>>.Success(breeds.ToList());
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all breeds.",
-                             nameof(BreedService));
-            return Result<IEnumerable<Breed>>.Failure(BreedErrors.RetrievalError);
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all breeds.", nameof(BreedService));
+            return Result<List<Breed>>.Failure(BreedErrors.RetrievalError);
         }
     }
 
