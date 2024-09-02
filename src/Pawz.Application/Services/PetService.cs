@@ -55,25 +55,20 @@ public class PetService : IPetService
 
             var locationInsertResult = await _locationService.CreateLocationAsync(location, cancellationToken);
 
-            // Check if location creation was successful
             if (!locationInsertResult.IsSuccess)
             {
-                _logger.LogWarning("Failed to create a location for the pet with Id: {PetId}", petCreateRequest.Id);
+                _logger.LogError("Failed to create a location for the pet with Id: {PetId}", petCreateRequest.Id);
                 return Result<bool>.Failure(LocationErrors.CreationFailed);
             }
 
-            // Step 2: Map the PetCreateRequest to the Pet entity
             var pet = _mapper.Map<Pet>(petCreateRequest);
-            pet.Location = locationInsertResult.Value; // Associate the location with the pet
+            pet.Location = locationInsertResult.Value;
             pet.PostedByUserId = _userAccessor.GetUserId();
             pet.Status = PetStatus.Available;
             pet.CreatedAt = DateTime.UtcNow;
 
-
-            // Step 3: Insert the Pet into the repository
             await _petRepository.InsertAsync(pet, cancellationToken);
 
-            // Step 4: Save all changes
             var petCreated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
             if (petCreated)
