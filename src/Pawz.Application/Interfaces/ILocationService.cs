@@ -14,7 +14,7 @@ public interface ILocationService
     /// <param name="location">The location entity to create.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
-    Task<Result<bool>> CreateLocationAsync(Location location, CancellationToken cancellationToken);
+    Task<Result<Location>> CreateLocationAsync(Location location, CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves all locations.

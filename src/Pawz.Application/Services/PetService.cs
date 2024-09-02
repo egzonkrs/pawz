@@ -1,8 +1,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
+using AutoMapper;
+using Microsoft.Extensions.Logging;
+using Pawz.Application.Interfaces;
+using Pawz.Application.Models;
+using Pawz.Application.Models.Pet;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Enums;
 using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -20,13 +26,17 @@ public class PetService : IPetService
     private readonly IFileUploaderService _fileUploaderService;
     private readonly IPetImageRepository _petImageRepository;
     private readonly IUserAccessor _userAccessor;
+    private readonly IMapper _mapper;
+    private readonly ILocationService _locationService;
 
     public PetService(IPetRepository petRepository,
                       IUnitOfWork unitOfWork,
                       ILogger<PetService> logger,
                       IFileUploaderService fileUploaderService,
                       IPetImageRepository petImageRepository,
-                      IUserAccessor userAccessor)
+                      IUserAccessor userAccessor,  
+                      IMapper mapper,
+                      ILocationService locationService) 
     {
         _petRepository = petRepository;
         _unitOfWork = unitOfWork;
@@ -34,6 +44,8 @@ public class PetService : IPetService
         _fileUploaderService = fileUploaderService;
         _petImageRepository = petImageRepository;
         _userAccessor = userAccessor;
+        _mapper = mapper;
+        _locationService = locationService;
     }
 
     /// <summary>
@@ -42,7 +54,7 @@ public class PetService : IPetService
     /// <param name="pet">The pet entity to create.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A result indicating whether the creation was successful.</returns>
-    public async Task<Result<bool>> CreatePetAsync(Pet pet, IEnumerable<IFormFile> imageFiles, string directory, CancellationToken cancellationToken)
+    public async Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, IEnumerable<IFormFile> imageFiles, string directory, CancellationToken cancellationToken)
     {
         try
         {
@@ -50,10 +62,42 @@ public class PetService : IPetService
             _logger.LogInformation("Started creating a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
 
             var petId = await _petRepository.InsertAsync(pet, cancellationToken);
+        _userAccessor = userAccessor;
+        _mapper = mapper;
+        _locationService = locationService;
+    
+       
+            _logger.LogInformation("Started creating a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
+
+            var location = new Location
+            {
+                CityId = petCreateRequest.CityId,
+                Address = petCreateRequest.Address,
+                PostalCode = petCreateRequest.PostalCode
+            };
+
+            var locationInsertResult = await _locationService.CreateLocationAsync(location, cancellationToken);
+
+            if (!locationInsertResult.IsSuccess)
+            {
+                _logger.LogError("Failed to create a location for the pet with Id: {PetId}", petCreateRequest.Id);
+                return Result<bool>.Failure(LocationErrors.CreationFailed);
+            }
+
+            var pet = _mapper.Map<Pet>(petCreateRequest);
+            pet.Location = locationInsertResult.Value;
+            pet.PostedByUserId = _userAccessor.GetUserId();
+            pet.Status = PetStatus.Available;
+            pet.CreatedAt = DateTime.UtcNow;
+
+            await _petRepository.InsertAsync(pet, cancellationToken);
+
+
             var petCreated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
             if (petCreated is false)
             {
+
                 _logger.LogError("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
                 return Result<bool>.Failure(PetErrors.CreationFailed);
             }
@@ -94,11 +138,16 @@ public class PetService : IPetService
 
             _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
             return Result<bool>.Success();
+                _logger.LogInformation("Successfully created a Pet with Id: {PetId} for UserId: {UserId}", pet.Id, petCreateRequest.PostedByUserId);
+                return Result<bool>.Success(true);
+            }
+
+            _logger.LogWarning("Failed to create a Pet for UserId: {UserId}", petCreateRequest.PostedByUserId);
+            return Result<bool>.Failure(PetErrors.CreationFailed);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to create a Pet for the UserId: {UserId}",
-                             nameof(PetService), pet.PostedByUserId);
+            _logger.LogError(ex, "An error occurred in {ServiceName} while attempting to create a Pet for UserId: {UserId}", nameof(PetService), petCreateRequest.PostedByUserId);
             return Result<bool>.Failure(PetErrors.CreationUnexpectedError);
         }
     }
@@ -224,6 +273,40 @@ public class PetService : IPetService
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to delete Pet with Id: {PetId}",
                              nameof(PetService), petId);
             return Result<bool>.Failure(PetErrors.DeletionUnexpectedError);
+        }
+    }
+
+    /// <summary>
+    /// Retrieves all pets associated with a specific user by their unique user ID.
+    /// </summary>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A result containing a collection of pets associated with the user, or an error if not found.</returns>
+    public async Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(CancellationToken cancellationToken)
+    {
+        string userId = null;
+        try
+        {
+            userId = _userAccessor.GetUserId();
+            _logger.LogInformation("Started retrieving pets for UserId: {UserId}", userId);
+
+            var pets = await _petRepository.GetByUserIdAsync(userId, cancellationToken);
+
+            if (pets is null || !pets.Any())
+            {
+                _logger.LogWarning("No pets found for UserId: {UserId}", userId);
+                return Result<IEnumerable<UserPetResponse>>.Failure(PetErrors.NoPetsFoundForUser(userId));
+            }
+
+            var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
+
+            _logger.LogInformation("Successfully retrieved pets for UserId: {UserId}", userId);
+            return Result<IEnumerable<UserPetResponse>>.Success(petResponses);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve pets for UserId: {UserId}",
+                             nameof(PetService), userId);
+            return Result<IEnumerable<UserPetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
 }

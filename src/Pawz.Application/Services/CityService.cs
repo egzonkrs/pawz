@@ -5,6 +5,7 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -60,22 +61,26 @@ public class CityService : ICityService
     /// </summary>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A result containing a collection of all cities.</returns>
-    public async Task<Result<IEnumerable<City>>> GetAllCitiesAsync(CancellationToken cancellationToken)
+    public async Task<Result<List<City>>> GetAllCitiesAsync(CancellationToken cancellationToken)
     {
         try
         {
             _logger.LogInformation("Started retrieving all cities.");
 
             var cities = await _cityRepository.GetAllAsync(cancellationToken);
+            if (cities is null)
+            {
+                _logger.LogInformation("Successfully retrieved all cities.");
+                return Result<List<City>>.Failure(CityErrors.RetrievalError);
+            }
 
             _logger.LogInformation("Successfully retrieved all cities.");
-            return Result<IEnumerable<City>>.Success(cities);
+            return Result<List<City>>.Success(cities.ToList());
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all cities.",
-                             nameof(CityService));
-            return Result<IEnumerable<City>>.Failure(CityErrors.RetrievalError);
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all cities.", nameof(CityService));
+            return Result<List<City>>.Failure(CityErrors.RetrievalError);
         }
     }
 
