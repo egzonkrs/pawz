@@ -24,9 +24,9 @@ public interface IAdoptionRequestService
     Task<Result<IEnumerable<AdoptionRequest>>> GetAllAdoptionRequestsAsync(CancellationToken cancellationToken);
 
     /// <summary>
-    /// Retrieves an adoption by its ID.
+    /// Retrieves an adoption by its Id.
     /// </summary>
-    /// <param name="adoptionRequestId">The ID of the pet to retrieve.</param>
+    /// <param name="adoptionRequestId">The Id of the pet to retrieve.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains the adoption entity.</returns>
     Task<Result<AdoptionRequest>> GetAdoptionRequestByIdAsync(int adoptionRequestId, CancellationToken cancellationToken);
@@ -40,9 +40,9 @@ public interface IAdoptionRequestService
     Task<Result<bool>> UpdateAdoptionRequestAsync(AdoptionRequest adoptionRequest, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Deletes an adoption by its ID.
+    /// Deletes an adoption by its Id.
     /// </summary>
-    /// <param name="adoptionRequestId">The ID of the adoption to delete.</param>
+    /// <param name="adoptionRequestId">The Id of the adoption to delete.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
     Task<Result<bool>> DeleteAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken);

@@ -1,6 +1,6 @@
 ﻿namespace Pawz.Application.Models;
 
-public class ModalRequest
+public class AdoptionRequestCreateRequest
 {
     /// <summary>
     /// The Country of the user that is trying to send an Adoption Request.

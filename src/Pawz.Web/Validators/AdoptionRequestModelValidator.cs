@@ -1,18 +1,18 @@
 ﻿using FluentValidation;
-using Pawz.Web.Models;
+using Pawz.Web.Models.Pet;
 
 namespace Pawz.Web.Validators;
 
-public class ModalValidator : AbstractValidator<AdoptionRequestCreateModel>
+public class AdoptionRequestModelValidator : AbstractValidator<AdoptionRequestCreateModel>
 {
-    public ModalValidator()
+    public AdoptionRequestModelValidator()
     {
-        RuleFor(x => x.Country)
+        RuleFor(x => x.Countries)
             .NotNull()
             .NotEmpty()
             .WithMessage("County is required");
 
-        RuleFor(x => x.City)
+        RuleFor(x => x.Cities)
             .NotNull()
             .NotEmpty()
             .WithMessage("City is required");
