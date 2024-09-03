@@ -1,5 +1,6 @@
+@model IEnumerable<Pawz.Domain.Entities.Pet>
 @{
-    ViewData["Title"] = "Home Page";
+ViewData["Title"] = "Home Page";
 }
 
 <!--===============================
@@ -67,134 +68,48 @@
                 </div>
             </div>
         </div>
+
         <div class="row">
             <!-- offer 01 -->
             <div class="col-lg-12">
                 <div class="trending-ads-slide">
-                    <div class="col-sm-12 col-lg-4">
-                        <!-- product card -->
-                        <div class="product-item bg-light">
-                            <div class="card h-100 shadow-sm px-3 py-2 pt-3 align-items-center position-relative">
-                                <div class="thumb-content">
-                                    <!-- <div class="price">$200</div> -->
-                                    <a asp-controller="Pet" asp-action="PetDetails">
-                                        <img class="card-img-top img-fluid" src="~/template/images/goldenRetriever.jpg" alt="Card image cap">
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="card-title"><a asp-controller="Pet" asp-action="PetDetails" asp>Golden Retriever</a></h4>
-                                    <ul class="list-inline product-meta">
-                                        <li class="list-inline-item">
-                                            <a><i class="fa fa-calendar"></i>2021</a>
-                                        </li>
-                                    </ul>
-                                    <p class="card-text">Golden Retrievers are friendly, intelligent, and loyal. Ideal for families, they are great with kids and other pets. Highly trainable, they make excellent companions and service dogs.</p>
-                                    <div class="product-ratings">
-                                        <ul class="list-inline">
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                    @foreach (var pet in Model)
+                    {
+                        <div class="col-sm-12 col-lg-4">
+                            <!-- product card -->
+                            <div class="product-item bg-light">
+                                <div class="card h-100 shadow-sm px-3 py-2 pt-3 align-items-center position-relative">
+                                    <div class="thumb-content">
+                                        <!-- <div class="price">$200</div> -->
+                                        <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">
+                                            <!-- Assuming you have a method to get the image URL -->
+                                            <img src="@pet.PetImages.FirstOrDefault()?.ImageUrl" alt="@pet.Name" class="img-fluid"/>
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">
+                                            <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">@pet.Name</a>
+                                        </h4>
+                                        <ul class="list-inline product-meta">
+                                            <li class="list-inline-item">
+                                                <a href="#"><i class="fa fa-calendar"></i> @pet.AgeYears years old</a>
+                                            </li>
                                         </ul>
+                                        <p class="card-text">@pet.About</p>
+                                        <div class="product-ratings">
+                                            <ul class="list-inline">
+                                                <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+                                                <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+                                                <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+                                                <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+                                                <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-12 col-lg-4">
-                        <!-- product card -->
-                        <div class="product-item bg-light">
-                            <div class="card h-100 shadow-sm px-3 py-2 pt-3 align-items-center position-relative">
-                                <div class="thumb-content">
-                                    <!-- <div class="price">$200</div> -->
-                                    <a asp-controller="Pet" asp-action="PetDetails">
-                                        <img class="card-img-top img-fluid" src="~/template/images/germanShepherd.jpg" alt="Card image cap">
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="card-title"><a asp-controller="Pet" asp-action="PetDetails">German Shepherd</a></h4>
-                                    <ul class="list-inline product-meta">
-                                        <li class="list-inline-item">
-                                            <a href="#"><i class="fa fa-calendar"></i>2023</a>
-                                        </li>
-                                    </ul>
-                                    <p class="card-text">German Shepherds are intelligent, protective, confident, loyal, and protective. They make excellent family pets and guard dogs. Highly trainable, they excel in roles like service and police work.</p>
-                                    <div class="product-ratings">
-                                        <ul class="list-inline">
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-lg-4">
-                        <!-- product card -->
-                        <div class="product-item bg-light">
-                            <div class="card h-100 shadow-sm px-3 py-2 pt-3 align-items-center position-relative">
-                                <div class="thumb-content">
-                                    <!-- <div class="price">$200</div> -->
-                                    <a asp-controller="Pet" asp-action="PetDetails">
-                                        <img class="card-img-top img-fluid" src="~/template/images/rottweiler.png" alt="Card image cap">
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="card-title"><a asp-controller="Pet" asp-action="PetDetails">Rottweiler</a ></h4>
-                                    <ul class="list-inline product-meta">
-                                        <li class="list-inline-item">
-                                            <a href="#"><i class="fa fa-calendar"></i>2022</a>
-                                        </li>
-                                    </ul>
-                                    <p class="card-text">Rottweilers are confident, strong, and loyal. They make excellent guard dogs and family companions. Known for their protective nature and intelligence, they are highly trainable and versatile.</p>
-                                    <div class="product-ratings">
-                                        <ul class="list-inline">
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-lg-4">
-                        <!-- product card -->
-                        <div class="product-item bg-light">
-                            <div class="card h-100 shadow-sm px-3 py-2 pt-3 align-items-center position-relative">
-                                <div class="thumb-content">
-                                    <!-- <div class="price">$200</div> -->
-                                    <a asp-controller="Pet" asp-action="PetDetails">
-                                        <img class="card-img-top img-fluid" src="~/template/images/haski.jpg" alt="Card image cap">
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="card-title"><a asp-controller="Pet" asp-action="PetDetails">Haski siberian</a></h4>
-                                    <ul class="list-inline product-meta">
-                                        <li class="list-inline-item">
-                                            <a href="#"><i class="fa fa-calendar"></i>2023</a>
-                                        </li>
-                                    </ul>
-                                    <p class="card-text">Siberian Huskies are energetic, friendly, and intelligent.They have a thick double coat and striking blue or multicolored eyes and wolf-like appearance.Huskies originally bred as sled dogs in cold climates. </p>
-                                    <div class="product-ratings">
-                                        <ul class="list-inline">
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>
