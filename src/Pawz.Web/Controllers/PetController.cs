@@ -131,6 +131,7 @@ public class PetController : Controller
             }).ToList();
 
             validationResult.AddErrorsToModelState(ModelState);
+            TempData["ErrorMessage"] = "Failed to create the pet! Please try again!";
             return View(petCreateViewModel);
         }
 
@@ -165,10 +166,10 @@ public class PetController : Controller
             return View(petCreateViewModel);
         }
 
-        return RedirectToAction("Index", "Home");
-
-
+        TempData["SuccessMessage"] = "Pet created successfully!";
+        return RedirectToAction("Details", "Pet");
     }
+
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
         var pet = await _petService.GetPetByIdAsync(id, cancellationToken);
