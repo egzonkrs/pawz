@@ -52,7 +52,7 @@ public class PetService : IPetService
     /// <param name="pet">The pet entity to create.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A result indicating whether the creation was successful.</returns>
-    public async Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, IEnumerable<IFormFile> imageFiles, string directory, CancellationToken cancellationToken)
+    public async Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, IEnumerable<IFormFile> imageFiles, CancellationToken cancellationToken)
     {
         try
         {
@@ -91,25 +91,15 @@ public class PetService : IPetService
 
             foreach (var imageFile in imageFiles)
             {
-                var uploadResult = await _fileUploaderService.UploadFileAsync(imageFile, directory);
-
-                if (!uploadResult.IsSuccess)
-                {
-                    var combinedErrors = string.Join("; ", uploadResult.Errors.Select(e => e.Description));
-
-                    _logger.LogError("Failed to upload image for Pet with Id: {PetId} from UserId: {UserId}. Error: {Error}",
-                                        pet.Id, pet.PostedByUserId, combinedErrors);
-                    return Result<bool>.Failure(combinedErrors);
-                }
-
-                var fileName = uploadResult.Value;
+                var uploadedFileName = await _fileUploaderService.UploadFileAsync(imageFile);
+                var fileName = uploadedFileName.Value;
 
                 var petImage = new PetImage
                 {
                     PetId = pet.Id,
                     ImageUrl = fileName,
                     IsPrimary = false,
-                    UploadedAt = DateTime.UtcNow
+                    UploadedAt = DateTime.UtcNow,
                 };
 
                 await _petImageRepository.InsertAsync(petImage, cancellationToken);
@@ -125,7 +115,6 @@ public class PetService : IPetService
 
             _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
             return Result<bool>.Success();
-
         }
         catch (Exception ex)
         {

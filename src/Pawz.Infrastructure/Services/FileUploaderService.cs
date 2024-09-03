@@ -33,36 +33,37 @@ public class FileUploaderService : IFileUploaderService
     /// <param name="directory">The directory where the file will be saved.</param>
     /// <returns>The relative path of the uploaded file.</returns>
     /// <exception cref="ArgumentException">Thrown when the file is null, empty, too large, or has an invalid type.</exception>
-    public async Task<Result<string>> UploadFileAsync(IFormFile file, string directory)
+    public async Task<Result<string>> UploadFileAsync(IFormFile file)
     {
         try
         {
             if (file is null || file.Length is 0)
             {
                 _logger.LogError("File upload failed: no file was provided.");
-                return Result<string>.Failure("Please upload a valid file.");
+                return Result<string>.Failure(FileUploadErrors.InvalidFile);
             }
 
             if (file.Length > maxFileSize)
             {
                 _logger.LogError("File upload failed: file size {FileSize} exceeds the maximum allowed size of {MaxFileSize}.", file.Length, maxFileSize);
-                return Result<string>.Failure($"File size exceeds the maximum allowed size of {maxFileSize / (1024 * 1024)} MB.");
+                return Result<string>.Failure(new Error(FileUploadErrors.MaxFileSize.Code, $"{FileUploadErrors.MaxFileSize.Description}: {maxFileSize / (1024 * 1024)} MB."));
             }
 
             var fileExtension = Path.GetExtension(file.FileName).ToLower();
 
             if (!allowedExtensions.Contains(fileExtension))
             {
+                var allowedTypes = string.Join(", ", allowedExtensions);
                 _logger.LogError("File upload failed: file extension {FileExtension} is not allowed.", fileExtension);
-                return Result<string>.Failure("File type is not allowed. Allowed types are: " + string.Join(", ", allowedExtensions));
+                return Result<string>.Failure(new Error(FileUploadErrors.UnsupportedFileFormat.Code, $"{FileUploadErrors.UnsupportedFileFormat.Description} Allowed types are: {allowedTypes}"));
             }
 
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            var fullPath = Path.Combine(directory, fileName);
+            var fullPath = Path.Combine(PetImagesDirectory, fileName);
 
-            if (!Directory.Exists(directory))
+            if (!Directory.Exists(PetImagesDirectory))
             {
-                Directory.CreateDirectory(directory);
+                Directory.CreateDirectory(PetImagesDirectory);
             }
 
             _logger.LogInformation("Starting file upload: {FileName}", fileName);
@@ -79,7 +80,7 @@ public class FileUploaderService : IFileUploaderService
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while uploading the file.");
-            return Result<string>.Failure("An unexpected error occurred while uploading the file.");
+            return Result<string>.Failure(FileUploadErrors.UnexpectedError);
         }
     }
 }
