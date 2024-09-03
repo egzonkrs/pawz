@@ -21,7 +21,7 @@ public interface IBreedService
     /// </summary>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a collection of breed entities.</returns>
-    Task<Result<IEnumerable<Breed>>> GetAllBreedsAsync(CancellationToken cancellationToken);
+    Task<Result<List<Breed>>> GetAllBreedsAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves a breed by its ID.

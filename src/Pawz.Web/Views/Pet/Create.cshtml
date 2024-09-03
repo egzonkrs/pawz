@@ -1,0 +1,224 @@
+@model Pawz.Web.Models.Pet.PetCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Pet";
+}
+
+<section class="create-pet py-5 border-top-1">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 align-item-center">
+                <div class="border mb-4">
+                    <h3 class="bg-gray p-4">Create Pet</h3>
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <fieldset class="p-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group mb-0">
+                                        <label asp-for="Name" class="form-label">Name</label>
+                                        <input asp-for="Name" class="form-control" placeholder="Pet Name" />
+                                        <span asp-validation-for="Name" class="form-label input-error-text"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group mb-0">
+                                        <label asp-for="SpeciesId" class="form-label">Species</label>
+                                        <select asp-for="SpeciesId" class="form-control w-100" id="SpeciesId">
+                                            <option selected disabled hidden value="">Select Species</option>
+                                            @foreach (var species in Model.Species)
+                                            {
+                                                <option value="@species.Value">@species.Text</option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="SpeciesId" class="form-label input-error-text"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group mb-0">
+                                        <label asp-for="BreedId" class="form-label">Breed</label>
+                                        <select asp-for="BreedId" class="form-control w-100" id="BreedId">
+                                            <option selected disabled hidden value="">Select Breed</option>
+                                        </select>
+                                        <span asp-validation-for="BreedId" class="form-label input-error-text"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group mb-0">
+                                        <label asp-for="AgeYears" class="form-label">Age (Years)</label>
+                                        <input asp-for="AgeYears" class="form-control w-100" type="number" min="0" />
+                                        <span asp-validation-for="AgeYears" class="form-label input-error-text"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group mb-0">
+                                        <label asp-for="AgeMonths" class="form-label">Age (Months)</label>
+                                        <input asp-for="AgeMonths" class="form-control w-100" type="number" min="0" />
+                                        <span asp-validation-for="AgeMonths" class="form-label input-error-text"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group mb-0">
+                                        <label asp-for="Price" class="form-label">Price</label>
+                                        <input asp-for="Price" class="form-control w-100" placeholder="Price" />
+                                        <span asp-validation-for="Price" class="form-label input-error-text"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group mb-0">
+                                        <label asp-for="CountryId" class="form-label">Country</label>
+                                        <select asp-for="CountryId" class="form-control w-100" id="CountryId">
+                                            <option value="">Select Country</option>
+                                            @foreach (var country in Model.Countries)
+                                            {
+                                                <option value="@country.Value">@country.Text</option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="CountryId" class="form-label input-error-text"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group mb-0">
+                                        <label asp-for="CityId" class="form-label">City</label>
+                                        <select asp-for="CityId" class="form-control w-100" id="CityId">
+                                            <option value="">Select City</option>
+                                            @foreach (var city in Model.Cities)
+                                            {
+                                                <option value="@city.Value">@city.Text</option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="CityId" class="form-label input-error-text"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group mb-0">
+                                        <label asp-for="PostalCode" class="form-label">Postal Code</label>
+                                        <input asp-for="PostalCode" class="form-control w-100" placeholder="Postal Code" />
+                                        <span asp-validation-for="PostalCode" class="form-label input-error-text"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-0">
+                                        <label asp-for="About" class="form-label">About</label>
+                                        <textarea asp-for="About" class="form-control w-100" placeholder="Tell us about the pet"></textarea>
+                                        <span asp-validation-for="About" class="form-label input-error-text"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-0">
+                                        <label asp-for="Address" class="form-label">About</label>
+                                        <input asp-for="Address" class="form-control w-100" placeholder="Address"></input>
+                                        <span asp-validation-for="Address" class="form-label input-error-text"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-0">
+                                        <label class="form-label">Upload Photos</label>
+                                        <input type="file" name="imageFiles" class="form-control" multiple />
+                                        <span class="form-label input-error-text"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                           
+
+                            @if (ViewData.ModelState.IsValid is false && ViewData.ModelState[string.Empty]?.Errors.Count > 0)
+                            {
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach (var error in ViewData.ModelState[string.Empty]!.Errors)
+                                        {
+                                            <li>@error.ErrorMessage</li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                            <div class="d-flex justify-content-end align-items-center">
+                                <button type="submit" class="btn btn-primary font-weight-bold">Create Pet</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const allBreeds = @Html.Raw(@Json.Serialize(Model.AllBreeds));
+            const allCities = @Html.Raw(@Json.Serialize(Model.AllCities));
+            console.log("All Breeds:", allBreeds);
+            console.log("All Cities:", allCities);
+
+            function populateDropdown(parentId, allItems, childId, defaultText, parentKey) {
+                const childSelect = document.querySelector(`#${childId}`);
+
+                childSelect.innerHTML = '';
+
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = `Select ${defaultText}`;
+                defaultOption.selected = true;
+                defaultOption.disabled = true;
+                defaultOption.hidden = true;
+                defaultOption.classList.add('default-option');
+
+                childSelect.appendChild(defaultOption);
+
+                if (parentId) {
+                    const filteredItems = allItems.filter(item => item[parentKey] === parseInt(parentId));
+                    console.log(`Filtered ${defaultText}:`, filteredItems);
+
+                    filteredItems.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.id;
+                        option.textContent = item.name;
+                        childSelect.appendChild(option);
+                    });
+
+                    console.log(`${defaultText} dropdown HTML:`, childSelect.innerHTML);
+                }
+
+                $(childSelect).niceSelect('update');
+            }
+
+            $('#BreedId, #CityId').niceSelect();
+            $('#SpeciesId, #CountryId').niceSelect();
+
+            $('#SpeciesId').on('change', function () {
+                const speciesId = $(this).val();
+                console.log("Selected Species ID:", speciesId);
+                populateDropdown(speciesId, allBreeds, 'BreedId', 'Breed', 'speciesId');
+            });
+
+            $('#CountryId').on('change', function () {
+                const countryId = $(this).val();
+                console.log("Selected Country ID:", countryId);
+                populateDropdown(countryId, allCities, 'CityId', 'City', 'countryId');
+            });
+
+            const initialSpeciesId = $('#SpeciesId').val();
+            if (initialSpeciesId) {
+                populateDropdown(initialSpeciesId, allBreeds, 'BreedId', 'Breed', 'speciesId');
+            }
+
+            const initialCountryId = $('#CountryId').val();
+            if (initialCountryId) {
+                populateDropdown(initialCountryId, allCities, 'CityId', 'City', 'countryId');
+            }
+        });
+    </script>
+}

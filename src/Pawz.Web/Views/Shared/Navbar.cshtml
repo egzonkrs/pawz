@@ -29,9 +29,22 @@
                         @if (UserAccessor.IsUserAuthenticated())
                         {
                             <li class="nav-item">
-                                <a class="nav-link font-weight-bold text-dark" asp-controller="Pet" asp-action="MyPets">
+                                <a class="nav-link font-weight-bold text-dark" asp-controller="Users" asp-action="Profile">
                                     Dashboard
                                 </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle font-weight-bold text-dark" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Pet
+                                    <span>
+                                        <i class="fa fa-angle-down"></i>
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Pet" asp-action="Create">Create</a>
+                                    </li>
+                                </ul>
                             </li>
                         }
                         <li class="nav-item dropdown dropdown-slide @@pages">
@@ -50,11 +63,6 @@
                                     <a class="dropdown-item @@contact" asp-controller="Home" asp-action="ContactUs">Contact Us</a>
                                 </li>
                             </ul>
-                        </li>
-                        <li class="nav-item dropdown dropdown-slide @@dashboard">
-                            <a class="nav-link dropdown-toggle font-weight-bold text-dark" asp-controller="Home" asp-action="WishList">
-                                Wish list
-                            </a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto mt-10">
