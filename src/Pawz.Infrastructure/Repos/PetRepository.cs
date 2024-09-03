@@ -17,12 +17,18 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
         _context = context;
     }
 
+    /// <summary>
+    /// Asynchronously retrieves all pets from the database, including their related entities such as PetImages, Breed, Species, User, and Location.
+    /// This method ensures that the associated data is loaded together with the pets to avoid multiple queries or lazy loading issues.
+    /// </summary>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+    /// <returns>An IEnumerable of Pet objects with their related entities fully loaded.</returns>
     public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default)
     {
         return await _dbSet
             .Include(p => p.PetImages)
-            .Include(p => p.Breed) // First include Breed
-            .ThenInclude(b => b.Species) // Then include Species through Breed
+            .Include(p => p.Breed)
+            .ThenInclude(b => b.Species)
             .Include(u => u.User)
             .Include(l => l.Location)
             // .Include(ar => ar.AdoptionRequests)
