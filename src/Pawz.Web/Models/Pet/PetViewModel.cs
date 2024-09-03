@@ -1,4 +1,5 @@
 using Pawz.Web.Models.Breed;
+using Pawz.Web.Models.PetImage;
 using System;
 using System.Collections.Generic;
 

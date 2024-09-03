@@ -15,30 +15,23 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto main-nav">
                         <li class="nav-item">
-                            <a class="nav-link font-weight-bold text-dark" asp-controller="Home"
-                                asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item dropdown dropdown-slide @@dashboard">
-                            <a class="nav-link dropdown-toggle font-weight-bold text-dark" asp-controller="Home"
-                                asp-action="Adopt">
+                            <a class="nav-link dropdown-toggle text-dark" asp-controller="Home" asp-action="Adopt">
                                 Adopt
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown dropdown-slide @@dashboard">
-                            <a class="nav-link dropdown-toggle" asp-controller="Pet" asp-action="Index">
-                                Pets
                             </a>
                         </li>
                         @if (UserAccessor.IsUserAuthenticated())
                         {
                             <li class="nav-item">
-                                <a class="nav-link font-weight-bold text-dark" asp-controller="Users" asp-action="Profile">
+                                <a class="nav-link text-dark" asp-controller="Users" asp-action="Profile">
                                     Dashboard
                                 </a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle font-weight-bold text-dark" href="#"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
                                     Pet
                                     <span>
                                         <i class="fa fa-angle-down"></i>
@@ -46,14 +39,19 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
+                                        <a class="dropdown-item" asp-controller="Pet" asp-action="Index">
+                                            View
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a class="dropdown-item" asp-controller="Pet" asp-action="Create">Create</a>
                                     </li>
                                 </ul>
                             </li>
                         }
                         <li class="nav-item dropdown dropdown-slide @@pages">
-                            <a class="nav-link dropdown-toggle font-weight-bold text-dark" href="#"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
                                 Pages
                                 <span>
                                     <i class="fa fa-angle-down"></i>

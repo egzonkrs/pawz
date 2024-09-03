@@ -1,7 +1,7 @@
 using Pawz.Web.Models.Pet;
 using System;
 
-namespace Pawz.Web.Models;
+namespace Pawz.Web.Models.PetImage;
 public class PetImageViewModel
 {
     public int Id { get; set; }
