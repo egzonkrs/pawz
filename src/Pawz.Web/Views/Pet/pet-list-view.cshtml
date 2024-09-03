@@ -1,4 +1,4 @@
-@model IEnumerable<Pawz.Web.Models.PetViewModel>
+@model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
 
 @foreach (var pet in Model)
 {
@@ -16,7 +16,7 @@
                                 <span class="font-weight-bold">@pet.Name</span>
                                 <ul class="list-inline mt-2 mb-3">
                                     <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>
-                                            @(pet.Species.Name)</span></li>
+                                            @(pet.Breed.Species.Name)</span></li>
                                     <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>
                                             @(pet.Breed.Name)</span></li>
                                     <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>

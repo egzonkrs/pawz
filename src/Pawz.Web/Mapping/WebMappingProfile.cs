@@ -6,6 +6,10 @@ using Pawz.Application.Models.PetModels;
 using Pawz.Application.Models.SpeciesModels;
 using Pawz.Domain.Entities;
 using Pawz.Web.Models;
+using Pawz.Web.Models.Breed;
+using Pawz.Web.Models.Pet;
+using Pawz.Web.Models.Species;
+using Pawz.Web.Models.User;
 
 namespace Pawz.Web.Mapping;
 

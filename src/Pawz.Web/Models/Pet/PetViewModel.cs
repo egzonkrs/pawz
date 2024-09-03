@@ -1,7 +1,8 @@
+using Pawz.Web.Models.Breed;
 using System;
 using System.Collections.Generic;
 
-namespace Pawz.Web.Models;
+namespace Pawz.Web.Models.Pet;
 
 public class PetViewModel
 {

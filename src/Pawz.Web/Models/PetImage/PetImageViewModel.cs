@@ -1,3 +1,4 @@
+using Pawz.Web.Models.Pet;
 using System;
 
 namespace Pawz.Web.Models;

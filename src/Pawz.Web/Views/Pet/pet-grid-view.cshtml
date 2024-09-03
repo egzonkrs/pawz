@@ -1,4 +1,4 @@
-@model IEnumerable<Pawz.Web.Models.PetViewModel>
+@model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
 
 <div class="product-grid-list">
     <div class="row mt-30">
@@ -19,7 +19,7 @@
                         </h4>
                         <p class="card-text">@pet.About</p>
                         <ul class="list-inline">
-                            <li><strong>Species:</strong> @(pet.Species.Name)</li>
+                            <li><strong>Species:</strong> @(pet.Breed.Species.Name)</li>
                             <li><strong>Breed:</strong> @(pet.Breed.Name)</li>
                             <li><strong>Location:</strong> @(pet.LocationCity) </li>
                             <li><strong>Age:</strong> @pet.AgeYears years and @pet.AgeMonths months</li>
