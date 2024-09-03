@@ -1,5 +1,4 @@
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
@@ -52,7 +51,7 @@ public class PetService : IPetService
     /// <param name="pet">The pet entity to create.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A result indicating whether the creation was successful.</returns>
-    public async Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, IEnumerable<IFormFile> imageFiles, CancellationToken cancellationToken)
+    public async Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken)
     {
         try
         {
@@ -89,7 +88,7 @@ public class PetService : IPetService
                 return Result<bool>.Failure(PetErrors.CreationFailed);
             }
 
-            foreach (var imageFile in imageFiles)
+            foreach (var imageFile in petCreateRequest.ImageFiles)
             {
                 var uploadedFileName = await _fileUploaderService.UploadFileAsync(imageFile);
                 var fileName = uploadedFileName.Value;
