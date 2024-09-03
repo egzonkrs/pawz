@@ -1,4 +1,3 @@
-using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
 using System;
 
