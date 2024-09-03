@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
@@ -102,7 +103,7 @@ public class PetController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(PetCreateViewModel petCreateViewModel, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(PetCreateViewModel petCreateViewModel, IEnumerable<IFormFile> imageFiles, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(petCreateViewModel, cancellationToken);
 
@@ -134,6 +135,7 @@ public class PetController : Controller
         }
 
         var petCreateRequest = _mapper.Map<PetCreateRequest>(petCreateViewModel);
+        petCreateRequest.ImageFiles = petCreateViewModel.ImageFiles;
         var petCreateResult = await _petService.CreatePetAsync(petCreateRequest, cancellationToken);
 
         if (petCreateResult.IsSuccess is false)
@@ -164,8 +166,9 @@ public class PetController : Controller
         }
 
         return RedirectToAction("Index", "Home");
-    }
 
+
+    }
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
         var pet = await _petService.GetPetByIdAsync(id, cancellationToken);

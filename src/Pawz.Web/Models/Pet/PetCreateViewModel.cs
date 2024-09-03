@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Web.Models.Breed;
 using Pawz.Web.Models.City;
@@ -101,4 +102,10 @@ public class PetCreateViewModel
     /// A list of all available cities.
     /// </summary>
     public List<CityViewModel> AllCities { get; set; }
+
+    /// <summary>
+    /// Gets or sets the collection of image files associated with the pet.
+    /// These files will be uploaded and stored as part of the pet's profile.
+    /// </summary>
+    public IEnumerable<IFormFile> ImageFiles { get; set; }
 }

@@ -10,7 +10,7 @@
             <div class="col-lg-8 col-md-10 align-item-center">
                 <div class="border mb-4">
                     <h3 class="bg-gray p-4">Create Pet</h3>
-                    <form asp-action="Create" method="post">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
                         <fieldset class="p-4">
                             <div class="row">
                                 <div class="col-md-4">
@@ -124,7 +124,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-0">
                                         <label class="form-label">Upload Photos</label>
-                                        <input type="file" class="form-control" multiple />
+                                        <input type="file" name="imageFiles" class="form-control" multiple />
                                         <span class="form-label input-error-text"></span>
                                     </div>
                                 </div>

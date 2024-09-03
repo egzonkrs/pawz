@@ -7,6 +7,7 @@ using Pawz.Domain.Abstractions;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
 using Pawz.Infrastructure.Repos;
+using Pawz.Infrastructure.Services;
 using System.Configuration;
 
 namespace Pawz.Web.Modules;
@@ -40,6 +41,8 @@ public class DataModule : IModule
         services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
         services.AddScoped<IBreedRepository, BreedRepository>();
         services.AddScoped<ISpeciesRepository, SpeciesRepository>();
+        services.AddScoped<IPetImageRepository, PetImageRepository>();
+        services.AddScoped<IFileUploaderService, FileUploaderService>();
         services.AddScoped<ILocationRepository, LocationRepository>();
         services.AddScoped<ICountryRepository, CountryRepository>();
         services.AddScoped<ICityRepository, CityRepository>();
