@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Pawz.Application.Models;
 using Pawz.Application.Models.Pet;
 using Pawz.Domain.Common;
@@ -17,7 +16,7 @@ public interface IPetService
     /// <param name="pet">The pet entity to create.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
-    Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, IEnumerable<IFormFile> imageFiles, CancellationToken cancellationToken);
+    Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves all pets.
