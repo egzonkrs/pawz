@@ -135,7 +135,8 @@ public class PetController : Controller
         }
 
         var petCreateRequest = _mapper.Map<PetCreateRequest>(petCreateViewModel);
-        var petCreateResult = await _petService.CreatePetAsync(petCreateRequest, imageFiles, cancellationToken);
+        petCreateRequest.ImageFiles = petCreateViewModel.ImageFiles;
+        var petCreateResult = await _petService.CreatePetAsync(petCreateRequest, cancellationToken);
 
         if (petCreateResult.IsSuccess is false)
         {
