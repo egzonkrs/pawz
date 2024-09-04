@@ -11,7 +11,7 @@ public class PetViewModel
     public int Id { get; set; }
     public string Name { get; set; }
     public string About { get; set; }
-    public ICollection<PetImageViewModel> PetImages { get; set; } = new List<PetImageViewModel>();
+    public List<PetImageViewModel> PetImages { get; set; } = new List<PetImageViewModel>();
     public BreedViewModel Breed { get; set; }
     public string LocationCity { get; set; }
     public int AgeYears { get; set; }

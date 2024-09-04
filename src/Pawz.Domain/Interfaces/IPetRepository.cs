@@ -29,4 +29,16 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A collection of pets associated with the specified user.</returns>
     Task<IEnumerable<Pet>> GetByUserIdAsync(string userId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Asynchronously retrieves a single Pet entity by its unique ID, including all related entities such as PetImages, Breed, Species, User, and Location.
+    /// This method uses eager loading to fetch the associated data in a single query to avoid multiple round-trips to the database.
+    /// </summary>
+    /// <param name="id">The unique identifier of the Pet to retrieve.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
+    /// <returns>
+    /// A task representing the asynchronous operation, containing the Pet entity with all related entities included, 
+    /// or null if no pet with the specified ID is found.
+    /// </returns>
+    Task<Pet> GetPetByIdWithRelatedEntitiesAsync(int id, CancellationToken cancellationToken = default);
 }

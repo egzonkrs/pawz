@@ -35,6 +35,28 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .ToListAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// Retrieves a single Pet entity by its ID, including all related entities such as PetImages, Breed, Species, User, and Location.
+    /// This method uses eager loading to ensure all related entities are loaded in the same query to prevent additional database calls.
+    /// </summary>
+    /// <param name="id">The unique identifier of the Pet to retrieve.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the asynchronous operation if needed.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains the Pet entity with all related entities loaded, 
+    /// or null if no pet with the specified ID is found.
+    /// </returns>
+    public async Task<Pet> GetPetByIdWithRelatedEntitiesAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(p => p.PetImages)
+            .Include(p => p.Breed)
+                .ThenInclude(b => b.Species)
+            .Include(p => p.User)
+            .Include(p => p.Location)
+            //.Include(p => p.AdoptionRequests) 
+            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+    }
+
     public async Task<int> CountPetsAsync(CancellationToken cancellationToken = default)
     {
         return await _dbSet.CountAsync(cancellationToken);
