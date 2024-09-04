@@ -56,14 +56,16 @@ public class PetController : Controller
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var pets = await _petService.GetAllPetsAsync(cancellationToken);
-        return View(pets.Value);
+        var result = await _petService.GetAllPetsWithRelatedEntities(cancellationToken);
+        var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
+        return View(petViewModels);
     }
 
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {
-        var pet = await _petService.GetPetByIdAsync(id, cancellationToken);
-        return View(pet.Value);
+        var result = await _petService.GetPetByIdAsync(id, cancellationToken);
+        var petViewModel = _mapper.Map<PetViewModel>(result.Value);
+        return View(petViewModel);
     }
 
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
@@ -142,7 +144,7 @@ public class PetController : Controller
             }).ToList();
 
             validationResult.AddErrorsToModelState(ModelState);
-
+            TempData["ErrorMessage"] = "Failed to create the pet! Please try again!";
             return View(petCreateViewModel);
         }
 
@@ -184,6 +186,8 @@ public class PetController : Controller
         petCreateViewModel.Cities = new SelectList(citiesList, "Id", "Name");
 
         return View(petCreateViewModel);
+        TempData["SuccessMessage"] = "Pet created successfully!";
+        return RedirectToAction("Details", "Pet");
     }
 
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
@@ -224,4 +228,3 @@ public class PetController : Controller
         return View(petResponses);
     }
 }
-

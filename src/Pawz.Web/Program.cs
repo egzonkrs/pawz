@@ -1,7 +1,17 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Pawz.Domain.Entities;
+using Pawz.Domain.Interfaces;
+using Pawz.Infrastructure.Data;
+using Pawz.Infrastructure.Data.Seed;
 using Pawz.Web.Extensions;
 using Pawz.Web.Modules;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +30,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseStatusCodePagesWithReExecute("/Error/{0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

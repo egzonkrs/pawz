@@ -1,8 +1,7 @@
-using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
 using System;
 
-namespace Pawz.Web.Models;
+namespace Pawz.Web.Models.User;
 
 public class UserPetViewModel
 {

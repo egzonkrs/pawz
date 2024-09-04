@@ -3,7 +3,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models.Identity;
-using Pawz.Application.Models;
 using Pawz.Application.Models.Pet;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models;
