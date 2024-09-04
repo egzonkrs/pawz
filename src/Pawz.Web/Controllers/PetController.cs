@@ -60,7 +60,8 @@ public class PetController : Controller
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var pets = await _petService.GetAllPetsAsync(cancellationToken);
-        return View(pets.Value);
+        var petViewModel = _mapper.Map<IEnumerable<PetViewModel>>(pets.Value);
+        return View(petViewModel);
     }
 
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)

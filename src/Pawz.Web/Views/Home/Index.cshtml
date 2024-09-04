@@ -1,4 +1,4 @@
-@model IEnumerable<Pawz.Domain.Entities.Pet>
+@model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
 @{
 ViewData["Title"] = "Home Page";
 }
@@ -83,7 +83,8 @@ ViewData["Title"] = "Home Page";
                                         <!-- <div class="price">$200</div> -->
                                         <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">
                                             <!-- Assuming you have a method to get the image URL -->
-                                            <img src="@pet.PetImages.FirstOrDefault()?.ImageUrl" alt="@pet.Name" class="img-fluid"/>
+                                            <img src="@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")"
+                                                 alt="Pet Image" class="img-fluid"/>
                                         </a>
                                     </div>
                                     <div class="card-body">
