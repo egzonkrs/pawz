@@ -60,13 +60,5 @@ public class PetCreateViewModelValidator : AbstractValidator<PetCreateViewModel>
         RuleFor(x => x.ImageFiles)
               .NotNull().WithMessage("At least one image is required.")
               .Must(images => images != null && images.Any()).WithMessage("You must upload at least one image.");
-
-        RuleForEach(x => x.ImageFiles).ChildRules(images =>
-        {
-            images.RuleFor(image => image.Length).LessThanOrEqualTo(5 * 1024 * 1024).WithMessage("Each image must be 5MB or smaller."); // 5MB limit
-            images.RuleFor(image => image.ContentType).Must(contentType =>
-                contentType == "image/jpeg" || contentType == "image/png" || contentType == "image/jpg" || contentType == "image/giff")
-                .WithMessage("Only JPEG, JPG, PNG or GIFF images are allowed.");
-        });
     }
 }
