@@ -31,6 +31,8 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .ThenInclude(b => b.Species)
             .Include(u => u.User)
             .Include(l => l.Location)
+             .ThenInclude(l => l.City)
+                .ThenInclude(c => c.Country)
             // .Include(ar => ar.AdoptionRequests)
             .ToListAsync(cancellationToken);
     }
