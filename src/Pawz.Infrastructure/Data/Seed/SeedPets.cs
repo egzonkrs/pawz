@@ -23,8 +23,7 @@ public class SeedPets
             {
                 Name = "Buddy",
                 BreedId = 1,
-                AgeYears = 3,
-                AgeMonths = 5,
+                AgeYears = "3-7 Years",
                 About = "Friendly and playful dog.",
                 Price = 300.00m,
                 Status = PetStatus.Pending,
@@ -37,8 +36,7 @@ public class SeedPets
             {
                 Name = "Max",
                 BreedId = 2,
-                AgeYears = 2,
-                AgeMonths = 2,
+                AgeYears = "0-3 Months",
                 About = "Loyal and intelligent dog.",
                 Price = 250.00m,
                 Status = PetStatus.Approved,
@@ -51,8 +49,7 @@ public class SeedPets
             {
                 Name = "Whiskers",
                 BreedId = 3,
-                AgeYears = 1,
-                AgeMonths = 0,
+                AgeYears = "3-7 Years",
                 About = "Quiet and affectionate cat.",
                 Price = 150.00m,
                 Status = PetStatus.Rejected,
@@ -65,8 +62,7 @@ public class SeedPets
             {
                 Name = "Mittens",
                 BreedId = 4,
-                AgeYears = 3,
-                AgeMonths = 3,
+                AgeYears = "3-6 Months",
                 About = "Active and social cat.",
                 Price = 200.00m,
                 Status = PetStatus.Pending,
