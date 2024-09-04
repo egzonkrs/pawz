@@ -131,7 +131,7 @@
                                         <label asp-for="ImageFiles" class="form-label">Upload Photos</label>
                                         <input type="file" asp-for="ImageFiles" class="form-control" multiple />
                                         <span asp-validation-for="ImageFiles" class="form-label input-error-text"></span>
-                                        
+                                     
                                     </div>
                                 </div>
                             </div>
@@ -143,8 +143,6 @@
                                         @foreach (var error in ViewData.ModelState[string.Empty]!.Errors)
                                         {
                                             <li>@error.ErrorMessage</li>
-                                            <div asp-validation-summary="All" class="text-danger"></div>
-
                                         }
                                     </ul>
                                 </div>
