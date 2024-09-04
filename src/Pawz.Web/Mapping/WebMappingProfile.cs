@@ -39,5 +39,7 @@ public class WebMappingProfile : Profile
         CreateMap<SpeciesRequest, SpeciesViewModel>().ReverseMap();
 
         CreateMap<Species, SpeciesViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
+
+        CreateMap<ApplicationUser, UserViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
     }
 }
