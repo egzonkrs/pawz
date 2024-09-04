@@ -107,17 +107,18 @@ public class PetController : Controller
     {
         var validationResult = await _validator.ValidateAsync(petCreateViewModel, cancellationToken);
 
+        var breedsResult = await _breedService.GetAllBreedsAsync(cancellationToken);
+        var speciesResult = await _speciesService.GetAllSpeciesAsync(cancellationToken);
+        var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
+        var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
+
+        var speciesList = speciesResult.Value ?? new List<Species>();
+        var breedsList = breedsResult.Value ?? new List<Breed>();
+        var countriesList = countriesResult.Value ?? new List<Country>();
+        var citiesList = citiesResult.Value ?? new List<City>();
+
         if (validationResult.IsValid is false)
         {
-            var breedsResult = await _breedService.GetAllBreedsAsync(cancellationToken);
-            var speciesResult = await _speciesService.GetAllSpeciesAsync(cancellationToken);
-            var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
-            var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
-
-            var speciesList = speciesResult.Value ?? new List<Species>();
-            var breedsList = breedsResult.Value ?? new List<Breed>();
-            var countriesList = countriesResult.Value ?? new List<Country>();
-            var citiesList = citiesResult.Value ?? new List<City>();
 
             petCreateViewModel.Species = new SelectList(speciesList, "Id", "Name");
             petCreateViewModel.Breeds = new SelectList(breedsList, "Id", "Name");
@@ -130,6 +131,13 @@ public class PetController : Controller
                 SpeciesId = x.SpeciesId,
             }).ToList();
 
+            petCreateViewModel.AllCities = citiesList.Select(x => new CityViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                CountryId = x.CountryId,
+            }).ToList();
+
             validationResult.AddErrorsToModelState(ModelState);
             return View(petCreateViewModel);
         }
@@ -140,16 +148,6 @@ public class PetController : Controller
 
         if (petCreateResult.IsSuccess is false)
         {
-            var breedsResult = await _breedService.GetAllBreedsAsync(cancellationToken);
-            var speciesResult = await _speciesService.GetAllSpeciesAsync(cancellationToken);
-            var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
-            var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
-
-            var speciesList = speciesResult.Value ?? new List<Species>();
-            var breedsList = breedsResult.Value ?? new List<Breed>();
-            var countriesList = countriesResult.Value ?? new List<Country>();
-            var citiesList = citiesResult.Value ?? new List<City>();
-
             petCreateViewModel.Species = new SelectList(speciesList, "Id", "Name");
             petCreateViewModel.Breeds = new SelectList(breedsList, "Id", "Name");
             petCreateViewModel.Countries = new SelectList(countriesList, "Id", "Name");
@@ -161,11 +159,29 @@ public class PetController : Controller
                 SpeciesId = x.SpeciesId,
             }).ToList();
 
+            petCreateViewModel.AllCities = citiesList.Select(x => new CityViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                CountryId = x.CountryId,
+            }).ToList();
+
             petCreateResult.AddErrorsToModelState(ModelState);
             return View(petCreateViewModel);
         }
+        // Redirect to home on success
+        if (petCreateResult.IsSuccess)
+        {
+            return RedirectToAction("Index", "Home");
+        }
 
-        return RedirectToAction("Index", "Home");
+        // If something went wrong, reload dropdown lists and return the view
+        petCreateViewModel.Species = new SelectList(speciesList, "Id", "Name");
+        petCreateViewModel.Breeds = new SelectList(breedsList, "Id", "Name");
+        petCreateViewModel.Countries = new SelectList(countriesList, "Id", "Name");
+        petCreateViewModel.Cities = new SelectList(citiesList, "Id", "Name");
+
+        return View(petCreateViewModel);
 
 
     }
