@@ -1,5 +1,6 @@
 using Pawz.Domain.Entities;
 using Pawz.Web.Models.Breed;
+using Pawz.Web.Models.Location;
 using Pawz.Web.Models.PetImage;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ public class PetViewModel
     public string About { get; set; }
     public List<PetImageViewModel> PetImages { get; set; } = new List<PetImageViewModel>();
     public BreedViewModel Breed { get; set; }
-    public string LocationCity { get; set; }
+    public LocationViewModel Location { get; set; }
     public int AgeYears { get; set; }
     public int AgeMonths { get; set; }
     public UserViewModel User { get; set; }

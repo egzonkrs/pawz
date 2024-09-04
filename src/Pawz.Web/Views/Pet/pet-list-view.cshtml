@@ -22,7 +22,7 @@
                                     <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>
                                             @(pet.User.FirstName) @(pet.User.LastName)</span></li>
                                     <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>
-                                            @(pet.LocationCity)
+                                            @(pet.Location?.City?.Name)
                                         </span></li>
                                     <li class="list-inline-item"><span><i class="fa fa-calendar"></i>
                                             @pet.CreatedAt.ToString("d MMMM yyyy")</span></li>

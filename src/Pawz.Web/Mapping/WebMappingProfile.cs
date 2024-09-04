@@ -6,6 +6,7 @@ using Pawz.Application.Models.PetModels;
 using Pawz.Application.Models.SpeciesModels;
 using Pawz.Domain.Entities;
 using Pawz.Web.Models.Breed;
+using Pawz.Web.Models.Location;
 using Pawz.Web.Models.Pet;
 using Pawz.Web.Models.PetImage;
 using Pawz.Web.Models.Species;
@@ -41,5 +42,11 @@ public class WebMappingProfile : Profile
         CreateMap<Species, SpeciesViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
 
         CreateMap<ApplicationUser, UserViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
+
+        CreateMap<Location, LocationViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
+
+        CreateMap<City, CityViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
+
+        CreateMap<Country, CountryViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
     }
 }
