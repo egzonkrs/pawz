@@ -144,6 +144,7 @@ public class PetController : Controller
             }).ToList();
 
             validationResult.AddErrorsToModelState(ModelState);
+
             TempData["ErrorMessage"] = "Failed to create the pet! Please try again!";
             return View(petCreateViewModel);
         }
@@ -185,7 +186,6 @@ public class PetController : Controller
         petCreateViewModel.Countries = new SelectList(countriesList, "Id", "Name");
         petCreateViewModel.Cities = new SelectList(citiesList, "Id", "Name");
 
-        return View(petCreateViewModel);
         TempData["SuccessMessage"] = "Pet created successfully!";
         return RedirectToAction("Details", "Pet");
     }
