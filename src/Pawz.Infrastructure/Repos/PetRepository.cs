@@ -21,11 +21,11 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     {
         return await _dbSet
             .Include(p => p.PetImages)
-            .Include(p => p.Breed) // First include Breed
-            .ThenInclude(b => b.Species) // Then include Species through Breed
+            .Include(p => p.Breed) 
+            .ThenInclude(b => b.Species) 
             .Include(u => u.User)
             .Include(l => l.Location)
-            // .Include(ar => ar.AdoptionRequests)
+            //TODO .Include(ar => ar.AdoptionRequests)
             .ToListAsync(cancellationToken);
     }
 
