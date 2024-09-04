@@ -1,7 +1,6 @@
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
@@ -12,6 +11,7 @@ using Pawz.Web.Extensions;
 using Pawz.Web.Models.Breed;
 using Pawz.Web.Models.City;
 using Pawz.Web.Models.Pet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -103,7 +103,7 @@ public class PetController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(PetCreateViewModel petCreateViewModel, IEnumerable<IFormFile> imageFiles, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(PetCreateViewModel petCreateViewModel, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(petCreateViewModel, cancellationToken);
 
@@ -119,6 +119,10 @@ public class PetController : Controller
 
         if (validationResult.IsValid is false)
         {
+            foreach (var state in ModelState)
+            {
+                Console.WriteLine($"{state.Key}: {string.Join(", ", state.Value.Errors.Select(e => e.ErrorMessage))}");
+            }
             petCreateViewModel.Species = new SelectList(speciesList, "Id", "Name");
             petCreateViewModel.Breeds = new SelectList(breedsList, "Id", "Name");
             petCreateViewModel.Countries = new SelectList(countriesList, "Id", "Name");
@@ -138,11 +142,11 @@ public class PetController : Controller
             }).ToList();
 
             validationResult.AddErrorsToModelState(ModelState);
+
             return View(petCreateViewModel);
         }
 
         var petCreateRequest = _mapper.Map<PetCreateRequest>(petCreateViewModel);
-        petCreateRequest.ImageFiles = petCreateViewModel.ImageFiles;
         var petCreateResult = await _petService.CreatePetAsync(petCreateRequest, cancellationToken);
 
         if (petCreateResult.IsSuccess is false)
