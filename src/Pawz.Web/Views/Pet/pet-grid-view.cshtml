@@ -1,0 +1,35 @@
+@model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
+
+<div class="product-grid-list">
+    <div class="row mt-30">
+        @foreach (var pet in Model)
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="product-item">
+                    <div class="card">
+                        <img class="card-img-top img-fluid"
+                            src="@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")"
+                            alt="Pet Image" />
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="@Url.Action("Details", "Pet", new { id = pet.Id })">
+                                @pet.Name
+                            </a>
+                        </h4>
+                        <p class="card-text">@pet.About</p>
+                        <ul class="list-inline">
+                            <li><strong>Species:</strong> @(pet.Breed.Species.Name)</li>
+                            <li><strong>Breed:</strong> @(pet.Breed.Name)</li>
+                            <li><strong>Location:</strong> @(pet.LocationCity) </li>
+                            <li><strong>Age:</strong> @pet.AgeYears years and @pet.AgeMonths months</li>
+                            <li><strong>Posted by:</strong> @(pet.PostedBy) </li>
+                            <li><strong>Date:</strong> @pet.CreatedAt.ToString("d MMMM yyyy")</li>
+                            <li><strong>Price:</strong> @pet.Price.ToString("C")</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

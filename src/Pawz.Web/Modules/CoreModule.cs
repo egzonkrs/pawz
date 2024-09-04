@@ -2,7 +2,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Pawz.Application.Mappings;
 using Pawz.Domain.Abstractions;
 using Pawz.Web.Mapping;
-using System;
 
 namespace Pawz.Web.Modules;
 
@@ -12,7 +11,6 @@ public class CoreModule : IModule
     {
         services.AddControllersWithViews();
         services.AddRouting(options => options.LowercaseUrls = true);
-        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        services.AddAutoMapper(typeof(MappingProfiles).Assembly, typeof(WebMappingProfile).Assembly);
+        services.AddAutoMapper(typeof(ApplicationMappingProfiles).Assembly, typeof(WebMappingProfile).Assembly);
     }
 }
