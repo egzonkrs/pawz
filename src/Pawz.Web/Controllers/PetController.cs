@@ -119,7 +119,6 @@ public class PetController : Controller
 
         if (validationResult.IsValid is false)
         {
-
             petCreateViewModel.Species = new SelectList(speciesList, "Id", "Name");
             petCreateViewModel.Breeds = new SelectList(breedsList, "Id", "Name");
             petCreateViewModel.Countries = new SelectList(countriesList, "Id", "Name");
@@ -169,22 +168,20 @@ public class PetController : Controller
             petCreateResult.AddErrorsToModelState(ModelState);
             return View(petCreateViewModel);
         }
-        // Redirect to home on success
+
         if (petCreateResult.IsSuccess)
         {
             return RedirectToAction("Index", "Home");
         }
 
-        // If something went wrong, reload dropdown lists and return the view
         petCreateViewModel.Species = new SelectList(speciesList, "Id", "Name");
         petCreateViewModel.Breeds = new SelectList(breedsList, "Id", "Name");
         petCreateViewModel.Countries = new SelectList(countriesList, "Id", "Name");
         petCreateViewModel.Cities = new SelectList(citiesList, "Id", "Name");
 
         return View(petCreateViewModel);
-
-
     }
+
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
         var pet = await _petService.GetPetByIdAsync(id, cancellationToken);
