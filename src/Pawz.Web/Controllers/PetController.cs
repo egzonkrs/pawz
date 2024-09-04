@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
@@ -8,10 +9,6 @@ using Pawz.Application.Models;
 using Pawz.Application.Models.Pet;
 using Pawz.Domain.Entities;
 using Pawz.Web.Extensions;
-using Pawz.Web.Models.Breed;
-using Pawz.Web.Models.City;
-using Pawz.Web.Models.Pet;
-using Pawz.Web.Models;
 using Pawz.Web.Models.Breed;
 using Pawz.Web.Models.City;
 using Pawz.Web.Models.Pet;
@@ -59,15 +56,16 @@ public class PetController : Controller
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var pets = await _petService.GetAllPetsAsync(cancellationToken);
-        var petViewModel = _mapper.Map<IEnumerable<PetViewModel>>(pets.Value);
-        return View(petViewModel);
+        var result = await _petService.GetAllPetsWithRelatedEntities(cancellationToken);
+        var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
+        return View(petViewModels);
     }
 
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {
-        var pet = await _petService.GetPetByIdAsync(id, cancellationToken);
-        return View(pet.Value);
+        var result = await _petService.GetPetByIdAsync(id, cancellationToken);
+        var petViewModel = _mapper.Map<PetViewModel>(result.Value);
+        return View(petViewModel);
     }
 
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
@@ -107,7 +105,7 @@ public class PetController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(PetCreateViewModel petCreateViewModel, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(PetCreateViewModel petCreateViewModel, IEnumerable<IFormFile> imageFiles, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(petCreateViewModel, cancellationToken);
 
@@ -139,6 +137,7 @@ public class PetController : Controller
         }
 
         var petCreateRequest = _mapper.Map<PetCreateRequest>(petCreateViewModel);
+        petCreateRequest.ImageFiles = petCreateViewModel.ImageFiles;
         var petCreateResult = await _petService.CreatePetAsync(petCreateRequest, cancellationToken);
 
         if (petCreateResult.IsSuccess is false)
@@ -169,9 +168,9 @@ public class PetController : Controller
         }
 
         return RedirectToAction("Index", "Home");
+
+
     }
-
-
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
         var pet = await _petService.GetPetByIdAsync(id, cancellationToken);
@@ -209,9 +208,5 @@ public class PetController : Controller
         var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
         return View(petResponses);
     }
-
-    public IActionResult PetDetails()
-    {
-        return View();
-    }
 }
+

@@ -12,8 +12,8 @@ using Pawz.Infrastructure.Data;
 namespace Pawz.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240827090753_RemovePetsFromSpecies")]
-    partial class RemovePetsFromSpecies
+    [Migration("20240902135612_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

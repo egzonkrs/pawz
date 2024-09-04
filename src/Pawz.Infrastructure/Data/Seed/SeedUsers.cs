@@ -28,7 +28,9 @@ public class SeedUsers
             UserName = "bob",
             Email = "bob@example.com",
             FirstName = "bob",
-            LastName = "doe"
+            LastName = "doe",
+            IsDeleted = false,
+            Address = "123 Main St"
         };
 
         var userJane = new ApplicationUser

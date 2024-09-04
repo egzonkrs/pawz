@@ -1,0 +1,53 @@
+@model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
+
+@foreach (var pet in Model)
+{
+    <div class="ad-listing-list mt-20">
+        <a href="@Url.Action("Details", "Pet", new { id = pet.Id })" class="text-decoration-none text-dark">
+            <div class="row p-lg-3 p-sm-5 p-4">
+                <div class="col-lg-4 align-self-center">
+                    <img src="@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")"
+                        class="img-fluid w-100" style="height: 200px; object-fit: cover;" alt="@pet.Name">
+                </div>
+                <div class="col-lg-8" style="display: flex; align-items: center; justify-content: space-between;">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-10">
+                            <div class="ad-listing-content">
+                                <span class="font-weight-bold">@pet.Name</span>
+                                <ul class="list-inline mt-2 mb-3">
+                                    <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>
+                                            @(pet.Breed.Species.Name)</span></li>
+                                    <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>
+                                            @(pet.Breed.Name)</span></li>
+                                    <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>
+                                            @(pet.LocationCity) 
+                                        </span></li>
+                                    <li class="list-inline-item"><span><i class="fa fa-calendar"></i>
+                                            @pet.CreatedAt.ToString("d MMMM yyyy")</span></li>
+                                </ul>
+                                <p class="pr-5">@pet.About</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 align-self-center">
+                            <div class="product-ratings float-lg-right pb-3">
+                                <ul class="list-inline">
+                                    @for (int i = 0; i < 5; i++)
+                                    {
+                                        if (i < 4) // Example: Show 4 out of 5 stars
+                                        {
+                                            <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+}

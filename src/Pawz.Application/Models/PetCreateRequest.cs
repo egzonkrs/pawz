@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Http;
 using Pawz.Domain.Enums;
+using System.Collections.Generic;
 
 namespace Pawz.Application.Models;
 
@@ -67,4 +69,10 @@ public class PetCreateRequest
     /// Status of the pet (e.g., 'Pending', 'Approved', 'Rejected').
     /// </summary>
     public PetStatus Status { get; set; }
+
+    /// <summary>
+    /// Gets or sets the collection of image files associated with the pet.
+    /// These files will be uploaded and stored as part of the pet's profile.
+    /// </summary>
+    public IEnumerable<IFormFile> ImageFiles { get; set; }
 }

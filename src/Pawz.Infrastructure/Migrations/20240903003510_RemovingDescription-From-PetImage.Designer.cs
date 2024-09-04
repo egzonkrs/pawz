@@ -12,8 +12,8 @@ using Pawz.Infrastructure.Data;
 namespace Pawz.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240826105552_Init")]
-    partial class Init
+    [Migration("20240903003510_RemovingDescription-From-PetImage")]
+    partial class RemovingDescriptionFromPetImage
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -345,6 +345,57 @@ namespace Pawz.Infrastructure.Migrations
                     b.ToTable("Breeds");
                 });
 
+            modelBuilder.Entity("Pawz.Domain.Entities.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("Cities");
+                });
+
+            modelBuilder.Entity("Pawz.Domain.Entities.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Countries");
+                });
+
             modelBuilder.Entity("Pawz.Domain.Entities.Location", b =>
                 {
                     b.Property<int>("Id")
@@ -353,13 +404,12 @@ namespace Pawz.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("City")
+                    b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
@@ -371,11 +421,9 @@ namespace Pawz.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.ToTable("Locations");
                 });
@@ -425,9 +473,6 @@ namespace Pawz.Infrastructure.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("SpeciesId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -438,8 +483,6 @@ namespace Pawz.Infrastructure.Migrations
                     b.HasIndex("LocationId");
 
                     b.HasIndex("PostedByUserId");
-
-                    b.HasIndex("SpeciesId");
 
                     b.ToTable("Pets");
                 });
@@ -454,10 +497,6 @@ namespace Pawz.Infrastructure.Migrations
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -602,6 +641,28 @@ namespace Pawz.Infrastructure.Migrations
                     b.Navigation("Species");
                 });
 
+            modelBuilder.Entity("Pawz.Domain.Entities.City", b =>
+                {
+                    b.HasOne("Pawz.Domain.Entities.Country", "Country")
+                        .WithMany("Cities")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("Pawz.Domain.Entities.Location", b =>
+                {
+                    b.HasOne("Pawz.Domain.Entities.City", "City")
+                        .WithMany("Locations")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+                });
+
             modelBuilder.Entity("Pawz.Domain.Entities.Pet", b =>
                 {
                     b.HasOne("Pawz.Domain.Entities.Breed", "Breed")
@@ -621,10 +682,6 @@ namespace Pawz.Infrastructure.Migrations
                         .HasForeignKey("PostedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Pawz.Domain.Entities.Species", null)
-                        .WithMany("Pets")
-                        .HasForeignKey("SpeciesId");
 
                     b.Navigation("Breed");
 
@@ -662,6 +719,16 @@ namespace Pawz.Infrastructure.Migrations
                     b.Navigation("Pets");
                 });
 
+            modelBuilder.Entity("Pawz.Domain.Entities.City", b =>
+                {
+                    b.Navigation("Locations");
+                });
+
+            modelBuilder.Entity("Pawz.Domain.Entities.Country", b =>
+                {
+                    b.Navigation("Cities");
+                });
+
             modelBuilder.Entity("Pawz.Domain.Entities.Location", b =>
                 {
                     b.Navigation("Pets");
@@ -677,8 +744,6 @@ namespace Pawz.Infrastructure.Migrations
             modelBuilder.Entity("Pawz.Domain.Entities.Species", b =>
                 {
                     b.Navigation("Breeds");
-
-                    b.Navigation("Pets");
                 });
 #pragma warning restore 612, 618
         }
