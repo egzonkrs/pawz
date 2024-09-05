@@ -35,6 +35,12 @@ public class UsersController : Controller
         return View();
     }
 
+    [HttpGet]
+    public IActionResult EditProfileForm()
+    {
+        return View(); 
+    }
+
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {
