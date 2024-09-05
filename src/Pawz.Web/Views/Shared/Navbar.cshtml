@@ -7,29 +7,31 @@
                 <a href="@Url.Action("Index","Home")" class="navbar-brand">
                     <img src="~/template/images/pawz.png" alt="" width="55" height="55">
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto main-nav">
                         <li class="nav-item">
-                            <a class="nav-link font-weight-bold text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item dropdown dropdown-slide @@dashboard">
-                            <a class="nav-link dropdown-toggle font-weight-bold text-dark" asp-controller="Home" asp-action="Adopt">
+                            <a class="nav-link dropdown-toggle text-dark" asp-controller="Home" asp-action="Adopt">
                                 Adopt
                             </a>
                         </li>
                         @if (UserAccessor.IsUserAuthenticated())
                         {
                             <li class="nav-item">
-                                <a class="nav-link font-weight-bold text-dark" asp-controller="Users" asp-action="Profile">
+                                <a class="nav-link text-dark" asp-controller="Users" asp-action="Profile">
                                     Dashboard
                                 </a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle font-weight-bold text-dark" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
                                     Pet
                                     <span>
                                         <i class="fa fa-angle-down"></i>
@@ -37,13 +39,19 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
+                                        <a class="dropdown-item" asp-controller="Pet" asp-action="Index">
+                                            View
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a class="dropdown-item" asp-controller="Pet" asp-action="Create">Create</a>
                                     </li>
                                 </ul>
                             </li>
                         }
                         <li class="nav-item dropdown dropdown-slide @@pages">
-                            <a class="nav-link dropdown-toggle font-weight-bold text-dark" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
                                 Pages
                                 <span>
                                     <i class="fa fa-angle-down"></i>
@@ -52,10 +60,12 @@
                             <!-- Dropdown list -->
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="dropdown-item @@about" asp-controller="Home" asp-action="AboutUs">About Us</a>
+                                    <a class="dropdown-item @@about" asp-controller="Home" asp-action="AboutUs">About
+                                        Us</a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item @@contact" asp-controller="Home" asp-action="ContactUs">Contact Us</a>
+                                    <a class="dropdown-item @@contact" asp-controller="Home"
+                                        asp-action="ContactUs">Contact Us</a>
                                 </li>
                             </ul>
                         </li>

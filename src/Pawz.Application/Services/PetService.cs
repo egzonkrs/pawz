@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
 using Pawz.Application.Models.Pet;
+using Pawz.Application.Models.PetModels;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
@@ -277,6 +278,32 @@ public class PetService : IPetService
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve pets for UserId: {UserId}",
                              nameof(PetService), userId);
             return Result<IEnumerable<UserPetResponse>>.Failure(PetErrors.RetrievalError);
+        }
+    }
+
+    public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            _logger.LogInformation("Started retrieving all pets with related entities.");
+
+            var pets = await _petRepository.GetAllPetsWithRelatedEntities(cancellationToken);
+
+            if (pets is null)
+            {
+                _logger.LogWarning("No pets were found with related entities.");
+                return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
+            }
+
+            var petResponses = _mapper.Map<IEnumerable<PetResponse>>(pets);
+
+            _logger.LogInformation("Successfully retrieved all pets with related entities.");
+            return Result<IEnumerable<PetResponse>>.Success(petResponses);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets with related entities.", nameof(PetService));
+            return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
 }

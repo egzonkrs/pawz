@@ -1,3 +1,5 @@
+using Pawz.Web.Models.Species;
+
 namespace Pawz.Web.Models.Breed;
 
 public class BreedViewModel
@@ -16,4 +18,11 @@ public class BreedViewModel
     /// The Id of the species to which this breed belongs
     /// </summary>
     public int SpeciesId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the species information for the pet.
+    /// This property represents the species to which the pet belongs, 
+    /// and is encapsulated in a SpeciesViewModel object.
+    /// </summary>
+    public SpeciesViewModel Species { get; set; }
 }
