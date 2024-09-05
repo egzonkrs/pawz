@@ -97,7 +97,7 @@
                     </div>
                     <div class="widget user text-center">
                         <img class="rounded-circle img-fluid mb-5 px-5"
-                            src="@(UserAccessor.GetUserInfo("profilepicture") ?? "~/template/images/user/defaultAvatar.jpg")"
+                            src="@Model.User.ImageUrl ?? ~/template/images/user/defaultAvatar.jpg"
                             alt="@UserAccessor.GetUserName()'s Profile Picture">
                         <h4 class="text-capitalize"><a href="user-profile.html">@Model.User?.FirstName
                                 @Model.User?.LastName</a></h4>
