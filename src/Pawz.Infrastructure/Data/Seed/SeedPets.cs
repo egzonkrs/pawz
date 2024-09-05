@@ -75,8 +75,7 @@ public class SeedPets
             {
                 Name = "Rocky",
                 BreedId = 4,
-                AgeYears = 2,
-                AgeMonths = 7,
+                AgeYears = "3-6 Months",
                 About = "Active and social dog.",
                 Price = 200.00m,
                 Status = PetStatus.Pending,
@@ -89,8 +88,7 @@ public class SeedPets
             {
                 Name = "Kage",
                 BreedId = 4,
-                AgeYears = 3,
-                AgeMonths = 3,
+                AgeYears = "3-7 Years",
                 About = "Active and social dog.",
                 Price = 200.00m,
                 Status = PetStatus.Pending,
@@ -103,8 +101,7 @@ public class SeedPets
             {
                 Name = "Pobo",
                 BreedId = 4,
-                AgeYears = 3,
-                AgeMonths = 3,
+                AgeYears = "3-7 Years",
                 About = "Active and social dog.",
                 Price = 200.00m,
                 Status = PetStatus.Pending,

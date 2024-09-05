@@ -77,7 +77,7 @@
                                 <ul class="list-unstyled">
                                     <li><strong>Species:</strong> @(Model.Breed?.Species?.Name ?? "Unknown")</li>
                                     <li><strong>Breed:</strong> @(Model.Breed?.Name ?? "Unknown")</li>
-                                    <li><strong>Age:</strong> @Model.AgeYears years and @Model.AgeMonths months</li>
+                                    <li><strong>Age:</strong> @Model.AgeYears</li>
                                     <li><strong>Date Listed:</strong> @Model.CreatedAt.ToString("d MMMM yyyy")</li>
                                     <li><strong>Price:</strong> @Model.Price.ToString("C")</li>
                                 </ul>

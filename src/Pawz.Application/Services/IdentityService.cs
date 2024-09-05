@@ -78,7 +78,7 @@ public sealed class IdentityService : IIdentityService
 
             var user = new ApplicationUser
             {
-                UserName = request.FirstName,
+                UserName = Guid.NewGuid().ToString(),
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
