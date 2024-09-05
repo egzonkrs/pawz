@@ -31,7 +31,7 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     Task<IEnumerable<Pet>> GetByUserIdAsync(string userId, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Asynchronously retrieves a single Pet entity by its unique ID, including all related entities such as PetImages, Breed, Species, User, and Location.
+    /// Retrieves a single Pet entity by its unique ID, including all related entities such as PetImages, Breed, Species, User, and Location.
     /// This method uses eager loading to fetch the associated data in a single query to avoid multiple round-trips to the database.
     /// </summary>
     /// <param name="id">The unique identifier of the Pet to retrieve.</param>

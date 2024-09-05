@@ -56,6 +56,6 @@ public class DataModule : IModule
         services.AddScoped<ICountryService, CountryService>();
         services.AddScoped<ICityService, CityService>();
 
-        services.Configure<ApiSettings>(_configuration.GetSection("ApiSettings"));
+        services.Configure<ApiSettings>(_configuration.GetSection(ApiSettings.SectionName));
     }
 }

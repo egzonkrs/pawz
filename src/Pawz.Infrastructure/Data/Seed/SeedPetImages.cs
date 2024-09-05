@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Pawz.Application.Helpers;
 using Pawz.Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Data.Seed;
@@ -12,186 +10,48 @@ public class SeedPetImages
 {
     public static async Task SeedPetImageData(AppDbContext context)
     {
-        var petImagesExist = await context.PetImages.AnyAsync();
-        if (petImagesExist) return;
+        if (await context.PetImages.AnyAsync()) return;
 
-        var uploadedAt = DateTime.UtcNow;
+        var petImages = new List<PetImage>();
 
-        //Dog Images
-        var firstImageUrlForPet1 = await PetImageFetcher.FetchRandomDogImageUrlAsync();
-        var secondImageUrlForPet1 = await PetImageFetcher.FetchRandomDogImageUrlAsync();
-        var thirdImageUrlForPet1 = await PetImageFetcher.FetchRandomDogImageUrlAsync();
-        var fourthImageUrlForPet1 = await PetImageFetcher.FetchRandomDogImageUrlAsync();
+        // Seed Dog Images
+        petImages.AddRange(await CreatePetImagesAsync(petId: 1, imageCount: 4, isDog: true));
+        petImages.AddRange(await CreatePetImagesAsync(petId: 2, imageCount: 4, isDog: true));
 
-        var firstImageUrlForPet2 = await PetImageFetcher.FetchRandomDogImageUrlAsync();
-        var secondImageUrlForPet2 = await PetImageFetcher.FetchRandomDogImageUrlAsync();
-        var thirdImageUrlForPet2 = await PetImageFetcher.FetchRandomDogImageUrlAsync();
-        var fourthImageUrlForPet2 = await PetImageFetcher.FetchRandomDogImageUrlAsync();
-
-        //Cat Images
-        var firstImageUrlForPet3 = await PetImageFetcher.FetchRandomCatImageUrlAsync();
-        var secondImageUrlForPet3 = await PetImageFetcher.FetchRandomCatImageUrlAsync();
-        var thirdImageUrlForPet3 = await PetImageFetcher.FetchRandomCatImageUrlAsync();
-        var fourthImageUrlForPet3 = await PetImageFetcher.FetchRandomCatImageUrlAsync();
-
-        var firstImageUrlForPet4 = await PetImageFetcher.FetchRandomCatImageUrlAsync();
-        var secondImageUrlForPet4 = await PetImageFetcher.FetchRandomCatImageUrlAsync();
-        var thirdImageUrlForPet4 = await PetImageFetcher.FetchRandomCatImageUrlAsync();
-        var fourthImageUrlForPet4 = await PetImageFetcher.FetchRandomCatImageUrlAsync();
-
-        var petImages = new List<PetImage>
-        {
-                new PetImage
-                {
-                    PetId = 1,
-                    ImageUrl = firstImageUrlForPet1,
-                    IsPrimary = true,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-                new PetImage
-                {
-                    PetId = 1,
-                    ImageUrl = secondImageUrlForPet1,
-                    IsPrimary = false,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-                new PetImage
-                {
-                    PetId = 1,
-                    ImageUrl = thirdImageUrlForPet1,
-                    IsPrimary = false,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-                new PetImage
-                {
-                    PetId = 1,
-                    ImageUrl = fourthImageUrlForPet1,
-                    IsPrimary = false,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-                new PetImage
-                {
-                    PetId = 2,
-                    ImageUrl = firstImageUrlForPet2,
-                    IsPrimary = true,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-                new PetImage
-                {
-                    PetId = 2,
-                    ImageUrl = secondImageUrlForPet2,
-                    IsPrimary = false,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-                new PetImage
-                {
-                    PetId = 2,
-                    ImageUrl = thirdImageUrlForPet2,
-                    IsPrimary = false,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-                new PetImage
-                {
-                    PetId = 2,
-                    ImageUrl = fourthImageUrlForPet2,
-                    IsPrimary = false,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-                new PetImage
-                {
-                    PetId = 3,
-                    ImageUrl = firstImageUrlForPet3,
-                    IsPrimary = true,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-
-                new PetImage
-                {
-                    PetId = 3,
-                    ImageUrl = secondImageUrlForPet3,
-                    IsPrimary = false,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-
-                new PetImage
-                {
-                    PetId = 3,
-                    ImageUrl = thirdImageUrlForPet3,
-                    IsPrimary = false,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-
-                new PetImage
-                {
-                    PetId = 3,
-                    ImageUrl = fourthImageUrlForPet3,
-                    IsPrimary = false,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-                new PetImage
-                {
-                    PetId = 4,
-                    ImageUrl = firstImageUrlForPet4,
-                    IsPrimary = true,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-
-                new PetImage
-                {
-                    PetId = 4,
-                    ImageUrl = secondImageUrlForPet4,
-                    IsPrimary = false,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-                new PetImage
-                {
-                    PetId = 4,
-                    ImageUrl = thirdImageUrlForPet4,
-                    IsPrimary = false,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                },
-                new PetImage
-                {
-                    PetId = 4,
-                    ImageUrl = fourthImageUrlForPet4,
-                    IsPrimary = false,
-                    UploadedAt = uploadedAt,
-                    IsDeleted = false,
-                    DeletedAt = null
-                }
-            };
+        // Seed Cat Images
+        petImages.AddRange(await CreatePetImagesAsync(petId: 3, imageCount: 4, isDog: false));
+        petImages.AddRange(await CreatePetImagesAsync(petId: 4, imageCount: 4, isDog: false));
 
         context.PetImages.AddRange(petImages);
         await context.SaveChangesAsync();
+    }
+
+    private static async Task<IEnumerable<PetImage>> CreatePetImagesAsync(int petId, int imageCount, bool isDog)
+    {
+        var imageTasks = new List<Task<string>>();
+
+        for (int i = 0; i < imageCount; i++)
+        {
+            var fetchTask = isDog
+                ? PetImageFetcher.FetchRandomDogImageUrlAsync()
+                : PetImageFetcher.FetchRandomCatImageUrlAsync();
+            imageTasks.Add(fetchTask);
+        }
+
+        var imageUrls = await Task.WhenAll(imageTasks);
+
+        var images = new List<PetImage>();
+        for (int i = 0; i < imageUrls.Length; i++)
+        {
+            images.Add(new PetImage
+            {
+                PetId = petId,
+                ImageUrl = imageUrls[i],
+                IsPrimary = i == 0,
+                IsDeleted = false,
+                DeletedAt = null
+            });
+        }
+        return images;
     }
 }

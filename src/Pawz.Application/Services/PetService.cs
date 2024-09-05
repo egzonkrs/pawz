@@ -167,7 +167,6 @@ public class PetService : IPetService
                 return Result<PetResponse>.Failure(PetErrors.NotFound(petId));
             }
 
-            // Use AutoMapper to map the Pet entity to PetResponse DTO
             var petResponse = _mapper.Map<PetResponse>(pet);
 
             _logger.LogInformation("Successfully retrieved Pet with Id: {PetId}", petId);
