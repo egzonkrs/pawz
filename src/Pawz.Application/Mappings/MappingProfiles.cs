@@ -1,8 +1,7 @@
 using AutoMapper;
 using Pawz.Application.Models;
-using Pawz.Domain.Entities;
 using Pawz.Application.Models.Pet;
-using System.Linq;
+using Pawz.Domain.Entities;
 
 namespace Pawz.Application.Mappings;
 
@@ -12,8 +11,10 @@ public class MappingProfiles : Profile
     {
         CreateMap<PetCreateRequest, Pet>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
-        CreateMap<UserPetRequest,Pet>().ReverseMap();
-        CreateMap<Pet,UserPetResponse>().ReverseMap();
+        CreateMap<UserPetRequest, Pet>().ReverseMap();
+        CreateMap<Pet, UserPetResponse>().ReverseMap();
         CreateMap<UserPetRequest, UserPetResponse>().ReverseMap();
+        CreateMap<AdoptionRequestCreateRequest, AdoptionRequest>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
     }
 }
