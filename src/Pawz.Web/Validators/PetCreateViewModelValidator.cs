@@ -54,7 +54,7 @@ public class PetCreateViewModelValidator : AbstractValidator<PetCreateViewModel>
 
         RuleFor(x => x.PostalCode)
             .NotNull()
-            .NotEmpty().WithMessage("Postal code issssss required.")
+            .NotEmpty().WithMessage("Postal code is required.")
             .MaximumLength(10).WithMessage("Postal code must be 10 characters or fewer.");
 
         RuleFor(x => x.ImageFiles)
