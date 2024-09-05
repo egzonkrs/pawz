@@ -11,10 +11,6 @@ using Pawz.Web.Extensions;
 using Pawz.Web.Models.Breed;
 using Pawz.Web.Models.City;
 using Pawz.Web.Models.Pet;
-using Pawz.Web.Models;
-using Pawz.Web.Models.Breed;
-using Pawz.Web.Models.City;
-using Pawz.Web.Models.Pet;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -32,8 +28,10 @@ public class PetController : Controller
     private readonly ICountryService _countryService;
     private readonly ICityService _cityService;
     private readonly IValidator<PetCreateViewModel> _validator;
+    private readonly IValidator<AdoptionRequestCreateModel> _adoptionRequestValidator;
     private readonly IUserAccessor _userAccessor;
     private readonly IMapper _mapper;
+    private readonly IAdoptionRequestService _adoptionRequestService;
 
     public PetController(
         IPetService petService,
@@ -44,7 +42,9 @@ public class PetController : Controller
         ICityService cityService,
         IValidator<PetCreateViewModel> validator,
         IUserAccessor userAccessor,
-        IMapper mapper)
+        IMapper mapper,
+        IAdoptionRequestService adoptionRequestService,
+        IValidator<AdoptionRequestCreateModel> adoptionRequestValidator)
     {
         _petService = petService;
         _breedService = breedService;
@@ -55,6 +55,8 @@ public class PetController : Controller
         _validator = validator;
         _userAccessor = userAccessor;
         _mapper = mapper;
+        _adoptionRequestService = adoptionRequestService;
+        _adoptionRequestValidator = adoptionRequestValidator;
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -65,8 +67,27 @@ public class PetController : Controller
 
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {
-        var pet = await _petService.GetPetByIdAsync(id, cancellationToken);
-        return View(pet.Value);
+        var petResult = await _petService.GetPetByIdAsync(id, cancellationToken);
+        var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
+        var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
+
+        var countriesList = countriesResult.Value ?? new List<Country>();
+        var citiesList = citiesResult.Value ?? new List<City>();
+
+        var adoptionRequestCreateModel = new AdoptionRequestCreateModel
+        {
+            PetId = id,
+            Countries = new SelectList(countriesList, "Id", "Name"),
+            Cities = new SelectList(citiesList, "Id", "Name"),
+            AllCities = citiesList.Select(x => new CityViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                CountryId = x.CountryId,
+            }).ToList()
+        };
+
+        return View(adoptionRequestCreateModel);
     }
 
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
