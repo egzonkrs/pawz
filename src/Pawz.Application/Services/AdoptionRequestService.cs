@@ -1,12 +1,15 @@
-﻿using Pawz.Application.Interfaces;
-using Pawz.Domain.Entities;
-using Pawz.Domain.Interfaces;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Pawz.Application.Interfaces;
+using Pawz.Application.Models;
+using Pawz.Domain.Common;
+using Pawz.Domain.Entities;
+using Pawz.Domain.Enums;
+using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Pawz.Domain.Common;
 
 namespace Pawz.Application.Services;
 
@@ -15,22 +18,56 @@ public class AdoptionRequestService : IAdoptionRequestService
     private readonly IAdoptionRequestRepository _adoptionRequestRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<AdoptionService> _logger;
+    private readonly IMapper _mapper;
+    private readonly ILocationService _locationService;
+    private readonly IUserAccessor _userAccessor;
 
-    public AdoptionRequestService(IAdoptionRequestRepository adoptionRequestRepository, IUnitOfWork unitOfWork, ILogger<AdoptionService> logger)
+    public AdoptionRequestService(
+        IAdoptionRequestRepository adoptionRequestRepository,
+        IUnitOfWork unitOfWork,
+        ILogger<AdoptionService> logger,
+        IMapper mapper,
+        ILocationService locationService,
+        IUserAccessor userAccessor)
     {
         _adoptionRequestRepository = adoptionRequestRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
+        _mapper = mapper;
+        _locationService = locationService;
+        _userAccessor = userAccessor;
     }
 
-    public async Task<Result<bool>> CreateAdoptionRequestAsync(AdoptionRequest adoptionRequest, CancellationToken cancellationToken)
+    public async Task<Result<bool>> CreateAdoptionRequestAsync(AdoptionRequestCreateRequest adoptionRequestCreateRequest, CancellationToken cancellationToken)
     {
         try
         {
-            _logger.LogInformation("Started creating an Adoption Request with Id: {AdoptionRequestId} from UserId: {UserId}", adoptionRequest.Id,
-                adoptionRequest.RequesterUserId);
+            _logger.LogInformation("Started creating an Adoption Request with Id: {AdoptionRequestId} from UserId: {UserId}", adoptionRequestCreateRequest.Id,
+                adoptionRequestCreateRequest);
+
+            var location = new Location
+            {
+                CityId = adoptionRequestCreateRequest.CityId,
+                Address = adoptionRequestCreateRequest.Address,
+                PostalCode = adoptionRequestCreateRequest.PostalCode
+            };
+
+            var locationInsertResult = await _locationService.CreateLocationAsync(location, cancellationToken);
+
+            if (!locationInsertResult.IsSuccess)
+            {
+                _logger.LogError("Failed to create a location for the pet with Id: {AdoptionRequestId}", adoptionRequestCreateRequest.Id);
+                return Result<bool>.Failure(LocationErrors.CreationFailed);
+            }
+
+            var adoptionRequest = _mapper.Map<AdoptionRequest>(adoptionRequestCreateRequest);
+            adoptionRequest.RequestDate = DateTime.Now;
+            adoptionRequest.Location = locationInsertResult.Value;
+            adoptionRequest.RequesterUserId = _userAccessor.GetUserId();
+            adoptionRequest.Status = AdoptionRequestStatus.Pending;
 
             await _adoptionRequestRepository.InsertAsync(adoptionRequest, cancellationToken);
+
             var isAdoptionRequestCreated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
             if (isAdoptionRequestCreated)
@@ -47,7 +84,7 @@ public class AdoptionRequestService : IAdoptionRequestService
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to create a Adoption Request for the UserId: {UserId}",
-                nameof(AdoptionService), adoptionRequest.RequesterUserId);
+                nameof(AdoptionService), adoptionRequestCreateRequest.RequesterUserId);
             return Result<bool>.Failure(AdoptionRequestErrors.CreationUnexpectedError);
         }
     }
