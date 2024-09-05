@@ -11,7 +11,6 @@ using Pawz.Web.Extensions;
 using Pawz.Web.Models.Breed;
 using Pawz.Web.Models.City;
 using Pawz.Web.Models.Pet;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -121,10 +120,6 @@ public class PetController : Controller
 
         if (validationResult.IsValid is false)
         {
-            foreach (var state in ModelState)
-            {
-                Console.WriteLine($"{state.Key}: {string.Join(", ", state.Value.Errors.Select(e => e.ErrorMessage))}");
-            }
             petCreateViewModel.Species = new SelectList(speciesList, "Id", "Name");
             petCreateViewModel.Breeds = new SelectList(breedsList, "Id", "Name");
             petCreateViewModel.Countries = new SelectList(countriesList, "Id", "Name");
