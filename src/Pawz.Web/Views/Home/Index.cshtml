@@ -81,10 +81,18 @@ ViewData["Title"] = "Home Page";
                                 <div class="card h-100 shadow-sm px-3 py-2 pt-3 align-items-center position-relative">
                                     <div class="thumb-content">
                                         <!-- <div class="price">$200</div> -->
-                                        <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">
-                                            <!-- Assuming you have a method to get the image URL -->
-                                            <img src="@pet.PetImages.FirstOrDefault()?.ImageUrl" alt="@pet.Name" class="img-fluid"/>
-                                        </a>
+                                        @* <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">
+                                            <img src="@pet.PetImages.First().ImageUrl" alt="@pet.Name" class="img-fluid" />
+                                        </a> *@
+                                        @if (pet.PetImages != null && pet.PetImages.Any())
+                                        {
+                                            <img src="@pet.PetImages.FirstOrDefault().ImageUrl" alt="@pet.Name" class="img-fluid" />
+                                        }
+                                        else
+                                        {
+                                            <!-- Fallback image if no image is available -->
+                                            <img src="~/images/pets/20be4b32-0a57-4d9c-afa1-c9b7d70a1fdb.jpg" alt="No image available" class="img-fluid" />
+                                        }
                                     </div>
                                     <div class="card-body">
                                         <h4 class="card-title">
