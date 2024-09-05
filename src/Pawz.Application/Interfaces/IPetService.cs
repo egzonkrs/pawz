@@ -32,7 +32,7 @@ public interface IPetService
     /// <param name="petId">The ID of the pet to retrieve.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains the pet entity.</returns>
-    Task<Result<Pet>> GetPetByIdAsync(int petId, CancellationToken cancellationToken);
+    Task<Result<PetResponse>> GetPetByIdAsync(int petId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Updates an existing pet.

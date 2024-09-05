@@ -20,7 +20,10 @@
                                     <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>
                                             @(pet.Breed.Name)</span></li>
                                     <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>
-                                            @(pet.LocationCity) 
+                                            @(pet.User.FirstName) @(pet.User.LastName)</span></li>
+                                    <li class="list-inline-item"><span><i class="fa fa-folder-open-o"></i>
+                                            @pet.Location?.Address, @pet.Location?.City?.Name,
+                                            @pet.Location?.City?.Country?.Name
                                         </span></li>
                                     <li class="list-inline-item"><span><i class="fa fa-calendar"></i>
                                             @pet.CreatedAt.ToString("d MMMM yyyy")</span></li>

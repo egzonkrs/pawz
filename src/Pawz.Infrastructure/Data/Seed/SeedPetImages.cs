@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Pawz.Application.Helpers;
 using Pawz.Domain.Entities;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,52 +10,48 @@ public class SeedPetImages
 {
     public static async Task SeedPetImageData(AppDbContext context)
     {
-        var petImagesExist = await context.PetImages.AnyAsync();
-        if (petImagesExist) return;
+        if (await context.PetImages.AnyAsync()) return;
 
-        var uploadedAt = DateTime.UtcNow;
+        var petImages = new List<PetImage>();
 
-        var petImages = new List<PetImage>
-        {
-            new PetImage
-            {
-                PetId = 1,
-                ImageUrl = "https://picsum.photos/id/237/200/300",
-                IsPrimary = true,
-                UploadedAt = uploadedAt,
-                IsDeleted = false,
-                DeletedAt = null
-            },
-            new PetImage
-            {
-                PetId = 2,
-                ImageUrl = "https://picsum.photos/id/238/200/300",
-                IsPrimary = false,
-                UploadedAt = uploadedAt,
-                IsDeleted = false,
-                DeletedAt = null
-            },
-            new PetImage
-            {
-                PetId = 3,
-                ImageUrl = "https://picsum.photos/id/239/200/300",
-                IsPrimary = true,
-                UploadedAt = uploadedAt,
-                IsDeleted = false,
-                DeletedAt = null
-            },
-            new PetImage
-            {
-                PetId = 4,
-                ImageUrl = "https://picsum.photos/id/240/200/300",
-                IsPrimary = false,
-                UploadedAt = uploadedAt,
-                IsDeleted = false,
-                DeletedAt = null
-            }
-        };
+        // Seed Dog Images
+        petImages.AddRange(await CreatePetImagesAsync(petId: 1, imageCount: 4, isDog: true));
+        petImages.AddRange(await CreatePetImagesAsync(petId: 2, imageCount: 4, isDog: true));
+
+        // Seed Cat Images
+        petImages.AddRange(await CreatePetImagesAsync(petId: 3, imageCount: 4, isDog: false));
+        petImages.AddRange(await CreatePetImagesAsync(petId: 4, imageCount: 4, isDog: false));
 
         context.PetImages.AddRange(petImages);
         await context.SaveChangesAsync();
+    }
+
+    private static async Task<IEnumerable<PetImage>> CreatePetImagesAsync(int petId, int imageCount, bool isDog)
+    {
+        var imageTasks = new List<Task<string>>();
+
+        for (int i = 0; i < imageCount; i++)
+        {
+            var fetchTask = isDog
+                ? PetImageFetcher.FetchRandomDogImageUrlAsync()
+                : PetImageFetcher.FetchRandomCatImageUrlAsync();
+            imageTasks.Add(fetchTask);
+        }
+
+        var imageUrls = await Task.WhenAll(imageTasks);
+
+        var images = new List<PetImage>();
+        for (int i = 0; i < imageUrls.Length; i++)
+        {
+            images.Add(new PetImage
+            {
+                PetId = petId,
+                ImageUrl = imageUrls[i],
+                IsPrimary = i == 0,
+                IsDeleted = false,
+                DeletedAt = null
+            });
+        }
+        return images;
     }
 }
