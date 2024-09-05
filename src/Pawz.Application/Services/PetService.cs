@@ -20,30 +20,42 @@ public class PetService : IPetService
     private readonly IPetRepository _petRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<PetService> _logger;
+    private readonly IFileUploaderService _fileUploaderService;
+    private readonly IPetImageRepository _petImageRepository;
     private readonly IUserAccessor _userAccessor;
     private readonly IMapper _mapper;
     private readonly ILocationService _locationService;
 
-    public PetService(
-        IPetRepository petRepository,
-        IUnitOfWork unitOfWork,
-        ILogger<PetService> logger,
-        IUserAccessor userAccessor,
-        IMapper mapper,
-        ILocationService locationService)
+    public PetService(IPetRepository petRepository,
+                      IUnitOfWork unitOfWork,
+                      ILogger<PetService> logger,
+                      IFileUploaderService fileUploaderService,
+                      IPetImageRepository petImageRepository,
+                      IUserAccessor userAccessor,
+                      IMapper mapper,
+                      ILocationService locationService)
     {
         _petRepository = petRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
+        _fileUploaderService = fileUploaderService;
+        _petImageRepository = petImageRepository;
         _userAccessor = userAccessor;
         _mapper = mapper;
         _locationService = locationService;
     }
 
+    /// <summary>
+    /// Creates a new pet in the system.
+    /// </summary>
+    /// <param name="pet">The pet entity to create.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A result indicating whether the creation was successful.</returns>
     public async Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken)
     {
         try
         {
+            petCreateRequest.PostedByUserId = _userAccessor.GetUserId();
             _logger.LogInformation("Started creating a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
 
             var location = new Location
@@ -67,18 +79,41 @@ public class PetService : IPetService
             pet.Status = PetStatus.Available;
             pet.CreatedAt = DateTime.UtcNow;
 
-            await _petRepository.InsertAsync(pet, cancellationToken);
-
+            var petId = await _petRepository.InsertAsync(pet, cancellationToken);
             var petCreated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
-            if (petCreated)
+            if (petCreated is false)
             {
-                _logger.LogInformation("Successfully created a Pet with Id: {PetId} for UserId: {UserId}", pet.Id, petCreateRequest.PostedByUserId);
-                return Result<bool>.Success(true);
+                _logger.LogError("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
+                return Result<bool>.Failure(PetErrors.CreationFailed);
             }
 
-            _logger.LogWarning("Failed to create a Pet for UserId: {UserId}", petCreateRequest.PostedByUserId);
-            return Result<bool>.Failure(PetErrors.CreationFailed);
+            foreach (var imageFile in petCreateRequest.ImageFiles)
+            {
+                var uploadedFileName = await _fileUploaderService.UploadFileAsync(imageFile);
+                var fileName = uploadedFileName.Value;
+
+                var petImage = new PetImage
+                {
+                    PetId = pet.Id,
+                    ImageUrl = fileName,
+                    IsPrimary = false,
+                    UploadedAt = DateTime.UtcNow,
+                };
+
+                await _petImageRepository.InsertAsync(petImage, cancellationToken);
+            }
+
+            var arePetImagesSaved = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
+
+            if (arePetImagesSaved is false)
+            {
+                _logger.LogError("Failed to save pet images; the pet creation process cannot be completed.");
+                return Result<bool>.Failure(PetErrors.CreationFailed);
+            }
+
+            _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
+            return Result<bool>.Success();
         }
         catch (Exception ex)
         {

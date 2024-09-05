@@ -457,3 +457,11 @@ $RECYCLE.BIN/
 *.db
 *.db-shm
 *.db-wal
+
+##
+## Photo extensions of pets.
+##
+*.jpg
+*.jpeg
+*.png
+*.gif

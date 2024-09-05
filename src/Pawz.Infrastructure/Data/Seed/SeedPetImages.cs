@@ -23,7 +23,6 @@ public class SeedPetImages
                 ImageUrl = "https://picsum.photos/id/237/200/300",
                 IsPrimary = true,
                 UploadedAt = uploadedAt,
-                Description = "Dog Image 1",
                 IsDeleted = false,
                 DeletedAt = null
             },
@@ -33,7 +32,6 @@ public class SeedPetImages
                 ImageUrl = "https://picsum.photos/id/238/200/300",
                 IsPrimary = false,
                 UploadedAt = uploadedAt,
-                Description = "Dog Image 2",
                 IsDeleted = false,
                 DeletedAt = null
             },
@@ -43,7 +41,6 @@ public class SeedPetImages
                 ImageUrl = "https://picsum.photos/id/239/200/300",
                 IsPrimary = true,
                 UploadedAt = uploadedAt,
-                Description = "Cat Image 1",
                 IsDeleted = false,
                 DeletedAt = null
             },
@@ -53,7 +50,6 @@ public class SeedPetImages
                 ImageUrl = "https://picsum.photos/id/240/200/300",
                 IsPrimary = false,
                 UploadedAt = uploadedAt,
-                Description = "Cat Image 2",
                 IsDeleted = false,
                 DeletedAt = null
             }
