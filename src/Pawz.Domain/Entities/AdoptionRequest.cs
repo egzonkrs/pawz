@@ -52,6 +52,16 @@ public class AdoptionRequest : IEntity<int>, ISoftDeletion
     public ApplicationUser User { get; set; }
 
     /// <summary>
+    /// 
+    /// </summary>
+    public int LocationId { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public Location Location { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether the entity is soft-deleted.
     /// This property is implemented from the <see cref="ISoftDelete"/> interface.
     /// </summary>
