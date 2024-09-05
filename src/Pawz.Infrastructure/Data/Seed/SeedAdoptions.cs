@@ -15,14 +15,13 @@ public class SeedAdoptions
         var adoptionsExists = await context.Adoptions.AnyAsync();
         if (adoptionsExists) return;
 
-
         var adoptions = new List<Adoption>
         {
             new Adoption
             {
                 AdoptionRequestId = 3,
                 AdoptionDate = DateTime.UtcNow,
-                AdoptionFee = 2,
+                AdoptionFee = 0,
                 IsDeleted = false,
                 DeletedAt = null
             },
@@ -30,7 +29,7 @@ public class SeedAdoptions
             {
                 AdoptionRequestId = 4,
                 AdoptionDate = DateTime.UtcNow,
-                AdoptionFee = 3,
+                AdoptionFee = 0,
                 IsDeleted = false,
                 DeletedAt = null
             },
