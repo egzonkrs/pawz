@@ -22,7 +22,7 @@ else
             {
                 <tr>
                     <td class="product-thumb">
-                        <img src="@pet.PetImages.First().ImageUrl" alt="Pet Photo" class="rounded-circle" style="width: 100px; height: 100px;">
+                        <img src="@(pet.PetImages.First().ImageUrl.StartsWith("http") ? pet.PetImages.First().ImageUrl : Url.Content("~/images/pets/" + pet.PetImages.First().ImageUrl))" alt="Pet Photo" class="rounded-circle" style="width: 100px; height: 100px;">
                     </td>
                     <td class="product-details" style="padding-left: 30px;">
                         <h3 class="title" style="font-size: 16px;">@pet.Name</h3>
