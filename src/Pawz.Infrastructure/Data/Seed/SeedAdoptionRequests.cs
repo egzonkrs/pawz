@@ -3,8 +3,6 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Data.Seed;
@@ -28,6 +26,7 @@ public class SeedAdoptionRequests
                 ResponseDate = DateTime.UtcNow,
                 PetId = 1,
                 RequesterUserId = userJane.Id,
+                LocationId = 1,
                 IsDeleted = false,
                 DeletedAt = null
             },
@@ -38,6 +37,7 @@ public class SeedAdoptionRequests
                 ResponseDate = DateTime.UtcNow,
                 PetId = 2,
                 RequesterUserId = userJohn.Id,
+                LocationId = 2,
                 IsDeleted = false,
                 DeletedAt = null
             },
@@ -48,6 +48,7 @@ public class SeedAdoptionRequests
                 ResponseDate = DateTime.UtcNow,
                 PetId = 3,
                 RequesterUserId = userJane.Id,
+                LocationId = 3,
                 IsDeleted = false,
                 DeletedAt = null
             },
@@ -58,6 +59,7 @@ public class SeedAdoptionRequests
                 ResponseDate = DateTime.UtcNow,
                 PetId = 4,
                 RequesterUserId = userJohn.Id,
+                LocationId = 2,
                 IsDeleted = false,
                 DeletedAt = null
             }
