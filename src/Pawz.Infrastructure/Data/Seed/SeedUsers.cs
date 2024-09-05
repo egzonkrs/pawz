@@ -21,7 +21,7 @@ public class SeedUsers
             Email = "john@example.com",
             FirstName = "john",
             LastName = "doe",
-            ImageUrl = "https://avatar.iran.liara.run/public"
+            ImageUrl = "https://api.dicebear.com/9.x/micah/svg?seed=Bandit"
         };
 
         var userBob = new ApplicationUser
@@ -32,7 +32,7 @@ public class SeedUsers
             LastName = "doe",
             IsDeleted = false,
             Address = "123 Main St",
-            ImageUrl = "https://avatar.iran.liara.run/public"
+            ImageUrl = "https://api.dicebear.com/9.x/micah/svg?seed=Loki"
         };
 
         var userJane = new ApplicationUser
