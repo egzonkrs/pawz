@@ -74,6 +74,48 @@ public class SeedPets
                 LocationId = 1,
                 PostedByUserId = userJane.Id,
                 IsDeleted = false
+            },
+            new Pet
+            {
+                Name = "Rocky",
+                BreedId = 4,
+                AgeYears = 2,
+                AgeMonths = 7,
+                About = "Active and social dog.",
+                Price = 200.00m,
+                Status = PetStatus.Pending,
+                CreatedAt = DateTime.UtcNow,
+                LocationId = 1,
+                PostedByUserId = userJane.Id,
+                IsDeleted = false
+            },
+            new Pet
+            {
+                Name = "Kage",
+                BreedId = 4,
+                AgeYears = 3,
+                AgeMonths = 3,
+                About = "Active and social dog.",
+                Price = 200.00m,
+                Status = PetStatus.Pending,
+                CreatedAt = DateTime.UtcNow,
+                LocationId = 1,
+                PostedByUserId = userJane.Id,
+                IsDeleted = false
+            },
+            new Pet
+            {
+                Name = "Pobo",
+                BreedId = 4,
+                AgeYears = 3,
+                AgeMonths = 3,
+                About = "Active and social dog.",
+                Price = 200.00m,
+                Status = PetStatus.Pending,
+                CreatedAt = DateTime.UtcNow,
+                LocationId = 1,
+                PostedByUserId = userJane.Id,
+                IsDeleted = false
             }
         };
 

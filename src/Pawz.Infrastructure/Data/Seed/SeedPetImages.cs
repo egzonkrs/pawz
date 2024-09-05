@@ -17,6 +17,9 @@ public class SeedPetImages
         // Seed Dog Images
         petImages.AddRange(await CreatePetImagesAsync(petId: 1, imageCount: 4, isDog: true));
         petImages.AddRange(await CreatePetImagesAsync(petId: 2, imageCount: 4, isDog: true));
+        petImages.AddRange(await CreatePetImagesAsync(petId: 5, imageCount: 4, isDog:true));
+        petImages.AddRange(await CreatePetImagesAsync(petId: 6, imageCount: 4, isDog:true));
+        petImages.AddRange(await CreatePetImagesAsync(petId: 7, imageCount: 4, isDog:true));
 
         // Seed Cat Images
         petImages.AddRange(await CreatePetImagesAsync(petId: 3, imageCount: 4, isDog: false));
