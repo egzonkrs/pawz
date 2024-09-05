@@ -17,16 +17,48 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
         _context = context;
     }
 
+    /// <summary>
+    /// Asynchronously retrieves all pets from the database, including their related entities such as PetImages, Breed, Species, User, and Location.
+    /// This method ensures that the associated data is loaded together with the pets to avoid multiple queries or lazy loading issues.
+    /// </summary>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+    /// <returns>An IEnumerable of Pet objects with their related entities fully loaded.</returns>
     public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default)
     {
         return await _dbSet
             .Include(p => p.PetImages)
-            .Include(p => p.Breed) 
-            .ThenInclude(b => b.Species) 
+            .Include(p => p.Breed)
+            .ThenInclude(b => b.Species)
             .Include(u => u.User)
             .Include(l => l.Location)
-            //TODO .Include(ar => ar.AdoptionRequests)
+             .ThenInclude(l => l.City)
+                .ThenInclude(c => c.Country)
+            // .Include(ar => ar.AdoptionRequests)
             .ToListAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Retrieves a single Pet entity by its ID, including all related entities such as PetImages, Breed, Species, User, and Location.
+    /// This method uses eager loading to ensure all related entities are loaded in the same query to prevent additional database calls.
+    /// </summary>
+    /// <param name="id">The unique identifier of the Pet to retrieve.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the asynchronous operation if needed.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains the Pet entity with all related entities loaded, 
+    /// or null if no pet with the specified ID is found.
+    /// </returns>
+    public async Task<Pet> GetPetByIdWithRelatedEntitiesAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(p => p.PetImages)
+            .Include(p => p.Breed)
+                .ThenInclude(b => b.Species)
+            .Include(p => p.User)
+            .Include(p => p.Location)
+                .ThenInclude(p => p.City)
+                    .ThenInclude(p => p.Country)
+            //TODO .Include(p => p.AdoptionRequests) 
+            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
     public async Task<int> CountPetsAsync(CancellationToken cancellationToken = default)

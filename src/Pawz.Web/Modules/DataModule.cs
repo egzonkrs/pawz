@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Pawz.Application.Helpers;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Services;
 using Pawz.Domain.Abstractions;
@@ -55,5 +56,7 @@ public class DataModule : IModule
         services.AddScoped<ILocationService, LocationService>();
         services.AddScoped<ICountryService, CountryService>();
         services.AddScoped<ICityService, CityService>();
+
+        services.Configure<ApiSettings>(_configuration.GetSection(ApiSettings.SectionName));
     }
 }
