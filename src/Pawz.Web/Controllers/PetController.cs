@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace Pawz.Web.Controllers;
 
-[Authorize]
+// [Authorize]
 public class PetController : Controller
 {
     private readonly IPetService _petService;

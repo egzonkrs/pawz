@@ -153,28 +153,30 @@ public class PetService : IPetService
     /// <param name="petId">The ID of the pet to retrieve.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A result containing the pet entity if found, or an error if not found.</returns>
-    public async Task<Result<Pet>> GetPetByIdAsync(int petId, CancellationToken cancellationToken)
+    public async Task<Result<PetResponse>> GetPetByIdAsync(int petId, CancellationToken cancellationToken)
     {
         try
         {
             _logger.LogInformation("Started retrieving Pet with Id: {PetId}", petId);
 
-            var pet = await _petRepository.GetByIdAsync(petId, cancellationToken);
+            var pet = await _petRepository.GetPetByIdWithRelatedEntitiesAsync(petId, cancellationToken);
 
             if (pet is null)
             {
                 _logger.LogWarning("Pet with Id: {PetId} was not found.", petId);
-                return Result<Pet>.Failure(PetErrors.NotFound(petId));
+                return Result<PetResponse>.Failure(PetErrors.NotFound(petId));
             }
 
+            var petResponse = _mapper.Map<PetResponse>(pet);
+
             _logger.LogInformation("Successfully retrieved Pet with Id: {PetId}", petId);
-            return Result<Pet>.Success(pet);
+            return Result<PetResponse>.Success(petResponse);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve Pet with Id: {PetId}",
                              nameof(PetService), petId);
-            return Result<Pet>.Failure(PetErrors.RetrievalError);
+            return Result<PetResponse>.Failure(PetErrors.RetrievalError);
         }
     }
 
