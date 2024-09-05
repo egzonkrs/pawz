@@ -1,4 +1,5 @@
-﻿using Pawz.Domain.Common;
+using Pawz.Application.Models;
+using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading;
@@ -14,7 +15,7 @@ public interface IAdoptionRequestService
     /// <param name="adoptionRequest">The pet entity to create.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
-    Task<Result<bool>> CreateAdoptionRequestAsync(AdoptionRequest adoptionRequest, CancellationToken cancellationToken);
+    Task<Result<bool>> CreateAdoptionRequestAsync(AdoptionRequestCreateRequest adoptionRequestCreateRequest, CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves all adoptions.
