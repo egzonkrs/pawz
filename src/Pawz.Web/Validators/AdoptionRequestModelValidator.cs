@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Pawz.Web.Models.Pet;
 
 namespace Pawz.Web.Validators;
@@ -7,20 +7,22 @@ public class AdoptionRequestModelValidator : AbstractValidator<AdoptionRequestCr
 {
     public AdoptionRequestModelValidator()
     {
-        RuleFor(x => x.Countries)
+        RuleFor(x => x.CityId)
             .NotNull()
-            .NotEmpty()
-            .WithMessage("County is required");
+            .GreaterThan(0).WithMessage("City must be selected.");
 
-        RuleFor(x => x.Cities)
+        RuleFor(x => x.CountryId)
             .NotNull()
-            .NotEmpty()
-            .WithMessage("City is required");
+            .GreaterThan(0).WithMessage("Country must be selected.");
 
         RuleFor(x => x.Address)
             .NotNull()
-            .NotEmpty()
-            .WithMessage("Address is required");
-    }
+            .NotEmpty().WithMessage("Address is required.")
+            .MaximumLength(200).WithMessage("Address must be 200 characters or fewer.");
 
+        RuleFor(x => x.PostalCode)
+            .NotNull()
+            .NotEmpty().WithMessage("Postal code is required.")
+            .MaximumLength(10).WithMessage("Postal code must be 10 characters or fewer.");
+    }
 }
