@@ -34,4 +34,14 @@ public interface IUserAccessor
     /// </summary>
     /// <returns>True if the user is authenticated, otherwise false.</returns>
     bool IsUserAuthenticated();
+
+    /// <summary>
+    /// Retrieves specific information about the currently logged-in user based on the provided info type.
+    /// </summary>
+    /// <returns>
+    /// A string containing the requested information (e.g., profile picture URL, address, phone number),
+    /// or null if the information is not available or the infoType is invalid.
+    /// </returns>
+    string GetUserInfo(string infoType);
+
 }

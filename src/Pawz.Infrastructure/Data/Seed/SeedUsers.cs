@@ -20,7 +20,8 @@ public class SeedUsers
             UserName = "john",
             Email = "john@example.com",
             FirstName = "john",
-            LastName = "doe"
+            LastName = "doe",
+            ImageUrl = "https://avatar.iran.liara.run/public"
         };
 
         var userBob = new ApplicationUser
@@ -30,7 +31,8 @@ public class SeedUsers
             FirstName = "bob",
             LastName = "doe",
             IsDeleted = false,
-            Address = "123 Main St"
+            Address = "123 Main St",
+            ImageUrl = "https://avatar.iran.liara.run/public"
         };
 
         var userJane = new ApplicationUser
@@ -38,11 +40,26 @@ public class SeedUsers
             UserName = "jane",
             Email = "jane@example.com",
             FirstName = "jane",
-            LastName = "doe"
+            LastName = "doe",
+            IsDeleted = false,
+            Address = "123 Main St",
+            ImageUrl = ""
+        };
+
+        var userNina = new ApplicationUser
+        {
+            UserName = "nina",
+            Email = "nina@example.com",
+            FirstName = "nina",
+            LastName = "doe",
+            IsDeleted = false,
+            Address = "123 Main St",
+            ImageUrl = ""
         };
 
         await userManager.CreateAsync(userJohn, "Password@123");
         await userManager.CreateAsync(userJane, "Password@123");
         await userManager.CreateAsync(userBob, "Password@123");
+        await userManager.CreateAsync(userNina, "Password@123");
     }
 }

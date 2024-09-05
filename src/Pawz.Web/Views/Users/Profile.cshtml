@@ -9,7 +9,8 @@
                     <!-- User Profile-->
                     <div class="widget user-dashboard-profile">
                         <div class="profile-thumb">
-                            <img src="~/template/images/user/user-thumb.jpg" alt="" class="rounded-circle">
+                            <img src="@(UserAccessor.GetUserInfo("profilepicture") ?? "~/template/images/user/defaultAvatar.jpg")"
+                                alt="@UserAccessor.GetUserName()'s Profile Picture" class="rounded-circle">
                         </div>
                         <h5 class="text-center">@UserAccessor.GetUserName()</h5>
                         <p>Joined February 06, 2020</p>
@@ -24,7 +25,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" class="partial-view-link" data-url="@Url.Action("AdoptionRequest", "Users")">
+                                <a href="#" class="partial-view-link"
+                                    data-url="@Url.Action("AdoptionRequest", "Users")">
                                     <i class="fa fa-handshake-o"></i> Adoption Requests
                                 </a>
                             </li>
@@ -81,16 +83,18 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
+        $(document).ready(function ()
+        {
             $('#partialViewContainer').load('@Url.Action("MyPets", "Users")');
 
-            $('.partial-view-link').click(function (e) {
+            $('.partial-view-link').click(function (e)
+            {
                 e.preventDefault();
                 var url = $(this).data('url');
-                var title = $(this).text().trim(); 
+                var title = $(this).text().trim();
 
                 $('#partialViewContainer').load(url);
-                $('#viewTitle').text(title); 
+                $('#viewTitle').text(title);
             });
         });
     </script>
