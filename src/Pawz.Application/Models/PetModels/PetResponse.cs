@@ -14,8 +14,7 @@ public class PetResponse
     public Species Species { get; set; }
     public int BreedId { get; set; }
     public Breed Breed { get; set; }
-    public int AgeYears { get; set; }
-    public int AgeMonths { get; set; }
+    public string AgeYears { get; set; }
     public string About { get; set; }
     public decimal Price { get; set; }
     public PetStatus Status { get; set; }

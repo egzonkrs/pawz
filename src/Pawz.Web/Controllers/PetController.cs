@@ -1,7 +1,6 @@
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
@@ -105,22 +104,22 @@ public class PetController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(PetCreateViewModel petCreateViewModel, IEnumerable<IFormFile> imageFiles, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(PetCreateViewModel petCreateViewModel, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(petCreateViewModel, cancellationToken);
 
+        var breedsResult = await _breedService.GetAllBreedsAsync(cancellationToken);
+        var speciesResult = await _speciesService.GetAllSpeciesAsync(cancellationToken);
+        var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
+        var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
+
+        var speciesList = speciesResult.Value ?? new List<Species>();
+        var breedsList = breedsResult.Value ?? new List<Breed>();
+        var countriesList = countriesResult.Value ?? new List<Country>();
+        var citiesList = citiesResult.Value ?? new List<City>();
+
         if (validationResult.IsValid is false)
         {
-            var breedsResult = await _breedService.GetAllBreedsAsync(cancellationToken);
-            var speciesResult = await _speciesService.GetAllSpeciesAsync(cancellationToken);
-            var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
-            var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
-
-            var speciesList = speciesResult.Value ?? new List<Species>();
-            var breedsList = breedsResult.Value ?? new List<Breed>();
-            var countriesList = countriesResult.Value ?? new List<Country>();
-            var citiesList = citiesResult.Value ?? new List<City>();
-
             petCreateViewModel.Species = new SelectList(speciesList, "Id", "Name");
             petCreateViewModel.Breeds = new SelectList(breedsList, "Id", "Name");
             petCreateViewModel.Countries = new SelectList(countriesList, "Id", "Name");
@@ -132,27 +131,24 @@ public class PetController : Controller
                 SpeciesId = x.SpeciesId,
             }).ToList();
 
+            petCreateViewModel.AllCities = citiesList.Select(x => new CityViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                CountryId = x.CountryId,
+            }).ToList();
+
             validationResult.AddErrorsToModelState(ModelState);
+
             TempData["ErrorMessage"] = "Failed to create the pet! Please try again!";
             return View(petCreateViewModel);
         }
 
         var petCreateRequest = _mapper.Map<PetCreateRequest>(petCreateViewModel);
-        petCreateRequest.ImageFiles = petCreateViewModel.ImageFiles;
         var petCreateResult = await _petService.CreatePetAsync(petCreateRequest, cancellationToken);
 
         if (petCreateResult.IsSuccess is false)
         {
-            var breedsResult = await _breedService.GetAllBreedsAsync(cancellationToken);
-            var speciesResult = await _speciesService.GetAllSpeciesAsync(cancellationToken);
-            var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
-            var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
-
-            var speciesList = speciesResult.Value ?? new List<Species>();
-            var breedsList = breedsResult.Value ?? new List<Breed>();
-            var countriesList = countriesResult.Value ?? new List<Country>();
-            var citiesList = citiesResult.Value ?? new List<City>();
-
             petCreateViewModel.Species = new SelectList(speciesList, "Id", "Name");
             petCreateViewModel.Breeds = new SelectList(breedsList, "Id", "Name");
             petCreateViewModel.Countries = new SelectList(countriesList, "Id", "Name");
@@ -164,9 +160,26 @@ public class PetController : Controller
                 SpeciesId = x.SpeciesId,
             }).ToList();
 
+            petCreateViewModel.AllCities = citiesList.Select(x => new CityViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                CountryId = x.CountryId,
+            }).ToList();
+
             petCreateResult.AddErrorsToModelState(ModelState);
             return View(petCreateViewModel);
         }
+
+        if (petCreateResult.IsSuccess)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+        petCreateViewModel.Species = new SelectList(speciesList, "Id", "Name");
+        petCreateViewModel.Breeds = new SelectList(breedsList, "Id", "Name");
+        petCreateViewModel.Countries = new SelectList(countriesList, "Id", "Name");
+        petCreateViewModel.Cities = new SelectList(citiesList, "Id", "Name");
 
         TempData["SuccessMessage"] = "Pet created successfully!";
         return RedirectToAction("Details", "Pet");

@@ -15,8 +15,7 @@ public class PetViewModel
     public List<PetImageViewModel> PetImages { get; set; } = new List<PetImageViewModel>();
     public BreedViewModel Breed { get; set; }
     public LocationViewModel Location { get; set; }
-    public int AgeYears { get; set; }
-    public int AgeMonths { get; set; }
+    public string AgeYears { get; set; }
     public UserViewModel User { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public decimal Price { get; set; }

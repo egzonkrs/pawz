@@ -15,14 +15,14 @@ public class SeedSpecies
 
         var species = new List<Species>
         {
-            new Species
+            new()
             {
                 Name = "Dog",
                 Description = "Domesticated carnivorous mammal",
                 CreatedAt = DateTime.UtcNow,
                 IsDeleted = false
             },
-            new Species
+            new()
             {
                 Name = "Cat",
                 Description = "Small domesticated carnivorous mammal",

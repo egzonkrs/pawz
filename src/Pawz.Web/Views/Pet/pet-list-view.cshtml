@@ -6,7 +6,7 @@
         <a href="@Url.Action("Details", "Pet", new { id = pet.Id })" class="text-decoration-none text-dark">
             <div class="row p-lg-3 p-sm-5 p-4">
                 <div class="col-lg-4 align-self-center">
-                    <img src="@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")"
+                    <img src="/images/pets/@(pet.PetImages.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")"
                         class="img-fluid w-100" style="height: 200px; object-fit: cover;" alt="@pet.Name">
                 </div>
                 <div class="col-lg-8" style="display: flex; align-items: center; justify-content: space-between;">

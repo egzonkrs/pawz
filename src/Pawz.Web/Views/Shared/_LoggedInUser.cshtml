@@ -4,8 +4,7 @@
 {
     <li class="nav-item dropdown dropdown-slide">
         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="navbar-text custom-navbar-text">
-                
+            <span class="navbar-text custom-navbar-text">            
                 <img src="@(string.IsNullOrEmpty(UserAccessor.GetUserInfo("profilepicture")) ? Url.Content("~/images/default-image.webp") : UserAccessor.GetUserInfo("profilepicture"))"
                     alt="@UserAccessor.GetUserName()'s Profile Picture" class="rounded-circle"
                     style="width: 30px; height: 30px; object-fit: cover;" />

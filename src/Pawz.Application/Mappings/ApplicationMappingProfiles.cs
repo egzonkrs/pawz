@@ -13,7 +13,10 @@ public class ApplicationMappingProfiles : Profile
     public ApplicationMappingProfiles()
     {
         CreateMap<PetRequest, Pet>().ReverseMap();
+
         CreateMap<Pet, PetResponse>().ReverseMap();
+
+
         CreateMap<PetRequest, PetResponse>().ReverseMap();
 
         CreateMap<BreedRequest, Breed>().ReverseMap();

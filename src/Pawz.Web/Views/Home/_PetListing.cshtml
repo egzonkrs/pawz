@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
+
+
+@foreach (var pet in Model)
+{
+    <div class="col-sm-12 col-lg-4">
+        <!-- product card -->
+        <div class="product-item bg-light">
+            <div class="card h-100 shadow-sm px-3 py-2 pt-3 align-items-center position-relative">
+                <div class="thumb-content">
+                    <!-- <div class="price">$200</div> -->
+                    <a href="@Url.Action("Details", "Pet", new { id = pet.Id })">
+                        <img class="card-img-top img-fluid"
+                             src="images/pets/@(pet.PetImages.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")" alt="@pet.Name">
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="@Url.Action("Details", "Pet", new { id = pet.Id })">
+                            @pet.Name
+                        </a>
+                    </h4>
+                    <ul class="list-inline product-meta">
+                        <li class="list-inline-item">
+                            <a><i class="fa fa-calendar"></i>@pet.AgeYears</a>
+                        </li>
+                    </ul>
+                    <p class="card-text">@pet.About</p>
+                    <div class="product-ratings">
+                        <ul class="list-inline">
+                            <li class="list-inline-item selected">
+                                <i class="fa fa-star"></i>
+                            </li>
+                            <li class="list-inline-item selected">
+                                <i class="fa fa-star"></i>
+                            </li>
+                            <li class="list-inline-item selected">
+                                <i class="fa fa-star"></i>
+                            </li>
+                            <li class="list-inline-item selected">
+                                <i class="fa fa-star"></i>
+                            </li>
+                            <li class="list-inline-item">
+                                <i class="fa fa-star"></i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

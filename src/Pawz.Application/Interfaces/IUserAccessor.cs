@@ -18,10 +18,22 @@ public interface IUserAccessor
     string GetEmail();
 
     /// <summary>
-    /// Gets the user's name.
+    /// Gets the user's username.
     /// </summary>
-    /// <returns>The user's name as a string.</returns>
+    /// <returns>The user's username as a string.</returns>
     string GetUserName();
+
+    /// <summary>
+    /// Gets the user's first name.
+    /// </summary>
+    /// <returns>The user's first name as a string.</returns>
+    string GetUserFirstName();
+
+    /// <summary>
+    /// Gets the user's last name.
+    /// </summary>
+    /// <returns>The user's last name as a string.</returns>
+    string GetUserLastName();
 
     /// <summary>
     /// Gets the user's role.
