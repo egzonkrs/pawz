@@ -33,7 +33,8 @@ public class SeedUsers
             UserName = Guid.NewGuid().ToString(),
             Email = "john@example.com",
             FirstName = "john",
-            LastName = "doe"
+            LastName = "doe",
+            ImageUrl = "https://api.dicebear.com/9.x/micah/svg?seed=Bandit"
         };
 
         var userBob = new ApplicationUser
@@ -43,7 +44,8 @@ public class SeedUsers
             FirstName = "bob",
             LastName = "doe",
             IsDeleted = false,
-            Address = "123 Main St"
+            Address = "123 Main St",
+            ImageUrl = "https://api.dicebear.com/9.x/micah/svg?seed=Loki"
         };
 
         var userJane = new ApplicationUser
@@ -51,7 +53,21 @@ public class SeedUsers
             UserName = Guid.NewGuid().ToString(),
             Email = "jane@example.com",
             FirstName = "jane",
-            LastName = "doe"
+            LastName = "doe",
+            IsDeleted = false,
+            Address = "123 Main St",
+            ImageUrl = ""
+        };
+
+        var userNina = new ApplicationUser
+        {
+            UserName = "nina",
+            Email = "nina@example.com",
+            FirstName = "nina",
+            LastName = "doe",
+            IsDeleted = false,
+            Address = "123 Main St",
+            ImageUrl = ""
         };
 
         await userManager.CreateAsync(userJohn, SeedUsersPassword);

@@ -1,3 +1,6 @@
+@model Pawz.Web.Models.Pet.PetViewModel
+@inject Pawz.Application.Interfaces.IUserAccessor UserAccessor
+
 <section class="section bg-gray">
     <!-- Container Start -->
     <div class="container">
@@ -74,8 +77,15 @@
             <!-- Right Sidebar -->
             <div class="col-lg-4">
                 <div class="sidebar">
-                    <div class="widget user text-center" style="margin-top: 7rem !important;">
-                        <img class="rounded-circle img-fluid" src="/images/userAvatar.jpg" alt="" style="padding: 0rem 7rem 0rem 7rem;">
+                    <div class="widget price text-center">
+                        <h4>Price</h4>
+                        <p>@Model.Price.ToString("C")</p>
+                    </div>
+                    <div class="widget user text-center">
+                        @* <img src="~/images/default-image.webp" /> *@
+                        <img class="rounded-circle img-fluid mb-5 px-5"
+                            src="@(string.IsNullOrEmpty(Model.User?.ImageUrl) ? Url.Content("~/images/default-image.webp") : Model.User.ImageUrl)"
+                            alt="@Model.User?.FirstName @Model.User?.LastName's Profile Picture">
                         <h4 class="text-capitalize"><a href="user-profile.html">@Model.User?.FirstName
                                 @Model.User?.LastName</a></h4>
                         <p class="member-time">Member Since @Model.CreatedAt.ToString("MMMM yyyy")</p>
