@@ -1,3 +1,12 @@
+@model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!--===============================
+=            Hero Area            =
+================================-->
+
 <section class="hero-area bg-1 text-center overly">
     <!-- Container Start -->
     <div class="container">
@@ -59,57 +68,14 @@
                 </div>
             </div>
         </div>
-
         <div class="row">
             <!-- offer 01 -->
             <div class="col-lg-12">
                 <div class="trending-ads-slide">
-                    @foreach (var pet in Model)
+                    @if (Model is not null || Model.Any())
                     {
-                        <div class="col-sm-12 col-lg-4">
-                            <!-- product card -->
-                            <div class="product-item bg-light">
-                                <div class="card h-100 shadow-sm px-3 py-2 pt-3 align-items-center position-relative">
-                                    <div class="thumb-content">
-                                        <!-- <div class="price">$200</div> -->
-                                        @* <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">
-                                            <img src="@pet.PetImages.First().ImageUrl" alt="@pet.Name" class="img-fluid" />
-                                        </a> *@
-                                        @if (pet.PetImages != null && pet.PetImages.Any())
-                                        {
-                                            <img src="@pet.PetImages.FirstOrDefault().ImageUrl" alt="@pet.Name" class="img-fluid" />
-                                        }
-                                        else
-                                        {
-                                            <!-- Fallback image if no image is available -->
-                                            <img src="~/images/pets/20be4b32-0a57-4d9c-afa1-c9b7d70a1fdb.jpg" alt="No image available" class="img-fluid" />
-                                        }
-                                    </div>
-                                    <div class="card-body">
-                                        <h4 class="card-title">
-                                            <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">@pet.Name</a>
-                                        </h4>
-                                        <ul class="list-inline product-meta">
-                                            <li class="list-inline-item">
-                                                <a href="#"><i class="fa fa-calendar"></i> @pet.AgeYears years old</a>
-                                            </li>
-                                        </ul>
-                                        <p class="card-text">@pet.About</p>
-                                        <div class="product-ratings">
-                                            <ul class="list-inline">
-                                                <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                                <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                                <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                                <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
-                                                <li class="list-inline-item"><i class="fa fa-star"></i></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <partial name="_PetListing"/>
                     }
-                    <partial name="_PetListing"/>
                 </div>
             </div>
         </div>

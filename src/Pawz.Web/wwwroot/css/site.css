@@ -70,3 +70,16 @@
     transform: scale(1.05);  /* Slightly enlarge the button on hover */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
 }
+
+.pet-thumbnail {
+    border-radius: 10px; /* Rounded corners */
+    padding: 5px; /* Adds padding inside the border */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+}
+
+.pet-thumbnail:hover {
+    transform: scale(1.08); /* Slightly enlarge on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Add a stronger shadow on hover */
+}
+

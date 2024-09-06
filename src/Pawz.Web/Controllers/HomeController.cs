@@ -1,8 +1,12 @@
+using AutoMapper;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Web.Models;
-using System.Diagnostics;
+using Pawz.Web.Models.Pet;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,20 +16,22 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IPetService _petService;
+    private readonly IMapper _mapper;
 
-    public HomeController(ILogger<HomeController> logger, IPetService petService)
+    public HomeController(ILogger<HomeController> logger,
+        IPetService petService,
+        IMapper mapper)
     {
         _logger = logger;
         _petService = petService;
+        _mapper = mapper;
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        // Fetch the list of pets from the service
-        var pets = await _petService.GetAllPetsAsync(cancellationToken);
-
-        // Pass the list of pets to the view
-        return View(pets.Value);
+        var result = await _petService.GetAllPetsWithRelatedEntities(cancellationToken);
+        var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
+        return View(petViewModels);
     }
 
     public IActionResult Adopt()

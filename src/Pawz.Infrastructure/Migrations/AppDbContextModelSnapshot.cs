@@ -442,11 +442,9 @@ namespace Pawz.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AgeMonths")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AgeYears")
-                        .HasColumnType("int");
+                    b.Property<string>("AgeYears")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("BreedId")
                         .HasColumnType("int");

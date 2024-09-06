@@ -14,35 +14,53 @@ public class SeedBreeds
 
         var breeds = new List<Breed>
         {
-            new Breed
+            new()
             {
-                SpeciesId = 1,
+                SpeciesId = 1, // Dog
                 Name = "Golden Retriever",
-                Description = "Friendly and tolerant breed.",
+                Description = "Friendly, intelligent, and devoted breed, known for its golden coat.",
                 IsDeleted = false,
                 DeletedAt = null
             },
-            new Breed
+            new()
             {
-                SpeciesId = 1,
+                SpeciesId = 1, // Dog
                 Name = "Labrador Retriever",
-                Description = "Outgoing and even-tempered breed.",
+                Description = "Outgoing, even-tempered, and playful breed, one of the most popular family dogs.",
                 IsDeleted = false,
                 DeletedAt = null
             },
-            new Breed
+            new()
             {
-                SpeciesId = 2,
+                SpeciesId = 1, // Dog
+                Name = "German Shepherd",
+                Description = "Courageous, confident, and smart breed, often used in working roles like police and military.",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+
+            // Cat Breeds
+            new()
+            {
+                SpeciesId = 2, // Cat
                 Name = "Persian",
-                Description = "Affectionate and quiet breed with long fur.",
+                Description = "Affectionate and quiet breed with long, luxurious fur and a calm demeanor.",
                 IsDeleted = false,
                 DeletedAt = null
             },
-            new Breed
+            new()
             {
-                SpeciesId = 2,
+                SpeciesId = 2, // Cat
                 Name = "Siamese",
-                Description = "Social and intelligent breed with striking blue eyes.",
+                Description = "Social, intelligent, and vocal breed with striking blue eyes and sleek body.",
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new()
+            {
+                SpeciesId = 2, // Cat
+                Name = "Maine Coon",
+                Description = "Large, friendly breed with a bushy tail and long fur, known for its gentle personality.",
                 IsDeleted = false,
                 DeletedAt = null
             }

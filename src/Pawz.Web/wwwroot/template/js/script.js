@@ -176,7 +176,7 @@
     prevArrow: '<i class="fa fa-chevron-left arrow-left"></i>',
     customPaging: function (slider, i) {
       var image = $(slider.$slides[i]).data('image');
-      return '<img class="img-fluid" src="' + image + '" alt="product-img">';
+      return '<img class="img-fluid pet-thumbnail" src="/' + image + '" alt="product-img">';
     }
   });
 
