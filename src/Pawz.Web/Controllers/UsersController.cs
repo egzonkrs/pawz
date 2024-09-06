@@ -39,7 +39,7 @@ public class UsersController : Controller
     [HttpGet]
     public IActionResult EditProfileForm()
     {
-        return View(); 
+        return PartialView("EditProfileForm"); 
     }
 
     [HttpPost]

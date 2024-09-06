@@ -20,7 +20,7 @@
                     <!-- Links -->
                     <div class="widget user-dashboard-menu">
                         <ul>
-                            <li class="active">
+                            <li>
                                 <a href="#" class="partial-view-link" data-url="@Url.Action("MyPets", "Users")">
                                     <i class="fa fa-paw"></i> My Pets
                                 </a>
@@ -96,6 +96,14 @@
 
                 $('#partialViewContainer').load(url);
                 $('#viewTitle').text(title);
+
+                if (url === '@Url.Action("EditProfileForm", "Users")')
+                {
+                    $('.pagination').hide();
+                } else
+                {
+                    $('.pagination').show();
+                }
             });
         });
     </script>
