@@ -30,6 +30,12 @@ public interface IUserAccessor
     string GetUserFirstName();
 
     /// <summary>
+    /// Gets the user's last name.
+    /// </summary>
+    /// <returns>The user's last name as a string.</returns>
+    string GetUserLastName();
+
+    /// <summary>
     /// Gets the user's role.
     /// </summary>
     /// <returns>The user's role as a string.</returns>
