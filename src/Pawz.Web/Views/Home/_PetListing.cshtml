@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
+@model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
 
 
 @foreach (var pet in Model)
@@ -11,7 +11,7 @@
                     <!-- <div class="price">$200</div> -->
                     <a href="@Url.Action("Details", "Pet", new { id = pet.Id })">
                         <img class="card-img-top img-fluid"
-                             src="@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")" alt="@pet.Name">
+                             src="@(pet.PetImages.First().ImageUrl.StartsWith("http") ? pet.PetImages.First().ImageUrl : Url.Content("~/images/pets/" + pet.PetImages.First().ImageUrl))" alt="@pet.Name">
                     </a>
                 </div>
                 <div class="card-body">
