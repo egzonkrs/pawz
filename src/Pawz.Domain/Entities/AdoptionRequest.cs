@@ -26,7 +26,6 @@ public class AdoptionRequest : IEntity<int>, ISoftDeletion
     /// </summary>
     public DateTime ResponseDate { get; set; }
 
-
     /// <summary>
     /// The Id of the pet associated with this adoption request
     /// </summary>
@@ -51,6 +50,16 @@ public class AdoptionRequest : IEntity<int>, ISoftDeletion
     /// The user who made the request.
     /// </summary>
     public ApplicationUser User { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public int LocationId { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public Location Location { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the entity is soft-deleted.

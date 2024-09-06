@@ -54,6 +54,23 @@
     line-height: 1;
 }
 
+.adoption-request-button {
+    font-size: 30px;        /* Slightly increase the font size */
+    width: 150px;             /* Set a larger fixed width */
+    height: 150px;            /* Set the same height as width to make it square */
+    padding: 0;               /* Remove any extra padding */
+    border-radius: 10px;      /* Slightly rounded corners, adjust as needed */
+    display: flex;            /* Flexbox to center text */
+    align-items: center;      /* Vertically center text */
+    justify-content: center;  /* Horizontally center text */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transition effects */
+}
+
+.adoption-request-button:hover {
+    transform: scale(1.05);  /* Slightly enlarge the button on hover */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
+}
+
 .pet-thumbnail {
     border-radius: 10px; /* Rounded corners */
     padding: 5px; /* Adds padding inside the border */

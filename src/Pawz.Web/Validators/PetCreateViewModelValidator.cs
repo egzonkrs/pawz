@@ -1,4 +1,5 @@
 using FluentValidation;
+using Pawz.Web.Models;
 using Pawz.Web.Models.Pet;
 using System.Linq;
 

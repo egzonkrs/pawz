@@ -36,6 +36,8 @@ public class Location : IEntity<int>, ISoftDeletion
     /// </summary>
     public ICollection<Pet> Pets { get; set; } = new List<Pet>();
 
+    public ICollection<AdoptionRequest> AdoptionRequests { get; set; } = new List<AdoptionRequest>();
+
     /// <summary>
     /// Indicates whether the entity is soft-deleted.
     /// This property is implemented from the <see cref="ISoftDeletion"/> interface.

@@ -1,4 +1,14 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function submitAdoptionRequest() {
 
-// Write your JavaScript code.
+    var location = document.getElementById('location').value;
+
+    if (location.trim() === '') {
+        alert('Please enter your location.');
+        return;
+    }
+
+    $('#adoptionRequestModal').modal('hide');
+    document.getElementById('adoptionRequestForm').reset();
+
+    alert('Adoption request submitted successfully!');
+}

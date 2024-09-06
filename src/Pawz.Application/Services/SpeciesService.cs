@@ -139,8 +139,7 @@ public class SpeciesService : ISpeciesService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to update Species with Id: {SpeciesId}",
-                             nameof(SpeciesService), species.Id);
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to update Species with Id: {SpeciesId}", nameof(SpeciesService), species.Id);
             return Result<bool>.Failure(SpeciesErrors.UpdateUnexpectedError);
         }
     }
@@ -177,8 +176,7 @@ public class SpeciesService : ISpeciesService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to delete Species with Id: {SpeciesId}",
-                             nameof(SpeciesService), speciesId);
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to delete Species with Id: {SpeciesId}", nameof(SpeciesService), speciesId);
             return Result<bool>.Failure(SpeciesErrors.DeletionUnexpectedError);
         }
     }

@@ -27,6 +27,7 @@ public class SeedAdoptionRequests
                 RequestDate = DateTime.UtcNow,
                 ResponseDate = DateTime.UtcNow,
                 PetId = 1,
+                LocationId = 3,
                 RequesterUserId = userBob.Id,
                 IsDeleted = false,
                 DeletedAt = null
@@ -37,6 +38,7 @@ public class SeedAdoptionRequests
                 RequestDate = DateTime.UtcNow,
                 ResponseDate = DateTime.UtcNow,
                 PetId = 1,
+                LocationId = 3,
                 RequesterUserId = userJane.Id,
                 IsDeleted = false,
                 DeletedAt = null
@@ -47,6 +49,7 @@ public class SeedAdoptionRequests
                 RequestDate = DateTime.UtcNow,
                 ResponseDate = DateTime.UtcNow,
                 PetId = 2,
+                LocationId = 3,
                 RequesterUserId = userBob.Id,
                 IsDeleted = false,
                 DeletedAt = null
@@ -57,6 +60,7 @@ public class SeedAdoptionRequests
                 RequestDate = DateTime.UtcNow,
                 ResponseDate = DateTime.UtcNow,
                 PetId = 2,
+                LocationId = 3,
                 RequesterUserId = userJane.Id,
                 IsDeleted = false,
                 DeletedAt = null
@@ -67,6 +71,7 @@ public class SeedAdoptionRequests
                 RequestDate = DateTime.UtcNow,
                 ResponseDate = DateTime.UtcNow,
                 PetId = 3,
+                LocationId = 3,
                 RequesterUserId = userJohn.Id,
                 IsDeleted = false,
                 DeletedAt = null
@@ -76,6 +81,7 @@ public class SeedAdoptionRequests
                 Status = AdoptionRequestStatus.Approved,
                 RequestDate = DateTime.UtcNow,
                 ResponseDate = DateTime.UtcNow,
+                LocationId = 3,
                 PetId = 3,
                 RequesterUserId = userBob.Id,
                 IsDeleted = false,
