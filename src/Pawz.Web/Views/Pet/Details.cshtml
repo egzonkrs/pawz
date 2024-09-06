@@ -96,9 +96,11 @@
                         <p>@Model.Price.ToString("C")</p>
                     </div>
                     <div class="widget user text-center">
+                        @* <img src="~/images/default-image.webp" /> *@
                         <img class="rounded-circle img-fluid mb-5 px-5"
-                            src="@Model.User.ImageUrl ?? ~/template/images/user/defaultAvatar.jpg"
-                            alt="@UserAccessor.GetUserName()'s Profile Picture">
+                            src="@(string.IsNullOrEmpty(Model.User?.ImageUrl) ? Url.Content("~/images/default-image.webp") : Model.User.ImageUrl)"
+                            alt="@Model.User?.FirstName @Model.User?.LastName's Profile Picture">
+
                         <h4 class="text-capitalize"><a href="user-profile.html">@Model.User?.FirstName
                                 @Model.User?.LastName</a></h4>
                         <p class="member-time">Member Since @Model.CreatedAt.ToString("MMMM yyyy")</p>
