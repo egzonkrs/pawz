@@ -89,8 +89,12 @@ public class PetService : IPetService
                 return Result<bool>.Failure(PetErrors.CreationFailed);
             }
 
-            foreach (var imageFile in petCreateRequest.ImageFiles)
+            var imageFilesList = petCreateRequest.ImageFiles.ToList();
+
+            for (int i = 0; i < imageFilesList.Count; i++)
             {
+                var imageFile = imageFilesList[i];
+
                 var uploadedFileName = await _fileUploaderService.UploadFileAsync(imageFile);
                 var fileName = uploadedFileName.Value;
 
@@ -98,11 +102,12 @@ public class PetService : IPetService
                 {
                     PetId = pet.Id,
                     ImageUrl = fileName,
-                    IsPrimary = false,
+                    IsPrimary = i == 0 ? true : false,
                     UploadedAt = DateTime.UtcNow,
                 };
 
                 await _petImageRepository.InsertAsync(petImage, cancellationToken);
+                _logger.LogInformation("Successfully inserted image {i} for PetId: {PetId}", i, pet.Id);
             }
 
             var arePetImagesSaved = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
