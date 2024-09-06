@@ -14,100 +14,90 @@ public class SeedPets
         var petsExists = await context.Pets.AnyAsync();
         if (petsExists) return;
 
-        var userJohn = await context.Users.FirstOrDefaultAsync(u => u.UserName == "john");
-        var userJane = await context.Users.FirstOrDefaultAsync(u => u.UserName == "jane");
+        var userAsd = await context.Users.FirstOrDefaultAsync(u => u.Email == "asd@qwe.com");
+        var userBob = await context.Users.FirstOrDefaultAsync(u => u.Email == "bob@example.com");
 
         var pets = new List<Pet>
         {
+            // Pets assigned to userAsd (2 dogs, 1 cat)
             new Pet
             {
                 Name = "Buddy",
-                BreedId = 1,
+                BreedId = 1, // Golden Retriever
                 AgeYears = "3-7 Years",
-                About = "Friendly and playful dog.",
-                Price = 300.00m,
-                Status = PetStatus.Pending,
+                About = "Buddy is the perfect adventure buddy! Whether it's a long walk in the park or just chilling at home, he’s always there to make you smile with his playful and loyal personality. Loves belly rubs and fetch!",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
                 CreatedAt = DateTime.UtcNow,
-                LocationId = 1,
-                PostedByUserId = userJohn.Id,
+                LocationId = 1, // Pristina
+                PostedByUserId = userAsd.Id,
                 IsDeleted = false
             },
             new Pet
             {
                 Name = "Max",
-                BreedId = 2,
+                BreedId = 2, // Labrador Retriever
                 AgeYears = "0-3 Months",
-                About = "Loyal and intelligent dog.",
-                Price = 250.00m,
-                Status = PetStatus.Approved,
+                About = "Max is a little bundle of joy who’s still learning his way around the world! He’s full of energy and loves meeting new people. If you’re looking for a loyal and goofy companion, Max is your guy!",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
                 CreatedAt = DateTime.UtcNow,
-                LocationId = 2,
-                PostedByUserId = userJane.Id,
+                LocationId = 6, // Tirana
+                PostedByUserId = userAsd.Id,
                 IsDeleted = false
             },
             new Pet
             {
                 Name = "Whiskers",
-                BreedId = 3,
+                BreedId = 3, // Persian
                 AgeYears = "3-7 Years",
-                About = "Quiet and affectionate cat.",
-                Price = 150.00m,
-                Status = PetStatus.Rejected,
+                About = "Whiskers is the ultimate lap cat! With a fluffy coat, he's the perfect companion for those quiet, cozy nights. He enjoys soft purring naps and watching the world go by from the window.",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
                 CreatedAt = DateTime.UtcNow,
-                LocationId = 3,
-                PostedByUserId = userJohn.Id,
+                LocationId = 3, // Mitrovica
+                PostedByUserId = userAsd.Id,
+                IsDeleted = false
+            },
+
+            // Pets assigned to userBob (1 dog, 2 cats)
+            new Pet
+            {
+                Name = "Rocky",
+                BreedId = 4, // Beagle
+                AgeYears = "3-6 Months",
+                About = "Rocky is an energetic, curious little pup who loves to explore everything! Whether he's sniffing out new trails or playing in the yard, he’s always on the move. Perfect for active families who love the outdoors!",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
+                CreatedAt = DateTime.UtcNow,
+                LocationId = 6, // Shkoder
+                PostedByUserId = userBob.Id,
                 IsDeleted = false
             },
             new Pet
             {
                 Name = "Mittens",
-                BreedId = 4,
+                BreedId = 5, // Siamese
                 AgeYears = "3-6 Months",
-                About = "Active and social cat.",
-                Price = 200.00m,
-                Status = PetStatus.Pending,
+                About = "Mittens is a talkative and social little furball who loves to chat with her humans! She’s always curious and loves to be part of the action. With her striking blue eyes, she’ll steal your heart in no time!",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
                 CreatedAt = DateTime.UtcNow,
-                LocationId = 1,
-                PostedByUserId = userJane.Id,
+                LocationId = 4, // Peja
+                PostedByUserId = userBob.Id,
                 IsDeleted = false
             },
             new Pet
             {
-                Name = "Rocky",
-                BreedId = 4,
-                AgeYears = "3-6 Months",
-                About = "Active and social dog.",
-                Price = 200.00m,
-                Status = PetStatus.Pending,
-                CreatedAt = DateTime.UtcNow,
-                LocationId = 1,
-                PostedByUserId = userJane.Id,
-                IsDeleted = false
-            },
-            new Pet
-            {
-                Name = "Kage",
-                BreedId = 4,
+                Name = "Shadow",
+                BreedId = 6, // Maine Coon
                 AgeYears = "3-7 Years",
-                About = "Active and social dog.",
-                Price = 200.00m,
-                Status = PetStatus.Pending,
+                About = "Shadow is a gentle giant with a heart full of love! Despite his size, he's a calm and affectionate cat who enjoys cuddling up by your side. He’s independent but always down for some quality petting time.",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
                 CreatedAt = DateTime.UtcNow,
-                LocationId = 1,
-                PostedByUserId = userJane.Id,
-                IsDeleted = false
-            },
-            new Pet
-            {
-                Name = "Pobo",
-                BreedId = 4,
-                AgeYears = "3-7 Years",
-                About = "Active and social dog.",
-                Price = 200.00m,
-                Status = PetStatus.Pending,
-                CreatedAt = DateTime.UtcNow,
-                LocationId = 1,
-                PostedByUserId = userJane.Id,
+                LocationId = 6, // Tirana
+                PostedByUserId = userBob.Id,
                 IsDeleted = false
             }
         };

@@ -1,9 +1,7 @@
-@model Pawz.Web.Models.Pet.PetViewModel
-
 <section class="section bg-gray">
     <!-- Container Start -->
     <div class="container">
-        <div class="row">
+        <div class="row d-flex align-items-start"> <!-- Ensure flexbox alignment -->
             <!-- Left sidebar -->
             <div class="col-lg-8">
                 <div class="product-details">
@@ -28,7 +26,7 @@
                     <div class="product-slider">
                         @foreach (var image in Model.PetImages)
                         {
-                            <div class="product-slider-item my-4" data-image="@image.ImageUrl"
+                            <div class="product-slider-item my-4" data-image="images/pets/@image.ImageUrl"
                                 data-slick-index="@Model.PetImages.IndexOf(image)"
                                 aria-hidden="@(Model.PetImages.IndexOf(image) == 0 ? "false" : "true")"
                                 tabindex="@(Model.PetImages.IndexOf(image) == 0 ? "0" : "-1")" style="width: 730px;">
@@ -41,20 +39,6 @@
                                       alt="Pet Image">
                             </div>
                         }
-
-                        <i class="fa fa-chevron-right arrow-right slick-arrow"></i>
-
-                        <ul class="slick-dots" role="tablist">
-                            @foreach (var image in Model.PetImages)
-                            {
-                                <li class="@(Model.PetImages.IndexOf(image) == 0 ? "slick-active" : "")"
-                                    role="presentation">
-                                    <img class="img-fluid"
-                                        src="@(string.IsNullOrEmpty(image.ImageUrl) ? "/images/default-image.webp" : image.ImageUrl)"
-                                        alt="Pet Image">
-                                </li>
-                            }
-                        </ul>
                     </div>
 
                     <!-- Product Details Content -->
@@ -94,12 +78,8 @@
             <!-- Right Sidebar -->
             <div class="col-lg-4">
                 <div class="sidebar">
-                    <div class="widget price text-center">
-                        <h4>Price</h4>
-                        <p>@Model.Price.ToString("C")</p>
-                    </div>
-                    <div class="widget user text-center">
-                        <img class="rounded-circle img-fluid mb-5 px-5" src="images/user/user-thumb.jpg" alt="">
+                    <div class="widget user text-center" style="margin-top: 7rem !important;">
+                        <img class="rounded-circle img-fluid" src="/images/userAvatar.jpg" alt="" style="padding: 0rem 7rem 0rem 7rem;">
                         <h4 class="text-capitalize"><a href="user-profile.html">@Model.User?.FirstName
                                 @Model.User?.LastName</a></h4>
                         <p class="member-time">Member Since @Model.CreatedAt.ToString("MMMM yyyy")</p>
@@ -118,6 +98,20 @@
                             <li>Pay only after collecting the item</li>
                         </ul>
                     </div>
+                    <div class="widget price text-center">
+                        <h4>Price</h4>
+                        <p>
+                            @if (Model.Price < 1)
+                            {
+                                @:Free
+                            }
+                            else
+                            {
+                                @Model.Price.ToString("C")
+                            }
+                        </p>
+                    </div>
+
                 </div>
             </div>
         </div>
