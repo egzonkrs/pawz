@@ -1,4 +1,4 @@
-@model Pawz.Web.Models.Pet.AdoptionRequestCreateModel
+@model Pawz.Web.Models.Pet.PetViewModel
 
 @{
     ViewBag.Title = "title";
@@ -10,56 +10,8 @@
     </button>
 </div>
 
-<partial name="AdoptionRequestCreateModel" model="@Model" />
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const allCities = @Html.Raw(@Json.Serialize(Model.AllCities));
-            console.log("All Cities:", allCities);
+<partial name="AdoptionRequestCreateModel" model="@Model.AdoptionRequestCreateModel" />
 
-            function populateDropdown(parentId, allItems, childId, defaultText, parentKey) {
-                const childSelect = document.querySelector(`#${childId}`);
-
-                childSelect.innerHTML = '';
-
-                const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.textContent = `Select ${defaultText}`;
-                defaultOption.selected = true;
-                defaultOption.disabled = true;
-                defaultOption.hidden = true;
-                defaultOption.classList.add('default-option');
-
-                childSelect.appendChild(defaultOption);
-
-                if (parentId) {
-                    const filteredItems = allItems.filter(item => item[parentKey] === parseInt(parentId));
-                    console.log(`Filtered ${defaultText}:`, filteredItems);
-
-                    filteredItems.forEach(item => {
-                        const option = document.createElement('option');
-                        option.value = item.id;
-                        option.textContent = item.name;
-                        childSelect.appendChild(option);
-                    });
-
-                    console.log(`${defaultText} dropdown HTML:`, childSelect.innerHTML);
-                }
-
-                $(childSelect).niceSelect('update');
-            }
-
-            $('#CityId').niceSelect();
-            $('#CountryId').niceSelect();
-
-            $('#CountryId').on('change', function () {
-                const countryId = $(this).val();
-                console.log("Selected Country ID:", countryId);
-                populateDropdown(countryId, allCities, 'CityId', 'City', 'countryId');
-            });
-    </script>
-}
 <section class="section bg-gray">
     <!-- Container Start -->
     <div class="container">
@@ -88,7 +40,7 @@
                     <div class="product-slider">
                         @foreach (var image in Model.PetImages)
                         {
-                            <div class="product-slider-item my-4" data-image="images/pets/@image.ImageUrl"
+                            <div class="product-slider-item my-4" data-image="/images/pets/@image.ImageUrl"
                                 data-slick-index="@Model.PetImages.IndexOf(image)"
                                 aria-hidden="@(Model.PetImages.IndexOf(image) == 0 ? "false" : "true")"
                                 tabindex="@(Model.PetImages.IndexOf(image) == 0 ? "0" : "-1")" style="width: 730px;">
@@ -190,3 +142,54 @@
     </div>
     <!-- Container End -->
 </section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const allCities = @Html.Raw(@Json.Serialize(Model.AdoptionRequestCreateModel.AllCities));
+            console.log("All Cities:", allCities);
+
+            function populateDropdown(parentId, allItems, childId, defaultText, parentKey) {
+                const childSelect = document.querySelector(`#${childId}`);
+
+                childSelect.innerHTML = '';
+
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = `Select ${defaultText}`;
+                defaultOption.selected = true;
+                defaultOption.disabled = true;
+                defaultOption.hidden = true;
+                defaultOption.classList.add('default-option');
+
+                childSelect.appendChild(defaultOption);
+
+                if (parentId) {
+                    const filteredItems = allItems.filter(item => item[parentKey] === parseInt(parentId));
+                    console.log(`Filtered ${defaultText}:`, filteredItems);
+
+                    filteredItems.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.id;
+                        option.textContent = item.name;
+                        childSelect.appendChild(option);
+                    });
+
+                    console.log(`${defaultText} dropdown HTML:`, childSelect.innerHTML);
+                }
+
+                $(childSelect).niceSelect('update');
+            }
+
+            $('#CityId').niceSelect();
+            $('#CountryId').niceSelect();
+
+            $('#CountryId').on('change', function () {
+                const countryId = $(this).val();
+                console.log("Selected Country ID:", countryId);
+                populateDropdown(countryId, allCities, 'CityId', 'City', 'countryId');
+            });
+        })
+    </script>
+}

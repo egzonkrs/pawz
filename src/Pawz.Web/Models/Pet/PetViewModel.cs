@@ -19,6 +19,7 @@ public class PetViewModel
     public UserViewModel User { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public decimal Price { get; set; }
+    public AdoptionRequestCreateModel AdoptionRequestCreateModel { get; set; }
 }
 
 public class UserViewModel

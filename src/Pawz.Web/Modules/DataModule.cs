@@ -25,7 +25,7 @@ public class DataModule : IModule
 
     public void Load(IServiceCollection services)
     {
-        var connectionString = _configuration.GetConnectionString("DefaultConnection");
+        var connectionString = _configuration.GetConnectionString("DockerConnection");
 
         if (connectionString is null)
         {
@@ -56,6 +56,7 @@ public class DataModule : IModule
         services.AddScoped<ILocationService, LocationService>();
         services.AddScoped<ICountryService, CountryService>();
         services.AddScoped<ICityService, CityService>();
+        services.AddScoped<IAdoptionRequestService, AdoptionRequestService>();
 
         services.Configure<ApiSettings>(_configuration.GetSection(ApiSettings.SectionName));
     }

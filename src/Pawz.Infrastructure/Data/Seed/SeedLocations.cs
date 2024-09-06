@@ -58,7 +58,7 @@ public class SeedLocations
             },
             new Location
             {
-                CityId = 8, // Shkoder
+                CityId = 7, // Shkoder
                 Address = "Rruga Kole Idromeno 5",
                 PostalCode = "4001",
                 IsDeleted = false,

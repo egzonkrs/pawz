@@ -24,12 +24,10 @@ public class PetController : Controller
     private readonly IPetService _petService;
     private readonly IBreedService _breedService;
     private readonly ISpeciesService _speciesService;
-    private readonly ILocationService _locationService;
     private readonly ICountryService _countryService;
     private readonly ICityService _cityService;
     private readonly IValidator<PetCreateViewModel> _validator;
     private readonly IValidator<AdoptionRequestCreateModel> _adoptionRequestValidator;
-    private readonly IUserAccessor _userAccessor;
     private readonly IMapper _mapper;
     private readonly IAdoptionRequestService _adoptionRequestService;
 
@@ -49,11 +47,9 @@ public class PetController : Controller
         _petService = petService;
         _breedService = breedService;
         _speciesService = speciesService;
-        _locationService = locationService;
         _countryService = countryService;
         _cityService = cityService;
         _validator = validator;
-        _userAccessor = userAccessor;
         _mapper = mapper;
         _adoptionRequestService = adoptionRequestService;
         _adoptionRequestValidator = adoptionRequestValidator;
@@ -68,14 +64,16 @@ public class PetController : Controller
 
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {
-        var petResult = await _petService.GetPetByIdAsync(id, cancellationToken);
         var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
         var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
 
         var countriesList = countriesResult.Value ?? new List<Country>();
         var citiesList = citiesResult.Value ?? new List<City>();
 
-        var adoptionRequestCreateModel = new AdoptionRequestCreateModel
+        var result = await _petService.GetPetByIdAsync(id, cancellationToken);
+        var petViewModel = _mapper.Map<PetViewModel>(result.Value);
+
+        petViewModel.AdoptionRequestCreateModel = new AdoptionRequestCreateModel
         {
             PetId = id,
             Countries = new SelectList(countriesList, "Id", "Name"),
@@ -88,10 +86,7 @@ public class PetController : Controller
             }).ToList()
         };
 
-        return View(adoptionRequestCreateModel);
-        //var result = await _petService.GetPetByIdAsync(id, cancellationToken);
-        //var petViewModel = _mapper.Map<PetViewModel>(result.Value);
-        //return View(petViewModel);
+        return View(petViewModel);
     }
 
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
