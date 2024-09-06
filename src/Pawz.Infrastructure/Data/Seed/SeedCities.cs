@@ -22,7 +22,28 @@ public class SeedCities
             },
             new City
             {
-                Name = "Vushtrri",
+                Name = "Prizren",
+                CountryId = 1,
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new City
+            {
+                Name = "Mitrovica",
+                CountryId = 1,
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new City
+            {
+                Name = "Peja",
+                CountryId = 1,
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new City
+            {
+                Name = "Ferizaj",
                 CountryId = 1,
                 IsDeleted = false,
                 DeletedAt = null
@@ -30,6 +51,34 @@ public class SeedCities
             new City
             {
                 Name = "Tirana",
+                CountryId = 2,
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new City
+            {
+                Name = "Durres",
+                CountryId = 2,
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new City
+            {
+                Name = "Shkoder",
+                CountryId = 2,
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new City
+            {
+                Name = "Vlora",
+                CountryId = 2,
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new City
+            {
+                Name = "Elbasan",
                 CountryId = 2,
                 IsDeleted = false,
                 DeletedAt = null

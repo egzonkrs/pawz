@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Pawz.Application.Helpers;
 using Pawz.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,51 +9,186 @@ public class SeedPetImages
 {
     public static async Task SeedPetImageData(AppDbContext context)
     {
-        if (await context.PetImages.AnyAsync()) return;
+        var petImagesExists = await context.PetImages.AnyAsync();
+        if (petImagesExists) return;
 
-        var petImages = new List<PetImage>();
+        var petImages = new List<PetImage>
+        {
+            // PetId 1 - Buddy (Golden Retriever)
+            new PetImage
+            {
+                PetId = 1,
+                ImageUrl = "dog1_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 1,
+                ImageUrl = "dog1_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 1,
+                ImageUrl = "dog1_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 1,
+                ImageUrl = "dog1_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
 
-        // Seed Dog Images
-        petImages.AddRange(await CreatePetImagesAsync(petId: 1, imageCount: 4, isDog: true));
-        petImages.AddRange(await CreatePetImagesAsync(petId: 2, imageCount: 4, isDog: true));
-        petImages.AddRange(await CreatePetImagesAsync(petId: 5, imageCount: 4, isDog:true));
-        petImages.AddRange(await CreatePetImagesAsync(petId: 6, imageCount: 4, isDog:true));
-        petImages.AddRange(await CreatePetImagesAsync(petId: 7, imageCount: 4, isDog:true));
+            // PetId 2 - Max (Labrador Retriever)
+            new PetImage
+            {
+                PetId = 2,
+                ImageUrl = "dog2_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 2,
+                ImageUrl = "dog2_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 2,
+                ImageUrl = "dog2_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
 
-        // Seed Cat Images
-        petImages.AddRange(await CreatePetImagesAsync(petId: 3, imageCount: 4, isDog: false));
-        petImages.AddRange(await CreatePetImagesAsync(petId: 4, imageCount: 4, isDog: false));
+            // PetId 3 - Whiskers (Persian Cat)
+            new PetImage
+            {
+                PetId = 3,
+                ImageUrl = "cat1_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 3,
+                ImageUrl = "cat1_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 3,
+                ImageUrl = "cat1_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 3,
+                ImageUrl = "cat1_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+
+            // PetId 2 - Max (Labrador Retriever)
+            new PetImage
+            {
+                PetId = 4,
+                ImageUrl = "dog3_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 4,
+                ImageUrl = "dog3_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 4,
+                ImageUrl = "dog3_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 4,
+                ImageUrl = "dog3_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+
+            // PetId 5 - Mittens (Siamese Cat)
+            new PetImage
+            {
+                PetId = 5,
+                ImageUrl = "cat2_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 5,
+                ImageUrl = "cat2_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 5,
+                ImageUrl = "cat2_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 5,
+                ImageUrl = "cat2_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+
+            // PetId 6 - Shadow (Maine Coon)
+            new PetImage
+            {
+                PetId = 6,
+                ImageUrl = "cat3_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 6,
+                ImageUrl = "cat3_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 6,
+                ImageUrl = "cat3_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 6,
+                ImageUrl = "cat3_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            }
+        };
 
         context.PetImages.AddRange(petImages);
         await context.SaveChangesAsync();
-    }
-
-    private static async Task<IEnumerable<PetImage>> CreatePetImagesAsync(int petId, int imageCount, bool isDog)
-    {
-        var imageTasks = new List<Task<string>>();
-
-        for (int i = 0; i < imageCount; i++)
-        {
-            var fetchTask = isDog
-                ? PetImageFetcher.FetchRandomDogImageUrlAsync()
-                : PetImageFetcher.FetchRandomCatImageUrlAsync();
-            imageTasks.Add(fetchTask);
-        }
-
-        var imageUrls = await Task.WhenAll(imageTasks);
-
-        var images = new List<PetImage>();
-        for (int i = 0; i < imageUrls.Length; i++)
-        {
-            images.Add(new PetImage
-            {
-                PetId = petId,
-                ImageUrl = imageUrls[i],
-                IsPrimary = i == 0,
-                IsDeleted = false,
-                DeletedAt = null
-            });
-        }
-        return images;
     }
 }

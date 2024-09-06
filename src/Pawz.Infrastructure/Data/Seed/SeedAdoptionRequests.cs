@@ -16,11 +16,23 @@ public class SeedAdoptionRequests
         var adoptionRequestsExists = await context.AdoptionRequests.AnyAsync();
         if (adoptionRequestsExists) return;
 
-        var userJohn = await context.Users.FirstOrDefaultAsync(u => u.UserName == "john");
-        var userJane = await context.Users.FirstOrDefaultAsync(u => u.UserName == "jane");
+        var userAsd = await context.Users.FirstOrDefaultAsync(u => u.Email == "asd@qwe.com");
+        var userBob = await context.Users.FirstOrDefaultAsync(u => u.Email == "bob@example.com");
+        var userJane = await context.Users.FirstOrDefaultAsync(u => u.Email == "jane@example.com");
+        var userJohn = await context.Users.FirstOrDefaultAsync(u => u.Email == "john@example.com");
 
         var adoptionRequests = new List<AdoptionRequest>
         {
+            new AdoptionRequest
+            {
+                Status = AdoptionRequestStatus.Pending,
+                RequestDate = DateTime.UtcNow,
+                ResponseDate = DateTime.UtcNow,
+                PetId = 1,
+                RequesterUserId = userBob.Id,
+                IsDeleted = false,
+                DeletedAt = null
+            },
             new AdoptionRequest
             {
                 Status = AdoptionRequestStatus.Pending,
@@ -33,10 +45,30 @@ public class SeedAdoptionRequests
             },
             new AdoptionRequest
             {
-                Status = AdoptionRequestStatus.Pending,
+                Status = AdoptionRequestStatus.Approved,
                 RequestDate = DateTime.UtcNow,
                 ResponseDate = DateTime.UtcNow,
                 PetId = 2,
+                RequesterUserId = userBob.Id,
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new AdoptionRequest
+            {
+                Status = AdoptionRequestStatus.Approved,
+                RequestDate = DateTime.UtcNow,
+                ResponseDate = DateTime.UtcNow,
+                PetId = 2,
+                RequesterUserId = userJane.Id,
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new AdoptionRequest
+            {
+                Status = AdoptionRequestStatus.Approved,
+                RequestDate = DateTime.UtcNow,
+                ResponseDate = DateTime.UtcNow,
+                PetId = 3,
                 RequesterUserId = userJohn.Id,
                 IsDeleted = false,
                 DeletedAt = null
@@ -47,17 +79,7 @@ public class SeedAdoptionRequests
                 RequestDate = DateTime.UtcNow,
                 ResponseDate = DateTime.UtcNow,
                 PetId = 3,
-                RequesterUserId = userJane.Id,
-                IsDeleted = false,
-                DeletedAt = null
-            },
-            new AdoptionRequest
-            {
-                Status = AdoptionRequestStatus.Approved,
-                RequestDate = DateTime.UtcNow,
-                ResponseDate = DateTime.UtcNow,
-                PetId = 4,
-                RequesterUserId = userJohn.Id,
+                RequesterUserId = userBob.Id,
                 IsDeleted = false,
                 DeletedAt = null
             }
