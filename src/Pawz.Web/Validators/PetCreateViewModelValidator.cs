@@ -60,7 +60,7 @@ public class PetCreateViewModelValidator : AbstractValidator<PetCreateViewModel>
         RuleFor(x => x.ImageFiles)
               .NotNull().WithMessage("At least one image is required.")
               .Must(images => images != null && images.Any()).WithMessage("You must upload at least one image.")
-              .Must(images => images.All(image => image.Length <= 5 * 1024 * 1024))
-              .WithMessage("Each image must be 5MB or smaller.");
+              .Must(images => images.All(image => image.Length <= 10 * 1024 * 1024))
+              .WithMessage("Each image must be 10MB or smaller.");
     }
 }
