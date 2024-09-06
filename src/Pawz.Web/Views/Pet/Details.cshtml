@@ -4,12 +4,6 @@
     ViewBag.Title = "title";
 }
 
-<div class="text-center">
-    <button class="btn btn-primary mb-4 adoption-request-button" data-toggle="modal" data-target="#adoptionRequestModal">
-        Adoption Request
-    </button>
-</div>
-
 <partial name="AdoptionRequestCreateModel" model="@Model.AdoptionRequestCreateModel" />
 
 <section class="section bg-gray">
@@ -40,14 +34,14 @@
                     <div class="product-slider">
                         @foreach (var image in Model.PetImages)
                         {
-                            <div class="product-slider-item my-4" data-image="/images/pets/@image.ImageUrl"
-                                data-slick-index="@Model.PetImages.IndexOf(image)"
-                                aria-hidden="@(Model.PetImages.IndexOf(image) == 0 ? "false" : "true")"
-                                tabindex="@(Model.PetImages.IndexOf(image) == 0 ? "0" : "-1")" style="width: 730px;">
-                                <img class="d-block img-fluid w-100"
-                                    src="@(string.IsNullOrEmpty(image.ImageUrl) ? "/images/default-image.webp" : "/images/pets/" + image.ImageUrl)"
-                                    alt="Pet Image">
-                            </div>
+                                <div class="product-slider-item my-4" data-image="/images/pets/@image.ImageUrl"
+                                    data-slick-index="@Model.PetImages.IndexOf(image)"
+                                    aria-hidden="@(Model.PetImages.IndexOf(image) == 0 ? "false" : "true")"
+                                    tabindex="@(Model.PetImages.IndexOf(image) == 0 ? "0" : "-1")" style="width: 730px;">
+                                    <img class="d-block img-fluid w-100"
+                                        src="@(string.IsNullOrEmpty(image.ImageUrl) ? "/images/default-image.webp" : "/images/pets/" + image.ImageUrl)"
+                                        alt="Pet Image">
+                                </div>
                         }
 
                         <i class="fa fa-chevron-right arrow-right slick-arrow"></i>
@@ -55,12 +49,12 @@
                         <ul class="slick-dots" role="tablist">
                             @foreach (var image in Model.PetImages)
                             {
-                                <li class="@(Model.PetImages.IndexOf(image) == 0 ? "slick-active" : "")"
-                                    role="presentation">
-                                    <img class="img-fluid"
-                                        src="@(string.IsNullOrEmpty(image.ImageUrl) ? "/images/default-image.webp" : image.ImageUrl)"
-                                        alt="Pet Image">
-                                </li>
+                                    <li class="@(Model.PetImages.IndexOf(image) == 0 ? "slick-active" : "")"
+                                        role="presentation">
+                                        <img class="img-fluid"
+                                            src="@(string.IsNullOrEmpty(image.ImageUrl) ? "/images/default-image.webp" : image.ImageUrl)"
+                                            alt="Pet Image">
+                                    </li>
                             }
                         </ul>
                     </div>
@@ -135,7 +129,11 @@
                             }
                         </p>
                     </div>
-
+                    <div class="text-center">
+    <button class="btn btn-primary mb-4 adoption-request-button" data-toggle="modal" data-target="#adoptionRequestModal">
+        Adoption Request
+    </button>
+</div>
                 </div>
             </div>
         </div>
@@ -144,52 +142,52 @@
 </section>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial"/>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const allCities = @Html.Raw(@Json.Serialize(Model.AdoptionRequestCreateModel.AllCities));
-            console.log("All Cities:", allCities);
+        <partial name="_ValidationScriptsPartial"/>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const allCities = @Html.Raw(@Json.Serialize(Model.AdoptionRequestCreateModel.AllCities));
+                console.log("All Cities:", allCities);
 
-            function populateDropdown(parentId, allItems, childId, defaultText, parentKey) {
-                const childSelect = document.querySelector(`#${childId}`);
+                function populateDropdown(parentId, allItems, childId, defaultText, parentKey) {
+                    const childSelect = document.querySelector(`#${childId}`);
 
-                childSelect.innerHTML = '';
+                    childSelect.innerHTML = '';
 
-                const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.textContent = `Select ${defaultText}`;
-                defaultOption.selected = true;
-                defaultOption.disabled = true;
-                defaultOption.hidden = true;
-                defaultOption.classList.add('default-option');
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = '';
+                    defaultOption.textContent = `Select ${defaultText}`;
+                    defaultOption.selected = true;
+                    defaultOption.disabled = true;
+                    defaultOption.hidden = true;
+                    defaultOption.classList.add('default-option');
 
-                childSelect.appendChild(defaultOption);
+                    childSelect.appendChild(defaultOption);
 
-                if (parentId) {
-                    const filteredItems = allItems.filter(item => item[parentKey] === parseInt(parentId));
-                    console.log(`Filtered ${defaultText}:`, filteredItems);
+                    if (parentId) {
+                        const filteredItems = allItems.filter(item => item[parentKey] === parseInt(parentId));
+                        console.log(`Filtered ${defaultText}:`, filteredItems);
 
-                    filteredItems.forEach(item => {
-                        const option = document.createElement('option');
-                        option.value = item.id;
-                        option.textContent = item.name;
-                        childSelect.appendChild(option);
-                    });
+                        filteredItems.forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.id;
+                            option.textContent = item.name;
+                            childSelect.appendChild(option);
+                        });
 
-                    console.log(`${defaultText} dropdown HTML:`, childSelect.innerHTML);
+                        console.log(`${defaultText} dropdown HTML:`, childSelect.innerHTML);
+                    }
+
+                    $(childSelect).niceSelect('update');
                 }
 
-                $(childSelect).niceSelect('update');
-            }
+                $('#CityId').niceSelect();
+                $('#CountryId').niceSelect();
 
-            $('#CityId').niceSelect();
-            $('#CountryId').niceSelect();
-
-            $('#CountryId').on('change', function () {
-                const countryId = $(this).val();
-                console.log("Selected Country ID:", countryId);
-                populateDropdown(countryId, allCities, 'CityId', 'City', 'countryId');
-            });
-        })
-    </script>
+                $('#CountryId').on('change', function () {
+                    const countryId = $(this).val();
+                    console.log("Selected Country ID:", countryId);
+                    populateDropdown(countryId, allCities, 'CityId', 'City', 'countryId');
+                });
+            })
+        </script>
 }
