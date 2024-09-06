@@ -24,7 +24,7 @@ public class FileUploaderService : IFileUploaderService
 
     public static readonly string PetImagesDirectory = "wwwroot/images/pets";
     private readonly string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
-    private const int maxFileSize = 5 * 1024 * 1024;
+    private const int maxFileSize = 10 * 1024 * 1024;
 
     /// <summary>
     /// Uploads a file to the specified directory after validating it.
