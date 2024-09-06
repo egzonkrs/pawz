@@ -38,7 +38,15 @@ public class UserAccessor : IUserAccessor
     public string GetUserName()
     {
         return _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
+    }
 
+    /// <summary>
+    /// Retrieves the first name of the currently authenticated user.
+    /// </summary>
+    /// <returns>The user's firstName as a string, or null if not authenticated.</returns>
+    public string GetUserFirstName()
+    {
+        return _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.GivenName);
     }
 
     /// <summary>
