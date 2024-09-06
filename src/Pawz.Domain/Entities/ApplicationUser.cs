@@ -23,6 +23,11 @@ public class ApplicationUser : IdentityUser, ISoftDeletion
     public string? Address { get; set; }
 
     /// <summary>
+    /// The user's address.
+    /// </summary>
+    public string? ImageUrl { get; set; }
+
+    /// <summary>
     /// The date and time when the user was created.
     /// Default is the current date and time.
     /// </summary>

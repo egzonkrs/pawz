@@ -4,9 +4,12 @@
 {
     <li class="nav-item dropdown dropdown-slide">
         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="navbar-text custom-navbar-text">
-                <img src="~/template/images/user/userAvatar.jpg" alt="@UserAccessor.GetUserName()'s Profile Picture" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;" />
-                Hi, @UserAccessor.GetUserFirstName()!
+            <span class="navbar-text custom-navbar-text">            
+                <img src="@(string.IsNullOrEmpty(UserAccessor.GetUserInfo("profilepicture")) ? Url.Content("~/images/default-image.webp") : UserAccessor.GetUserInfo("profilepicture"))"
+                    alt="@UserAccessor.GetUserName()'s Profile Picture" class="rounded-circle"
+                    style="width: 30px; height: 30px; object-fit: cover;" />
+
+                Hi, @UserAccessor.GetUserName()!
             </span>
         </a>
         <ul class="dropdown-menu">
@@ -17,8 +20,8 @@
             </li>
             <li>
                 <a class="dropdown-item nav-link" asp-controller="Users" asp-action="Logout">
-                    <i class="fa fa-sign-out p-2"></i>  Logout
-                </a >
+                    <i class="fa fa-sign-out p-2"></i> Logout
+                </a>
             </li>
         </ul>
     </li>

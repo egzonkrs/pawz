@@ -1,15 +1,19 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Pawz.Application.Interfaces;
+using Pawz.Domain.Entities;
 using System.Security.Claims;
 
 namespace Pawz.Application.Services;
 
 public class UserAccessor : IUserAccessor
 {
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UserAccessor(IHttpContextAccessor httpContextAccessor)
+    public UserAccessor(UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor)
     {
+        _userManager = userManager;
         _httpContextAccessor = httpContextAccessor;
     }
 
@@ -29,6 +33,25 @@ public class UserAccessor : IUserAccessor
     public string GetEmail()
     {
         return _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email);
+    }
+
+    /// <summary>
+    /// Retrieves the specified information (e.g., profile picture, address, phone number) for the currently logged-in user.
+    /// </summary>
+    /// /// <returns>
+    /// A string containing the requested user information if available; otherwise, null.
+    /// </returns>
+    public string GetUserInfo(string infoType)
+    {
+        var user = _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User).Result;
+
+        return infoType.ToLower() switch
+        {
+            "profilepicture" => user?.ImageUrl,
+            "address" => user?.Address,
+            "phone" => user?.PhoneNumber,
+            _ => null
+        };
     }
 
     /// <summary>
