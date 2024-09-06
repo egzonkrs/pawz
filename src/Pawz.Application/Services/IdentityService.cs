@@ -98,7 +98,7 @@ public sealed class IdentityService : IIdentityService
                 {
                      new Claim(ClaimTypes.NameIdentifier, user.Id),
                      new Claim(ClaimTypes.Email, user.Email),
-                     new Claim(ClaimTypes.Name, user.UserName),
+                     new Claim(ClaimTypes.GivenName, user.FirstName),
                      new Claim(ClaimTypes.Role, "User")
                 };
 
