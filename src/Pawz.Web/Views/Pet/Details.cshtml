@@ -31,33 +31,45 @@
                         </ul>
                     </div>
 
-                    <div class="product-slider">
-                        @foreach (var image in Model.PetImages)
-                        {
-                            <div class="product-slider-item my-4" data-image="/images/pets/@image.ImageUrl"
-                                data-slick-index="@Model.PetImages.IndexOf(image)"
-                                aria-hidden="@(Model.PetImages.IndexOf(image) == 0 ? "false" : "true")"
-                                tabindex="@(Model.PetImages.IndexOf(image) == 0 ? "0" : "-1")" style="width: 730px;">
-                                <img class="d-block img-fluid w-100"
-                                    src="@(string.IsNullOrEmpty(image.ImageUrl) ? "/images/default-image.webp" : "/images/pets/" + image.ImageUrl)"
-                                    alt="Pet Image">
-                            </div>
-                        }
-
-                        <i class="fa fa-chevron-right arrow-right slick-arrow"></i>
-
-                        <ul class="slick-dots" role="tablist">
+                    @if (Model.PetImages.Count > 1)
+                    {
+                        <div class="product-slider">
                             @foreach (var image in Model.PetImages)
                             {
-                                <li class="@(Model.PetImages.IndexOf(image) == 0 ? "slick-active" : "")"
-                                    role="presentation">
-                                    <img class="img-fluid"
-                                        src="@(string.IsNullOrEmpty(image.ImageUrl) ? "/images/default-image.webp" : image.ImageUrl)"
+                                <div class="product-slider-item my-4" data-image="/images/pets/@image.ImageUrl"
+                                    data-slick-index="@Model.PetImages.IndexOf(image)"
+                                    aria-hidden="@(Model.PetImages.IndexOf(image) == 0 ? "false" : "true")"
+                                    tabindex="@(Model.PetImages.IndexOf(image) == 0 ? "0" : "-1")" style="width: 730px;">
+                                    <img class="d-block img-fluid w-100"
+                                        src="@(string.IsNullOrEmpty(image.ImageUrl) ? "/images/default-image.webp" : "/images/pets/" + image.ImageUrl)"
                                         alt="Pet Image">
-                                </li>
+                                </div>
                             }
-                        </ul>
-                    </div>
+
+                            <i class="fa fa-chevron-right arrow-right slick-arrow"></i>
+
+                            <ul class="slick-dots" role="tablist">
+                                @foreach (var image in Model.PetImages)
+                                {
+                                    <li class="@(Model.PetImages.IndexOf(image) == 0 ? "slick-active" : "")"
+                                        role="presentation">
+                                        <img class="img-fluid"
+                                            src="@(string.IsNullOrEmpty(image.ImageUrl) ? "/images/default-image.webp" : image.ImageUrl)"
+                                            alt="Pet Image">
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="margin-top: 30px;">
+                            <img class="d-block img-fluid w-100"
+                                src="@(string.IsNullOrEmpty(Model.PetImages.First().ImageUrl) ? "/images/default-image.webp" : "/images/pets/" + Model.PetImages.First().ImageUrl)"
+                                alt="Pet Image">
+                        </div>
+                    }
+
 
                     <!-- Product Details Content -->
                     <div class="content mt-5 pt-5">
@@ -85,7 +97,7 @@
                                     <li><strong>Breed:</strong> @(Model.Breed?.Name ?? "Unknown")</li>
                                     <li><strong>Age:</strong> @Model.AgeYears</li>
                                     <li><strong>Date Listed:</strong> @Model.CreatedAt.ToString("d MMMM yyyy")</li>
-                                    <li><strong>Price:</strong> @Model.Price.ToString("C")</li>
+                                    <li><strong>Price:</strong> @(Model.Price == 0 ? "Free" : Model.Price.ToString("C"))</li>
                                 </ul>
                             </div>
                         </div>
@@ -130,10 +142,9 @@
                             }
                         </p>
                     </div>
-                    <div class="text-center">
-                        <button class="btn btn-primary mb-4 adoption-request-button" data-toggle="modal"
-                            data-target="#adoptionRequestModal">
-                            Adoption Request
+                    <div class="widget text-center">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#adoptionRequestModal">
+                            Request Adoption
                         </button>
                     </div>
                 </div>

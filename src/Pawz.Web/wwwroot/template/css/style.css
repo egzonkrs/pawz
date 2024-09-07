@@ -1304,6 +1304,10 @@ ul.pagination .active a {
   border-radius: 0;
 }
 
+.arrow-left{
+  left: -15px;
+}
+
 .arrow-right, .arrow-left {
   cursor: pointer;
   width: 35px;
