@@ -35,13 +35,13 @@
                         @foreach (var image in Model.PetImages)
                         {
                             <div class="product-slider-item my-4"
-                                 data-image="@("http://localhost:5001/images/pets/" + image.ImageUrl)"
+                                 data-image="@("/images/pets/" + image.ImageUrl)"
                                  data-slick-index="@Model.PetImages.IndexOf(image)"
                                  aria-hidden="@(Model.PetImages.IndexOf(image) == 0 ? "false" : "true")"
                                  tabindex="@(Model.PetImages.IndexOf(image) == 0 ? "0" : "-1")"
                                  style="width: 730px;">
                                 <img class="d-block img-fluid w-100"
-                                     src="@(string.IsNullOrEmpty(image.ImageUrl) ? Url.Content("~/images/default-image.webp") : "http://localhost:5001/images/pets/" + image.ImageUrl)"
+                                     src="@(string.IsNullOrEmpty(image.ImageUrl) ? Url.Content("~/images/default-image.webp") : "/images/pets/" + image.ImageUrl)"
                                      alt="Pet Image">
                             </div>
                         }
@@ -54,7 +54,7 @@
                                 <li class="@(Model.PetImages.IndexOf(image) == 0 ? "slick-active" : "")"
                                     role="presentation">
                                     <img class="img-fluid"
-                                         src="@(string.IsNullOrEmpty(image.ImageUrl) ? "/images/default-image.webp" : "http://localhost:5001/images/pets/" + image.ImageUrl)"
+                                         src="@(string.IsNullOrEmpty(image.ImageUrl) ? "/images/default-image.webp" : "/images/pets/" + image.ImageUrl)"
                                          alt="Pet Image">
                                 </li>
                             }
