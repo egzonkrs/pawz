@@ -46,4 +46,7 @@ public interface ICityService
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
     Task<Result<bool>> DeleteCityAsync(int cityId, CancellationToken cancellationToken);
+
+
+    //Task<Result<IEnumerable<City>>> GetCitiesByCountryIdAsync(int countryId, CancellationToken cancellationToken);
 }

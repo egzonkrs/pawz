@@ -9,6 +9,7 @@ using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
 using Pawz.Infrastructure.Repos;
 using Pawz.Infrastructure.Services;
+using Pawz.Web.Controllers;
 using System.Configuration;
 
 namespace Pawz.Web.Modules;
@@ -55,6 +56,7 @@ public class DataModule : IModule
         services.AddScoped<ILocationService, LocationService>();
         services.AddScoped<ICountryService, CountryService>();
         services.AddScoped<ICityService, CityService>();
+        services.AddScoped<IAdoptionRequestService, AdoptionRequestService>();
 
         services.Configure<ApiSettings>(_configuration.GetSection(ApiSettings.SectionName));
     }

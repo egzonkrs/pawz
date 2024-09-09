@@ -18,10 +18,22 @@ public interface IUserAccessor
     string GetEmail();
 
     /// <summary>
-    /// Gets the user's name.
+    /// Gets the user's username.
     /// </summary>
-    /// <returns>The user's name as a string.</returns>
+    /// <returns>The user's username as a string.</returns>
     string GetUserName();
+
+    /// <summary>
+    /// Gets the user's first name.
+    /// </summary>
+    /// <returns>The user's first name as a string.</returns>
+    string GetUserFirstName();
+
+    /// <summary>
+    /// Gets the user's last name.
+    /// </summary>
+    /// <returns>The user's last name as a string.</returns>
+    string GetUserLastName();
 
     /// <summary>
     /// Gets the user's role.
@@ -34,4 +46,14 @@ public interface IUserAccessor
     /// </summary>
     /// <returns>True if the user is authenticated, otherwise false.</returns>
     bool IsUserAuthenticated();
+
+    /// <summary>
+    /// Retrieves specific information about the currently logged-in user based on the provided info type.
+    /// </summary>
+    /// <returns>
+    /// A string containing the requested information (e.g., profile picture URL, address, phone number),
+    /// or null if the information is not available or the infoType is invalid.
+    /// </returns>
+    string GetUserInfo(string infoType);
+
 }

@@ -15,11 +15,11 @@ public class PetViewModel
     public List<PetImageViewModel> PetImages { get; set; } = new List<PetImageViewModel>();
     public BreedViewModel Breed { get; set; }
     public LocationViewModel Location { get; set; }
-    public int AgeYears { get; set; }
-    public int AgeMonths { get; set; }
+    public string AgeYears { get; set; }
     public UserViewModel User { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public decimal Price { get; set; }
+    public AdoptionRequestCreateModel AdoptionRequestCreateModel { get; set; }
 }
 
 public class UserViewModel
@@ -27,6 +27,7 @@ public class UserViewModel
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string? Address { get; set; }
+    public string? ImageUrl { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public ICollection<PetViewModel> Pets { get; set; }
     public ICollection<AdoptionRequest> AdoptionRequests { get; set; }

@@ -31,12 +31,7 @@ public class PetCreateViewModel
     /// <summary>
     /// The age of the pet in years.
     /// </summary>
-    public int AgeYears { get; set; }
-
-    /// <summary>
-    /// The age of the pet in months.
-    /// </summary>
-    public int AgeMonths { get; set; }
+    public string AgeYears { get; set; }
 
     /// <summary>
     /// Additional information about the pet.

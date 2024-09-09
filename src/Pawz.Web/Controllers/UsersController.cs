@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models.Identity;
 using Pawz.Application.Models.Pet;
+using Pawz.Application.Models.Identity;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models;
 using System.Collections.Generic;
@@ -35,6 +36,13 @@ public class UsersController : Controller
         return View();
     }
 
+    [HttpGet]
+    public IActionResult EditProfileForm()
+    {
+        return View(); 
+    }
+
+    [HttpPost]
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {

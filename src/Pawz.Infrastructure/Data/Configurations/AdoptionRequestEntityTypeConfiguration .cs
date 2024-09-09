@@ -12,5 +12,10 @@ public class AdoptionRequestEntityTypeConfiguration : IEntityTypeConfiguration<A
             .HasOne(ar => ar.Pet)
             .WithMany(p => p.AdoptionRequests)
             .HasForeignKey(ar => ar.PetId);
+
+        builder
+            .HasOne(ar => ar.Location)
+            .WithMany(l => l.AdoptionRequests)
+            .HasForeignKey(ar => ar.LocationId);
     }
 }

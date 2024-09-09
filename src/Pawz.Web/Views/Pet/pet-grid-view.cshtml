@@ -8,7 +8,7 @@
                 <div class="product-item">
                     <div class="card">
                         <img class="card-img-top img-fluid"
-                            src="@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")"
+                            src="/images/pets/@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")"
                             alt="Pet Image" />
                     </div>
                     <div class="card-body">
@@ -23,7 +23,7 @@
                             <li><strong>Breed:</strong> @(pet.Breed.Name)</li>
                             <li><strong>Location:</strong> @pet.Location?.Address, @pet.Location?.City?.Name,
                                     @pet.Location?.City?.Country?.Name </li>
-                            <li><strong>Age:</strong> @pet.AgeYears years and @pet.AgeMonths months</li>
+                            <li><strong>Age:</strong> @pet.AgeYears</li>
                             <li><strong>Posted by:</strong> @(pet.User.FirstName) @(pet.User.LastName) </li>
                             <li><strong>Date:</strong> @pet.CreatedAt.ToString("d MMMM yyyy")</li>
                             <li><strong>Price:</strong> @pet.Price.ToString("C")</li>
