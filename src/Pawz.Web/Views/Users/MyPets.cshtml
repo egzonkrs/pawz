@@ -1,12 +1,16 @@
 @model IEnumerable<Pawz.Application.Models.Pet.UserPetResponse>
 
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search by name, breed, or location..." class="form-control mb-3" style="max-width: 300px;" />
+</div>
+
 @if (Model == null || !Model.Any())
 {
     <p>You don't have any pets created.</p>
 }
 else
 {
-    <table class="table table-responsive product-dashboard-table">
+    <table class="table table-responsive product-dashboard-table" id="petTable">
         <thead>
             <tr>
                 <th>Image</th>
@@ -17,7 +21,7 @@ else
                 <th class="text-center">Action</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="petTableBody">
             @foreach (var pet in Model)
             {
                 <tr>
@@ -38,7 +42,7 @@ else
                     </td>
                     <td class="action text-center" data-title="Action">
                         <div class="">
-                            <ul class="list-inline justify-content-center" style="display: flex; justify-content: center; flex-direction:column gap: 10px;">
+                            <ul class="list-inline justify-content-center" style="display: flex; gap: 10px;">
                                 <li class="list-inline-item">
                                     <a data-toggle="tooltip" data-placement="top" title="View" class="view" href="pet-details.html?id=@pet.Id" style="font-size: 12px;">
                                         <i class="fa fa-eye"></i>
@@ -62,3 +66,16 @@ else
         </tbody>
     </table>
 }
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#searchInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('#petTableBody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+    });
+</script>
