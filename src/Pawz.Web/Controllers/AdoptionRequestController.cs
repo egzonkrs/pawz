@@ -139,4 +139,16 @@ public class AdoptionRequestController : Controller
         await _adoptionRequestService.DeleteAdoptionRequestAsync(id, cancellationToken);
         return RedirectToAction(nameof(Index));
     }
+
+    public async Task<IActionResult> GetPetAdoptionRequests(int petId, CancellationToken cancellationToken)
+    {
+        var adoptionRequests = await _adoptionRequestService.GetAdoptionRequestsByPetIdAsync(petId, cancellationToken);
+
+        if (!adoptionRequests.IsSuccess || adoptionRequests.Value is null || !adoptionRequests.Value.Any())
+        {
+            return View(new List<AdoptionRequest>());
+        }
+
+        return View(adoptionRequests);
+    }
 }
