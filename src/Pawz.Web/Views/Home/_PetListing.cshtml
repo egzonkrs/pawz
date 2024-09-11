@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
+﻿@using Pawz.Web.Models.Pet
+@model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
 
 
 @foreach (var pet in Model)
@@ -8,17 +9,15 @@
         <div class="product-item bg-light">
             <div class="card h-100 shadow-sm px-3 py-2 pt-3 align-items-center position-relative">
                 <div class="thumb-content">
-                    <!-- <div class="price">$200</div> -->
-                    <a href="@Url.Action("Details", "Pet", new { id = pet.Id })">
+                    <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">
                         <img class="card-img-top img-fluid"
-                             src="images/pets/@(pet.PetImages.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")" alt="@pet.Name">
+                             data-image="@GetPrimaryPetImagePath(pet)"
+                             src="@GetPrimaryPetImagePath(pet)" alt="@pet.Name">
                     </a>
                 </div>
                 <div class="card-body">
                     <h4 class="card-title">
-                        <a href="@Url.Action("Details", "Pet", new { id = pet.Id })">
-                            @pet.Name
-                        </a>
+                        <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">@pet.Name</a>
                     </h4>
                     <ul class="list-inline product-meta">
                         <li class="list-inline-item">
@@ -49,4 +48,14 @@
             </div>
         </div>
     </div>
+}
+
+@functions {
+    private static string GetPrimaryPetImagePath(PetViewModel pet)
+    {
+        var primaryPetUrl = pet.PetImages.FirstOrDefault(img => img.IsPrimary)?.ImageUrl;
+        return primaryPetUrl is null
+            ? "/images/pets/default-image.webp"
+            : $"/images/pets/{primaryPetUrl}";
+    }
 }

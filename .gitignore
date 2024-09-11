@@ -465,3 +465,5 @@ $RECYCLE.BIN/
 *.jpeg
 *.png
 *.gif
+
+*.Development.json

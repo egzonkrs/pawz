@@ -176,8 +176,10 @@
             nextArrow: '<i class="fa fa-chevron-right arrow-right"></i>',
             prevArrow: '<i class="fa fa-chevron-left arrow-left"></i>',
             customPaging: function (slider, i) {
-                var image = $(slider.$slides[i]).data('image');
-                return '<img class="img-fluid pet-thumbnail" src="' + image + '" alt="product-img">';
+                const petImagePath = $(slider.$slides[i]).data('image');
+                if (petImagePath) {
+                    return `<img class="img-fluid pet-thumbnail" src="${petImagePath}" alt="product-img">`;
+                }
             }
         });
     });
