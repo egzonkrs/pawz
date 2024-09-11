@@ -197,7 +197,7 @@ public class AdoptionRequestService : IAdoptionRequestService
         }
     }
 
-    public async Task<Result<IEnumerable<AdoptionRequest>>> GetAdoptionRequestsByPetIdAsync(int petId, CancellationToken cancellationToken)
+    public async Task<Result<List<AdoptionRequest>>> GetAdoptionRequestsByPetIdAsync(int petId, CancellationToken cancellationToken)
     {
         try
         {
@@ -208,17 +208,17 @@ public class AdoptionRequestService : IAdoptionRequestService
             if (adoptionRequests == null || !adoptionRequests.Any())
             {
                 _logger.LogInformation("No Adoption Requests found for PetId: {PetId}", petId);
-                return Result<IEnumerable<AdoptionRequest>>.Failure(AdoptionRequestErrors.NotFound(petId));
+                return Result<List<AdoptionRequest>>.Success(new List<AdoptionRequest>());
             }
 
             _logger.LogInformation("Successfully retrieved {Count} Adoption Requests for PetId: {PetId}", adoptionRequests.Count(), petId);
-            return Result<IEnumerable<AdoptionRequest>>.Success(adoptionRequests);
+            return Result<List<AdoptionRequest>>.Success(adoptionRequests.ToList());
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve Adoption Requests for PetId: {PetId}",
                 nameof(AdoptionRequestService), petId);
-            return Result<IEnumerable<AdoptionRequest>>.Failure(AdoptionRequestErrors.RetrievalError);
+            return Result<List<AdoptionRequest>>.Failure(AdoptionRequestErrors.RetrievalError);
         }
     }
 
