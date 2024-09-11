@@ -1,7 +1,14 @@
 @model IEnumerable<AdoptionRequest>
-<div class="container"> 
-<h2 class="p-4">Adoption Requests</h2>
-<div class="row">
+<div class="container">
+    <h2 class="pl-4 pb-4">
+        Adoption Requests
+        <button onclick="window.history.back()" class="btn btn-outline-info float-right mr-2">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            Back to my pets
+        </button>
+    </h2>
+
+    <div class="row">
     <div class="col-3">
             @if(Model.First().Pet != null)
             {
@@ -20,8 +27,6 @@
                     <p> ♦ Age: <i> @Model.First().Pet.AgeYears </i></p>
                     <p> ♦ Location: <i> @Model.First().Pet.Location.City.Name </i></p>
                     <p> ♦ Price: <i> @(Model.First().Pet.Price == 0 ? "Free" : Model.First().Pet.Price + "€") </i></p>
-
-
                 </div>
             }
             else
@@ -55,7 +60,8 @@
                             <tr class="text-center">
                                 <th>
                                     <img src="@(string.IsNullOrEmpty(request.User.ImageUrl) ? Url.Content("~/images/userAvatar.jpg") :
-                         (request.User.ImageUrl.StartsWith("http") ? request.User.ImageUrl : Url.Content("~/images/users/" + request.User.ImageUrl)))"
+                                                                   (request.User.ImageUrl.StartsWith("http") ? request.User.ImageUrl :
+                                                                   Url.Content("~/images/users/" + request.User.ImageUrl)))"
                                          alt="User Photo" class="rounded-circle" style="width: 100px; height: 100px;" />
                                 </th>
                                 <td class="align-middle"> @request.User.FirstName</td>
@@ -63,8 +69,10 @@
                                 <td class="align-middle">@request.RequestDate.ToString("dd/MM/yyyy")</td>
                                 <td class="align-middle">@request.Status</td>
                                 <td class="text-center align-middle">
-                                    <button class="btn btn-success m-1"> Accept</button>
-                                    <button class="btn btn-danger"> Reject </button>
+                                        <button class="btn btn-success"> <i class="fa fa-check" aria-hidden="true"></i></button>
+                                        <button class="btn btn-danger">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
                                 </td>
                             </tr>
                         }
