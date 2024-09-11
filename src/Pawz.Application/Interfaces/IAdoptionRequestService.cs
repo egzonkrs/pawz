@@ -54,6 +54,6 @@ public interface IAdoptionRequestService
     /// <param name="petId">The Id of the pet.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a collection of <see cref="AdoptionRequest"/> objects.</returns>
-    Task<IEnumerable<AdoptionRequest>> GetAdoptionRequestsByPetIdAsync(int petId, CancellationToken cancellationToken);
+    Task<Result<IEnumerable<AdoptionRequest>>> GetAdoptionRequestsByPetIdAsync(int petId, CancellationToken cancellationToken);
 
 }
