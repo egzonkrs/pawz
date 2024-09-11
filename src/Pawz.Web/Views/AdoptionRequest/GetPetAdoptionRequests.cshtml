@@ -31,14 +31,13 @@
             }
             else
             {
-                <h1>No </h1>
+                <h1> There are no pet adoption requests. </h1>
             }
-          
         </div> <!--end col for pet details-->
     <div class="col-9">
         @if (!Model.Any())
         {
-            <p>Nuk ka kërkesa për adoptim për këtë pet.</p>
+            <p>There are no pet adoption requests.</p>
         }
         else
         {
@@ -103,6 +102,5 @@
                 </nav>
             </div>
         </div> <!-- end col-for-table-->
-
     </div> <!-- end of row-->
 </div>
