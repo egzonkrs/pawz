@@ -39,6 +39,12 @@ public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>
     {
         return await _dbSet
             .Where(ar => ar.PetId == petId)
+            .Include(ar => ar.User) // Include për të marrë të dhënat e përdoruesit që ka bërë kërkesën
+            .Include(ar => ar.Pet)
+            .Include(ar => ar.Pet.Breed)
+            .Include(ar => ar.Pet.Breed.Species)
+            .Include(ar => ar.Pet.Location.City)
+            .Include(ar => ar.Pet.PetImages)
             .ToListAsync(cancellationToken);
     }
 
