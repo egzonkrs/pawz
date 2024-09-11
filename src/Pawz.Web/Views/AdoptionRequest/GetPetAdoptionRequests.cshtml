@@ -1,0 +1,100 @@
+@model IEnumerable<AdoptionRequest>
+<div class="container"> 
+<h2 class="p-4">Adoption Requests</h2>
+<div class="row">
+    <div class="col-3">
+            @if(Model.First().Pet != null)
+            {
+                <div class="widget">
+                    <div class="text-center">
+                       <img src="@(Model.First().Pet != null && !string.IsNullOrEmpty(Model.First().Pet.PetImages.First().ImageUrl)
+                             ? (Model.First().Pet.PetImages.First().ImageUrl.StartsWith("http")
+                             ? Model.First().Pet.PetImages.First().ImageUrl
+                             : Url.Content("~/images/pets/" + Model.First().Pet.PetImages.First().ImageUrl))
+                             : Url.Content("~/images/defaultPetAvatar.jpg"))"
+                             alt="Pet Photo" class="rounded-circle" style="width: 150px; height: 150px;" />
+                    </div>
+                    <h5 class="text-center mt-3">@Model.First().Pet.Name</h5>
+                    <p> ♦ Breed: <i> @Model.First().Pet.Breed.Name </i></p>
+                    <p> ♦ Species: <i> @Model.First().Pet.Breed.Species.Name </i></p>
+                    <p> ♦ Age: <i> @Model.First().Pet.AgeYears </i></p>
+                    <p> ♦ Location: <i> @Model.First().Pet.Location.City.Name </i></p>
+                    <p> ♦ Price: <i> @(Model.First().Pet.Price == 0 ? "Free" : Model.First().Pet.Price + "€") </i></p>
+
+
+                </div>
+            }
+            else
+            {
+                <h1>No </h1>
+            }
+          
+        </div> <!--end col for pet details-->
+    <div class="col-9">
+        @if (!Model.Any())
+        {
+            <p>Nuk ka kërkesa për adoptim për këtë pet.</p>
+        }
+        else
+        {
+            <div class="table-responsive mx-auto">
+                <table class="table table-striped table-bordered mb-5">
+                    <thead>
+                        <tr class="text-center">
+                            <th> Image</th>
+                            <th> Name</th>
+                            <th> Surname</th>
+                            <th> Request Date</th>
+                            <th> Status</th>
+                            <th> Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var request in Model)
+                        {
+                            <tr class="text-center">
+                                <th>
+                                    <img src="@(string.IsNullOrEmpty(request.User.ImageUrl) ? Url.Content("~/images/userAvatar.jpg") :
+                         (request.User.ImageUrl.StartsWith("http") ? request.User.ImageUrl : Url.Content("~/images/users/" + request.User.ImageUrl)))"
+                                         alt="User Photo" class="rounded-circle" style="width: 100px; height: 100px;" />
+                                </th>
+                                <td class="align-middle"> @request.User.FirstName</td>
+                                <td class="align-middle"> @request.User.LastName </td>
+                                <td class="align-middle">@request.RequestDate.ToString("dd/MM/yyyy")</td>
+                                <td class="align-middle">@request.Status</td>
+                                <td class="text-center align-middle">
+                                    <button class="btn btn-success m-1"> Accept</button>
+                                    <button class="btn btn-danger"> Reject </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+            <!-- paginatipn -->
+            <div class="pagination justify-content-center">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="dashboard.html" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="dashboard.html">1</a></li>
+                        <li class="page-item active"><a class="page-link" href="dashboard.html">2</a></li>
+                        <li class="page-item"><a class="page-link" href="dashboard.html">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="dashboard.html" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div> <!-- end col-for-table-->
+
+    </div> <!-- end of row-->
+</div>
