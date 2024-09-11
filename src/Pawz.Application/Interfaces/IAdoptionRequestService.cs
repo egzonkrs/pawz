@@ -47,4 +47,13 @@ public interface IAdoptionRequestService
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
     Task<Result<bool>> DeleteAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Retrieves all adoption requests for a specific pet by its Id.
+    /// </summary>
+    /// <param name="petId">The Id of the pet.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+    /// <returns>A task representing the operation. The task result contains a collection of <see cref="AdoptionRequest"/> objects.</returns>
+    Task<IEnumerable<AdoptionRequest>> GetAdoptionRequestsByPetIdAsync(int petId, CancellationToken cancellationToken);
+
 }
