@@ -57,7 +57,7 @@
 .adoption-request-button {
     font-size: 30px;        /* Slightly increase the font size */
     width: 150px;             /* Set a larger fixed width */
-    height: 150px;            /* Set the same height as width to make it square */
+    height: 90px !important; /* Set the same height as width to make it square */
     padding: 0;               /* Remove any extra padding */
     border-radius: 10px;      /* Slightly rounded corners, adjust as needed */
     display: flex;            /* Flexbox to center text */
