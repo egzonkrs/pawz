@@ -235,9 +235,9 @@ public class PetController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    public async Task<IActionResult> MyPets(CancellationToken cancellationToken)
+    public async Task<IActionResult> MyPets(string searchTerm,CancellationToken cancellationToken)
     {
-        var result = await _petService.GetPetsByUserIdAsync(cancellationToken);
+        var result = await _petService.GetPetsByUserIdAsync(searchTerm,cancellationToken);
 
         var pets = result.Value;
 
