@@ -81,6 +81,7 @@ public class AdoptionRequestController : Controller
             }).ToList();
 
             validationResult.AddErrorsToModelState(ModelState);
+            TempData["ErrorMessage"] = "Failed to request for adoption! Please try again!";
             return View(adoptionRequestCreateModel);
         }
 
@@ -109,6 +110,7 @@ public class AdoptionRequestController : Controller
             return View(adoptionRequestCreateModel);
         }
 
+        TempData["SuccessMessage"] = "Adoption request created successfully!";
         return RedirectToAction("Index", "Home");
     }
 
