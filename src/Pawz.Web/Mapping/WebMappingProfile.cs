@@ -51,5 +51,11 @@ public class WebMappingProfile : Profile
         CreateMap<City, CityViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
 
         CreateMap<Country, CountryViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
+
+        CreateMap<PetCreateViewModel, PetCreateRequest>();
+        CreateMap<Pet, AdoptionRequestCreateModel>();
+
+        CreateMap<AdoptionRequestCreateModel, AdoptionRequestCreateRequest>();
+        CreateMap<AdoptionRequestCreateRequest, AdoptionRequest>();
     }
 }
