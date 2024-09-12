@@ -24,7 +24,7 @@ public class AdoptionRequest : IEntity<int>, ISoftDeletion
     /// <summary>
     /// The date when the adoption request was responded to
     /// </summary>
-    public DateTime ResponseDate { get; set; }
+    public DateTime? ResponseDate { get; set; }
 
     /// <summary>
     /// The Id of the pet associated with this adoption request
