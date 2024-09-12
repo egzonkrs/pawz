@@ -63,14 +63,14 @@ public class AdoptionRequestController : Controller
     {
         var validationResult = await _validator.ValidateAsync(adoptionRequestCreateModel, cancellationToken);
 
+        var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
+        var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
+
+        var countriesList = countriesResult.Value ?? new List<Country>();
+        var citiesList = citiesResult.Value ?? new List<City>();
+
         if (validationResult.IsValid is false)
         {
-            var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
-            var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
-
-            var countriesList = countriesResult.Value ?? new List<Country>();
-            var citiesList = citiesResult.Value ?? new List<City>();
-
             adoptionRequestCreateModel.Countries = new SelectList(countriesList, "Id", "Name");
             adoptionRequestCreateModel.Cities = new SelectList(citiesList, "Id", "Name");
             adoptionRequestCreateModel.AllCities = citiesList.Select(x => new CityViewModel
@@ -82,7 +82,7 @@ public class AdoptionRequestController : Controller
 
             validationResult.AddErrorsToModelState(ModelState);
             TempData["ErrorMessage"] = "Failed to request for adoption! Please try again!";
-            return View(adoptionRequestCreateModel);
+            return RedirectToAction("Index", "Home");
         }
 
         var adoptionRequestCreateRequest = _mapper.Map<AdoptionRequestCreateRequest>(adoptionRequestCreateModel);
@@ -91,12 +91,6 @@ public class AdoptionRequestController : Controller
 
         if (adoptionRequestCreateResult.IsSuccess is false)
         {
-            var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
-            var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
-
-            var countriesList = countriesResult.Value ?? new List<Country>();
-            var citiesList = citiesResult.Value ?? new List<City>();
-
             adoptionRequestCreateModel.Countries = new SelectList(countriesList, "Id", "Name");
             adoptionRequestCreateModel.Cities = new SelectList(citiesList, "Id", "Name");
             adoptionRequestCreateModel.AllCities = citiesList.Select(x => new CityViewModel
@@ -107,10 +101,18 @@ public class AdoptionRequestController : Controller
             }).ToList();
 
             adoptionRequestCreateResult.AddErrorsToModelState(ModelState);
-            return View(adoptionRequestCreateModel);
+            TempData["ErrorMessage"] = "Failed to request for adoption! Please try again!";
+            return RedirectToAction("Index", "Home");
         }
 
-        TempData["SuccessMessage"] = "Adoption request created successfully!";
+        if (adoptionRequestCreateResult.IsSuccess)
+        {
+            TempData["SuccessMessage"] = "Adoption request created successfully!";
+        }
+
+        adoptionRequestCreateModel.Countries = new SelectList(countriesList, "Id", "Name");
+        adoptionRequestCreateModel.Cities = new SelectList(citiesList, "Id", "Name");
+
         return RedirectToAction("Index", "Home");
     }
 
