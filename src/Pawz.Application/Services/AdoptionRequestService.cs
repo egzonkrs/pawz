@@ -65,6 +65,7 @@ public class AdoptionRequestService : IAdoptionRequestService
             adoptionRequest.Location = locationInsertResult.Value;
             adoptionRequest.RequesterUserId = _userAccessor.GetUserId();
             adoptionRequest.Status = AdoptionRequestStatus.Pending;
+            adoptionRequest.Email = _userAccessor.GetEmail();
 
             await _adoptionRequestRepository.InsertAsync(adoptionRequest, cancellationToken);
 
