@@ -39,12 +39,13 @@ public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>
     {
         return await _dbSet
             .Where(ar => ar.PetId == petId)
-            .Include(ar => ar.User) 
+            .Include(ar => ar.User)
             .Include(ar => ar.Pet)
             .Include(ar => ar.Pet.Breed)
             .Include(ar => ar.Pet.Breed.Species)
             .Include(ar => ar.Pet.Location.City)
             .Include(ar => ar.Pet.PetImages)
+            .AsSplitQuery()
             .ToListAsync(cancellationToken);
     }
 
