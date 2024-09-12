@@ -41,10 +41,13 @@ public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>
             .Where(ar => ar.PetId == petId)
             .Include(ar => ar.User)
             .Include(ar => ar.Pet)
-            .Include(ar => ar.Pet.Breed)
-            .Include(ar => ar.Pet.Breed.Species)
-            .Include(ar => ar.Pet.Location.City)
-            .Include(ar => ar.Pet.PetImages)
+               .ThenInclude(p => p.Breed)
+               .ThenInclude(b => b.Species)
+            .Include(ar => ar.Pet)
+               .ThenInclude(p => p.Location)
+               .ThenInclude(l => l.City)
+            .Include(ar => ar.Pet)
+               .ThenInclude(p => p.PetImages)
             .AsSplitQuery()
             .ToListAsync(cancellationToken);
     }
