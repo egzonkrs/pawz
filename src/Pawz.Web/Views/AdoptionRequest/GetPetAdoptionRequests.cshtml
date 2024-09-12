@@ -13,9 +13,9 @@
             <div class="widget">
                 <div class="text-center">
                     <img src="/images/pets/@(Model.First().Pet.PetImages.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "defaultPetAvatar.jpg")"
-                         alt="Pet Photo" class="rounded-circle" style="width: 150px; height: 150px;" />
+                         alt="Pet Photo" class="rounded-circle user-avatar-image-150" />
                 </div>
-                <h5 class="text-center mt-3">@Model.</h5>
+                <h5 class="text-center mt-3">@Model.First().Pet.Name</h5>
                 <p> ♦ Breed: <i> @Model.First().Pet.Breed.Name </i></p>
                 <p> ♦ Species: <i> @Model.First().Pet.Breed.Species.Name </i></p>
                 <p> ♦ Age: <i> @Model.First().Pet.AgeYears </i></p>
@@ -48,7 +48,7 @@
                                 <tr class="text-center">
                                     <th>
                                         <img src="/images/users/@(request.User.ImageUrl ?? "userAvatar.jpg")"
-                                             alt="User Photo" class="rounded-circle" style="width: 100px; height: 100px;" />
+                                             alt="User Photo" class="rounded-circle user-avatar-image-100" />
                                     </th>
                                     <td class="align-middle"> @request.User.FirstName</td>
                                     <td class="align-middle"> @request.User.LastName </td>
