@@ -1,7 +1,10 @@
 @model IEnumerable<Pawz.Application.Models.Pet.UserPetResponse>
 
-<div class="search-container">
-    <input type="text" id="searchInput" placeholder="Search by name, breed, or location..." class="form-control mb-3" style="max-width: 300px;" />
+<div class="search-container mb-3">
+    <input type="text" name="searchTerm" id="searchInput"
+           placeholder="Search by name, breed, or location..."
+           class="form-control mb-3" style="max-width: 300px;"
+           value="@ViewData["searchTerm"]" />
 </div>
 
 @if (Model == null || !Model.Any())
@@ -74,7 +77,9 @@ else
         $('#searchInput').on('keyup', function () {
             var value = $(this).val().toLowerCase();
             $('#petTableBody tr').filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                $(this).toggle(
+                    $(this).text().toLowerCase().indexOf(value) > -1
+                );
             });
         });
     });
