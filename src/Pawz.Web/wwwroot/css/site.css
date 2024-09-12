@@ -10,76 +10,91 @@
     }
 
 .text-xs {
-    font-size: 0.75rem; /* 12px */
-    line-height: 1rem; /* 16px */
+    font-size: 0.75rem; 
+    line-height: 1rem; 
 }
 
 .text-sm {
-    font-size: 0.875rem; /* 14px */
-    line-height: 1.25rem; /* 20px */
+    font-size: 0.875rem; 
+    line-height: 1.25rem; 
 }
 
 .text-base {
-    font-size: 1rem; /* 16px */
-    line-height: 1.5rem; /* 24px */
+    font-size: 1rem;
+    line-height: 1.5rem; 
 }
 
 .text-lg {
-    font-size: 1.125rem; /* 18px */
-    line-height: 1.75rem; /* 28px */
+    font-size: 1.125rem; 
+    line-height: 1.75rem; 
 }
 
 .text-xl {
-    font-size: 1.25rem; /* 20px */
-    line-height: 1.75rem; /* 28px */
+    font-size: 1.25rem; 
+    line-height: 1.75rem; 
 }
 
 .text-2xl {
-    font-size: 1.5rem; /* 24px */
-    line-height: 2rem; /* 32px */
+    font-size: 1.5rem; 
+    line-height: 2rem; 
 }
 
 .text-3xl {
-    font-size: 1.875rem; /* 30px */
-    line-height: 2.25rem; /* 36px */
+    font-size: 1.875rem; 
+    line-height: 2.25rem; 
 }
 
 .text-4xl {
-    font-size: 2.25rem; /* 36px */
-    line-height: 2.5rem; /* 40px */
+    font-size: 2.25rem; 
+    line-height: 2.5rem; 
 }
 
 .text-5xl {
-    font-size: 3rem; /* 48px */
+    font-size: 3rem; 
     line-height: 1;
 }
 
 .adoption-request-button {
-    font-size: 30px;        /* Slightly increase the font size */
-    width: 150px;             /* Set a larger fixed width */
-    height: 150px;            /* Set the same height as width to make it square */
-    padding: 0;               /* Remove any extra padding */
-    border-radius: 10px;      /* Slightly rounded corners, adjust as needed */
-    display: flex;            /* Flexbox to center text */
-    align-items: center;      /* Vertically center text */
-    justify-content: center;  /* Horizontally center text */
-    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transition effects */
+    font-size: 30px;        
+    width: 150px;             
+    height: 90px !important; 
+    padding: 0;              
+    border-radius: 10px;      
+    display: flex;           
+    align-items: center;      
+    justify-content: center;  
+    transition: transform 0.2s ease, box-shadow 0.2s ease; 
 }
 
 .adoption-request-button:hover {
-    transform: scale(1.05);  /* Slightly enlarge the button on hover */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
+    transform: scale(1.05);  
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
 }
 
 .pet-thumbnail {
-    border-radius: 10px; /* Rounded corners */
-    padding: 5px; /* Adds padding inside the border */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+    border-radius: 10px; 
+    padding: 5px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
 }
 
 .pet-thumbnail:hover {
-    transform: scale(1.08); /* Slightly enlarge on hover */
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Add a stronger shadow on hover */
+    transform: scale(1.08); 
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); 
 }
 
+.user-avatar-image-150 {
+    width: 150px;
+    height: 150px;
+}
+
+.user-avatar-image-100 {
+    width: 100px;
+    height: 100px;
+}
+
+.user-avatar-image-30 {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+}
