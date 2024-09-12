@@ -61,7 +61,7 @@ public class PetController : Controller
         return View(petViewModels);
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("pet/details/{id:int}")]
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {
         var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
@@ -195,7 +195,7 @@ public class PetController : Controller
 
         if (petCreateResult.IsSuccess)
         {
-            return RedirectToAction("Index", "Home");
+            TempData["SuccessMessage"] = "Pet created successfully!";
         }
 
         petCreateViewModel.Species = new SelectList(speciesList, "Id", "Name");
@@ -203,8 +203,7 @@ public class PetController : Controller
         petCreateViewModel.Countries = new SelectList(countriesList, "Id", "Name");
         petCreateViewModel.Cities = new SelectList(citiesList, "Id", "Name");
 
-        TempData["SuccessMessage"] = "Pet created successfully!";
-        return RedirectToAction("Details", "Pet");
+        return RedirectToAction("Create", "Pet");
     }
 
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
