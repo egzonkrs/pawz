@@ -13,5 +13,6 @@ public class WebMappingProfiles : Profile
         CreateMap<Pet, AdoptionRequestCreateModel>();
 
         CreateMap<AdoptionRequestCreateModel, AdoptionRequestCreateRequest>();
+
     }
 }
