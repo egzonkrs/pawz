@@ -83,3 +83,18 @@
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); 
 }
 
+.user-avatar-image-150 {
+    width: 150px;
+    height: 150px;
+}
+
+.user-avatar-image-100 {
+    width: 100px;
+    height: 100px;
+}
+
+.user-avatar-image-30 {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+}
