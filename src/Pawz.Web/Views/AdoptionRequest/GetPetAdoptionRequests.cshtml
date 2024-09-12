@@ -9,63 +9,63 @@
     </h2>
 
     <div class="row">
-    <div class="col-3">   
-       <div class="widget">
-           <div class="text-center">
+        <div class="col-3">
+            <div class="widget">
+                <div class="text-center">
                     <img src="/images/pets/@(Model.First().Pet.PetImages.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "defaultPetAvatar.jpg")"
                          alt="Pet Photo" class="rounded-circle" style="width: 150px; height: 150px;" />
-           </div>
-          <h5 class="text-center mt-3">@Model.</h5>
-          <p> ♦ Breed: <i> @Model.First().Pet.Breed.Name </i></p>
-          <p> ♦ Species: <i> @Model.First().Pet.Breed.Species.Name </i></p>
-          <p> ♦ Age: <i> @Model.First().Pet.AgeYears </i></p>
-          <p> ♦ Location: <i> @Model.First().Pet.Location.City.Name </i></p>
-          <p> ♦ Price: <i> @(Model.First().Pet.Price == 0 ? "Free" : Model.First().Pet.Price + "€") </i></p>  
-      </div>   
-    </div> <!--end col for pet details--> 
-    <div class="col-9">
-       @if (Model is null)
-       {
-          <p>There are no pet adoption requests.</p>
-       }
-       else
-       {
-        <div class="table-responsive mx-auto">
-            <table class="table table-striped table-bordered mb-5">
-                <thead>
-                    <tr class="text-center">
-                        <th> Image</th>
-                        <th> Name</th>
-                        <th> Surname</th>
-                        <th> Request Date</th>
-                        <th> Status</th>
-                        <th> Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                   @foreach (var request in Model)
-                    {
-                      <tr class="text-center">
-                        <th>
-                           <img src="/images/users/@(request.User.ImageUrl ?? "userAvatar.jpg")"
-                               alt="User Photo" class="rounded-circle" style="width: 100px; height: 100px;" />
-                       </th> 
-                       <td class="align-middle"> @request.User.FirstName</td>
-                       <td class="align-middle"> @request.User.LastName </td>
-                       <td class="align-middle">@request.RequestDate.ToString("dd/MM/yyyy")</td>
-                       <td class="align-middle">@request.Status</td>
-                       <td class="text-center align-middle">
-                               <button class="btn btn-success"> <i class="fa fa-check" aria-hidden="true"></i></button>
+                </div>
+                <h5 class="text-center mt-3">@Model.</h5>
+                <p> ♦ Breed: <i> @Model.First().Pet.Breed.Name </i></p>
+                <p> ♦ Species: <i> @Model.First().Pet.Breed.Species.Name </i></p>
+                <p> ♦ Age: <i> @Model.First().Pet.AgeYears </i></p>
+                <p> ♦ Location: <i> @Model.First().Pet.Location.City.Name </i></p>
+                <p> ♦ Price: <i> @(Model.First().Pet.Price == 0 ? "Free" : Model.First().Pet.Price + "€") </i></p>
+            </div>
+        </div> <!--end col for pet details-->
+        <div class="col-9">
+            @if (Model is null)
+            {
+                <p>There are no pet adoption requests.</p>
+            }
+            else
+            {
+                <div class="table-responsive mx-auto">
+                    <table class="table table-striped table-bordered mb-5">
+                        <thead>
+                            <tr class="text-center">
+                                <th> Image</th>
+                                <th> Name</th>
+                                <th> Surname</th>
+                                <th> Request Date</th>
+                                <th> Status</th>
+                                <th> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var request in Model)
+                            {
+                                <tr class="text-center">
+                                    <th>
+                                        <img src="/images/users/@(request.User.ImageUrl ?? "userAvatar.jpg")"
+                                             alt="User Photo" class="rounded-circle" style="width: 100px; height: 100px;" />
+                                    </th>
+                                    <td class="align-middle"> @request.User.FirstName</td>
+                                    <td class="align-middle"> @request.User.LastName </td>
+                                    <td class="align-middle">@request.RequestDate.ToString("dd/MM/yyyy")</td>
+                                    <td class="align-middle">@request.Status</td>
+                                    <td class="text-center align-middle">
+                                        <button class="btn btn-success"> <i class="fa fa-check" aria-hidden="true"></i></button>
                                         <button class="btn btn-danger">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
             <!-- paginatipn -->
             <div class="pagination justify-content-center">
                 <nav aria-label="Page navigation example">
