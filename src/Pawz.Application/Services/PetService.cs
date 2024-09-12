@@ -258,7 +258,7 @@ public class PetService : IPetService
     /// </summary>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A result containing a collection of pets associated with the user, or an error if not found.</returns>
-    public async Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(string searchTerm, CancellationToken cancellationToken)
     {
         string userId = null;
         try
@@ -272,6 +272,15 @@ public class PetService : IPetService
             {
                 _logger.LogWarning("No pets found for UserId: {UserId}", userId);
                 return Result<IEnumerable<UserPetResponse>>.Failure(PetErrors.NoPetsFoundForUser(userId));
+            }
+            
+            if(!string.IsNullOrEmpty(searchTerm))
+            {
+                searchTerm=searchTerm.ToLower();
+                pets=pets.Where(p=>
+                    p.Name.ToLower().Contains(searchTerm) ||
+                    p.Breed.Name.ToLower().Contains(searchTerm) ||
+                    p.Location.City.Name.ToLower().Contains(searchTerm)).ToList();
             }
 
             var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
