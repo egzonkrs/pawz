@@ -4,11 +4,10 @@
 {
     <li class="nav-item dropdown dropdown-slide">
         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="navbar-text custom-navbar-text">            
-                <img src="@(string.IsNullOrEmpty(UserAccessor.GetUserInfo("profilepicture")) ? Url.Content("~/images/userAvatar.jpg") : UserAccessor.GetUserInfo("profilepicture"))"
-                    alt="@UserAccessor.GetUserFirstName()'s Profile Picture" class="rounded-circle"
-                    style="width: 30px; height: 30px; object-fit: cover;" />
-
+            <span class="navbar-text custom-navbar-text">
+                <img src="/images/@(UserAccessor.GetUserInfo("profilepicture") ?? "userAvatar.jpg")"
+                     alt="@UserAccessor.GetUserFirstName()'s Profile Picture" class="rounded-circle"
+                     style="width: 30px; height: 30px; object-fit: cover;" />
                 Hi, @UserAccessor.GetUserFirstName()
             </span>
         </a>
