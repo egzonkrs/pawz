@@ -37,7 +37,7 @@
         <div class="row">
             <div class="col-lg-3 col-md-4">
                 <div class="category-sidebar">
-                    @Html.Partial("category-sidebar")
+                    @Html.Partial("CategorySidebar")
                 </div>
             </div>
             <div class="col-lg-9 col-md-8">
@@ -76,7 +76,7 @@
                 <div id="pet-grid-view-container">
                     @if (Model is not null || Model.Any())
                     {
-                        @Html.Partial("pet-grid-view", Model)
+                        @Html.Partial("PetGridView", Model)
                     }
                     else
                     {
@@ -91,7 +91,7 @@
                 <div id="pet-list-view-container" style="display:none; margin-bottom: 1rem;">
                     @if (Model is not null || Model.Any())
                     {
-                        @Html.Partial("pet-list-view", Model)
+                        @Html.Partial("PetListView", Model)
                     }
                     else
                     {
