@@ -98,3 +98,7 @@
     height: 30px;
     object-fit: cover;
 }
+
+.pet-action-buttons {
+    font-size: 12px;
+}
