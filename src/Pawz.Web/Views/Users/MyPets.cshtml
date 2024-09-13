@@ -38,25 +38,28 @@ else
                     </td>
                     <td class="text-center">
                         <a asp-controller="AdoptionRequest"
-                                asp-action="GetPetAdoptionRequests"
-                                asp-route-petId="@pet.Id"
-                                class="p-2 mr-3 btn btn-outline-info btn-sm rounded-pill">Requests</a>
+                           asp-action="GetPetAdoptionRequests"
+                           asp-route-petId="@pet.Id"
+                           class="p-2 mr-3 btn btn-outline-info btn-sm rounded-pill">Requests</a>
                     </td>
                     <td class="action text-center" data-title="Action">
                         <div class="">
                             <ul class="list-inline justify-content-center" style="display: flex; justify-content: center; flex-direction:column gap: 10px;">
                                 <li class="list-inline-item">
-                                    <a data-toggle="tooltip" data-placement="top" title="View" class="view" href="pet-details.html?id=@pet.Id" style="font-size: 12px;">
+                                    <a data-toggle="tooltip" data-placement="top" title="View" class="view pet-action-buttons"
+                                       asp-controller="Pet"
+                                       asp-action="Details"
+                                       asp-route-id="@pet.Id">
                                         <i class="fa fa-eye"></i>
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
-                                    <a class="edit" data-toggle="tooltip" data-placement="top" title="Edit" href="edit-pet.html?id=@pet.Id" style="font-size: 12px;">
+                                    <a class="edit pet-action-buttons" data-toggle="tooltip" data-placement="top" title="Edit" href="edit-pet.html?id=@pet.Id">
                                         <i class="fa fa-pencil"></i>
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
-                                    <a class="delete" data-toggle="tooltip" data-placement="top" title="Delete" href="delete-pet.html?id=@pet.Id" style="font-size: 12px;">
+                                    <a class="delete pet-action-buttons" data-toggle="tooltip" data-placement="top" title="Delete" href="delete-pet.html?id=@pet.Id">
                                         <i class="fa fa-trash"></i>
                                     </a>
                                 </li>
