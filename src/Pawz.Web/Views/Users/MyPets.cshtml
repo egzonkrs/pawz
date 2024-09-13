@@ -38,9 +38,9 @@ else
                     </td>
                     <td class="text-center">
                         <a asp-controller="AdoptionRequest"
-                                asp-action="GetPetAdoptionRequests"
-                                asp-route-petId="@pet.Id"
-                                class="p-2 mr-3 btn btn-outline-info btn-sm rounded-pill">Requests</a>
+                           asp-action="GetPetAdoptionRequests"
+                           asp-route-petId="@pet.Id"
+                           class="p-2 mr-3 btn btn-outline-info btn-sm rounded-pill">Requests</a>
                     </td>
                     <td class="action text-center" data-title="Action">
                         <div class="">
@@ -49,8 +49,7 @@ else
                                     <a data-toggle="tooltip" data-placement="top" title="View" class="view pet-action-buttons"
                                        asp-controller="Pet"
                                        asp-action="Details"
-                                       asp-route-id="@pet.Id"
->
+                                       asp-route-id="@pet.Id">
                                         <i class="fa fa-eye"></i>
                                     </a>
                                 </li>
