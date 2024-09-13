@@ -46,7 +46,11 @@ else
                         <div class="">
                             <ul class="list-inline justify-content-center" style="display: flex; justify-content: center; flex-direction:column gap: 10px;">
                                 <li class="list-inline-item">
-                                    <a data-toggle="tooltip" data-placement="top" title="View" class="view" href="pet-details.html?id=@pet.Id" style="font-size: 12px;">
+                                    <a data-toggle="tooltip" data-placement="top" title="View" class="view"
+                                       asp-controller="Pet"
+                                       asp-action="Details"
+                                       asp-route-id="@pet.Id"
+                                       style="font-size: 12px;">
                                         <i class="fa fa-eye"></i>
                                     </a>
                                 </li>
