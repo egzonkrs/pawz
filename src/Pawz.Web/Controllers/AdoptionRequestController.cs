@@ -87,7 +87,6 @@ public class AdoptionRequestController : Controller
         }
 
         var adoptionRequestCreateRequest = _mapper.Map<AdoptionRequestCreateRequest>(adoptionRequestCreateModel);
-        adoptionRequestCreateRequest.PetId = adoptionRequestCreateModel.PetId;
         var adoptionRequestCreateResult = await _adoptionRequestService.CreateAdoptionRequestAsync(adoptionRequestCreateRequest, cancellationToken);
 
         if (adoptionRequestCreateResult.IsSuccess is false)
