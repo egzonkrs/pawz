@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
-using Pawz.Application.Models.Pet;
 using Pawz.Domain.Entities;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models.Breed;
@@ -193,10 +192,7 @@ public class PetController : Controller
             return View(petCreateViewModel);
         }
 
-        if (petCreateResult.IsSuccess)
-        {
-            TempData["SuccessMessage"] = "Pet created successfully!";
-        }
+        TempData["SuccessMessage"] = "Pet created successfully!";
 
         petCreateViewModel.Species = new SelectList(speciesList, "Id", "Name");
         petCreateViewModel.Breeds = new SelectList(breedsList, "Id", "Name");

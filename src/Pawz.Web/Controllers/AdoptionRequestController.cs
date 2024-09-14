@@ -105,10 +105,7 @@ public class AdoptionRequestController : Controller
             return RedirectToAction("Index", "Home");
         }
 
-        if (adoptionRequestCreateResult.IsSuccess)
-        {
-            TempData["SuccessMessage"] = "Adoption request created successfully!";
-        }
+        TempData["SuccessMessage"] = "Adoption request created successfully!";
 
         adoptionRequestCreateModel.Countries = new SelectList(countriesList, "Id", "Name");
         adoptionRequestCreateModel.Cities = new SelectList(citiesList, "Id", "Name");
