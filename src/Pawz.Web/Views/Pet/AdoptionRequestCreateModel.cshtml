@@ -1,5 +1,4 @@
 @model Pawz.Web.Models.Pet.AdoptionRequestCreateModel
-@using Pawz.Domain.Enums;
 
 <div class="modal fade" id="adoptionRequestModal" tabindex="-1" role="dialog" aria-labelledby="adoptionRequestModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -49,28 +48,24 @@
                             </div>
                             <div class="form-group mb-0">
                                 <label asp-for="ContactNumber" class="form-label">Contact Number</label>
-                                <input asp-for="ContactNumber" class="form-control w-100" placeholder="Enter your contact number">
+                                <input asp-for="ContactNumber" type="tel" class="form-control w-100" placeholder="+XXX XX XXX XXX" autocomplete="tel">
                                 <span asp-validation-for="ContactNumber" class="form-label input-error-text"></span>
                             </div>
                             <div class="form-group mb-0">
                                 <label asp-for="IsRentedProperty" class="form-label">Do you live in a rented property?</label>
                                 <select asp-for="IsRentedProperty" class="form-control w-100">
-                                    <option selected disabled hidden value="">Select</option>
-                                    @foreach (var option in Enum.GetValues(typeof(YesNoEnum)).Cast<YesNoEnum>())
-                                    {
-                                        <option value="@((int)option)">@option</option>
-                                    }
+                                    <option selected disabled value="">Select</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
                                 </select>
                                 <span asp-validation-for="IsRentedProperty" class="form-label input-error-text"></span>
                             </div>
                             <div class="form-group mb-0">
                                 <label asp-for="HasOutdoorSpace" class="form-label">Do you have outdoor space?</label>
                                 <select asp-for="HasOutdoorSpace" class="form-control w-100">
-                                    <option selected disabled hidden value="">Select</option>
-                                    @foreach (var option in Enum.GetValues(typeof(YesNoEnum)).Cast<YesNoEnum>())
-                                    {
-                                        <option value="@((int)option)">@option</option>
-                                    }
+                                    <option selected disabled value="">Select</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
                                 </select>
                                 <span asp-validation-for="HasOutdoorSpace" class="form-label input-error-text"></span>
                             </div>
@@ -82,11 +77,9 @@
                             <div class="form-group mb-0">
                                 <label asp-for="OwnsOtherPets" class="form-label">Do you own other pets?</label>
                                 <select asp-for="OwnsOtherPets" class="form-control w-100">
-                                    <option selected disabled hidden value="">Select</option>
-                                    @foreach (var option in Enum.GetValues(typeof(YesNoEnum)).Cast<YesNoEnum>())
-                                    {
-                                        <option value="@((int)option)">@option</option>
-                                    }
+                                    <option selected disabled value="">Select</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
                                 </select>
                                 <span asp-validation-for="OwnsOtherPets" class="form-label input-error-text"></span>
                             </div>
@@ -125,3 +118,6 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
