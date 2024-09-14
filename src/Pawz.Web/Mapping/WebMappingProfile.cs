@@ -6,6 +6,7 @@ using Pawz.Application.Models.PetImagesModels;
 using Pawz.Application.Models.PetModels;
 using Pawz.Application.Models.SpeciesModels;
 using Pawz.Domain.Entities;
+using Pawz.Web.Models;
 using Pawz.Web.Models.Breed;
 using Pawz.Web.Models.Location;
 using Pawz.Web.Models.Pet;
@@ -57,5 +58,8 @@ public class WebMappingProfile : Profile
 
         CreateMap<AdoptionRequestCreateModel, AdoptionRequestCreateRequest>();
         CreateMap<AdoptionRequestCreateRequest, AdoptionRequest>();
+
+        CreateMap<AdoptionRequestResponse, AdoptionRequestViewModel>().ReverseMap();
+
     }
 }

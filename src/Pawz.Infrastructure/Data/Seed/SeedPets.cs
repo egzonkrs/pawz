@@ -49,7 +49,7 @@ public class SeedPets
             new Pet
             {
                 Name = "Whiskers",
-                BreedId = 3, // Persian
+                BreedId = 4, // Persian
                 AgeYears = "3-7 Years",
                 About = "Whiskers is the ultimate lap cat! With a fluffy coat, he's the perfect companion for those quiet, cozy nights. He enjoys soft purring naps and watching the world go by from the window.",
                 Price = 0.00m, // Free
