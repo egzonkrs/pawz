@@ -9,13 +9,11 @@ public class AdoptionRequestModelValidator : AbstractValidator<AdoptionRequestCr
     {
         RuleFor(x => x.CityId)
             .NotNull()
-            .NotEmpty().WithMessage("City is required.")
-            .GreaterThan(0).WithMessage("City must be selected.");
+            .NotEmpty().WithMessage("City is required.");
 
         RuleFor(x => x.CountryId)
             .NotNull()
-            .NotEmpty().WithMessage("Country is required.")
-            .GreaterThan(0).WithMessage("Country must be selected.");
+            .NotEmpty().WithMessage("Country is required.");
 
         RuleFor(x => x.Address)
             .NotNull()
@@ -33,23 +31,17 @@ public class AdoptionRequestModelValidator : AbstractValidator<AdoptionRequestCr
             .Matches(@"^\+?\d{1,3}\s?\d{2}\s?\d{3}\s?\d{3}$").WithMessage("Contact number must be in the format +XXX XX XXX XXX.");
 
         RuleFor(x => x.IsRentedProperty)
-            .NotNull()
-            .NotEmpty().WithMessage("This field is required.")
-            .IsInEnum().WithMessage("Please specify whether you live in a rented property.");
+            .NotNull().WithMessage("Please specify whether you live in a rented property.");
 
         RuleFor(x => x.HasOutdoorSpace)
-            .NotNull()
-            .NotEmpty().WithMessage("This field is required.")
-            .IsInEnum().WithMessage("Please specify whether you have outdoor space.");
+            .NotNull().WithMessage("Please specify whether you have outdoor space.");
+
+        RuleFor(x => x.OwnsOtherPets)
+            .NotNull().WithMessage("Please specify whether you own other pets.");
 
         RuleFor(x => x.OutdoorSpaceDetails)
             .MaximumLength(500).WithMessage("Outdoor space details must be 500 characters or fewer.")
             .When(x => !string.IsNullOrEmpty(x.OutdoorSpaceDetails));
-
-        RuleFor(x => x.OwnsOtherPets)
-            .NotNull()
-            .NotEmpty().WithMessage("This field is required.")
-            .IsInEnum().WithMessage("Please specify whether you own other pets.");
 
         RuleFor(x => x.OtherPetsDetails)
             .MaximumLength(500).WithMessage("Other pets details must be 500 characters or fewer.")
