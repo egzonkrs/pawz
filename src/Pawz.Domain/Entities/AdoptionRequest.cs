@@ -74,12 +74,12 @@ public class AdoptionRequest : IEntity<int>, ISoftDeletion
     /// <summary>
     /// Indicates whether the requester lives in a rented property (Yes/No).
     /// </summary>
-    public YesNoEnum IsRentedProperty { get; set; }
+    public bool IsRentedProperty { get; set; }
 
     /// <summary>
     /// Indicates whether the requester has an outdoor space available (Yes/No).
     /// </summary>
-    public YesNoEnum HasOutdoorSpace { get; set; }
+    public bool HasOutdoorSpace { get; set; }
 
     /// <summary>
     /// Additional details about the outdoor space, if available.
@@ -89,7 +89,7 @@ public class AdoptionRequest : IEntity<int>, ISoftDeletion
     /// <summary>
     /// Indicates whether the requester owns other pets (Yes/No).
     /// </summary>
-    public YesNoEnum OwnsOtherPets { get; set; }
+    public bool OwnsOtherPets { get; set; }
 
     /// <summary>
     /// Details about other pets owned by the requester, including quantity, species, and breed.
