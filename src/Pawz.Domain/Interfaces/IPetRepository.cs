@@ -41,4 +41,6 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     /// or null if no pet with the specified ID is found.
     /// </returns>
     Task<Pet> GetPetByIdWithRelatedEntitiesAsync(int id, CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<Pet>> GetPetsByUserIdWithUserDetailsAsync(string userId, CancellationToken cancellationToken);
 }

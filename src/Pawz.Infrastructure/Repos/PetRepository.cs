@@ -83,4 +83,25 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .Include(pet => pet.PetImages)
             .ToListAsync(cancellationToken);
     }
+
+    /// <summary>
+    /// Retrieves all pets associated with a specific user by their unique user ID, including the related user details.
+    /// </summary>
+    /// <param name="userId">The ID of the user whose pets are to be retrieved.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A collection of pets associated with the specified user, including related location, breed, images, and user details.</returns>
+    public async Task<IEnumerable<Pet>> GetPetsByUserIdWithUserDetailsAsync(string userId, CancellationToken cancellationToken)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Where(pet => pet.PostedByUserId == userId) 
+            .Include(p => p.Location)
+                .ThenInclude(p => p.City)
+                    .ThenInclude(p => p.Country)
+            .Include(pet => pet.Breed)                 
+            .Include(pet => pet.PetImages)             
+            .Include(pet => pet.User)                  
+            .ToListAsync(cancellationToken);           
+    }
+
 }
