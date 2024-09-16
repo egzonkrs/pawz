@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
@@ -207,18 +208,130 @@ public class PetController : Controller
         return RedirectToAction("Details", "Pet");
     }
 
+    //public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
+    //{
+    //    // Merr pet-in ekzistues nga baza e të dhënave
+    //    var petResult = await _petService.GetPetByIdAsync(id, cancellationToken);
+    //    if (petResult.IsSuccess is false)
+    //    {
+    //        TempData["ErrorMessage"] = "Pet not found!";
+    //        return RedirectToAction("Index", "Pet");
+    //    }
+
+    //    // Merr të dhënat që janë të nevojshme për formën
+    //    var breedsResult = await _breedService.GetAllBreedsAsync(cancellationToken);
+    //    var speciesResult = await _speciesService.GetAllSpeciesAsync(cancellationToken);
+    //    var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
+    //    var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
+
+    //    var petCreateViewModel = new PetCreateViewModel
+    //    {
+    //        Id = petResult.Value.Id,
+    //        Name = petResult.Value.Name,
+    //        SpeciesId = petResult.Value.SpeciesId,
+    //        BreedId = petResult.Value.BreedId,
+    //        AgeYears = petResult.Value.AgeYears,
+    //        Price = petResult.Value.Price,
+    //        CountryId = petResult.Value.Location.City.CountryId,
+    //        CityId = petResult.Value.Location.CityId,
+    //        PostalCode = petResult.Value.Location.PostalCode,
+    //        Address = petResult.Value.Location.Address,
+    //        About = petResult.Value.About,
+    //        Species = new SelectList(speciesResult.Value ?? new List<Species>(), "Id", "Name"),
+    //        Breeds = new SelectList(breedsResult.Value ?? new List<Breed>(), "Id", "Name"),
+    //        Countries = new SelectList(countriesResult.Value ?? new List<Country>(), "Id", "Name"),
+    //        Cities = new SelectList(citiesResult.Value ?? new List<City>(), "Id", "Name"),
+    //        AllBreeds = breedsResult.Value?.Select(x => new BreedViewModel { Id = x.Id, Name = x.Name, SpeciesId = x.SpeciesId }).ToList(),
+    //        AllCities = citiesResult.Value?.Select(x => new CityViewModel { Id = x.Id, Name = x.Name, CountryId = x.CountryId }).ToList()
+    //    };
+
+    //    return View(petCreateViewModel);
+    //}
+
+    //[HttpPost]
+    //[ValidateAntiForgeryToken]
+    //public async Task<IActionResult> Edit(PetCreateViewModel petCreateViewModel, IEnumerable<IFormFile> imageFiles, CancellationToken cancellationToken)
+    //{
+    //    // Validimi i input-it
+    //    var validationResult = await _validator.ValidateAsync(petCreateViewModel, cancellationToken);
+    //    if (!validationResult.IsValid)
+    //    {
+    //        validationResult.AddErrorsToModelState(ModelState);
+
+    //        // Rimbush formën me të dhënat aktuale në rast gabimi
+    //        var breedsResult = await _breedService.GetAllBreedsAsync(cancellationToken);
+    //        var speciesResult = await _speciesService.GetAllSpeciesAsync(cancellationToken);
+    //        var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
+    //        var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
+
+    //        petCreateViewModel.Species = new SelectList(speciesResult.Value ?? new List<Species>(), "Id", "Name");
+    //        petCreateViewModel.Breeds = new SelectList(breedsResult.Value ?? new List<Breed>(), "Id", "Name");
+    //        petCreateViewModel.Countries = new SelectList(countriesResult.Value ?? new List<Country>(), "Id", "Name");
+    //        petCreateViewModel.Cities = new SelectList(citiesResult.Value ?? new List<City>(), "Id", "Name");
+    //        petCreateViewModel.AllBreeds = breedsResult.Value?.Select(x => new BreedViewModel { Id = x.Id, Name = x.Name, SpeciesId = x.SpeciesId }).ToList();
+    //        petCreateViewModel.AllCities = citiesResult.Value?.Select(x => new CityViewModel { Id = x.Id, Name = x.Name, CountryId = x.CountryId }).ToList();
+
+    //        TempData["ErrorMessage"] = "Failed to update the pet! Please try again!";
+    //        return View(petCreateViewModel);
+    //    }
+
+    //    // Përditëson pet-in
+    //    var petUpdateRequest = _mapper.Map<PetCreateRequest>(petCreateViewModel);
+    //    petUpdateRequest.ImageFiles = imageFiles;
+
+    //    var petUpdateResult = await _petService.UpdatePetAsync(petCreateViewModel.Id, petUpdateRequest, cancellationToken);
+
+    //    if (petUpdateResult.IsSuccess is false)
+    //    {
+    //        TempData["ErrorMessage"] = "Failed to update the pet!";
+    //        return RedirectToAction("Update", new { id = petCreateViewModel.Id });
+    //    }
+
+    //    TempData["SuccessMessage"] = "Pet updated successfully!";
+    //    return RedirectToAction("Details", new { id = petCreateViewModel.Id });
+    //}
+
+
+
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
-        var pet = await _petService.GetPetByIdAsync(id, cancellationToken);
-        return View(pet);
+        var result = await _petService.GetPetByIdAsync(id, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return NotFound();
+        }
+
+        var pet = result.Value;
+
+        // ViewBag.Breeds = new SelectList(await _breedService.GetAllBreedsAsync(cancellationToken), "Id", "Name", pet.BreedId);
+        //ViewBag.Cities = new SelectList(await _cityService.GetAllCitiesAsync(cancellationToken), "Id", "Name", pet.CityId);
+        //ViewBag.Statuses = Enum.GetValues(typeof(PetStatus)).Cast<PetStatus>().Select(e => new { Id = e, Name = e.ToString() });
+
+        var petCreateRequest = new PetCreateRequest
+        {
+            Id = pet.Id,
+            Name = pet.Name,
+            //BreedId = pet.BreedId,
+            AgeYears = pet.AgeYears,
+            About = pet.About,
+            Price = pet.Price,
+            //CityId = pet.CityId,
+            //Address = pet.Address,
+            //PostalCode = pet.PostalCode,
+            PostedByUserId = pet.PostedByUserId,
+            Status = pet.Status
+        };
+
+        return View(petCreateRequest);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Pet pet, CancellationToken cancellationToken)
+    public async Task<IActionResult> Edit(PetCreateRequest pet, CancellationToken cancellationToken)
     {
         await _petService.UpdatePetAsync(pet, cancellationToken);
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction("Profile","Users");
     }
 
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
