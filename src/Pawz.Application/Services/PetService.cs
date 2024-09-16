@@ -277,10 +277,9 @@ public class PetService : IPetService
             if(!string.IsNullOrEmpty(searchTerm))
             {
                 searchTerm=searchTerm.ToLower();
-                pets=pets.Where(p=>
+                pets = pets.Where(p =>
                     p.Name.ToLower().Contains(searchTerm) ||
-                    p.Breed.Name.ToLower().Contains(searchTerm) ||
-                    p.Location.City.Name.ToLower().Contains(searchTerm)).ToList();
+                    p.Breed.Name.ToLower().Contains(searchTerm));
             }
 
             var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
