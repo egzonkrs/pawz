@@ -1,0 +1,60 @@
+@model Pawz.Application.Models.PetCreateRequest
+
+@{
+    ViewData["Title"] = "Edit Pet";
+}
+
+<h2>Edit Pet</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BreedId" class="control-label"></label>
+        <select asp-for="BreedId" asp-items="ViewBag.Breeds" class="form-control"></select>
+        <span asp-validation-for="BreedId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AgeYears" class="control-label"></label>
+        <input asp-for="AgeYears" class="form-control" />
+        <span asp-validation-for="AgeYears" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="About" class="control-label"></label>
+        <textarea asp-for="About" class="form-control"></textarea>
+        <span asp-validation-for="About" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Price" class="control-label"></label>
+        <input asp-for="Price" type="number" step="0.01" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Status" class="control-label"></label>
+        <select asp-for="Status" asp-items="ViewBag.Statuses" class="form-control"></select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+} 
