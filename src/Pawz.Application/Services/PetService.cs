@@ -312,4 +312,48 @@ public class PetService : IPetService
             return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
+
+    public async Task<Result<bool>> UpdatePetAsync(PetCreateRequest petRequest, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var userId = _userAccessor.GetUserId();
+            _logger.LogInformation("Started updating Pet with Id: {PetId} from UserId: {UserId}", petRequest.Id, userId);
+
+            var existingPet = await _petRepository.GetPetByIdWithRelatedEntitiesAsync(petRequest.Id, cancellationToken);
+            if (existingPet == null)
+            {
+                _logger.LogWarning("Pet with Id: {PetId} not found", petRequest.Id);
+                return Result<bool>.Failure(PetErrors.NoPetsFound());
+            }
+
+            if (existingPet.PostedByUserId != userId)
+            {
+                _logger.LogWarning("UserId: {UserId} is not authorized to update Pet with Id: {PetId}", userId, petRequest.Id);
+                return Result<bool>.Failure(PetErrors.UpdateUnexpectedError);
+            }
+
+            existingPet.Name = petRequest.Name;
+            existingPet.AgeYears = petRequest.AgeYears;
+            existingPet.About = petRequest.About;
+            existingPet.Price = petRequest.Price;
+
+            var petUpdated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
+
+            if (petUpdated)
+            {
+                _logger.LogInformation("Successfully updated Pet with Id: {PetId} from UserId: {UserId}", petRequest.Id, userId);
+                return Result<bool>.Success(true);
+            }
+
+            _logger.LogWarning("Failed to update Pet with Id: {PetId} from UserId: {UserId}. No changes were detected.", petRequest.Id, userId);
+            return Result<bool>.Failure(PetErrors.NoChangesDetected);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to update Pet with Id: {PetId} for UserId: {UserId}",
+                             nameof(PetService), petRequest.Id, _userAccessor.GetUserId());
+            return Result<bool>.Failure(PetErrors.UpdateUnexpectedError);
+        }
+    }
 }
