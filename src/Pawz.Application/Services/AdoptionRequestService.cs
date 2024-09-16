@@ -8,6 +8,7 @@ using Pawz.Domain.Enums;
 using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -195,4 +196,32 @@ public class AdoptionRequestService : IAdoptionRequestService
             return Result<bool>.Failure(AdoptionRequestErrors.DeletionUnexpectedError);
         }
     }
+
+    public async Task<Result<List<AdoptionRequestResponse>>> GetAdoptionRequestsByPetIdAsync(int petId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            _logger.LogInformation("Started retrieving Adoption Requests for PetId: {PetId}", petId);
+
+            var adoptionRequests = await _adoptionRequestRepository.GetByPetIdAsync(petId, cancellationToken);
+
+            if (adoptionRequests == null || !adoptionRequests.Any())
+            {
+                _logger.LogInformation("No Adoption Requests found for PetId: {PetId}", petId);
+                return Result<List<AdoptionRequestResponse>>.Success(new List<AdoptionRequestResponse>());
+            }
+
+            var adoptionRequestResponses = _mapper.Map<List<AdoptionRequestResponse>>(adoptionRequests);
+
+            _logger.LogInformation("Successfully retrieved {Count} Adoption Requests for PetId: {PetId}", adoptionRequests.Count(), petId);
+            return Result<List<AdoptionRequestResponse>>.Success(adoptionRequestResponses);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve Adoption Requests for PetId: {PetId}",
+                nameof(AdoptionRequestService), petId);
+            return Result<List<AdoptionRequestResponse>>.Failure(AdoptionRequestErrors.RetrievalError);
+        }
+    }
+
 }

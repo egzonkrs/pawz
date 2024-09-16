@@ -9,8 +9,9 @@
                     <!-- User Profile-->
                     <div class="widget user-dashboard-profile">
                         <div class="profile-thumb">
-                            <img src="@(string.IsNullOrEmpty(UserAccessor.GetUserInfo("profilepicture")) ? Url.Content("~/images/default-image.webp") : UserAccessor.GetUserInfo("profilepicture"))"
-                                alt="@UserAccessor.GetUserName()'s Profile Picture" class="rounded-circle">
+                            <img src="/images/users/@(UserAccessor.GetUserInfo("profilepicture") ?? "userAvatar.jpg")"
+                                 alt="@UserAccessor.GetUserName()'s Profile Picture" class="rounded-circle user-avatar-image-150">
+                     
                         </div>
                         <h5 class="text-center">@UserAccessor.GetUserFirstName() @UserAccessor.GetUserLastName()</h5>
                         <p>Joined February 06, 2020</p>

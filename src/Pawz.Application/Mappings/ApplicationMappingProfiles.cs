@@ -1,11 +1,11 @@
-﻿using AutoMapper;
-using Pawz.Domain.Entities;
-using Pawz.Application.Models.PetModels;
-using Pawz.Application.Models.BreedModels;
-using Pawz.Application.Models.PetImagesModels;
-using Pawz.Application.Models.SpeciesModels;
-using Pawz.Application.Models.Pet;
+using AutoMapper;
 using Pawz.Application.Models;
+using Pawz.Application.Models.BreedModels;
+using Pawz.Application.Models.Pet;
+using Pawz.Application.Models.PetImagesModels;
+using Pawz.Application.Models.PetModels;
+using Pawz.Application.Models.SpeciesModels;
+using Pawz.Domain.Entities;
 
 namespace Pawz.Application.Mappings;
 public class ApplicationMappingProfiles : Profile
@@ -13,10 +13,7 @@ public class ApplicationMappingProfiles : Profile
     public ApplicationMappingProfiles()
     {
         CreateMap<PetRequest, Pet>().ReverseMap();
-
         CreateMap<Pet, PetResponse>().ReverseMap();
-
-
         CreateMap<PetRequest, PetResponse>().ReverseMap();
 
         CreateMap<BreedRequest, Breed>().ReverseMap();
@@ -36,5 +33,7 @@ public class ApplicationMappingProfiles : Profile
         CreateMap<UserPetRequest, Pet>().ReverseMap();
         CreateMap<Pet, UserPetResponse>().ReverseMap();
         CreateMap<UserPetRequest, UserPetResponse>().ReverseMap();
+
+        CreateMap<AdoptionRequest, AdoptionRequestResponse>().ReverseMap();
     }
 }

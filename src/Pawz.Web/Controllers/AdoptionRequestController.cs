@@ -6,6 +6,7 @@ using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
 using Pawz.Domain.Entities;
 using Pawz.Web.Extensions;
+using Pawz.Web.Models;
 using Pawz.Web.Models.City;
 using Pawz.Web.Models.Pet;
 using System.Collections.Generic;
@@ -138,5 +139,18 @@ public class AdoptionRequestController : Controller
     {
         await _adoptionRequestService.DeleteAdoptionRequestAsync(id, cancellationToken);
         return RedirectToAction(nameof(Index));
+    }
+
+    public async Task<IActionResult> GetPetAdoptionRequests(int petId, CancellationToken cancellationToken)
+    {
+        var adoptionRequestsResult = await _adoptionRequestService.GetAdoptionRequestsByPetIdAsync(petId, cancellationToken);
+
+        if (!adoptionRequestsResult.IsSuccess || adoptionRequestsResult is null || !adoptionRequestsResult.Value.Any())
+        {
+            return View(new List<AdoptionRequestViewModel>());
+        }
+        var viewModel = _mapper.Map<List<AdoptionRequestViewModel>>(adoptionRequestsResult.Value);
+
+        return View(viewModel);
     }
 }
