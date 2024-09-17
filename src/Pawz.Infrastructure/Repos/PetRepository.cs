@@ -94,6 +94,7 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     {
         return await _dbSet
             .AsNoTracking()
+            .AsSplitQuery()
             .Where(pet => pet.PostedByUserId == userId) 
             .Include(p => p.Location)
                 .ThenInclude(p => p.City)
