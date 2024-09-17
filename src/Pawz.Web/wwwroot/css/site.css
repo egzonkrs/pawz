@@ -102,3 +102,13 @@
 .pet-action-buttons {
     font-size: 12px;
 }
+#notification-dropdown .dropdown-menu {
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+#notification-list .dropdown-item {
+    white-space: normal;
+    word-wrap: break-word;
+}
