@@ -11,29 +11,32 @@ namespace Pawz.Infrastructure.Repos;
 
 public class NotificationRepository : GenericRepository<Notification, int>, INotificationRepository
 {
-    private readonly AppDbContext _context;
     public NotificationRepository(AppDbContext context) : base(context)
     {
-        _context = context;
+
     }
 
     public async Task<IEnumerable<Notification>> GetNotificationsForUserAsync(string userId, CancellationToken cancellationToken)
     {
-        return await _context.Notifications
+        return await _dbSet
             .Where(n => n.RecipientId == userId)
+            .Include(n => n.Pet)
+            .Include(n => n.Sender)
             .OrderByDescending(n => n.CreatedAt)
             .ToListAsync(cancellationToken);
     }
 
     public async Task<Notification> GetNotificationByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await _context.Notifications
+        return await _dbSet
+            .Include(n => n.Pet)
+            .Include(n => n.Sender)
             .FirstOrDefaultAsync(n => n.Id == id, cancellationToken);
     }
 
     public async Task<Notification> GetExistingNotificationAsync(string senderId, string recipientId, int? petId, CancellationToken cancellationToken)
     {
-        return await _context.Notifications
+        return await _dbSet
             .FirstOrDefaultAsync(n =>
                 n.SenderId == senderId &&
                 n.RecipientId == recipientId &&
