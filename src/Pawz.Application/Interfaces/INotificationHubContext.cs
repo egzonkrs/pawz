@@ -16,6 +16,6 @@ public interface INotificationHubContext
     /// <param name="arg">The argument to pass to the client-side method.</param>
     /// <param name="cancellationToken">A token to observe while waiting for the task to complete, allowing the operation to be cancelled.</param>
     /// <returns>A task that represents the asynchronous send operation.</returns>
-    Task SendToUserAsync(string userId, string method, object arg, CancellationToken cancellationToken);
+    Task SendToUserAsync<T>(string userId, string method, T arg, CancellationToken cancellationToken);
 
 }

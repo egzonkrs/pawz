@@ -14,7 +14,7 @@ public class SignalRHubContext : INotificationHubContext
         _hubContext = hubContext;
     }
 
-    public async Task SendToUserAsync(string userId, string method, object arg, CancellationToken cancellationToken)
+    public async Task SendToUserAsync<T>(string userId, string method, T arg, CancellationToken cancellationToken)
     {
         await _hubContext.Clients.User(userId).SendAsync(method, arg, cancellationToken);
     }
