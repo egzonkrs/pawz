@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Pawz.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class v1 : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,6 +33,7 @@ namespace Pawz.Infrastructure.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -270,8 +271,7 @@ namespace Pawz.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BreedId = table.Column<int>(type: "int", nullable: false),
-                    AgeYears = table.Column<int>(type: "int", nullable: false),
-                    AgeMonths = table.Column<int>(type: "int", nullable: false),
+                    AgeYears = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     About = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
@@ -315,6 +315,7 @@ namespace Pawz.Infrastructure.Migrations
                     ResponseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PetId = table.Column<int>(type: "int", nullable: true),
                     RequesterUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LocationId = table.Column<int>(type: "int", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
@@ -328,10 +329,54 @@ namespace Pawz.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_AdoptionRequests_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_AdoptionRequests_Pets_PetId",
                         column: x => x.PetId,
                         principalTable: "Pets",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Message = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    SenderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RecipientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PetId = table.Column<int>(type: "int", nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_AspNetUsers_RecipientId",
+                        column: x => x.RecipientId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Notifications_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Pets_PetId",
+                        column: x => x.PetId,
+                        principalTable: "Pets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -342,7 +387,6 @@ namespace Pawz.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PetId = table.Column<int>(type: "int", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsPrimary = table.Column<bool>(type: "bit", nullable: false),
                     UploadedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -381,6 +425,11 @@ namespace Pawz.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AdoptionRequests_LocationId",
+                table: "AdoptionRequests",
+                column: "LocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AdoptionRequests_PetId",
@@ -453,6 +502,26 @@ namespace Pawz.Infrastructure.Migrations
                 column: "CityId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Notifications_IsDeleted_CreatedAt",
+                table: "Notifications",
+                columns: new[] { "IsDeleted", "CreatedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_PetId",
+                table: "Notifications",
+                column: "PetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_RecipientId",
+                table: "Notifications",
+                column: "RecipientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_SenderId",
+                table: "Notifications",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PetImages_PetId",
                 table: "PetImages",
                 column: "PetId");
@@ -493,6 +562,9 @@ namespace Pawz.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "PetImages");
