@@ -169,7 +169,7 @@ public class UsersController : Controller
             LastName = "Doe",
             Address = "123 Main St",
             PhoneNumber = "555-1234",
-            ImageUrl = "~/images/default-image.webp"
+            ImageUrl = "/images/default-image.webp"
         };
     }
 

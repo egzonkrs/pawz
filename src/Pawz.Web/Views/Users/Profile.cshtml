@@ -10,7 +10,7 @@
                     <div class="widget user-dashboard-profile">
                         <div class="profile-thumb">
                             <img src="@(string.IsNullOrEmpty(UserAccessor.GetUserInfo("profilepicture")) ? Url.Content("~/images/default-image.webp") : UserAccessor.GetUserInfo("profilepicture"))"
-                                alt="@UserAccessor.GetUserName()'s Profile Picture" class="rounded-circle">
+                                alt="@UserAccessor.GetUserName()'s Profile Picture" class="rounded-circle" style="width: 150px; height: 150px;">
                         </div>
                         <h5 class="text-center">@UserAccessor.GetUserFirstName() @UserAccessor.GetUserLastName()</h5>
                         <p>Joined February 06, 2020</p>
