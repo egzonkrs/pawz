@@ -30,7 +30,7 @@ public interface INotificationService
     /// <param name="userId">The ID of the user whose notifications are being retrieved.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains an enumerable list of notification responses.</returns>
-    Task<Result<IEnumerable<NotificationResponse>>> GetNotificationsForUserAsync(string userId, CancellationToken cancellationToken);
+    Task<Result<List<NotificationResponse>>> GetNotificationsForUserAsync(string userId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Marks a notification as read.
