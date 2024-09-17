@@ -1,9 +1,9 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models.NotificationModels;
 using Pawz.Web.Models;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Pawz.Web.Controllers
@@ -15,14 +15,17 @@ namespace Pawz.Web.Controllers
         private readonly INotificationService _notificationService;
         private readonly IUserAccessor _userAccessor;
         private readonly IMapper _mapper;
+        private readonly ILogger<NotificationController> _logger;
 
         public NotificationController(INotificationService notificationService,
                                       IUserAccessor userAccessor,
+                                      ILogger<NotificationController> logger,
                                       IMapper mapper)
         {
             _notificationService = notificationService;
             _userAccessor = userAccessor;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpPost("send")]
@@ -49,8 +52,8 @@ namespace Pawz.Web.Controllers
 
             if (result.IsSuccess)
             {
-                var viewModels = _mapper.Map<List<NotificationRequestViewModel>>(result.Value);
-                return Ok(viewModels);
+                _logger.LogInformation("Notifications fetched: {@Notifications}", result.Value);
+                return Ok(result.Value);
             }
 
             return BadRequest(result.Errors);
@@ -59,14 +62,24 @@ namespace Pawz.Web.Controllers
         [HttpPost("markAsRead/{id}")]
         public async Task<IActionResult> MarkAsRead(int id)
         {
+            _logger.LogInformation($"Received request to mark notification as read. ID: {id}");
+
+            if (id <= 0)
+            {
+                return BadRequest("Invalid notification ID");
+            }
             var result = await _notificationService.MarkNotificationAsReadAsync(id, HttpContext.RequestAborted);
 
             if (result.IsSuccess)
             {
-                return Ok();
-            }
+                _logger.LogInformation($"Successfully marked notification as read. ID: {id}");
 
-            return BadRequest(result.Errors);
+                return Ok(new { success = true, message = "Notification marked as read" });
+
+            }
+            _logger.LogWarning($"Failed to mark notification as read. ID: {id}. Error: {result.Errors}");
+
+            return BadRequest(new { success = false, message = result.Errors });
         }
     }
 }
