@@ -222,7 +222,7 @@ public class PetController : Controller
         var breedsResult = await _breedService.GetAllBreedsAsync(cancellationToken);
         var breedsList = breedsResult.Value ?? new List<Breed>();
 
-        var petCreateRequest = new PetCreateViewModel
+        var petEdit = new PetEditViewModel
         {
             Id = pet.Id,
             Name = pet.Name,
@@ -233,12 +233,12 @@ public class PetController : Controller
             Breeds = new SelectList(breedsList, "Id", "Name", pet.BreedId)
         };
 
-        return View(petCreateRequest);
+        return View(petEdit);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(PetCreateRequest pet, CancellationToken cancellationToken)
+    public async Task<IActionResult> Edit(Pet pet, CancellationToken cancellationToken)
     {
         await _petService.UpdatePetAsync(pet, cancellationToken);
         return RedirectToAction("Profile","Users");

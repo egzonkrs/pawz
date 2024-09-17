@@ -185,37 +185,6 @@ public class PetService : IPetService
     }
 
     /// <summary>
-    /// Updates an existing pet in the system.
-    /// </summary>
-    /// <param name="pet">The pet entity to update.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A result indicating whether the update was successful.</returns>
-    public async Task<Result<bool>> UpdatePetAsync(Pet pet, CancellationToken cancellationToken)
-    {
-        try
-        {
-            _logger.LogInformation("Started updating Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
-
-            await _petRepository.UpdateAsync(pet, cancellationToken);
-            var petUpdated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
-
-            if (petUpdated)
-            {
-                _logger.LogInformation("Successfully updated Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
-                return Result<bool>.Success(true);
-            }
-            _logger.LogWarning("Failed to update Pet with Id: {PetId} from UserId: {UserId}. No changes were detected.", pet.Id, pet.PostedByUserId);
-            return Result<bool>.Failure(PetErrors.NoChangesDetected);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to update Pet with Id: {PetId} for the UserId: {UserId}",
-                             nameof(PetService), pet.Id, pet.PostedByUserId);
-            return Result<bool>.Failure(PetErrors.UpdateUnexpectedError);
-        }
-    }
-
-    /// <summary>
     /// Deletes a pet by its unique ID.
     /// </summary>
     /// <param name="petId">The ID of the pet to delete.</param>
@@ -313,47 +282,47 @@ public class PetService : IPetService
         }
     }
 
-    public async Task<Result<bool>> UpdatePetAsync(PetCreateRequest petRequest, CancellationToken cancellationToken)
+    public async Task<Result<bool>> UpdatePetAsync(Pet pet, CancellationToken cancellationToken)
     {
         try
         {
             var userId = _userAccessor.GetUserId();
-            _logger.LogInformation("Started updating Pet with Id: {PetId} from UserId: {UserId}", petRequest.Id, userId);
+            _logger.LogInformation("Started updating Pet with Id: {PetId} from UserId: {UserId}", pet.Id, userId);
 
-            var existingPet = await _petRepository.GetPetByIdWithRelatedEntitiesAsync(petRequest.Id, cancellationToken);
+            var existingPet = await _petRepository.GetPetByIdWithRelatedEntitiesAsync(pet.Id, cancellationToken);
             if (existingPet == null)
             {
-                _logger.LogWarning("Pet with Id: {PetId} not found", petRequest.Id);
+                _logger.LogWarning("Pet with Id: {PetId} not found", pet.Id);
                 return Result<bool>.Failure(PetErrors.NoPetsFound());
             }
 
             if (existingPet.PostedByUserId != userId)
             {
-                _logger.LogWarning("UserId: {UserId} is not authorized to update Pet with Id: {PetId}", userId, petRequest.Id);
+                _logger.LogWarning("UserId: {UserId} is not authorized to update Pet with Id: {PetId}", userId, pet.Id);
                 return Result<bool>.Failure(PetErrors.UpdateUnexpectedError);
             }
 
-            existingPet.Name = petRequest.Name;
-            existingPet.AgeYears = petRequest.AgeYears;
-            existingPet.About = petRequest.About;
-            existingPet.Price = petRequest.Price;
-            existingPet.BreedId = petRequest.BreedId;
+            existingPet.Name = pet.Name;
+            existingPet.AgeYears = pet.AgeYears;
+            existingPet.About = pet.About;
+            existingPet.Price = pet.Price;
+            existingPet.BreedId = pet.BreedId;
 
             var petUpdated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
             if (petUpdated)
             {
-                _logger.LogInformation("Successfully updated Pet with Id: {PetId} from UserId: {UserId}", petRequest.Id, userId);
-                return Result<bool>.Success(true);
+                _logger.LogInformation("Successfully updated Pet with Id: {PetId} from UserId: {UserId}", pet.Id, userId);
+                return Result<bool>.Success();
             }
 
-            _logger.LogWarning("Failed to update Pet with Id: {PetId} from UserId: {UserId}. No changes were detected.", petRequest.Id, userId);
+            _logger.LogWarning("Failed to update Pet with Id: {PetId} from UserId: {UserId}. No changes were detected.", pet.Id, userId);
             return Result<bool>.Failure(PetErrors.NoChangesDetected);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to update Pet with Id: {PetId} for UserId: {UserId}",
-                             nameof(PetService), petRequest.Id, _userAccessor.GetUserId());
+                             nameof(PetService), pet.Id, _userAccessor.GetUserId());
             return Result<bool>.Failure(PetErrors.UpdateUnexpectedError);
         }
     }
