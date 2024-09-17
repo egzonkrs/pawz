@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models.Identity;
+using Pawz.Application.Models.UserModel;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using System;
@@ -138,5 +139,65 @@ public sealed class IdentityService : IIdentityService
         {
             _logger.LogError(ex, "An error occurred while logging out the user.");
         }
+    }
+
+    /// <summary>
+    /// Handles user profile update operations.
+    /// </summary>
+    /// <param name="request">The update request containing user details to be updated.</param>
+    /// <returns>A result indicating success or failure of the update operation.</returns>
+    public async Task<Result<bool>> EditUserAsync(EditUserRequest request)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId);
+            if (user == null)
+            {
+                _logger.LogError("Edit failed for UserId: {UserId} - User not found.", request.UserId);
+                return Result<bool>.Failure(UsersErrors.NotFound(request.UserId));
+            }
+
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.Address = request.Address;
+            user.PhoneNumber = request.PhoneNumber;
+
+            _logger.LogInformation("Started editing User with UserId: {UserId}", request.UserId);
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                _logger.LogError("User edit failed for UserId: {UserId} with Errors: {Errors}",
+                                 request.UserId, string.Join(",", result.Errors.Select(x => x.Description)));
+
+                return Result<bool>.Failure(UsersErrors.UpdateUnexpectedError);
+            }
+
+            if (result.Succeeded && result.Errors.Count() == 0)
+            {
+                _logger.LogInformation("No changes detected for UserId: {UserId}.", request.UserId);
+                return Result<bool>.Failure(UsersErrors.NoChangesDetected);
+            }
+
+            _logger.LogInformation("User edited successfully with UserId: {UserId}", request.UserId);
+            return Result<bool>.Success();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred in {ServiceName} while attempting to edit User with UserId: {UserId}",
+                             nameof(IdentityService), request.UserId);
+            return Result<bool>.Failure(UsersErrors.UpdateUnexpectedError);
+        }
+    }
+
+    public async Task<ApplicationUser> GetUserByIdAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            throw new InvalidOperationException($"User with ID {userId} not found.");
+        }
+        return user;
     }
 }

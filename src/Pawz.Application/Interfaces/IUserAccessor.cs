@@ -1,3 +1,7 @@
+using Pawz.Domain.Common;
+using Pawz.Domain.Entities;
+using System.Threading.Tasks;
+
 namespace Pawz.Application.Interfaces;
 
 /// <summary>
@@ -56,4 +60,5 @@ public interface IUserAccessor
     /// </returns>
     string GetUserInfo(string infoType);
 
+    Task<string> GetCurrentUserIdAsync();
 }

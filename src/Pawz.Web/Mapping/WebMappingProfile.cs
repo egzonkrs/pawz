@@ -44,7 +44,7 @@ public class WebMappingProfile : Profile
 
         CreateMap<Species, SpeciesViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
 
-        CreateMap<ApplicationUser, UserViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
+        CreateMap<ApplicationUser, ApplicationUserViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
 
         CreateMap<Location, LocationViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
 

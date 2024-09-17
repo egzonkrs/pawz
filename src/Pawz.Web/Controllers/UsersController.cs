@@ -4,10 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models.Identity;
 using Pawz.Application.Models.Pet;
-using Pawz.Application.Models.Identity;
+using Pawz.Application.Models.UserModel;
+using Pawz.Domain.Entities;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models;
+using Pawz.Web.Models.Pet;
+using Pawz.Web.Models.User;
+using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,14 +25,16 @@ public class UsersController : Controller
     private readonly IValidator<LoginViewModel> _loginModelValidator;
     private readonly IPetService _petService;
     private readonly IMapper _mapper;
+    private readonly IUserAccessor _userAccessor;
 
-    public UsersController(IIdentityService identityService, IValidator<RegisterViewModel> validator, IValidator<LoginViewModel> loginModelValidator, IPetService petService, IMapper mapper)
+    public UsersController(IIdentityService identityService, IValidator<RegisterViewModel> validator, IValidator<LoginViewModel> loginModelValidator, IPetService petService, IMapper mapper, IUserAccessor userAccessor)
     {
         _identityService = identityService;
         _validator = validator;
         _loginModelValidator = loginModelValidator;
         _petService = petService;
         _mapper = mapper;
+        _userAccessor = userAccessor;
     }
 
     [HttpGet]
@@ -37,9 +44,10 @@ public class UsersController : Controller
     }
 
     [HttpGet]
-    public IActionResult EditProfileForm()
+    public IActionResult EditProfileForm(string userId)
     {
-        return PartialView("EditProfileForm"); 
+        var model = GetUserById(userId);
+        return PartialView("EditProfileForm", model);
     }
 
     [HttpPost]
@@ -112,6 +120,13 @@ public class UsersController : Controller
         return RedirectToAction("Index", "Home");
     }
 
+    // public async Task<IActionResult> Profile()
+    // {
+    //     var userId = await _userAccessor.GetCurrentUserIdAsync();
+    //     var user = await _identityService.GetUserByIdAsync(userId);
+    //     return View(user);
+    // }
+
     public IActionResult Profile()
     {
         return View();
@@ -146,4 +161,32 @@ public class UsersController : Controller
         return PartialView("MyAdoptions");
     }
 
+    public ApplicationUserViewModel GetUserById(string userId)
+    {
+        return new ApplicationUserViewModel
+        {
+            FirstName = "Jane",
+            LastName = "Doe",
+            Address = "123 Main St",
+            PhoneNumber = "555-1234",
+            ImageUrl = "~/images/default-image.webp"
+        };
+    }
+
+    public IActionResult EditUser(string userId)
+    {
+        var model = GetUserById(userId);
+        return View("Profile");
+    }
+
+    [HttpPost]
+    public IActionResult EditUser(ApplicationUserViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            return RedirectToAction("Profile");
+        }
+
+        return View("Profile");
+    }
 }

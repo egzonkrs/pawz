@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Pawz.Application.Interfaces;
 using Pawz.Domain.Entities;
+using System;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Pawz.Application.Services;
 
@@ -81,7 +83,6 @@ public class UserAccessor : IUserAccessor
         return _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Surname);
     }
 
-
     /// <summary>
     /// Retrieves the role of the currently authenticated user.
     /// </summary>
@@ -98,5 +99,16 @@ public class UserAccessor : IUserAccessor
     public bool IsUserAuthenticated()
     {
         return _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
+    }
+
+    public async Task<string> GetCurrentUserIdAsync()
+    {
+        var user = _httpContextAccessor.HttpContext.User;
+        var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+        {
+            throw new InvalidOperationException("User is not authenticated or userId claim is missing.");
+        }
+        return userId;
     }
 }

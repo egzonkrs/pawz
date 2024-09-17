@@ -10,7 +10,7 @@ public static class UsersErrors
     /// </summary>
     /// <param name="id">The ID of the user that was not found.</param>
     /// <returns>An <see cref="Error"/> indicating that the user with the specified ID was not found.</returns>
-    public static Error NotFound(int id) => new Error("Users.NotFound", $"User with ID {id} was not found.");
+    public static Error NotFound(string  id) => new Error("Users.NotFound", $"User with ID {id} was not found.");
 
     /// <summary>
     /// Returns an error indicating that no changes were detected during the operation.
