@@ -9,7 +9,7 @@ using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
 using Pawz.Infrastructure.Repos;
 using Pawz.Infrastructure.Services;
-using Pawz.Web.Controllers;
+using Pawz.Web.Hubs;
 using System.Configuration;
 
 namespace Pawz.Web.Modules;
@@ -34,7 +34,9 @@ public class DataModule : IModule
 
         services.AddDbContext<AppDbContext>(options =>
             options
-                .UseSqlServer(connectionString)
+                .UseSqlServer(connectionString, sqlOptions =>
+            sqlOptions.CommandTimeout(60) // 60 sekonda për timeout
+        )
                 .AddInterceptors(new SoftDeleteInterceptor())
         );
 
@@ -59,5 +61,11 @@ public class DataModule : IModule
         services.AddScoped<IAdoptionRequestService, AdoptionRequestService>();
 
         services.Configure<ApiSettings>(_configuration.GetSection(ApiSettings.SectionName));
+
+        services.AddScoped<INotificationRepository, NotificationRepository>();
+        services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<IRealTimeNotificationSender, SignalRNotificationSender>();
+        services.AddScoped<INotificationHubContext, SignalRHubContext>();
+        services.AddScoped<IRealTimeNotificationSender, RealTimeNotificationSender>();
     }
 }
