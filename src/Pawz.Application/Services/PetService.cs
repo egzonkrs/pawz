@@ -337,6 +337,7 @@ public class PetService : IPetService
             existingPet.AgeYears = petRequest.AgeYears;
             existingPet.About = petRequest.About;
             existingPet.Price = petRequest.Price;
+            existingPet.BreedId = petRequest.BreedId;
 
             var petUpdated = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
