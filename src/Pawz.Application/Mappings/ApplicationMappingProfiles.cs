@@ -37,9 +37,9 @@ public class ApplicationMappingProfiles : Profile
 
         CreateMap<AdoptionRequest, AdoptionRequestResponse>().ReverseMap();
 
-        CreateMap<NotificationRequest, Notification>();
-        CreateMap<Notification, NotificationResponse>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
+        CreateMap<NotificationRequest, Notification>().ReverseMap();
+        CreateMap<Notification, NotificationResponse>().ReverseMap();
+
 
 
     }
