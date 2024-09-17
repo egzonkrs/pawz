@@ -1,50 +1,125 @@
-// Variabla globale për lidhjen SignalR
+// notification.js
 
+// Variabla globale për lidhjen SignalR
 let connection;
 
-// Funksioni për të filluar lidhjen SignalR
-function startSignalRConnection() {
+// Funksioni kryesor që ekzekutohet kur dokumenti është gati
+document.addEventListener('DOMContentLoaded', function () {
+    if (userIsLoggedIn()) {
+        initializeNotificationSystem();
+    } else {
+        console.log("Përdoruesi nuk është i loguar. Sistemi i njoftimeve është i çaktivizuar.");
+    }
+});
+
+// Kontrollon nëse përdoruesi është i loguar
+function userIsLoggedIn() {
+    return document.body.classList.contains('user-logged-in');
+}
+
+// Inicializon sistemin e njoftimeve
+function initializeNotificationSystem() {
+    initializeSignalR();
+    getUserNotifications();
+    setupNotificationUI();
+}
+
+// Inicializon lidhjen SignalR
+function initializeSignalR() {
     connection = new signalR.HubConnectionBuilder()
         .withUrl("/notificationHub")
-        .withAutomaticReconnect()
+        .configureLogging(signalR.LogLevel.Warning)
         .build();
 
-    connection.start().catch(err => console.error("Error starting SignalR connection:", err.toString()));
+    connection.start().catch(err => console.warn("Nuk mund të lidhej me serverin e njoftimeve:", err));
 
     connection.on("ReceiveNotification", function (notification) {
-        updateNotificationUI(notification);
+        console.log("Njoftim i ri:", notification);
+        addNotificationToUI(notification);
+        updateNotificationCount();
     });
 }
 
-// Funksioni për të përditësuar UI-në e njoftimeve
-function updateNotificationUI(notification) {
+// Merr njoftimet e përdoruesit nga serveri
+function getUserNotifications() {
+    fetch('/api/Notification/user')
+        .then(response => response.json())
+        .then(notifications => {
+            notifications.forEach(addNotificationToUI);
+            updateNotificationCount();
+        })
+        .catch(error => console.warn('Gabim gjatë marrjes së njoftimeve:', error));
+}
+
+// Konfiguron UI-në e njoftimeve
+function setupNotificationUI() {
+    const notificationDropdown = document.getElementById('notification-dropdown');
+    if (notificationDropdown) {
+        notificationDropdown.addEventListener('click', function () {
+            // Logjika për hapjen/mbylljen e dropdown-it të njoftimeve
+        });
+    }
+
+    document.addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('mark-as-read')) {
+            const notificationId = e.target.getAttribute('data-notification-id');
+            markNotificationAsRead(notificationId);
+        }
+    });
+}
+
+// Shton një njoftim në UI
+function addNotificationToUI(notification) {
+    const notificationList = document.getElementById('notification-list');
+    if (notificationList) {
+        const notificationElement = document.createElement('div');
+        notificationElement.className = 'notification-item';
+        notificationElement.innerHTML = `
+            <p>${notification.message}</p>
+            <button class="mark-as-read" data-notification-id="${notification.id}">Shëno si të lexuar</button>
+        `;
+        notificationList.prepend(notificationElement);
+    }
+}
+
+// Përditëson numëruesin e njoftimeve
+function updateNotificationCount() {
     const count = document.getElementById('notification-count');
-    const currentCount = parseInt(count.textContent) || 0;
-    const list = document.getElementById('notification-list');
+    if (count) {
+        const currentCount = document.querySelectorAll('.notification-item').length;
+        count.textContent = currentCount;
+        count.style.display = currentCount > 0 ? 'inline' : 'none';
+    }
+}
 
-    // Kontrolloni nëse njoftimi ekziston tashmë
-    const existingNotification = document.querySelector(`[data-notification-id="${notification.id}"]`);
+// Markon një njoftim si të lexuar
+function markNotificationAsRead(notificationId) {
+    fetch(`/api/Notification/markAsRead/${notificationId}`, { method: 'POST' })
+        .then(response => {
+            if (response.ok) {
+                removeNotificationFromUI(notificationId);
+            }
+        })
+        .catch(error => console.warn('Gabim gjatë shënimit të njoftimit si të lexuar:', error));
+}
 
-    if (existingNotification) {
-        // Nëse ekziston, përditësojeni atë
-        existingNotification.textContent = notification.message;
-    } else {
-        // Nëse nuk ekziston, shtojeni si të ri
-        const newNotification = document.createElement('a');
-        newNotification.className = 'dropdown-item';
-        newNotification.href = '#';
-        newNotification.textContent = notification.message;
-        newNotification.setAttribute('data-notification-id', notification.id);
-        list.prepend(newNotification);
-
-        // Rrisni numërimin vetëm nëse është një njoftim i ri
-        count.textContent = currentCount + 1;
+// Heq një njoftim nga UI
+function removeNotificationFromUI(notificationId) {
+    const notification = document.querySelector(`.notification-item[data-notification-id="${notificationId}"]`);
+    if (notification) {
+        notification.remove();
+        updateNotificationCount();
     }
 }
 
 // Funksioni për të dërguar një njoftim
-function sendNotification(recipientId, petId) {
-    const message = `User clicked on Pet with ID: ${petId}`;
+window.sendNotification = function (recipientId, petId) {
+    if (!userIsLoggedIn()) {
+        console.log("Nuk mund të dërgoni njoftime pa qenë i loguar.");
+        return;
+    }
+
+    const message = `Një përdorues ka shfaqur interes për kafshën tuaj me ID: ${petId}`;
     fetch('/api/Notification/send', {
         method: 'POST',
         headers: {
@@ -57,81 +132,24 @@ function sendNotification(recipientId, petId) {
         }),
     })
         .then(response => response.json())
-        .then(data => console.log('Notification sent:', data))
-        .catch((error) => console.error('Error sending notification:', error));
-}
+        .then(data => console.log('Njoftimi u dërgua:', data))
+        .catch((error) => console.warn('Gabim gjatë dërgimit të njoftimit:', error));
+};
 
+// Funksion që mund të thirret pas një logini të suksesshëm
+window.onSuccessfulLogin = function () {
+    initializeNotificationSystem();
+};
 
-// Funksioni për të marrë njoftimet e përdoruesit
-function getUserNotifications() {
-    fetch('/api/Notification/user')
-        .then(response => response.json())
-        .then(notifications => {
-            const list = document.getElementById('notification-list');
-            const count = document.getElementById('notification-count');
-            list.innerHTML = '';
-            notifications.forEach(notification => {
-                const newNotification = document.createElement('a');
-                newNotification.className = 'dropdown-item';
-                newNotification.href = '#';
-                newNotification.textContent = notification.message;
-                newNotification.setAttribute('data-notification-id', notification.id);
-                list.appendChild(newNotification);
-            });
-            count.textContent = notifications.length;
-        })
-        .catch(error => console.error('Error fetching notifications:', error));
-}
-
-// Event listener për të ngarkuar njoftimet kur hapet dropdown-i
-document.addEventListener('DOMContentLoaded', function () {
-    const notificationDropdown = document.querySelector('.notification-dropdown');
-    if (notificationDropdown) {
-        notificationDropdown.addEventListener('show.bs.dropdown', function () {
-            getUserNotifications();
-        });
+// Funksion që mund të thirret pas logout
+window.onLogout = function () {
+    if (connection) {
+        connection.stop();
     }
-
-    // Lidhni butonin e mesazhit me funksionin e dërgimit të njoftimit
-    const messageButtons = document.querySelectorAll('[id^="messageButton"]');
-    messageButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const petId = this.getAttribute('data-pet-id');
-            const ownerId = this.getAttribute('data-owner-id');
-            sendNotification(ownerId, petId);
-        });
-    });
-
-    // Filloni lidhjen SignalR
-    startSignalRConnection();
-
-    // Ngarko njoftimet fillestare
-    getUserNotifications();
-});
-
-// Funksioni për të shënuar një njoftim si të lexuar
-function markNotificationAsRead(notificationId) {
-    fetch(`/api/Notification/markAsRead/${notificationId}`, {
-        method: 'POST',
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Notification marked as read:', data);
-            // Përditëso UI-në pas shënimit si të lexuar
-            const notification = document.querySelector(`[data-notification-id="${notificationId}"]`);
-            if (notification) {
-                notification.classList.add('read');
-            }
-        })
-        .catch((error) => console.error('Error marking notification as read:', error));
-}
-
-// Shtoni event listener për klikimin e njoftimeve individuale
-document.addEventListener('click', function (event) {
-    if (event.target.matches('#notification-list .dropdown-item')) {
-        const notificationId = event.target.getAttribute('data-notification-id');
-        markNotificationAsRead(notificationId);
+    // Pastro elementet e UI-së të lidhura me njoftimet
+    const notificationList = document.getElementById('notification-list');
+    if (notificationList) {
+        notificationList.innerHTML = '';
     }
-});
-
-
+    updateNotificationCount();
+};
