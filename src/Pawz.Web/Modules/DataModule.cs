@@ -34,9 +34,7 @@ public class DataModule : IModule
 
         services.AddDbContext<AppDbContext>(options =>
             options
-                .UseSqlServer(connectionString, sqlOptions =>
-            sqlOptions.CommandTimeout(60) // 60 sekonda për timeout
-        )
+                .UseSqlServer(connectionString)
                 .AddInterceptors(new SoftDeleteInterceptor())
         );
 
