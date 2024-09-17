@@ -119,8 +119,12 @@
                         <a>See all listings</a>
                         <ul class="list-inline mt-20">
                             <li class="list-inline-item">
-                                <a
-                                    class="btn btn-contact d-inline-block btn-primary px-lg-5 my-1 px-md-3">
+                                <a id="messageButton"
+                                   data-pet-id="@Model.Id"
+                                   data-owner-id="@Model.User?.Id"
+                                   data-pet-name="@Model.Name"
+                                   data-sender-name="@User.Identity.Name"
+                                   class="btn btn-contact d-inline-block btn-primary px-lg-5 my-1 px-md-3">
                                     Message
                                 </a>
                             </li>
@@ -208,4 +212,5 @@
                 });
             })
         </script>
+
 }
