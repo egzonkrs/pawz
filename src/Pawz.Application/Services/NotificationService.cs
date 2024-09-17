@@ -100,18 +100,20 @@ public class NotificationService : INotificationService
         }
     }
 
-    public async Task<Result<IEnumerable<NotificationResponse>>> GetNotificationsForUserAsync(string userId, CancellationToken cancellationToken)
+    public async Task<Result<List<NotificationResponse>>> GetNotificationsForUserAsync(string userId, CancellationToken cancellationToken)
     {
         try
         {
             var notifications = await _notificationRepository.GetNotificationsForUserAsync(userId, cancellationToken);
-            var response = _mapper.Map<IEnumerable<NotificationResponse>>(notifications);
-            return Result<IEnumerable<NotificationResponse>>.Success(response);
+            var response = _mapper.Map<List<NotificationResponse>>(notifications);
+            _logger.LogInformation("Mapped notifications: {@Notifications}", response);
+
+            return Result<List<NotificationResponse>>.Success(response);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error retrieving notifications for user");
-            return Result<IEnumerable<NotificationResponse>>.Failure("An unexpected error occurred");
+            return Result<List<NotificationResponse>>.Failure("An unexpected error occurred");
         }
     }
 
@@ -119,9 +121,13 @@ public class NotificationService : INotificationService
     {
         try
         {
+            _logger.LogInformation($"Attempting to mark notification as read. ID: {id}");
+
             var notification = await _notificationRepository.GetNotificationByIdAsync(id, cancellationToken);
             if (notification == null)
             {
+                _logger.LogWarning($"Notification not found. ID: {id}");
+
                 return Result<bool>.Failure("Notification not found");
             }
 
@@ -131,8 +137,11 @@ public class NotificationService : INotificationService
 
             if (!result)
             {
+                _logger.LogWarning($"Failed to mark notification as read. ID: {id}");
+
                 return Result<bool>.Failure("Failed to mark notification as read");
             }
+            _logger.LogInformation($"Successfully marked notification as read. ID: {id}");
 
             var response = _mapper.Map<NotificationResponse>(notification);
             return Result<bool>.Success();
