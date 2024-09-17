@@ -12,8 +12,6 @@ public class CoreModule : IModule
         services.AddControllersWithViews();
         services.AddRouting(options => options.LowercaseUrls = true);
         services.AddAutoMapper(typeof(ApplicationMappingProfiles).Assembly, typeof(WebMappingProfile).Assembly);
-
         services.AddSignalR();
-
     }
 }
