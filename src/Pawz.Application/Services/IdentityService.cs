@@ -156,7 +156,7 @@ public sealed class IdentityService : IIdentityService
                 _logger.LogError("Edit failed for UserId: {UserId} - User not found.", request.UserId);
                 return Result<bool>.Failure(UsersErrors.NotFound(request.UserId));
             }
-
+            
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.Address = request.Address;
@@ -174,12 +174,6 @@ public sealed class IdentityService : IIdentityService
                 return Result<bool>.Failure(UsersErrors.UpdateUnexpectedError);
             }
 
-            if (result.Succeeded && result.Errors.Count() == 0)
-            {
-                _logger.LogInformation("No changes detected for UserId: {UserId}.", request.UserId);
-                return Result<bool>.Failure(UsersErrors.NoChangesDetected);
-            }
-
             _logger.LogInformation("User edited successfully with UserId: {UserId}", request.UserId);
             return Result<bool>.Success();
         }
@@ -191,13 +185,4 @@ public sealed class IdentityService : IIdentityService
         }
     }
 
-    public async Task<ApplicationUser> GetUserByIdAsync(string userId)
-    {
-        var user = await _userManager.FindByIdAsync(userId);
-        if (user == null)
-        {
-            throw new InvalidOperationException($"User with ID {userId} not found.");
-        }
-        return user;
-    }
 }

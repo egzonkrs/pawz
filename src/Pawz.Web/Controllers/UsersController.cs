@@ -51,7 +51,6 @@ public class UsersController : Controller
     }
 
     [HttpPost]
-    [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {
         var validationResult = await _validator.ValidateAsync(registerViewModel);
@@ -173,20 +172,31 @@ public class UsersController : Controller
         };
     }
 
-    public IActionResult EditUser(string userId)
-    {
-        var model = GetUserById(userId);
-        return View("Profile");
-    }
-
     [HttpPost]
-    public IActionResult EditUser(ApplicationUserViewModel model)
+    public async Task<IActionResult> EditUser(ApplicationUserViewModel model)
     {
         if (ModelState.IsValid)
         {
-            return RedirectToAction("Profile");
-        }
+            var editUserRequest = new EditUserRequest
+            {
+                UserId = model.UserId,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Address = model.Address,
+                PhoneNumber = model.PhoneNumber
+            };
 
-        return View("Profile");
+            var result = await _identityService.EditUserAsync(editUserRequest);
+
+            if (result.IsSuccess)
+            {
+                return RedirectToAction("Profile");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Error updating the user profile.");
+            }
+        }
+        return View("Profile", model);
     }
 }

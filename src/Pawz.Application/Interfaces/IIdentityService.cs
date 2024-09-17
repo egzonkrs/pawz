@@ -32,7 +32,5 @@ public interface IIdentityService
     /// <param name="request">The update request containing user details to be updated.</param>
     /// <returns>A result indicating success or failure of the update operation.</returns>
     Task<Result<bool>> EditUserAsync(EditUserRequest request);
-
-    Task<ApplicationUser> GetUserByIdAsync(string userId);
 }
 
