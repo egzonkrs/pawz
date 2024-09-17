@@ -1,46 +1,35 @@
-// notification.js
-
-// Variabla globale për lidhjen SignalR
 let connection;
 
-// Funksioni kryesor që ekzekutohet kur dokumenti është gati
 document.addEventListener('DOMContentLoaded', function () {
     if (userIsLoggedIn()) {
         initializeNotificationSystem();
-    } else {
-        console.log("Përdoruesi nuk është i loguar. Sistemi i njoftimeve është i çaktivizuar.");
-    }
+    } 
 });
 
-// Kontrollon nëse përdoruesi është i loguar
 function userIsLoggedIn() {
     return document.body.classList.contains('user-logged-in');
 }
 
-// Inicializon sistemin e njoftimeve
 function initializeNotificationSystem() {
     initializeSignalR();
     getUserNotifications();
     setupNotificationUI();
 }
 
-// Inicializon lidhjen SignalR
 function initializeSignalR() {
     connection = new signalR.HubConnectionBuilder()
         .withUrl("/notificationHub")
-        .configureLogging(signalR.LogLevel.Warning)
+        .configureLogging(signalR.LogLevel.Information)
         .build();
 
-    connection.start().catch(err => console.warn("Nuk mund të lidhej me serverin e njoftimeve:", err));
+    connection.start().catch(err => console.error("SignalR Connection Error: ", err.toString()));
 
     connection.on("ReceiveNotification", function (notification) {
-        console.log("Njoftim i ri:", notification);
         addNotificationToUI(notification);
         updateNotificationCount();
     });
 }
 
-// Merr njoftimet e përdoruesit nga serveri
 function getUserNotifications() {
     fetch('/api/Notification/user')
         .then(response => response.json())
@@ -48,78 +37,102 @@ function getUserNotifications() {
             notifications.forEach(addNotificationToUI);
             updateNotificationCount();
         })
-        .catch(error => console.warn('Gabim gjatë marrjes së njoftimeve:', error));
+        .catch(error => console.error('Error fetching notifications:', error));
 }
 
-// Konfiguron UI-në e njoftimeve
 function setupNotificationUI() {
     const notificationDropdown = document.getElementById('notification-dropdown');
     if (notificationDropdown) {
-        notificationDropdown.addEventListener('click', function () {
-            // Logjika për hapjen/mbylljen e dropdown-it të njoftimeve
+        notificationDropdown.addEventListener('click', function (event) {
+            event.preventDefault();
+            const dropdownMenu = document.getElementById('notification-menu');
+            if (dropdownMenu) {
+                dropdownMenu.classList.toggle('show');
+            }
         });
     }
 
-    document.addEventListener('click', function (e) {
-        if (e.target && e.target.classList.contains('mark-as-read')) {
-            const notificationId = e.target.getAttribute('data-notification-id');
-            markNotificationAsRead(notificationId);
+    document.addEventListener('click', function (event) {
+        const notificationItem = event.target.closest('.notification-item');
+        if (notificationItem) {
+            const notificationId = notificationItem.getAttribute('data-notification-id');
+            if (notificationId) {
+                markNotificationAsRead(notificationId);
+            } 
         }
     });
 }
 
-// Shton një njoftim në UI
 function addNotificationToUI(notification) {
     const notificationList = document.getElementById('notification-list');
     if (notificationList) {
         const notificationElement = document.createElement('div');
-        notificationElement.className = 'notification-item';
+        notificationElement.className = 'notification-item' + (notification.isRead ? '' : ' unread');
+
+        // Përdorni një ID alternative nëse 'id' mungon
+        const notificationId = notification.id || `temp-${Date.now()}`;
+        notificationElement.setAttribute('data-notification-id', notificationId);
+
         notificationElement.innerHTML = `
             <p>${notification.message}</p>
-            <button class="mark-as-read" data-notification-id="${notification.id}">Shëno si të lexuar</button>
         `;
         notificationList.prepend(notificationElement);
+        console.log('Added notification to UI:', notification);
     }
 }
 
-// Përditëson numëruesin e njoftimeve
 function updateNotificationCount() {
-    const count = document.getElementById('notification-count');
-    if (count) {
-        const currentCount = document.querySelectorAll('.notification-item').length;
-        count.textContent = currentCount;
-        count.style.display = currentCount > 0 ? 'inline' : 'none';
+    const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+    const countElement = document.getElementById('notification-count');
+    if (countElement) {
+        countElement.textContent = unreadCount;
+        countElement.style.display = unreadCount > 0 ? 'inline' : 'none';
     }
 }
 
-// Markon një njoftim si të lexuar
 function markNotificationAsRead(notificationId) {
-    fetch(`/api/Notification/markAsRead/${notificationId}`, { method: 'POST' })
+    if (isNaN(notificationId) || notificationId <= 0) {
+        return;
+    }
+    fetch(`/api/Notification/markAsRead/${notificationId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
         .then(response => {
-            if (response.ok) {
-                removeNotificationFromUI(notificationId);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const notification = document.querySelector(`.notification-item[data-notification-id="${notificationId}"]`);
+            if (notification) {
+                notification.classList.remove('unread');
+                updateNotificationCount();
             }
         })
-        .catch(error => console.warn('Gabim gjatë shënimit të njoftimit si të lexuar:', error));
+        .catch(error => console.error('Error marking notification as read:', error));
 }
 
-// Heq një njoftim nga UI
-function removeNotificationFromUI(notificationId) {
-    const notification = document.querySelector(`.notification-item[data-notification-id="${notificationId}"]`);
-    if (notification) {
-        notification.remove();
-        updateNotificationCount();
+document.addEventListener('DOMContentLoaded', function () {
+    const messageButton = document.getElementById('messageButton');
+    if (messageButton) {
+        messageButton.addEventListener('click', function () {
+            const petId = this.getAttribute('data-pet-id');
+            const ownerId = this.getAttribute('data-owner-id');
+            sendNotification(ownerId, petId);
+        });
     }
-}
+});
 
-// Funksioni për të dërguar një njoftim
 window.sendNotification = function (recipientId, petId) {
     if (!userIsLoggedIn()) {
-        console.log("Nuk mund të dërgoni njoftime pa qenë i loguar.");
         return;
     }
 
-    const message = `Një përdorues ka shfaqur interes për kafshën tuaj me ID: ${petId}`;
+    const message = `A user requested to adopt the pet: with ID: ${petId}`;
     fetch('/api/Notification/send', {
         method: 'POST',
         headers: {
@@ -132,21 +145,18 @@ window.sendNotification = function (recipientId, petId) {
         }),
     })
         .then(response => response.json())
-        .then(data => console.log('Njoftimi u dërgua:', data))
-        .catch((error) => console.warn('Gabim gjatë dërgimit të njoftimit:', error));
+        .then(data => console.log('Notification sent:', data))
+        .catch((error) => console.error('Error sending notification:', error));
 };
 
-// Funksion që mund të thirret pas një logini të suksesshëm
 window.onSuccessfulLogin = function () {
     initializeNotificationSystem();
 };
 
-// Funksion që mund të thirret pas logout
 window.onLogout = function () {
     if (connection) {
         connection.stop();
     }
-    // Pastro elementet e UI-së të lidhura me njoftimet
     const notificationList = document.getElementById('notification-list');
     if (notificationList) {
         notificationList.innerHTML = '';
