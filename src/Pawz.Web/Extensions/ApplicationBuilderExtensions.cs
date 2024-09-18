@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
-using Pawz.Infrastructure.Data.Seed;
 using System;
 using System.Threading.Tasks;
 

@@ -147,7 +147,7 @@ public sealed class IdentityService : IIdentityService
     /// </summary>
     /// <param name="request">The update request containing user details to be updated.</param>
     /// <returns>A result indicating success or failure of the update operation.</returns>
-    public async Task<Result<bool>> EditUserAsync(EditUserRequest request)
+    public async Task<Result<ApplicationUser>> EditUserAsync(EditUserRequest request)
     {
         try
         {
@@ -155,13 +155,15 @@ public sealed class IdentityService : IIdentityService
             if (user == null)
             {
                 _logger.LogError("Edit failed for UserId: {UserId} - User not found.", request.UserId);
-                return Result<bool>.Failure(UsersErrors.NotFound(request.UserId));
+                return Result<ApplicationUser>.Failure(UsersErrors.NotFound(request.UserId));
             }
 
+            // Update user fields
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.Address = request.Address;
             user.PhoneNumber = request.PhoneNumber;
+            user.ImageUrl = request.ImageUrl;  // Fixed the mistake where ImageUrl was not being updated
 
             _logger.LogInformation("Started editing User with UserId: {UserId}", request.UserId);
 
@@ -172,17 +174,19 @@ public sealed class IdentityService : IIdentityService
                 _logger.LogError("User edit failed for UserId: {UserId} with Errors: {Errors}",
                                  request.UserId, string.Join(",", result.Errors.Select(x => x.Description)));
 
-                return Result<bool>.Failure(UsersErrors.UpdateUnexpectedError);
+                return Result<ApplicationUser>.Failure(UsersErrors.UpdateUnexpectedError);
             }
 
             _logger.LogInformation("User edited successfully with UserId: {UserId}", request.UserId);
-            return Result<bool>.Success();
+
+            // Return the updated user
+            return Result<ApplicationUser>.Success(user);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in {ServiceName} while attempting to edit User with UserId: {UserId}",
                              nameof(IdentityService), request.UserId);
-            return Result<bool>.Failure(UsersErrors.UpdateUnexpectedError);
+            return Result<ApplicationUser>.Failure(UsersErrors.UpdateUnexpectedError);
         }
     }
 
@@ -193,7 +197,7 @@ public sealed class IdentityService : IIdentityService
     {
         try
         {
-            var userId = _userAccessor.GetUserId(); 
+            var userId = _userAccessor.GetUserId();
 
             if (string.IsNullOrEmpty(userId))
             {

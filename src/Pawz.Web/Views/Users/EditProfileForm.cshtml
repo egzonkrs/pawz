@@ -14,31 +14,42 @@
             <div class="widget personal-info">
                 <h3 class="widget-header user">Edit Personal Information</h3>
 
-                <form asp-action="EditUser" method="post" enctype="multipart/form-data">
+                <form id="editUserForm" asp-action="EditUser" asp-controller="Users" method="post" enctype="multipart/form-data">
+                    <!-- Hidden field for UserId -->
+                    <input type="hidden" asp-for="UserId" />
+
                     <!-- First Name -->
                     <div class="form-group">
-                        <label asp-for="FirstName"></label>
+                        <label asp-for="FirstName">
+                            @(string.IsNullOrEmpty(Model.FirstName) ? "Add First Name" : "Edit First Name")
+                        </label>
                         <input type="text" class="form-control" asp-for="FirstName" />
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
 
                     <!-- Last Name -->
                     <div class="form-group">
-                        <label asp-for="LastName"></label>
+                        <label asp-for="LastName">
+                            @(string.IsNullOrEmpty(Model.LastName) ? "Add Last Name" : "Edit Last Name")
+                        </label>
                         <input type="text" class="form-control" asp-for="LastName" />
                         <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
 
                     <!-- Address -->
                     <div class="form-group">
-                        <label asp-for="Address"></label>
+                        <label asp-for="Address">
+                            @(string.IsNullOrEmpty(Model.Address) ? "Add Address" : "Edit Address")
+                        </label>
                         <input type="text" class="form-control" asp-for="Address" />
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
 
                     <!-- Phone Number -->
                     <div class="form-group">
-                        <label asp-for="PhoneNumber"></label>
+                        <label asp-for="PhoneNumber">
+                            @(string.IsNullOrEmpty(Model.PhoneNumber) ? "Add Phone Number" : "Edit Phone Number")
+                        </label>
                         <input type="text" class="form-control" asp-for="PhoneNumber" />
                         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
@@ -113,8 +124,40 @@
         </div>
     </div>
     <div class="widget d-flex align-items-center justify-content-between pt-4 mt-4"
-        style="margin-bottom: 0 !important;">
+        style="margin-bottom: 0 !important; flex-wrap: wrap;">
         <button type="button" class="btn btn-outline-danger">Delete Account</button>
         <button type="button" class="btn btn-outline-warning">Deactivate Account</button>
     </div>
 </div>
+
+<script>
+    document.getElementById("editUserForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the form from submitting
+
+        var form = document.getElementById("editUserForm");
+        var formData = new FormData(form);
+
+        // Log all form data fields and values
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]); // Logs the field name and value
+        }
+
+        // Use fetch API to submit the form data asynchronously
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+            }
+        })
+        .then(response => response.text())
+        .then(result => {
+            // Handle success, reload or redirect
+            console.log('Form submitted successfully:', result);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+

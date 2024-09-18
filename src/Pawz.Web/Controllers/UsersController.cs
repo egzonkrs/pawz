@@ -171,6 +171,7 @@ public class UsersController : Controller
 
         return new ApplicationUserViewModel
         {
+            UserId = result.Value.Id,
             FirstName = result.Value.FirstName,
             LastName = result.Value.LastName,
             Address = result.Value.Address,
@@ -186,7 +187,7 @@ public class UsersController : Controller
         return PartialView("EditProfileForm", model);
     }
 
-    [HttpPost]
+    [HttpPut("{id}")]
     public async Task<IActionResult> EditUser(ApplicationUserViewModel model)
     {
         if (ModelState.IsValid)
@@ -197,7 +198,8 @@ public class UsersController : Controller
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Address = model.Address,
-                PhoneNumber = model.PhoneNumber
+                PhoneNumber = model.PhoneNumber,
+                ImageUrl = model.ImageUrl
             };
 
             var result = await _identityService.EditUserAsync(editUserRequest);
