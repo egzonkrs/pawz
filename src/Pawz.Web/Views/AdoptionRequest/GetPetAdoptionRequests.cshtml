@@ -20,7 +20,7 @@
             <div class="widget">
                 <div class="text-center">
                     <img src="/images/pets/@(Model.First().Pet.PetImages.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "defaultPetAvatar.jpg")"
-                         alt="Pet Photo" class="rounded-circle user-avatar-image-150" />
+                        alt="Pet Photo" class="rounded-circle user-avatar-image-150" style="width: 200px; height: 200px;" />
                 </div>
                 <h5 class="text-center mt-3">@textInfo.ToTitleCase(Model.First().Pet.Name.ToLower()) </h5>
                 <p> ♦ Breed: <i> @Model.First().Pet.Breed.Name </i></p>
@@ -54,8 +54,8 @@
                             {
                                 <tr class="text-center">
                                     <th>
-                                        <img src="/images/users/@(request.User.ImageUrl ?? "userAvatar.jpg")"
-                                             alt="User Photo" class="rounded-circle user-avatar-image-100" />
+                                        <img src="/images/users/@(request.User.ImageUrl ?? "userAvatar.jpg")" alt="User Photo"
+                                            class="rounded-circle user-avatar-image-100" style="width: 200px; height: 200px;" />
                                     </th>
                                     <td class="align-middle"> @textInfo.ToTitleCase(request.User.FirstName.ToLower()) </td>
                                     <td class="align-middle"> @textInfo.ToTitleCase(request.User.LastName.ToLower()) </td>
@@ -74,7 +74,7 @@
                 </div>
             }
             <!-- paginatipn -->
-            <div class="pagination justify-content-center">
+            <div class="pagination justify-content-center mb-5">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
                         <li class="page-item">
