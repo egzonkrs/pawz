@@ -1,6 +1,7 @@
 using AutoMapper;
 using Pawz.Application.Models;
 using Pawz.Application.Models.BreedModels;
+using Pawz.Application.Models.NotificationModels;
 using Pawz.Application.Models.Pet;
 using Pawz.Application.Models.PetImagesModels;
 using Pawz.Application.Models.PetModels;
@@ -35,5 +36,8 @@ public class ApplicationMappingProfiles : Profile
         CreateMap<UserPetRequest, UserPetResponse>().ReverseMap();
 
         CreateMap<AdoptionRequest, AdoptionRequestResponse>().ReverseMap();
+
+        CreateMap<NotificationRequest, Notification>().ReverseMap();
+        CreateMap<Notification, NotificationResponse>().ReverseMap();
     }
 }
