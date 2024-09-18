@@ -55,6 +55,12 @@ public static class PetErrors
     public static Error DeletionUnexpectedError => new Error("Pets.DeletionUnexpectedError", "An unexpected error occurred during the deletion operation.");
 
     /// <summary>
+    /// Returns an error indicating that the user is not authorized to perform the requested operation.
+    /// </summary>
+    /// <returns>An <see cref="Error"/> indicating that the user is not authorized.</returns>
+    public static Error Unauthorized => new Error("Pets.Unauthorized", "You are not authorized to perform this operation.");
+
+    /// <summary>
     /// Returns an error indicating that no pets were found for the specified user.
     /// </summary>
     /// <param name="userId">The ID of the user for whom no pets were found.</param>
