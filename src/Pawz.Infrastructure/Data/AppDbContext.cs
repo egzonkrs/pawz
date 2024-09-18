@@ -6,7 +6,6 @@ using System.Configuration;
 using System.Reflection;
 
 namespace Pawz.Infrastructure.Data;
-
 public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
     private readonly IConfiguration _configuration;
@@ -26,7 +25,6 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Species> Species { get; set; }
     public DbSet<Notification> Notifications { get; set; }
 
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (optionsBuilder.IsConfigured) return;
@@ -42,7 +40,6 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
             .UseSqlServer(connectionString)
             .AddInterceptors(new SoftDeleteInterceptor());
     }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // To-do:
