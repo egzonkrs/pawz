@@ -153,15 +153,12 @@ public class UsersController : Controller
         return PartialView("MyAdoptions");
     }
 
-    public ApplicationUserViewModel GetUserById(string userId)
+    public ApplicationUserViewModel GetUserById()
     {
-        // Call the async method and wait for it to complete
         var result = _identityService.GetUserByIdAsync().GetAwaiter().GetResult();
 
-        // Check if the result was successful or if the user was not found
         if (!result.IsSuccess || result.Value == null)
         {
-            // Return a default model if the user was not found
             return new ApplicationUserViewModel
             {
                 FirstName = "Unknown",
@@ -172,22 +169,20 @@ public class UsersController : Controller
             };
         }
 
-        // Map the ApplicationUser to ApplicationUserViewModel and return it
         return new ApplicationUserViewModel
         {
             FirstName = result.Value.FirstName,
             LastName = result.Value.LastName,
             Address = result.Value.Address,
             PhoneNumber = result.Value.PhoneNumber,
-            ImageUrl = result.Value.ImageUrl // Ensure this field exists in ApplicationUser
+            ImageUrl = result.Value.ImageUrl
         };
     }
 
-
     [HttpGet]
-    public IActionResult EditProfileForm(string userId)
+    public IActionResult EditProfileForm()
     {
-        var model = GetUserById(userId);
+        var model = GetUserById();
         return PartialView("EditProfileForm", model);
     }
 

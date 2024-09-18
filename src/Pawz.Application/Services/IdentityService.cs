@@ -186,11 +186,13 @@ public sealed class IdentityService : IIdentityService
         }
     }
 
+    /// <summary>
+    /// Retrieves a user by their unique identifier.
+    /// </summary>
     public async Task<Result<ApplicationUser>> GetUserByIdAsync()
     {
         try
         {
-
             var userId = _userAccessor.GetUserId(); 
 
             if (string.IsNullOrEmpty(userId))
