@@ -32,5 +32,15 @@ public interface IIdentityService
     /// <param name="request">The update request containing user details to be updated.</param>
     /// <returns>A result indicating success or failure of the update operation.</returns>
     Task<Result<bool>> EditUserAsync(EditUserRequest request);
+
+    /// <summary>
+    /// Retrieves a user by their unique identifier.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="Task{TResult}"/> that represents the asynchronous operation. The task result contains 
+    /// a <see cref="Result{ApplicationUser}"/> object that includes either the user data if successful, 
+    /// or a list of errors if the operation fails.
+    /// </returns>
+    Task<Result<ApplicationUser>> GetUserByIdAsync();
 }
 

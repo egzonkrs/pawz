@@ -43,13 +43,6 @@ public class UsersController : Controller
         return View();
     }
 
-    [HttpGet]
-    public IActionResult EditProfileForm(string userId)
-    {
-        var model = GetUserById(userId);
-        return PartialView("EditProfileForm", model);
-    }
-
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {
@@ -162,14 +155,40 @@ public class UsersController : Controller
 
     public ApplicationUserViewModel GetUserById(string userId)
     {
+        // Call the async method and wait for it to complete
+        var result = _identityService.GetUserByIdAsync().GetAwaiter().GetResult();
+
+        // Check if the result was successful or if the user was not found
+        if (!result.IsSuccess || result.Value == null)
+        {
+            // Return a default model if the user was not found
+            return new ApplicationUserViewModel
+            {
+                FirstName = "Unknown",
+                LastName = "User",
+                Address = "Unknown",
+                PhoneNumber = "Unknown",
+                ImageUrl = ""
+            };
+        }
+
+        // Map the ApplicationUser to ApplicationUserViewModel and return it
         return new ApplicationUserViewModel
         {
-            FirstName = "Jane",
-            LastName = "Doe",
-            Address = "123 Main St",
-            PhoneNumber = "555-1234",
-            ImageUrl = "/images/default-image.webp"
+            FirstName = result.Value.FirstName,
+            LastName = result.Value.LastName,
+            Address = result.Value.Address,
+            PhoneNumber = result.Value.PhoneNumber,
+            ImageUrl = result.Value.ImageUrl // Ensure this field exists in ApplicationUser
         };
+    }
+
+
+    [HttpGet]
+    public IActionResult EditProfileForm(string userId)
+    {
+        var model = GetUserById(userId);
+        return PartialView("EditProfileForm", model);
     }
 
     [HttpPost]

@@ -19,12 +19,13 @@ public sealed class IdentityService : IIdentityService
     private readonly ILogger<IIdentityService> _logger;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
-
-    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<IIdentityService> logger)
+    private readonly IUserAccessor _userAccessor;
+    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<IIdentityService> logger, IUserAccessor userAccessor)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _logger = logger;
+        _userAccessor = userAccessor;
     }
 
     /// <summary>
@@ -156,7 +157,7 @@ public sealed class IdentityService : IIdentityService
                 _logger.LogError("Edit failed for UserId: {UserId} - User not found.", request.UserId);
                 return Result<bool>.Failure(UsersErrors.NotFound(request.UserId));
             }
-            
+
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.Address = request.Address;
@@ -182,6 +183,34 @@ public sealed class IdentityService : IIdentityService
             _logger.LogError(ex, "An error occurred in {ServiceName} while attempting to edit User with UserId: {UserId}",
                              nameof(IdentityService), request.UserId);
             return Result<bool>.Failure(UsersErrors.UpdateUnexpectedError);
+        }
+    }
+
+    public async Task<Result<ApplicationUser>> GetUserByIdAsync()
+    {
+        try
+        {
+
+            var userId = _userAccessor.GetUserId(); 
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Result<ApplicationUser>.Failure(UsersErrors.NotFound("CurrentUser"));
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return Result<ApplicationUser>.Failure(UsersErrors.NotFound(userId));
+            }
+
+            return Result<ApplicationUser>.Success(user);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while attempting to fetch the current user's data.");
+            return Result<ApplicationUser>.Failure(UsersErrors.UnexpectedError);
         }
     }
 

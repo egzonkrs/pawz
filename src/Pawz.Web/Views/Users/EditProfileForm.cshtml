@@ -47,8 +47,9 @@
                     <div class="form-group">
                         <label>Current Profile Picture</label>
                         <div class="profile-thumb">
-                            <img src="@Model.ImageUrl" alt="@Model.FirstName @Model.LastName's Profile Picture"
-                                class="rounded-circle" style="width: 150px; height: 150px;" />
+                            <img src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "/images/default-image.webp" : Model.ImageUrl)"
+                                alt="@Model.FirstName @Model.LastName's Profile Picture" class="rounded-circle"
+                                style="width: 150px; height: 150px;" />
                         </div>
                     </div>
 
