@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
+using Pawz.Domain.Common;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,17 +34,25 @@ public class SignalRNotificationSender : IRealTimeNotificationSender
     /// <param name="notification">The notification message to be sent to the user.</param>
     /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation of sending the notification.</returns>
-    public async Task SendNotificationAsync(string userId, string notification, CancellationToken cancellationToken)
+    public async Task<Result<bool>> SendNotificationAsync(string userId, string notification, CancellationToken cancellationToken)
     {
         try
         {
-            await _hubContext.SendToUserAsync(userId, "ReceiveNotification", notification, cancellationToken);
-            _logger.LogInformation($"Successfully sent notification to user {userId}");
+            var result = await _hubContext.SendToUserAsync(userId, "ReceiveNotification", notification, cancellationToken);
+
+            if (!result.IsSuccess)
+            {
+                _logger.LogError("Failed to send notification to user {UserId}", userId);
+                return Result<bool>.Failure(NotificationErrors.SendingFailed(userId));
+            }
+
+            _logger.LogInformation("Successfully sent notification to user {UserId}", userId);
+            return Result<bool>.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error sending notification to user {userId}: {ex.Message}");
-            throw;
+            _logger.LogError(ex, "An error occurred while attempting to send notification to user {UserId}", userId);
+            return Result<bool>.Failure(NotificationErrors.SendingUnexpectedError);
         }
     }
 }
