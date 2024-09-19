@@ -162,17 +162,29 @@ public class AdoptionRequestController : Controller
         if (result.IsSuccess)
         {
             TempData["SuccessMessage"] = "Adoption request successfully accepted.";
-
-            var adoptionRequest = await _adoptionRequestService.GetAdoptionRequestByIdAsync(adoptionRequestId, cancellationToken);
-            if (adoptionRequest.IsSuccess)
-            {
-                return RedirectToAction("GetPetAdoptionRequests", "AdoptionRequest", new { petId = adoptionRequestId });
-
-            }
-            return RedirectToAction("Index", "Home");
         }
-        TempData["ErrorMessage"] = "Failed to accept the adoption request.";
-        return RedirectToAction("GetPetAdoptionRequests", "AdoptionRequest", new { petId = adoptionRequestId });
-
+        else
+        {
+            TempData["ErrorMessage"] = "Failed to accept the adoption request.";
+        }
+        return Redirect(Request.Headers["Referer"].ToString());
     }
+
+
+    [HttpPost]
+    public async Task<IActionResult> RejectAdoptionRequest(int adoptionRequestId, CancellationToken cancellationToken)
+    {
+        var result = await _adoptionRequestService.RejectAdoptionRequestAsync(adoptionRequestId, cancellationToken);
+
+        if (result.IsSuccess)
+        {
+            TempData["SuccessMessage"] = "Adoption request successfully rejected.";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Failed to reject the adoption request.";
+        }
+        return Redirect(Request.Headers["Referer"].ToString());
+    }
+
 }

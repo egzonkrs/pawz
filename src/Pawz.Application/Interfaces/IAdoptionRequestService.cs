@@ -66,4 +66,15 @@ public interface IAdoptionRequestService
     /// Returns a failure result if the request was not found or an error occurred during the process.
     /// </returns>
     Task<Result<bool>> AcceptAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Rejects a specific adoption request by setting its status to "Rejected".
+    /// </summary>
+    /// <param name="adoptionRequestId">The ID of the adoption request to be rejected.</param>
+    /// <param name="cancellationToken">Token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// Returns a success result if the adoption request status was successfully set to "Rejected".
+    /// Returns a failure result if the request was not found or an error occurred during the update process.
+    /// </returns>
+    Task<Result<bool>> RejectAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken);
 }

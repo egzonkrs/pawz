@@ -285,4 +285,41 @@ public class AdoptionRequestService : IAdoptionRequestService
             return Result<bool>.Failure(AdoptionRequestErrors.UpdateUnexpectedError);
         }
     }
+
+    public async Task<Result<bool>> RejectAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            _logger.LogInformation("Started rejecting Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
+
+            var adoptionRequest = await _adoptionRequestRepository.GetByIdAsync(adoptionRequestId, cancellationToken);
+            if (adoptionRequest is null)
+            {
+                _logger.LogWarning("Adoption Request with Id: {AdoptionRequestId} was not found.", adoptionRequestId);
+                return Result<bool>.Failure(AdoptionRequestErrors.NotFound(adoptionRequestId));
+            }
+
+            adoptionRequest.Status = AdoptionRequestStatus.Rejected;
+            adoptionRequest.ResponseDate = DateTime.Now;
+
+            await _adoptionRequestRepository.UpdateAsync(adoptionRequest, cancellationToken);
+
+            var changesSaved = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
+
+            if (changesSaved)
+            {
+                _logger.LogInformation("Successfully rejected Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
+                return Result<bool>.Success(true);
+            }
+
+            _logger.LogWarning("Failed to reject Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
+            return Result<bool>.Failure(AdoptionRequestErrors.UpdateUnexpectedError);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while rejecting Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
+            return Result<bool>.Failure(AdoptionRequestErrors.UpdateUnexpectedError);
+        }
+    }
+
 }

@@ -63,16 +63,32 @@
                                     <td class="align-middle">@request.RequestDate.ToString("dd/MM/yyyy")</td>
                                     <td class="align-middle">@request.Status</td>
                                     <td class="text-center align-middle">
-                                        <form id="acceptAdoptionRequestForm" asp-controller="AdoptionRequest" asp-action="AcceptAdoptionRequest" method="post">
-                                            <input type="hidden" name="adoptionRequestId" value="@(request.Id)" />
-                                            <button type="submit" class="btn btn-success">
-                                                <i class="fa fa-check" aria-hidden="true"></i>
-                                            </button>
-                                        </form>
+                                        @if (request.Status == AdoptionRequestStatusViewModel.Approved)
+                                        {
+                                            <span class="badge badge-success">Request Approved</span>
+                                        }
+                                        else if (request.Status == AdoptionRequestStatusViewModel.Rejected)
+                                        {
+                                            <span class="badge badge-danger">Request Rejected</span>
+                                        }
+                                        else
+                                        {
+                                            <form id="acceptAdoptionRequestForm" asp-controller="AdoptionRequest"
+                                                asp-action="AcceptAdoptionRequest" method="post">
+                                                <input type="hidden" name="adoptionRequestId" value="@(request.Id)" />
+                                                <button type="submit" class="btn btn-success">
+                                                    <i class="fa fa-check" aria-hidden="true"></i> Accept
+                                                </button>
+                                            </form>
 
-                                        <button class="btn btn-danger">
-                                            <i class="fa fa-times" aria-hidden="true"></i>
-                                        </button>
+                                            <form id="rejectAdoptionRequestForm" asp-controller="AdoptionRequest"
+                                                asp-action="RejectAdoptionRequest" method="post">
+                                                <input type="hidden" name="adoptionRequestId" value="@(request.Id)" />
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="fa fa-times" aria-hidden="true"></i> Reject
+                                                </button>
+                                            </form>
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -106,16 +122,3 @@
     </div> <!-- end of row-->
 </div>
 
-<script>
-    document.getElementById("acceptAdoptionRequestForm").addEventListener("submit", function(event) {
-        event.preventDefault(); 
-
-        console.log("Accept button clicked, submitting form...");
-
-        event.target.submit();
-    });
-
-    document.getElementById("acceptButton").addEventListener("click", function() {
-        console.log("Accept button clicked!");
-    });
-</script>
