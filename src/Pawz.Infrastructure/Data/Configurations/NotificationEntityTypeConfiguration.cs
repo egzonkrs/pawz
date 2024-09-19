@@ -9,15 +9,10 @@ public class NotificationEntityTypeConfiguration : IEntityTypeConfiguration<Noti
     public void Configure(EntityTypeBuilder<Notification> builder)
     {
         builder
-            .HasKey(n => n.Id);
+           .Property(n => n.SenderId);
 
         builder
-            .Property(n => n.SenderId)
-            .IsRequired();
-
-        builder
-            .Property(n => n.RecipientId)
-            .IsRequired();
+          .Property(n => n.RecipientId);
 
         builder
             .HasOne(n => n.Sender)
@@ -32,12 +27,6 @@ public class NotificationEntityTypeConfiguration : IEntityTypeConfiguration<Noti
             .OnDelete(DeleteBehavior.NoAction);
 
         builder
-            .HasIndex(n => n.RecipientId);
-
-        builder
-            .HasIndex(n => n.SenderId);
-
-        builder
-            .HasIndex(n => new { n.IsDeleted, n.CreatedAt });
+             .HasIndex(n => new { n.RecipientId, n.SenderId, n.IsDeleted, n.CreatedAt });
     }
 }
