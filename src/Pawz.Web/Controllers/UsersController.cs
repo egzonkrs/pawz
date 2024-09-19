@@ -10,6 +10,7 @@ using Pawz.Web.Models;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Pawz.Application.QueryFilters;
 
 namespace Pawz.Web.Controllers;
 
@@ -118,9 +119,9 @@ public class UsersController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> MyPets(string searchTerm,CancellationToken cancellationToken)
+    public async Task<IActionResult> MyPets(PetQueryParameters queryParameters,CancellationToken cancellationToken)
     {
-        var result = await _petService.GetPetsByUserIdAsync(searchTerm,cancellationToken);
+        var result = await _petService.GetPetsByUserIdAsync(queryParameters,cancellationToken);
 
         var pets = result.Value;
 
