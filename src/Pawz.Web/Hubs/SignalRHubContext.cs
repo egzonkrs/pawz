@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
+using Pawz.Domain.Common;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,15 +36,19 @@ public class SignalRHubContext : INotificationHubContext
     /// <param name="arg">The argument to pass to the method on the client-side.</param>
     /// <param name="cancellationToken">The cancellation token for handling operation cancellation.</param>
     /// <returns>A task representing the asynchronous operation of sending the message.</returns>
-    public async Task SendToUserAsync<T>(string userId, string method, T arg, CancellationToken cancellationToken)
+    public async Task<Result<bool>> SendToUserAsync<T>(string userId, string method, T arg, CancellationToken cancellationToken)
     {
         try
         {
             await _hubContext.Clients.User(userId).SendAsync(method, arg, cancellationToken);
+
+            _logger.LogInformation("Successfully sent message to user {UserId} using method {Method}", userId, method);
+            return Result<bool>.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error sending message via SignalR to user {userId} using method {method}");
+            _logger.LogError(ex, "Failed sending message via SignalR to user {UserId} using method {Method}", userId, method);
+            return Result<bool>.Failure(NotificationErrors.SendingFailed(userId));
         }
     }
 }
