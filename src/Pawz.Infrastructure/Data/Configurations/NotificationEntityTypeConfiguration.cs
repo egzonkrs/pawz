@@ -27,6 +27,15 @@ public class NotificationEntityTypeConfiguration : IEntityTypeConfiguration<Noti
             .OnDelete(DeleteBehavior.NoAction);
 
         builder
-             .HasIndex(n => new { n.RecipientId, n.SenderId, n.IsDeleted, n.CreatedAt });
+           .HasIndex(n => n.RecipientId);
+
+        builder
+            .HasIndex(n => n.SenderId);
+
+        builder
+            .HasIndex(n => n.IsDeleted);
+
+        builder
+            .HasIndex(n => n.CreatedAt);
     }
 }
