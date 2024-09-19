@@ -218,10 +218,11 @@ public class PetService : IPetService
     /// <summary>
     /// Deletes a pet by its unique ID.
     /// </summary>
-    /// <param name="petId">The ID of the pet to delete.</param>
+    /// <param name="petId">The ID of the pet to delete.</param
+    /// <param name="userId">The ID of the user who created the pet.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A result indicating whether the deletion was successful.</returns>
-    public async Task<Result<bool>> DeletePetAsync(int petId, CancellationToken cancellationToken)
+    public async Task<Result<bool>> DeletePetAsync(int petId, string userId, CancellationToken cancellationToken)
     {
         try
         {
@@ -234,15 +235,25 @@ public class PetService : IPetService
                 return Result<bool>.Failure(PetErrors.NotFound(petId));
             }
 
-            await _petRepository.DeleteAsync(pet, cancellationToken);
+            if (pet.PostedByUserId != userId)
+            {
+                _logger.LogWarning("User {UserId} is not authorized to delete Pet with Id: {PetId}", userId, petId);
+                return Result<bool>.Failure(PetErrors.Unauthorized);
+            }
+
+            pet.IsDeleted = true;
+            pet.DeletedAt = DateTimeOffset.UtcNow;
+
+            await _petRepository.UpdateAsync(pet, cancellationToken);
             var petDeleted = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
             if (petDeleted)
             {
-                _logger.LogInformation("Successfully deleted Pet with Id: {PetId}", petId);
-                return Result<bool>.Success(true);
+                _logger.LogInformation("Successfully soft-deleted Pet with Id: {PetId}", petId);
+                return Result<bool>.Success();
             }
-            _logger.LogWarning("Failed to delete Pet with Id: {PetId}. No changes were detected.", petId);
+
+            _logger.LogWarning("Failed to soft-delete Pet with Id: {PetId}. No changes were detected.", petId);
             return Result<bool>.Failure(PetErrors.NoChangesDetected);
         }
         catch (Exception ex)
