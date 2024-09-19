@@ -153,4 +153,26 @@ public class AdoptionRequestController : Controller
 
         return View(viewModel);
     }
+
+    [HttpPost]
+    public async Task<IActionResult> AcceptAdoptionRequest(int adoptionRequestId, CancellationToken cancellationToken)
+    {
+        var result = await _adoptionRequestService.AcceptAdoptionRequestAsync(adoptionRequestId, cancellationToken);
+
+        if (result.IsSuccess)
+        {
+            TempData["SuccessMessage"] = "Adoption request successfully accepted.";
+
+            var adoptionRequest = await _adoptionRequestService.GetAdoptionRequestByIdAsync(adoptionRequestId, cancellationToken);
+            if (adoptionRequest.IsSuccess)
+            {
+                return RedirectToAction("GetPetAdoptionRequests", "AdoptionRequest", new { petId = adoptionRequestId });
+
+            }
+            return RedirectToAction("Index", "Home");
+        }
+        TempData["ErrorMessage"] = "Failed to accept the adoption request.";
+        return RedirectToAction("GetPetAdoptionRequests", "AdoptionRequest", new { petId = adoptionRequestId });
+
+    }
 }

@@ -20,7 +20,8 @@
             <div class="widget">
                 <div class="text-center">
                     <img src="/images/pets/@(Model.First().Pet.PetImages.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "defaultPetAvatar.jpg")"
-                        alt="Pet Photo" class="rounded-circle user-avatar-image-150" style="width: 200px; height: 200px;" />
+                        alt="Pet Photo" class="rounded-circle user-avatar-image-150"
+                        style="width: 200px; height: 200px;" />
                 </div>
                 <h5 class="text-center mt-3">@textInfo.ToTitleCase(Model.First().Pet.Name.ToLower()) </h5>
                 <p> ♦ Breed: <i> @Model.First().Pet.Breed.Name </i></p>
@@ -55,14 +56,20 @@
                                 <tr class="text-center">
                                     <th>
                                         <img src="/images/users/@(request.User.ImageUrl ?? "userAvatar.jpg")" alt="User Photo"
-                                            class="rounded-circle user-avatar-image-100" style="width: 200px; height: 200px;" />
+                                            class="rounded-circle user-avatar-image-100" style="width: 150px; height: 150px;" />
                                     </th>
                                     <td class="align-middle"> @textInfo.ToTitleCase(request.User.FirstName.ToLower()) </td>
                                     <td class="align-middle"> @textInfo.ToTitleCase(request.User.LastName.ToLower()) </td>
                                     <td class="align-middle">@request.RequestDate.ToString("dd/MM/yyyy")</td>
                                     <td class="align-middle">@request.Status</td>
                                     <td class="text-center align-middle">
-                                        <button class="btn btn-success"> <i class="fa fa-check" aria-hidden="true"></i></button>
+                                        <form id="acceptAdoptionRequestForm" asp-controller="AdoptionRequest" asp-action="AcceptAdoptionRequest" method="post">
+                                            <input type="hidden" name="adoptionRequestId" value="@(request.Id)" />
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fa fa-check" aria-hidden="true"></i>
+                                            </button>
+                                        </form>
+
                                         <button class="btn btn-danger">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </button>
@@ -98,3 +105,17 @@
         </div> <!-- end col-for-table-->
     </div> <!-- end of row-->
 </div>
+
+<script>
+    document.getElementById("acceptAdoptionRequestForm").addEventListener("submit", function(event) {
+        event.preventDefault(); 
+
+        console.log("Accept button clicked, submitting form...");
+
+        event.target.submit();
+    });
+
+    document.getElementById("acceptButton").addEventListener("click", function() {
+        console.log("Accept button clicked!");
+    });
+</script>

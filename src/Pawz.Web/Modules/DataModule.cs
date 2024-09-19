@@ -49,6 +49,7 @@ public class DataModule : IModule
         services.AddScoped<ILocationRepository, LocationRepository>();
         services.AddScoped<ICountryRepository, CountryRepository>();
         services.AddScoped<ICityRepository, CityRepository>();
+        services.AddScoped<IAdoptionService, AdoptionService>();
 
         services.AddScoped<IPetService, PetService>();
         services.AddScoped<ISpeciesService, SpeciesService>();
@@ -57,6 +58,7 @@ public class DataModule : IModule
         services.AddScoped<ICountryService, CountryService>();
         services.AddScoped<ICityService, CityService>();
         services.AddScoped<IAdoptionRequestService, AdoptionRequestService>();
+        services.AddScoped<IAdoptionRepository, AdoptionRepository>();
 
         services.Configure<ApiSettings>(_configuration.GetSection(ApiSettings.SectionName));
     }

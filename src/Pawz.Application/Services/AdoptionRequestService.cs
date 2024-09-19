@@ -17,6 +17,7 @@ namespace Pawz.Application.Services;
 public class AdoptionRequestService : IAdoptionRequestService
 {
     private readonly IAdoptionRequestRepository _adoptionRequestRepository;
+    private readonly IAdoptionRepository _adoptionRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<AdoptionService> _logger;
     private readonly IMapper _mapper;
@@ -29,7 +30,8 @@ public class AdoptionRequestService : IAdoptionRequestService
         ILogger<AdoptionService> logger,
         IMapper mapper,
         ILocationService locationService,
-        IUserAccessor userAccessor)
+        IUserAccessor userAccessor,
+        IAdoptionRepository adoptionRepository)
     {
         _adoptionRequestRepository = adoptionRequestRepository;
         _unitOfWork = unitOfWork;
@@ -37,6 +39,7 @@ public class AdoptionRequestService : IAdoptionRequestService
         _mapper = mapper;
         _locationService = locationService;
         _userAccessor = userAccessor;
+        _adoptionRepository = adoptionRepository;
     }
 
     public async Task<Result<bool>> CreateAdoptionRequestAsync(AdoptionRequestCreateRequest adoptionRequestCreateRequest, CancellationToken cancellationToken)
@@ -225,4 +228,61 @@ public class AdoptionRequestService : IAdoptionRequestService
         }
     }
 
+    public async Task<Result<bool>> AcceptAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            _logger.LogInformation("Started accepting Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
+
+            var adoptionRequest = await _adoptionRequestRepository.GetByIdAsync(adoptionRequestId, cancellationToken);
+            if (adoptionRequest is null)
+            {
+                _logger.LogWarning("Adoption Request with Id: {AdoptionRequestId} was not found.", adoptionRequestId);
+                return Result<bool>.Failure(AdoptionRequestErrors.NotFound(adoptionRequestId));
+            }
+
+            adoptionRequest.Status = AdoptionRequestStatus.Approved;
+            adoptionRequest.ResponseDate = DateTime.Now;
+
+            var adoption = new Adoption
+            {
+                AdoptionRequestId = adoptionRequestId,
+                AdoptionRequest = adoptionRequest,
+                AdoptionDate = DateTime.Now,
+                AdoptionFee = 0,
+                IsDeleted = false
+            };
+
+            await _adoptionRepository.InsertAsync(adoption, cancellationToken);
+
+            var otherAdoptionRequests = await _adoptionRequestRepository.GetByPetIdAsync(adoptionRequest.PetId.Value, cancellationToken);
+
+            foreach (var otherRequest in otherAdoptionRequests)
+            {
+                if (otherRequest.Id != adoptionRequestId)
+                {
+                    otherRequest.Status = AdoptionRequestStatus.Rejected;
+                    otherRequest.ResponseDate = DateTime.Now;
+                    await _adoptionRequestRepository.UpdateAsync(otherRequest, cancellationToken);
+                }
+            }
+
+            var changesSaved = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
+
+            if (changesSaved)
+            {
+                _logger.LogInformation("Successfully accepted Adoption Request with Id: {AdoptionRequestId} and rejected other requests for PetId: {PetId}",
+                    adoptionRequestId, adoptionRequest.PetId);
+                return Result<bool>.Success(true);
+            }
+
+            _logger.LogWarning("Failed to accept Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
+            return Result<bool>.Failure(AdoptionRequestErrors.CreationFailed);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while accepting Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
+            return Result<bool>.Failure(AdoptionRequestErrors.UpdateUnexpectedError);
+        }
+    }
 }

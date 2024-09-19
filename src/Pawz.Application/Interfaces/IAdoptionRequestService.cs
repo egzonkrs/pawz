@@ -56,4 +56,14 @@ public interface IAdoptionRequestService
     /// <returns>A task representing the operation. The task result contains a collection of <see cref="AdoptionRequest"/> objects.</returns>
     Task<Result<List<AdoptionRequestResponse>>> GetAdoptionRequestsByPetIdAsync(int petId, CancellationToken cancellationToken);
 
+    /// <summary>
+    /// Accepts a specific adoption request and automatically rejects all other pending requests for the same pet.
+    /// </summary>
+    /// <param name="adoptionRequestId">The ID of the adoption request to be accepted.</param>
+    /// <param name="cancellationToken">Token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// Returns a success result if the adoption request was successfully accepted and other requests were rejected.
+    /// Returns a failure result if the request was not found or an error occurred during the process.
+    /// </returns>
+    Task<Result<bool>> AcceptAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken);
 }
