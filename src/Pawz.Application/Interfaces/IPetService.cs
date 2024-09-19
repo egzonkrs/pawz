@@ -1,6 +1,7 @@
 using Pawz.Application.Models;
 using Pawz.Application.Models.Pet;
 using Pawz.Application.Models.PetModels;
+using Pawz.Application.QueryFilters;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using System.Collections.Generic;
@@ -55,7 +56,7 @@ public interface IPetService
     /// </summary>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a collection of pet entities.</returns>
-    Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(string searchTerm,CancellationToken cancellationToken);
+    Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(PetQueryParameters queryParameters, CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves all pets along with their associated related entities.

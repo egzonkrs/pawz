@@ -4,6 +4,7 @@ using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
 using Pawz.Application.Models.Pet;
 using Pawz.Application.Models.PetModels;
+using Pawz.Application.QueryFilters;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
@@ -258,7 +259,7 @@ public class PetService : IPetService
     /// </summary>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A result containing a collection of pets associated with the user, or an error if not found.</returns>
-    public async Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(string searchTerm, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(PetQueryParameters queryParameters, CancellationToken cancellationToken)
     {
         string userId = null;
         try
@@ -273,10 +274,10 @@ public class PetService : IPetService
                 _logger.LogWarning("No pets found for UserId: {UserId}", userId);
                 return Result<IEnumerable<UserPetResponse>>.Failure(PetErrors.NoPetsFoundForUser(userId));
             }
-            
-            if(!string.IsNullOrEmpty(searchTerm))
+
+            if (!string.IsNullOrEmpty(queryParameters.SearchTerm))
             {
-                searchTerm=searchTerm.ToLower();
+                var searchTerm = queryParameters.SearchTerm.ToLower();
                 pets = pets.Where(p =>
                     p.Name.ToLower().Contains(searchTerm) ||
                     p.Breed.Name.ToLower().Contains(searchTerm));
