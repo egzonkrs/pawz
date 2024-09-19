@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
+using Pawz.Domain.Common;
 using System;
 using System.Threading.Tasks;
 
@@ -47,22 +48,28 @@ public class NotificationHub : Hub
     /// Adds the client to a SignalR group based on the user's first name.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation of handling the connection.</returns>
-    public override async Task OnConnectedAsync()
+    public override async Task<Result<bool>> OnConnectedAsync()
     {
         try
         {
-            string currentUser = _userAccessor.GetUserId();
+            var currentUser = _userAccessor.GetUserId();
 
-            if (!string.IsNullOrEmpty(currentUser))
+            if (string.IsNullOrEmpty(currentUser))
             {
-                await Groups.AddToGroupAsync(Context.ConnectionId, currentUser);
+                _logger.LogError("User connection failed: invalid user ID.");
+                return Result<bool>.Failure(NotificationErrors.InvalidRecipient);
             }
 
+            await Groups.AddToGroupAsync(Context.ConnectionId, currentUser);
+            _logger.LogInformation("User {UserId} successfully connected with ConnectionId {ConnectionId}", currentUser, Context.ConnectionId);
+
             await base.OnConnectedAsync();
+            return Result<bool>.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error on user connection: {ex.Message}");
+            _logger.LogError(ex, "An unexpected error occurred while attempting to connect user.");
+            return Result<bool>.Failure(NotificationErrors.UserConnectionFailed);
         }
     }
 
@@ -72,25 +79,34 @@ public class NotificationHub : Hub
     /// </summary>
     /// <param name="exception">An optional exception parameter in case the disconnection was caused by an error.</param>
     /// <returns>A task that represents the asynchronous operation of handling the disconnection.</returns>
-    public override async Task OnDisconnectedAsync(Exception? exception)
+    public override async Task<Result<bool>> OnDisconnectedAsync(Exception? exception)
     {
         try
         {
-            string currentUser = _userAccessor.GetUserId();
-            if (!string.IsNullOrEmpty(currentUser))
+            var currentUser = _userAccessor.GetUserId();
+
+            if (string.IsNullOrEmpty(currentUser))
             {
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, currentUser);
+                _logger.LogError("User disconnection failed: invalid user ID.");
+                return Result<bool>.Failure(NotificationErrors.InvalidRecipient);
             }
+
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, currentUser);
+            _logger.LogInformation("User {UserId} successfully disconnected and removed from group with ConnectionId {ConnectionId}", currentUser, Context.ConnectionId);
 
             if (exception != null)
             {
                 _logger.LogError(exception, $"Disconnection error: {exception.Message}");
+                return Result<bool>.Failure(NotificationErrors.UserDisconnectionFailed);
             }
+
             await base.OnDisconnectedAsync(exception);
+            return Result<bool>.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error on user disconnection: {ex.Message}");
+            _logger.LogError(ex, "An unexpected error occurred while attempting to disconnect user.");
+            return Result<bool>.Failure(NotificationErrors.UnexpectedError);
         }
     }
 }
