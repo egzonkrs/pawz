@@ -1,12 +1,9 @@
 using AutoMapper;
 using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
-using Pawz.Application.Models.Pet;
 using Pawz.Domain.Entities;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models.Breed;
@@ -31,6 +28,8 @@ public class PetController : Controller
     private readonly IValidator<AdoptionRequestCreateModel> _adoptionRequestValidator;
     private readonly IMapper _mapper;
     private readonly IAdoptionRequestService _adoptionRequestService;
+    private readonly IUserAccessor _userAccessor;
+
 
     public PetController(
         IPetService petService,
@@ -54,6 +53,7 @@ public class PetController : Controller
         _mapper = mapper;
         _adoptionRequestService = adoptionRequestService;
         _adoptionRequestValidator = adoptionRequestValidator;
+        _userAccessor = userAccessor;
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -246,15 +246,26 @@ public class PetController : Controller
 
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        var pet = await _petService.GetPetByIdAsync(id, cancellationToken);
-        return View(pet);
+        var petResult = await _petService.GetPetByIdAsync(id, cancellationToken);
+        if (!petResult.IsSuccess)
+        {
+            return NotFound();
+        }
+        return View(petResult.Value);
     }
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)
     {
-        await _petService.DeletePetAsync(id, cancellationToken);
+        var userId = _userAccessor.GetUserId();
+        var result = await _petService.DeletePetAsync(id, userId, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            result.AddErrorsToModelState(ModelState);
+            return View();
+        }
         return RedirectToAction(nameof(Index));
     }
 
