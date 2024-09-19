@@ -75,5 +75,4 @@ public class NotificationErrors
     /// </summary>
     /// <returns>An <see cref="Error"/> indicating that the recipient is invalid.</returns>
     public static Error InvalidRecipient => new Error("Notification.InvalidRecipient", "The recipient of the notification is invalid or not specified");
-
 }

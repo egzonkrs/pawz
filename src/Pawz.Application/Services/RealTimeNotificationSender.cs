@@ -48,7 +48,6 @@ public class RealTimeNotificationSender : IRealTimeNotificationSender
 
             _logger.LogInformation("Successfully sent notification to user {UserId}", userId);
             return Result<bool>.Success();
-
         }
         catch (Exception ex)
         {
