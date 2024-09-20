@@ -253,4 +253,46 @@
             }
         });
     </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#adoptionRequestForm').on('submit', function(e) {
+                e.preventDefault();
+
+                $('.input-error-text').html('');
+                $('input, select, textarea').removeClass('is-invalid');
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Create", "AdoptionRequest")',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            toastr.success('Adoption request submitted successfully!');
+                            $('#adoptionRequestModal').modal('hide');
+                        } else {
+                            
+                            $.each(response.errors, function(key, errorMessages) {
+                                var input = $('[name="' + key + '"]'); 
+                                input.addClass('is-invalid'); 
+
+                                var errorHtml = errorMessages.join('<br>');
+                                if (input.is(':radio')) {
+                                    input.closest('.form-group').find('.input-error-text').html(errorHtml);
+                                } else {
+                                    input.siblings('.input-error-text').html(errorHtml);
+                                }
+                            });
+                        }
+                    },
+                    error: function() {
+                        var errorMessage = '@TempData["ErrorMessage"]';
+                        toastr.error(errorMessage);
+                    }
+                });
+            });
+        });
+    </script>
 }
