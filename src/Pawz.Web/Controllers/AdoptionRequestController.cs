@@ -82,8 +82,12 @@ public class AdoptionRequestController : Controller
             }).ToList();
 
             validationResult.AddErrorsToModelState(ModelState);
-            TempData["ErrorMessage"] = "Failed to request for adoption! Please try again!";
-            return RedirectToAction("Index", "Home");
+
+            var errors = validationResult.Errors
+           .GroupBy(e => e.PropertyName)
+           .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
+
+            return Json(new { success = false, errors });
         }
 
         var adoptionRequestCreateRequest = _mapper.Map<AdoptionRequestCreateRequest>(adoptionRequestCreateModel);
@@ -101,16 +105,14 @@ public class AdoptionRequestController : Controller
             }).ToList();
 
             adoptionRequestCreateResult.AddErrorsToModelState(ModelState);
-            TempData["ErrorMessage"] = "Failed to request for adoption! Please try again!";
-            return RedirectToAction("Index", "Home");
-        }
 
-        TempData["SuccessMessage"] = "Adoption request created successfully!";
+            return Json(new { success = false, message = "Failed to create adoption request." });
+        }
 
         adoptionRequestCreateModel.Countries = new SelectList(countriesList, "Id", "Name");
         adoptionRequestCreateModel.Cities = new SelectList(citiesList, "Id", "Name");
 
-        return RedirectToAction("Index", "Home");
+        return Json(new { success = true, redirectUrl = Url.Action("Index", "Home") });
     }
 
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
