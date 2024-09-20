@@ -54,15 +54,16 @@
                             </div>
                             <div class="form-group mb-0">
                                 <label asp-for="IsRentedProperty" class="form-label">Do you live in a rented property?</label>
-                                <div>
+                                <div class="radio-group">
                                     <label class="radio-inline"><input type="radio" asp-for="IsRentedProperty" value="true"> Yes</label>
                                     <label class="radio-inline"><input type="radio" asp-for="IsRentedProperty" value="false"> No</label>
                                 </div>
                                 <span asp-validation-for="IsRentedProperty" class="form-label input-error-text"></span>
                             </div>
+
                             <div class="form-group mb-0">
                                 <label asp-for="HasOutdoorSpace" class="form-label">Do you have outdoor space?</label>
-                                <div>
+                                <div class="radio-group">
                                     <label class="radio-inline"><input type="radio" asp-for="HasOutdoorSpace" value="true" onchange="toggleTextArea('HasOutdoorSpace', 'OutdoorSpaceDetails')"> Yes</label>
                                     <label class="radio-inline"><input type="radio" asp-for="HasOutdoorSpace" value="false" onchange="toggleTextArea('HasOutdoorSpace', 'OutdoorSpaceDetails')"> No</label>
                                 </div>
@@ -75,7 +76,7 @@
                             </div>
                             <div class="form-group mb-0">
                                 <label asp-for="OwnsOtherPets" class="form-label">Do you own other pets?</label>
-                                <div>
+                                <div class="radio-group">
                                     <label class="radio-inline"><input type="radio" asp-for="OwnsOtherPets" value="true" onchange="toggleTextArea('OwnsOtherPets', 'OtherPetsDetails')"> Yes</label>
                                     <label class="radio-inline"><input type="radio" asp-for="OwnsOtherPets" value="false" onchange="toggleTextArea('OwnsOtherPets', 'OtherPetsDetails')"> No</label>
                                 </div>

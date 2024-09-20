@@ -17,7 +17,7 @@ public class AdoptionRequestModelValidator : AbstractValidator<AdoptionRequestCr
 
         RuleFor(x => x.Address)
             .NotEmpty().WithMessage("Address is required.")
-            .MaximumLength(5).WithMessage("Address must be 200 characters or fewer.");
+            .MaximumLength(200).WithMessage("Address must be 200 characters or fewer.");
 
         RuleFor(x => x.PostalCode)
             .NotEmpty().WithMessage("Postal code is required.")
