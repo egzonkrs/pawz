@@ -1,14 +1,14 @@
 .input-error-text {
     display: block;
-    min-height: 1.3rem;
-    color: transparent;
+    min-height: 1rem;
+    color: red;
     font-size: 0.8rem;
 }
 
-    .input-error-text.field-validation-error {
+   /* .input-error-text.field-validation-error {
         color: red;
     }
-
+*/
 .text-xs {
     font-size: 0.75rem; 
     line-height: 1rem; 
