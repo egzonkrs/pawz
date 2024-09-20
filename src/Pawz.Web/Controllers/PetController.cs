@@ -25,7 +25,6 @@ public class PetController : Controller
     private readonly ICountryService _countryService;
     private readonly ICityService _cityService;
     private readonly IValidator<PetCreateViewModel> _validator;
-    private readonly IValidator<AdoptionRequestCreateModel> _adoptionRequestValidator;
     private readonly IMapper _mapper;
     private readonly IAdoptionRequestService _adoptionRequestService;
 
@@ -39,8 +38,7 @@ public class PetController : Controller
         IValidator<PetCreateViewModel> validator,
         IUserAccessor userAccessor,
         IMapper mapper,
-        IAdoptionRequestService adoptionRequestService,
-        IValidator<AdoptionRequestCreateModel> adoptionRequestValidator)
+        IAdoptionRequestService adoptionRequestService)
     {
         _petService = petService;
         _breedService = breedService;
@@ -50,7 +48,6 @@ public class PetController : Controller
         _validator = validator;
         _mapper = mapper;
         _adoptionRequestService = adoptionRequestService;
-        _adoptionRequestValidator = adoptionRequestValidator;
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
