@@ -49,4 +49,44 @@ public class AdoptionRequestCreateRequest
     /// The ID of the user who made the request.
     /// </summary>
     public string RequesterUserId { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the adopter lives in a rented property.
+    /// </summary>
+    public bool IsRentedProperty { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the adopter has outdoor space.
+    /// </summary>
+    public bool HasOutdoorSpace { get; set; }
+
+    /// <summary>
+    /// Gets or sets the details about the adopter's outdoor space, if applicable.
+    /// </summary>
+    public string? OutdoorSpaceDetails { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the adopter owns other pets.
+    /// </summary>
+    public bool OwnsOtherPets { get; set; }
+
+    /// <summary>
+    /// Gets or sets the details about the adopter's other pets, if applicable.
+    /// </summary>
+    public string? OtherPetsDetails { get; set; }
+
+    /// <summary>
+    /// Gets or sets the adopter's contact number.
+    /// </summary>
+    public string ContactNumber { get; set; }
+
+    /// <summary>
+    /// Gets or sets the adopter's email address.
+    /// </summary>
+    public string Email { get; set; }
+
+    /// <summary>
+    /// Gets or sets any additional message or comments provided by the adopter.
+    /// </summary>
+    public string? Message { get; set; }
 }

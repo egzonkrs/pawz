@@ -25,7 +25,6 @@ public class PetController : Controller
     private readonly ICountryService _countryService;
     private readonly ICityService _cityService;
     private readonly IValidator<PetCreateViewModel> _validator;
-    private readonly IValidator<AdoptionRequestCreateModel> _adoptionRequestValidator;
     private readonly IMapper _mapper;
     private readonly IAdoptionRequestService _adoptionRequestService;
     private readonly IUserAccessor _userAccessor;
@@ -41,8 +40,7 @@ public class PetController : Controller
         IValidator<PetCreateViewModel> validator,
         IUserAccessor userAccessor,
         IMapper mapper,
-        IAdoptionRequestService adoptionRequestService,
-        IValidator<AdoptionRequestCreateModel> adoptionRequestValidator)
+        IAdoptionRequestService adoptionRequestService)
     {
         _petService = petService;
         _breedService = breedService;
@@ -52,7 +50,6 @@ public class PetController : Controller
         _validator = validator;
         _mapper = mapper;
         _adoptionRequestService = adoptionRequestService;
-        _adoptionRequestValidator = adoptionRequestValidator;
         _userAccessor = userAccessor;
     }
 
@@ -63,6 +60,7 @@ public class PetController : Controller
         return View(petViewModels);
     }
 
+    [HttpGet("pet/details/{id:int}")]
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {
         var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
@@ -194,18 +192,14 @@ public class PetController : Controller
             return View(petCreateViewModel);
         }
 
-        if (petCreateResult.IsSuccess)
-        {
-            return RedirectToAction("Index", "Home");
-        }
+        TempData["SuccessMessage"] = "Pet created successfully!";
 
         petCreateViewModel.Species = new SelectList(speciesList, "Id", "Name");
         petCreateViewModel.Breeds = new SelectList(breedsList, "Id", "Name");
         petCreateViewModel.Countries = new SelectList(countriesList, "Id", "Name");
         petCreateViewModel.Cities = new SelectList(citiesList, "Id", "Name");
 
-        TempData["SuccessMessage"] = "Pet created successfully!";
-        return RedirectToAction("Details", "Pet");
+        return RedirectToAction("Create", "Pet");
     }
 
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
