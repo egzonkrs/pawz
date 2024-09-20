@@ -10,7 +10,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form asp-action="Create" method="post" asp-controller="AdoptionRequest" enctype="multipart/form-data">
+                
+                <form asp-action="Create" method="post" asp-controller="AdoptionRequest" enctype="multipart/form-data" id="adoptionRequestForm">
                     <fieldset class="p-4">
                         <input type="hidden" asp-for="PetId" />
                         <div class="col">
