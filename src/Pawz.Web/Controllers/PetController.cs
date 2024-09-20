@@ -50,7 +50,6 @@ public class PetController : Controller
         _validator = validator;
         _mapper = mapper;
         _adoptionRequestService = adoptionRequestService;
-        _adoptionRequestValidator = adoptionRequestValidator;
         _userAccessor = userAccessor;
     }
 
