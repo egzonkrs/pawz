@@ -204,8 +204,30 @@ public class PetController : Controller
 
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
-        var pet = await _petService.GetPetByIdAsync(id, cancellationToken);
-        return View(pet);
+        var result = await _petService.GetPetByIdAsync(id, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return NotFound();
+        }
+
+        var pet = result.Value;
+
+        var breedsResult = await _breedService.GetAllBreedsAsync(cancellationToken);
+        var breedsList = breedsResult.Value ?? new List<Breed>();
+
+        var petEdit = new PetEditViewModel
+        {
+            Id = pet.Id,
+            Name = pet.Name,
+            BreedId = pet.BreedId,
+            AgeYears = pet.AgeYears,
+            About = pet.About,
+            Price = pet.Price,
+            Breeds = new SelectList(breedsList, "Id", "Name", pet.BreedId)
+        };
+
+        return View(petEdit);
     }
 
     [HttpPost]
@@ -213,7 +235,7 @@ public class PetController : Controller
     public async Task<IActionResult> Edit(Pet pet, CancellationToken cancellationToken)
     {
         await _petService.UpdatePetAsync(pet, cancellationToken);
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction("Profile","Users");
     }
 
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
