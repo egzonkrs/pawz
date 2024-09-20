@@ -18,17 +18,14 @@ public class AdoptionRequestModelValidator : AbstractValidator<AdoptionRequestCr
             .GreaterThan(0).WithMessage("Country must be selected.");
 
         RuleFor(x => x.Address)
-            .NotNull()
             .NotEmpty().WithMessage("Address is required.")
             .MaximumLength(200).WithMessage("Address must be 200 characters or fewer.");
 
         RuleFor(x => x.PostalCode)
-            .NotNull()
             .NotEmpty().WithMessage("Postal code is required.")
             .MaximumLength(10).WithMessage("Postal code must be 10 characters or fewer.");
 
         RuleFor(x => x.ContactNumber)
-            .NotNull()
             .NotEmpty().WithMessage("Contact number is required.")
             .Matches(@"^\+?\d{1,3}\s?\d{2}\s?\d{3}\s?\d{3}$").WithMessage("Contact number must be in the format +XXX XX XXX XXX.");
 
