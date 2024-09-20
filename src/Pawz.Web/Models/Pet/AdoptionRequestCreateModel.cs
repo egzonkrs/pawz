@@ -59,12 +59,12 @@ public class AdoptionRequestCreateModel
     /// <summary>
     /// Gets or sets whether the adopter lives in a rented property.
     /// </summary>
-    public bool IsRentedProperty { get; set; }
+    public bool? IsRentedProperty { get; set; }
 
     /// <summary>
     /// Gets or sets whether the adopter has outdoor space.
     /// </summary>
-    public bool HasOutdoorSpace { get; set; }
+    public bool? HasOutdoorSpace { get; set; }
 
     /// <summary>
     /// Gets or sets the details about the adopter's outdoor space, if applicable.
@@ -74,7 +74,7 @@ public class AdoptionRequestCreateModel
     /// <summary>
     /// Gets or sets whether the adopter owns other pets.
     /// </summary>
-    public bool OwnsOtherPets { get; set; }
+    public bool? OwnsOtherPets { get; set; }
 
     /// <summary>
     /// Gets or sets the details about the adopter's other pets, if applicable.
