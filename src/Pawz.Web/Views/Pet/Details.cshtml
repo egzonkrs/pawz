@@ -106,7 +106,7 @@
             <!-- Right Sidebar -->
             <div class="col-lg-4">
                 <div class="sidebar">
-                    <div class="widget user text-center" style="margin-top: 7rem !important;">
+                    <div class="widget user text-center" style="margin-top: 6.9rem !important;">
                         @* <img class="rounded-circle img-fluid" src="/images/userAvatar.jpg" alt="" style="padding: 0rem 7rem 0rem 7rem;"> *@
                         <h4 class="text-capitalize">
                             <a>
@@ -131,6 +131,7 @@
                             <li>Meet seller at a public place</li>
                             <li>Check the item before you buy</li>
                             <li>Pay only after collecting the item</li>
+                            <li>Check recent photos of the pet.</li>
                         </ul>
                     </div>
                     <div class="widget price text-center">
@@ -147,8 +148,8 @@
                         </p>
                     </div>
                     <div class="text-center">
-                        <button class="btn btn-primary mb-4 adoption-request-button w-100" data-toggle="modal" data-target="#adoptionRequestModal">
-                            Adoption Request
+                        <button class="btn btn-transparent mb-4 adoption-request-button w-100" data-toggle="modal" data-target="#adoptionRequestModal">
+                            Request Adoption
                         </button>
                     </div>
                 </div>
@@ -161,58 +162,95 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial"/>
     <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const allCities = @Html.Raw(@Json.Serialize(Model.AdoptionRequestCreateModel.AllCities));
-                console.log("All Cities:", allCities);
+        document.addEventListener('DOMContentLoaded', function () {
+            const allCities = @Html.Raw(@Json.Serialize(Model.AdoptionRequestCreateModel.AllCities));
+            console.log("All Cities:", allCities);
 
-                function populateDropdown(parentId, allItems, childId, defaultText, parentKey) {
-                    const childSelect = document.querySelector(`#${childId}`);
+            function populateDropdown(parentId, allItems, childId, defaultText, parentKey) {
+                const childSelect = document.querySelector(`#${childId}`);
 
-                    childSelect.innerHTML = '';
+                childSelect.innerHTML = '';
 
-                    const defaultOption = document.createElement('option');
-                    defaultOption.value = '';
-                    defaultOption.textContent = `Select ${defaultText}`;
-                    defaultOption.selected = true;
-                    defaultOption.disabled = true;
-                    defaultOption.hidden = true;
-                    defaultOption.classList.add('default-option');
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = `Select ${defaultText}`;
+                defaultOption.selected = true;
+                defaultOption.disabled = true;
+                defaultOption.hidden = true;
+                defaultOption.classList.add('default-option');
 
-                    childSelect.appendChild(defaultOption);
+                childSelect.appendChild(defaultOption);
 
-                    if (parentId) {
-                        const filteredItems = allItems.filter(item => item[parentKey] === parseInt(parentId));
-                        console.log(`Filtered ${defaultText}:`, filteredItems);
+                if (parentId) {
+                    const filteredItems = allItems.filter(item => item[parentKey] === parseInt(parentId));
+                    console.log(`Filtered ${defaultText}:`, filteredItems);
 
-                        filteredItems.forEach(item => {
-                            const option = document.createElement('option');
-                            option.value = item.id;
-                            option.textContent = item.name;
-                            childSelect.appendChild(option);
-                        });
+                    filteredItems.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.id;
+                        option.textContent = item.name;
+                        childSelect.appendChild(option);
+                    });
 
-                        console.log(`${defaultText} dropdown HTML:`, childSelect.innerHTML);
-                    }
-
-                    $(childSelect).niceSelect('update');
+                    console.log(`${defaultText} dropdown HTML:`, childSelect.innerHTML);
                 }
 
-                $('#CityId').niceSelect();
-                $('#CountryId').niceSelect();
+                $(childSelect).niceSelect('update');
+            }
 
-                $('#CountryId').on('change', function () {
-                    const countryId = $(this).val();
-                    console.log("Selected Country ID:", countryId);
-                    populateDropdown(countryId, allCities, 'CityId', 'City', 'countryId');
-                });
-            })
-        </script>
-}
-<script type="text/javascript">
-    $(document).ready(function () {
-        var errorMessage = '@TempData["ErrorMessage"]';
-        if (errorMessage) {
-            toastr.error(errorMessage);
+            $('#CityId').niceSelect();
+            $('#CountryId').niceSelect();
+
+            $('#CountryId').on('change', function () {
+                const countryId = $(this).val();
+                console.log("Selected Country ID:", countryId);
+                populateDropdown(countryId, allCities, 'CityId', 'City', 'countryId');
+            });
+        })
+    </script>
+
+    <script>
+        function toggleTextArea(groupName, textAreaId) {
+            var radios = document.querySelectorAll('input[name="' + groupName + '"]');
+            var textarea = document.getElementById(textAreaId);
+          
+            for (var i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    if (radios[i].value === 'true') {
+                        textarea.disabled = false;
+                    } else {
+                        textarea.disabled = true;
+                        textarea.value = '';
+                    }
+                    break;
+                }
+            }
         }
-    });
-</script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            toggleTextArea('HasOutdoorSpace', 'OutdoorSpaceDetails');
+            toggleTextArea('OwnsOtherPets', 'OtherPetsDetails');
+
+            document.querySelectorAll('input[name="HasOutdoorSpace"]').forEach(function (radio) {
+                radio.addEventListener('change', function () {
+                    toggleTextArea('HasOutdoorSpace', 'OutdoorSpaceDetails');
+                });
+            });
+
+            document.querySelectorAll('input[name="OwnsOtherPets"]').forEach(function (radio) {
+                radio.addEventListener('change', function () {
+                    toggleTextArea('OwnsOtherPets', 'OtherPetsDetails');
+                });
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage) {
+                toastr.error(errorMessage);
+            }
+        });
+    </script>
+}

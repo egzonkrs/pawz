@@ -8,12 +8,14 @@ public class AdoptionRequestModelValidator : AbstractValidator<AdoptionRequestCr
     public AdoptionRequestModelValidator()
     {
         RuleFor(x => x.CityId)
-            .NotNull()
-            .NotEmpty().WithMessage("City is required.");
+           .NotNull()
+           .NotEmpty().WithMessage("City is required.")
+           .GreaterThan(0).WithMessage("City must be selected.");
 
         RuleFor(x => x.CountryId)
             .NotNull()
-            .NotEmpty().WithMessage("Country is required.");
+            .NotEmpty().WithMessage("Country is required.")
+            .GreaterThan(0).WithMessage("Country must be selected.");
 
         RuleFor(x => x.Address)
             .NotNull()
