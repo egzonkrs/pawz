@@ -99,6 +99,19 @@ public class SeedPets
                 LocationId = 6, // Tirana
                 PostedByUserId = userBob.Id,
                 IsDeleted = false
+            },
+            new Pet
+            {
+                Name = "Llamba",
+                BreedId = 3, // Maine Coon
+                AgeYears = "1-2 Years",
+                About = "Llaba is a mixture of staffy and border collie, body, his coat is short, but soft like a border Collie. His torso coat is predominantly brown with darker liver merle patterns like an Australian Shepherd.",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
+                CreatedAt = DateTime.UtcNow,
+                LocationId = 2, // Prizren
+                PostedByUserId = userBob.Id,
+                IsDeleted = false
             }
         };
 

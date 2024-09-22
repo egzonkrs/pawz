@@ -185,6 +185,36 @@ public class SeedPetImages
                 ImageUrl = "cat3_4.jpg",
                 IsPrimary = false,
                 IsDeleted = false
+            },
+
+            // PetId 7 - Llamba (German Shepard)
+            new PetImage
+            {
+                PetId = 7,
+                ImageUrl = "dog4_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 7,
+                ImageUrl = "dog4_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 7,
+                ImageUrl = "dog4_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 7,
+                ImageUrl = "dog4_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
             }
         };
 
