@@ -242,30 +242,20 @@ public class AdoptionRequestService : IAdoptionRequestService
             }
 
             adoptionRequest.Status = AdoptionRequestStatus.Approved;
-            adoptionRequest.ResponseDate = DateTime.Now;
+            adoptionRequest.ResponseDate = DateTime.UtcNow;
 
             var adoption = new Adoption
             {
                 AdoptionRequestId = adoptionRequestId,
                 AdoptionRequest = adoptionRequest,
-                AdoptionDate = DateTime.Now,
+                AdoptionDate = DateTime.UtcNow,
                 AdoptionFee = 0,
                 IsDeleted = false
             };
 
             await _adoptionRepository.InsertAsync(adoption, cancellationToken);
 
-            var otherAdoptionRequests = await _adoptionRequestRepository.GetByPetIdAsync(adoptionRequest.PetId.Value, cancellationToken);
-
-            foreach (var otherRequest in otherAdoptionRequests)
-            {
-                if (otherRequest.Id != adoptionRequestId)
-                {
-                    otherRequest.Status = AdoptionRequestStatus.Rejected;
-                    otherRequest.ResponseDate = DateTime.Now;
-                    await _adoptionRequestRepository.UpdateAsync(otherRequest, cancellationToken);
-                }
-            }
+            await RejectOtherAdoptionRequestsAsync(adoptionRequest.PetId.Value, adoptionRequestId, cancellationToken);
 
             var changesSaved = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
@@ -284,6 +274,20 @@ public class AdoptionRequestService : IAdoptionRequestService
             _logger.LogError(ex, "An error occurred while accepting Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
             return Result<bool>.Failure(AdoptionRequestErrors.UpdateUnexpectedError);
         }
+    }
+
+    private async Task RejectOtherAdoptionRequestsAsync(int petId, int approvedRequestId, CancellationToken cancellationToken)
+    {
+        var pendingAdoptionRequests = await _adoptionRequestRepository.GetByPetIdAsync(petId, cancellationToken);
+        var rejectionCandidates = pendingAdoptionRequests.Where(request => request.Id != approvedRequestId).ToList();
+
+        foreach (var request in rejectionCandidates)
+        {
+            request.Status = AdoptionRequestStatus.Rejected;
+            request.ResponseDate = DateTime.UtcNow;
+        }
+
+        await _adoptionRequestRepository.UpdateListAsync(rejectionCandidates, cancellationToken);
     }
 
     public async Task<Result<bool>> RejectAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken)

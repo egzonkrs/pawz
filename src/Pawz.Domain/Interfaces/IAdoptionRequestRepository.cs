@@ -31,5 +31,14 @@ public interface IAdoptionRequestRepository : IGenericRepository<AdoptionRequest
     /// <param name="cancellationToken">The cancellation token to observe.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a collection of adoption requests made by the specified user.</returns>
     Task<IEnumerable<AdoptionRequest>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates a list of adoption requests in the database.
+    /// </summary>
+    /// <param name="adoptionRequests">The list of <see cref="AdoptionRequest"/> objects to be updated.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
+    /// <exception cref="ArgumentException">Thrown when the provided list of adoption requests is null or empty.</exception>
+    /// <returns>A task representing the asynchronous update operation.</returns>
+    Task UpdateListAsync(List<AdoptionRequest> adoptionRequests, CancellationToken cancellationToken);
 }
 

@@ -3,6 +3,7 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -63,5 +64,30 @@ public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>
         return await _dbSet
             .Where(ar => ar.RequesterUserId == userId)
             .ToListAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Updates a list of adoption requests in the database.
+    /// </summary>
+    /// <param name="adoptionRequests">The list of <see cref="AdoptionRequest"/> objects to be updated.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
+    /// <exception cref="ArgumentException">Thrown when the provided list of adoption requests is null or empty.</exception>
+    /// <returns>A task representing the asynchronous update operation.</returns>
+    public async Task UpdateListAsync(List<AdoptionRequest> adoptionRequests, CancellationToken cancellationToken)
+    {
+        if (adoptionRequests == null || adoptionRequests.Count == 0)
+            throw new ArgumentException("No adoption requests provided for update.");
+
+        foreach (var adoptionRequest in adoptionRequests)
+        {
+            if (_dbSet.Local.All(ar => ar.Id != adoptionRequest.Id))
+            {
+                _dbSet.Attach(adoptionRequest);
+            }
+
+            _dbSet.Entry(adoptionRequest).State = EntityState.Modified;
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }
