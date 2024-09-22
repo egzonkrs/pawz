@@ -64,14 +64,14 @@ public class AdoptionRequestController : Controller
     {
         var validationResult = await _validator.ValidateAsync(adoptionRequestCreateModel, cancellationToken);
 
+        var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
+        var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
+
+        var countriesList = countriesResult.Value ?? new List<Country>();
+        var citiesList = citiesResult.Value ?? new List<City>();
+
         if (validationResult.IsValid is false)
         {
-            var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
-            var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
-
-            var countriesList = countriesResult.Value ?? new List<Country>();
-            var citiesList = citiesResult.Value ?? new List<City>();
-
             adoptionRequestCreateModel.Countries = new SelectList(countriesList, "Id", "Name");
             adoptionRequestCreateModel.Cities = new SelectList(citiesList, "Id", "Name");
             adoptionRequestCreateModel.AllCities = citiesList.Select(x => new CityViewModel
@@ -82,21 +82,19 @@ public class AdoptionRequestController : Controller
             }).ToList();
 
             validationResult.AddErrorsToModelState(ModelState);
-            return View(adoptionRequestCreateModel);
+
+            var errors = validationResult.Errors
+           .GroupBy(e => e.PropertyName)
+           .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
+
+            return Json(new { success = false, errors });
         }
 
         var adoptionRequestCreateRequest = _mapper.Map<AdoptionRequestCreateRequest>(adoptionRequestCreateModel);
-        adoptionRequestCreateRequest.PetId = adoptionRequestCreateModel.PetId;
         var adoptionRequestCreateResult = await _adoptionRequestService.CreateAdoptionRequestAsync(adoptionRequestCreateRequest, cancellationToken);
 
         if (adoptionRequestCreateResult.IsSuccess is false)
         {
-            var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
-            var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
-
-            var countriesList = countriesResult.Value ?? new List<Country>();
-            var citiesList = citiesResult.Value ?? new List<City>();
-
             adoptionRequestCreateModel.Countries = new SelectList(countriesList, "Id", "Name");
             adoptionRequestCreateModel.Cities = new SelectList(citiesList, "Id", "Name");
             adoptionRequestCreateModel.AllCities = citiesList.Select(x => new CityViewModel
@@ -107,10 +105,14 @@ public class AdoptionRequestController : Controller
             }).ToList();
 
             adoptionRequestCreateResult.AddErrorsToModelState(ModelState);
-            return View(adoptionRequestCreateModel);
+
+            return Json(new { success = false, message = "Failed to create adoption request." });
         }
 
-        return RedirectToAction("Index", "Home");
+        adoptionRequestCreateModel.Countries = new SelectList(countriesList, "Id", "Name");
+        adoptionRequestCreateModel.Cities = new SelectList(citiesList, "Id", "Name");
+
+        return Json(new { success = true, redirectUrl = Url.Action("Index", "Home") });
     }
 
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)

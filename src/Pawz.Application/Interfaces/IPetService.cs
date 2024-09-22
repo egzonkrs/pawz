@@ -47,9 +47,10 @@ public interface IPetService
     /// Deletes a pet by its ID.
     /// </summary>
     /// <param name="petId">The ID of the pet to delete.</param>
+    /// <param name="userId">The ID of the user who created the pet.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
-    Task<Result<bool>> DeletePetAsync(int petId, CancellationToken cancellationToken);
+    Task<Result<bool>> DeletePetAsync(int petId, string userId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves all pets created by a specific user.

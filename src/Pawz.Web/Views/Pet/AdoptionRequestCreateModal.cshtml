@@ -1,0 +1,122 @@
+@model Pawz.Web.Models.Pet.AdoptionRequestCreateModel
+
+<div class="modal fade" id="adoptionRequestModal" tabindex="-1" role="dialog" aria-labelledby="adoptionRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="adoptionRequestModalLabel">Adoption Request</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+                <form asp-action="Create" method="post" asp-controller="AdoptionRequest" enctype="multipart/form-data" id="adoptionRequestForm">
+                    <fieldset class="p-4">
+                        <input type="hidden" asp-for="PetId" />
+                        <div class="col">
+                            <div class="form-group mb-0">
+                                <label asp-for="CountryId" class="form-label">Country</label>
+                                <select asp-for="CountryId" class="nice-select form-control w-100 bg-white open" id="CountryId">
+                                    <option selected disabled hidden value="">Select your country</option>
+                                    @foreach (var country in Model.Countries)
+                                    {
+                                        <option value="@country.Value">@country.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CountryId" class="form-label input-error-text"></span>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label asp-for="CityId" class="form-label">City</label>
+                                <select asp-for="CityId" class="form-control w-100" id="CityId">
+                                    <option selected disabled hidden value="">Select your city</option>
+                                    @foreach (var city in Model.Cities)
+                                    {
+                                        <option value="@city.Value">@city.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CityId" class="form-label input-error-text"></span>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label asp-for="Address" class="form-label">Address</label>
+                                <input asp-for="Address" class="form-control w-100" id="address" placeholder="Enter your address">
+                                <span asp-validation-for="Address" class="form-label input-error-text"></span>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label asp-for="PostalCode" class="form-label">Postal Code</label>
+                                <input asp-for="PostalCode" class="form-control w-100" placeholder="Postal Code" />
+                                <span asp-validation-for="PostalCode" class="form-label input-error-text"></span>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label asp-for="ContactNumber" class="form-label">Contact Number</label>
+                                <input asp-for="ContactNumber" type="tel" class="form-control w-100" placeholder="+XXX XX XXX XXX" autocomplete="tel">
+                                <span asp-validation-for="ContactNumber" class="form-label input-error-text"></span>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label asp-for="IsRentedProperty" class="form-label">Do you live in a rented property?</label>
+                                <div class="radio-group">
+                                    <label class="radio-inline"><input type="radio" asp-for="IsRentedProperty" value="true"> Yes</label>
+                                    <label class="radio-inline"><input type="radio" asp-for="IsRentedProperty" value="false"> No</label>
+                                </div>
+                                <span asp-validation-for="IsRentedProperty" class="form-label input-error-text"></span>
+                            </div>
+
+                            <div class="form-group mb-0">
+                                <label asp-for="HasOutdoorSpace" class="form-label">Do you have outdoor space?</label>
+                                <div class="radio-group">
+                                    <label class="radio-inline"><input type="radio" asp-for="HasOutdoorSpace" value="true" onchange="toggleTextArea('HasOutdoorSpace', 'OutdoorSpaceDetails')"> Yes</label>
+                                    <label class="radio-inline"><input type="radio" asp-for="HasOutdoorSpace" value="false" onchange="toggleTextArea('HasOutdoorSpace', 'OutdoorSpaceDetails')"> No</label>
+                                </div>
+                                <span asp-validation-for="HasOutdoorSpace" class="form-label input-error-text"></span>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label asp-for="OutdoorSpaceDetails" class="form-label">Outdoor Space Details</label>
+                                <textarea asp-for="OutdoorSpaceDetails" id="OutdoorSpaceDetails" class="form-control w-100" placeholder="Describe your outdoor space"></textarea>
+                                <span asp-validation-for="OutdoorSpaceDetails" class="form-label input-error-text"></span>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label asp-for="OwnsOtherPets" class="form-label">Do you own other pets?</label>
+                                <div class="radio-group">
+                                    <label class="radio-inline"><input type="radio" asp-for="OwnsOtherPets" value="true" onchange="toggleTextArea('OwnsOtherPets', 'OtherPetsDetails')"> Yes</label>
+                                    <label class="radio-inline"><input type="radio" asp-for="OwnsOtherPets" value="false" onchange="toggleTextArea('OwnsOtherPets', 'OtherPetsDetails')"> No</label>
+                                </div>
+                                <span asp-validation-for="OwnsOtherPets" class="form-label input-error-text"></span>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label asp-for="OtherPetsDetails" class="form-label">Other Pets Details</label>
+                                <textarea asp-for="OtherPetsDetails" id="OtherPetsDetails" class="form-control w-100" placeholder="Provide details about your other pets"></textarea>
+                                <span asp-validation-for="OtherPetsDetails" class="form-label input-error-text"></span>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label asp-for="Message" class="form-label">Additional Message or Comments</label>
+                                <textarea asp-for="Message" class="form-control w-100" placeholder="Provide any additional comments"></textarea>
+                                <span asp-validation-for="Message" class="form-label input-error-text"></span>
+                            </div>
+                        </div>
+
+                        @if (ViewData.ModelState.IsValid is false && ViewData.ModelState[string.Empty]?.Errors.Count > 0)
+                        {
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach (var error in ViewData.ModelState[string.Empty]!.Errors)
+                                    {
+                                        <li>@error.ErrorMessage</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                        <div class="modal-footer d-flex justify-content-between mt-auto">
+                            <button type="button" class="btn btn-transparent mb-0" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary font-weight-bold mb-0">Submit</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

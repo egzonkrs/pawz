@@ -1,11 +1,9 @@
 using AutoMapper;
 using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
-using Pawz.Application.Models.Pet;
 using Pawz.Domain.Entities;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models.Breed;
@@ -27,9 +25,10 @@ public class PetController : Controller
     private readonly ICountryService _countryService;
     private readonly ICityService _cityService;
     private readonly IValidator<PetCreateViewModel> _validator;
-    private readonly IValidator<AdoptionRequestCreateModel> _adoptionRequestValidator;
     private readonly IMapper _mapper;
     private readonly IAdoptionRequestService _adoptionRequestService;
+    private readonly IUserAccessor _userAccessor;
+
 
     public PetController(
         IPetService petService,
@@ -41,8 +40,7 @@ public class PetController : Controller
         IValidator<PetCreateViewModel> validator,
         IUserAccessor userAccessor,
         IMapper mapper,
-        IAdoptionRequestService adoptionRequestService,
-        IValidator<AdoptionRequestCreateModel> adoptionRequestValidator)
+        IAdoptionRequestService adoptionRequestService)
     {
         _petService = petService;
         _breedService = breedService;
@@ -52,7 +50,7 @@ public class PetController : Controller
         _validator = validator;
         _mapper = mapper;
         _adoptionRequestService = adoptionRequestService;
-        _adoptionRequestValidator = adoptionRequestValidator;
+        _userAccessor = userAccessor;
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -62,6 +60,7 @@ public class PetController : Controller
         return View(petViewModels);
     }
 
+    [HttpGet("pet/details/{id:int}")]
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {
         var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
@@ -193,24 +192,42 @@ public class PetController : Controller
             return View(petCreateViewModel);
         }
 
-        if (petCreateResult.IsSuccess)
-        {
-            return RedirectToAction("Index", "Home");
-        }
+        TempData["SuccessMessage"] = "Pet created successfully!";
 
         petCreateViewModel.Species = new SelectList(speciesList, "Id", "Name");
         petCreateViewModel.Breeds = new SelectList(breedsList, "Id", "Name");
         petCreateViewModel.Countries = new SelectList(countriesList, "Id", "Name");
         petCreateViewModel.Cities = new SelectList(citiesList, "Id", "Name");
 
-        TempData["SuccessMessage"] = "Pet created successfully!";
-        return RedirectToAction("Details", "Pet");
+        return RedirectToAction("Create", "Pet");
     }
 
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
-        var pet = await _petService.GetPetByIdAsync(id, cancellationToken);
-        return View(pet);
+        var result = await _petService.GetPetByIdAsync(id, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return NotFound();
+        }
+
+        var pet = result.Value;
+
+        var breedsResult = await _breedService.GetAllBreedsAsync(cancellationToken);
+        var breedsList = breedsResult.Value ?? new List<Breed>();
+
+        var petEdit = new PetEditViewModel
+        {
+            Id = pet.Id,
+            Name = pet.Name,
+            BreedId = pet.BreedId,
+            AgeYears = pet.AgeYears,
+            About = pet.About,
+            Price = pet.Price,
+            Breeds = new SelectList(breedsList, "Id", "Name", pet.BreedId)
+        };
+
+        return View(petEdit);
     }
 
     [HttpPost]
@@ -218,20 +235,31 @@ public class PetController : Controller
     public async Task<IActionResult> Edit(Pet pet, CancellationToken cancellationToken)
     {
         await _petService.UpdatePetAsync(pet, cancellationToken);
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction("Profile","Users");
     }
 
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        var pet = await _petService.GetPetByIdAsync(id, cancellationToken);
-        return View(pet);
+        var petResult = await _petService.GetPetByIdAsync(id, cancellationToken);
+        if (!petResult.IsSuccess)
+        {
+            return NotFound();
+        }
+        return View(petResult.Value);
     }
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)
     {
-        await _petService.DeletePetAsync(id, cancellationToken);
+        var userId = _userAccessor.GetUserId();
+        var result = await _petService.DeletePetAsync(id, userId, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            result.AddErrorsToModelState(ModelState);
+            return View();
+        }
         return RedirectToAction(nameof(Index));
     }
 
