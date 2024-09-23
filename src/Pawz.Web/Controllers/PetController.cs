@@ -260,7 +260,7 @@ public class PetController : Controller
             result.AddErrorsToModelState(ModelState);
             return View();
         }
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction("Profile", "Users");
     }
 
 }
