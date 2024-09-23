@@ -215,6 +215,276 @@ public class SeedPetImages
                 ImageUrl = "dog4_4.jpg",
                 IsPrimary = false,
                 IsDeleted = false
+            },
+
+            // PetId 8 - Ollie (Labrador Retriever)
+            new PetImage
+            {
+                PetId = 8,
+                ImageUrl = "dog5_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 8,
+                ImageUrl = "dog5_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 8,
+                ImageUrl = "dog5_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 8,
+                ImageUrl = "dog5_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+
+            // PetId 9 - Milo (Persian)
+            new PetImage
+            {
+                PetId = 9,
+                ImageUrl = "cat4_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 9,
+                ImageUrl = "cat4_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 9,
+                ImageUrl = "cat4_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 9,
+                ImageUrl = "cat4_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+
+            // PetId 10 - Simba (Persian)
+            new PetImage
+            {
+                PetId = 10,
+                ImageUrl = "cat5_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 10,
+                ImageUrl = "cat5_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 10,
+                ImageUrl = "cat5_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 10,
+                ImageUrl = "cat5_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+
+            // PetId 11 - Simona (Siamese)
+            new PetImage
+            {
+                PetId = 11,
+                ImageUrl = "cat6_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 11,
+                ImageUrl = "cat6_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 11,
+                ImageUrl = "cat6_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 11,
+                ImageUrl = "cat6_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+
+            // PetId 12 - Donny (Labrador Retriever)
+            new PetImage
+            {
+                PetId = 12,
+                ImageUrl = "dog6_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 12,
+                ImageUrl = "dog6_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 12,
+                ImageUrl = "dog6_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 12,
+                ImageUrl = "dog6_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+
+            // PetId 13 - Nala (German Shepard)
+            new PetImage
+            {
+                PetId = 13,
+                ImageUrl = "dog7_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 13,
+                ImageUrl = "dog7_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 13,
+                ImageUrl = "dog7_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 13,
+                ImageUrl = "dog7_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+
+            // PetId 14 - Dylan (Golden Retriver)
+            new PetImage
+            {
+                PetId = 14,
+                ImageUrl = "dog8_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 14,
+                ImageUrl = "dog8_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 14,
+                ImageUrl = "dog8_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 14,
+                ImageUrl = "dog8_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+
+            // PetId 15 - Mia (Siamese)
+            new PetImage
+            {
+                PetId = 15,
+                ImageUrl = "cat7_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 15,
+                ImageUrl = "cat7_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 15,
+                ImageUrl = "cat7_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 15,
+                ImageUrl = "cat7_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+
+            // PetId 16 - Bubbles (Maine Coon)
+            new PetImage
+            {
+                PetId = 16,
+                ImageUrl = "cat8_1.jpg",
+                IsPrimary = true,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 16,
+                ImageUrl = "cat8_2.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 16,
+                ImageUrl = "cat8_3.jpg",
+                IsPrimary = false,
+                IsDeleted = false
+            },
+            new PetImage
+            {
+                PetId = 16,
+                ImageUrl = "cat8_4.jpg",
+                IsPrimary = false,
+                IsDeleted = false
             }
         };
 

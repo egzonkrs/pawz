@@ -103,7 +103,7 @@ public class SeedPets
             new Pet
             {
                 Name = "Llamba",
-                BreedId = 3, // Maine Coon
+                BreedId = 3, // German Shepherd
                 AgeYears = "1-2 Years",
                 About = "Llaba is a mixture of staffy and border collie, body, his coat is short, but soft like a border Collie. His torso coat is predominantly brown with darker liver merle patterns like an Australian Shepherd.",
                 Price = 0.00m, // Free
@@ -111,6 +111,123 @@ public class SeedPets
                 CreatedAt = DateTime.UtcNow,
                 LocationId = 2, // Prizren
                 PostedByUserId = userBob.Id,
+                IsDeleted = false
+            },
+            new Pet
+            {
+                Name = "Ollie",
+                BreedId = 2, // Labrador Retriever
+                AgeYears = "2-4 Years",
+                About = "Ollie is so good with other dogs and knows how to appropriately correct boisterous dogs without causing injury and has been very useful in training sessions and has positive experiences during social time.",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
+                CreatedAt = DateTime.UtcNow,
+                LocationId = 3, // Mitrovica
+                PostedByUserId = userAsd.Id,
+                IsDeleted = false
+            },
+            new Pet
+            {
+                Name = "Milo",
+                BreedId = 4, // Persian
+                AgeYears = "1-2 Years",
+                About = "Ollie is so good with other dogs and knows how to appropriately correct boisterous dogs without causing injury and has been very useful in training sessions and has positive experiences during social time.",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
+                CreatedAt = DateTime.UtcNow,
+                LocationId = 3, // Prizren
+                PostedByUserId = userAsd.Id,
+                IsDeleted = false
+            },
+            new Pet
+            {
+                Name = "Simba",
+                BreedId = 4, // Persian
+                AgeYears = "3-4 Years",
+                About = "Luna is an endearing boy whose charming personality and delightful quirks make him an irresistible companion. If you're looking for a friend who exudes warmth and love, Robert could be your purr-fect match.",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
+                CreatedAt = DateTime.UtcNow,
+                LocationId = 6, // Tirana
+                PostedByUserId = userAsd.Id,
+                IsDeleted = false
+            },
+            new Pet
+            {
+                Name = "Simona",
+                BreedId = 5, // Siamese
+                AgeYears = "2-3 Years",
+                About = "Siamese is an endearing boy whose charming personality and delightful quirks make him an irresistible companion. If you're looking for a friend who exudes warmth and love, Robert could be your purr-fect match.",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
+                CreatedAt = DateTime.UtcNow,
+                LocationId = 6, // Tirana
+                PostedByUserId = userAsd.Id,
+                IsDeleted = false
+            },
+            new Pet
+            {
+                Name = "Donny",
+                BreedId = 2, // Labrador Retriever
+                AgeYears = "2-4 Years",
+                About = "Donny is so good with other dogs and knows how to appropriately correct boisterous dogs without causing injury and has been very useful in training sessions and has positive experiences during social time.",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
+                CreatedAt = DateTime.UtcNow,
+                LocationId = 3, // Mitrovica
+                PostedByUserId = userAsd.Id,
+                IsDeleted = false
+            },
+            new Pet
+            {
+                Name = "Nala",
+                BreedId = 3, // German Shepard
+                AgeYears = "1-2 Years",
+                About = "Nala is a sweet and gentle girl who is blossoming into a confident and loving companion. She has a tender heart and an eagerness to learn, making her an ideal addition to a family that can provide her with the patience.",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
+                CreatedAt = DateTime.UtcNow,
+                LocationId = 3, // Mitrovica
+                PostedByUserId = userAsd.Id,
+                IsDeleted = false
+            },
+            new Pet
+            {
+                Name = "Dylan",
+                BreedId = 1, // Golden Retriver
+                AgeYears = "2-4 Years",
+                About = "Dylan is an energetic and affectionate young boy looking for a loving home. He loves playing games, loving companion and would be suited to an active family with older kids who will include him on all their adventures.",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
+                CreatedAt = DateTime.UtcNow,
+                LocationId = 3, // Mitrovica
+                PostedByUserId = userAsd.Id,
+                IsDeleted = false
+            },
+            new Pet
+            {
+                Name = "Mia",
+                BreedId = 5, // Siamese
+                AgeYears = "2-3 Years",
+                About = "Mia is an endearing boy whose charming personality and delightful quirks make him an irresistible companion. If you're looking for a friend who exudes warmth and love, Robert could be your purr-fect match.",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
+                CreatedAt = DateTime.UtcNow,
+                LocationId = 6, // Tirana
+                PostedByUserId = userAsd.Id,
+                IsDeleted = false
+            },
+            new Pet
+            {
+                Name = "Bubbles",
+                BreedId = 6, // Maine Coon
+                AgeYears = "2-3 Years",
+                About = "Bubbles exhibits an adventurous spirit, but also doesn't mind a good catnap with their human. This cute girl thrives on playtimes and an exciting fancy soiree, tuna and chicken being her favourite tea time treats..",
+                Price = 0.00m, // Free
+                Status = PetStatus.Available,
+                CreatedAt = DateTime.UtcNow,
+                LocationId = 6, // Tirana
+                PostedByUserId = userAsd.Id,
                 IsDeleted = false
             }
         };
