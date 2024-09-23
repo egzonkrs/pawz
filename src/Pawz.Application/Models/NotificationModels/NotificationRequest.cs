@@ -1,3 +1,5 @@
+using Pawz.Domain.Enums;
+
 namespace Pawz.Application.Models.NotificationModels;
 
 /// <summary>
@@ -24,4 +26,9 @@ public class NotificationRequest
     /// Gets or sets the ID of the pet associated with the notification.
     /// </summary>
     public int PetId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the type of the notification.
+    /// </summary>
+    public NotificationType Type { get; set; }
 }
