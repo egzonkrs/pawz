@@ -303,12 +303,12 @@ public class AdoptionRequestService : IAdoptionRequestService
             }
 
             await _adoptionRequestRepository.UpdateListAsync(rejectionCandidates, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<bool>.Success();
         }
         catch (Exception ex)
         {
-            // Log the exception and return failure
             _logger.LogError(ex, "An unexpected error occurred while rejecting other adoption requests for pet with ID {PetId}", petId);
             return Result<bool>.Failure(AdoptionRequestErrors.UpdateUnexpectedError);
         }
@@ -349,5 +349,4 @@ public class AdoptionRequestService : IAdoptionRequestService
             return Result<bool>.Failure(AdoptionRequestErrors.UpdateUnexpectedError);
         }
     }
-
 }

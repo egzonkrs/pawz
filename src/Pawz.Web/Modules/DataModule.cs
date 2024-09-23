@@ -7,7 +7,7 @@ using Pawz.Application.Services;
 using Pawz.Domain.Abstractions;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
-using Pawz.Infrastructure.Repos;
+using Pawz.Infrastructure.Repositories;
 using Pawz.Infrastructure.Services;
 using Pawz.Web.Hubs;
 using System.Configuration;

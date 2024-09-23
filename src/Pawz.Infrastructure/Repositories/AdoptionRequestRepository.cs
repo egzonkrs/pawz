@@ -3,13 +3,12 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Pawz.Infrastructure.Repos;
+namespace Pawz.Infrastructure.Repositories;
 
 public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>, IAdoptionRequestRepository
 {
@@ -72,9 +71,9 @@ public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>
     /// <param name="adoptionRequests">The list of <see cref="AdoptionRequest"/> objects to be updated.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
     /// <returns>A task representing the asynchronous update operation.</returns>
-    public async Task UpdateListAsync(List<AdoptionRequest> adoptionRequests, CancellationToken cancellationToken)
+    public Task UpdateListAsync(List<AdoptionRequest> adoptionRequests, CancellationToken cancellationToken)
     {
         _dbSet.UpdateRange(adoptionRequests);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        return Task.CompletedTask;
     }
 }

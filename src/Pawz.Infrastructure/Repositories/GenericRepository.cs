@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Pawz.Infrastructure.Repos;
+namespace Pawz.Infrastructure.Repositories;
 
 public abstract class GenericRepository<TEntity, TKey> : IGenericRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>
 {
-    protected readonly AppDbContext _dbContext;
+    private readonly AppDbContext _dbContext;
     protected readonly DbSet<TEntity> _dbSet;
 
     protected GenericRepository(AppDbContext context)
