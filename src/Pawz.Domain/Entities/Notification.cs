@@ -1,3 +1,4 @@
+using Pawz.Domain.Enums;
 using Pawz.Domain.Interfaces;
 using System;
 
@@ -47,6 +48,11 @@ public class Notification : IEntity<int>, ISoftDeletion
     /// Gets or sets the pet associated with the notification.
     /// </summary>
     public Pet? Pet { get; set; }
+
+    /// <summary>
+    /// Gets or sets the type of the notification.
+    /// </summary>
+    public NotificationType Type { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the notification has been marked as read.
