@@ -28,13 +28,13 @@ public class PetService : IPetService
     private readonly ILocationService _locationService;
 
     public PetService(IPetRepository petRepository,
-                      IUnitOfWork unitOfWork,
-                      ILogger<PetService> logger,
-                      IFileUploaderService fileUploaderService,
-                      IPetImageRepository petImageRepository,
-                      IUserAccessor userAccessor,
-                      IMapper mapper,
-                      ILocationService locationService)
+        IUnitOfWork unitOfWork,
+        ILogger<PetService> logger,
+        IFileUploaderService fileUploaderService,
+        IPetImageRepository petImageRepository,
+        IUserAccessor userAccessor,
+        IMapper mapper,
+        ILocationService locationService)
     {
         _petRepository = petRepository;
         _unitOfWork = unitOfWork;
@@ -122,7 +122,8 @@ public class PetService : IPetService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in {ServiceName} while attempting to create a Pet for UserId: {UserId}", nameof(PetService), petCreateRequest.PostedByUserId);
+            _logger.LogError(ex, "An error occurred in {ServiceName} while attempting to create a Pet for UserId: {UserId}", nameof(PetService),
+                petCreateRequest.PostedByUserId);
             return Result<bool>.Failure(PetErrors.CreationUnexpectedError);
         }
     }
@@ -146,7 +147,7 @@ public class PetService : IPetService
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets.",
-                             nameof(PetService));
+                nameof(PetService));
             return Result<IEnumerable<Pet>>.Failure(PetErrors.RetrievalError);
         }
     }
@@ -179,7 +180,7 @@ public class PetService : IPetService
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve Pet with Id: {PetId}",
-                             nameof(PetService), petId);
+                nameof(PetService), petId);
             return Result<PetResponse>.Failure(PetErrors.RetrievalError);
         }
     }
@@ -228,7 +229,7 @@ public class PetService : IPetService
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to delete Pet with Id: {PetId}",
-                             nameof(PetService), petId);
+                nameof(PetService), petId);
             return Result<bool>.Failure(PetErrors.DeletionUnexpectedError);
         }
     }
@@ -262,7 +263,7 @@ public class PetService : IPetService
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve pets for UserId: {UserId}",
-                             nameof(PetService), userId);
+                nameof(PetService), userId);
             return Result<IEnumerable<UserPetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
@@ -333,8 +334,26 @@ public class PetService : IPetService
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to update Pet with Id: {PetId} for UserId: {UserId}",
-                             nameof(PetService), pet.Id, _userAccessor.GetUserId());
+                nameof(PetService), pet.Id, _userAccessor.GetUserId());
             return Result<bool>.Failure(PetErrors.UpdateUnexpectedError);
         }
+    }
+
+    public async Task<IEnumerable<Pet>> GetFilteredPetsAsync(string? speciesName, string? breedName)
+    {
+        var petsQuery = await _petRepository.GetAllPetsWithRelatedEntities();
+
+        if (!string.IsNullOrEmpty(speciesName))
+        {
+            petsQuery = petsQuery.Where(p => p.Breed.Species.Name == speciesName);
+        }
+
+        if (!string.IsNullOrEmpty(breedName))
+        {
+            petsQuery = petsQuery.Where(p => p.Breed.Name == breedName);
+        }
+
+        var filteredPets = petsQuery.ToList();
+        return filteredPets;
     }
 }
