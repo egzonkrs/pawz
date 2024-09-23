@@ -10,13 +10,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form asp-action="Create" method="post" asp-controller="AdoptionRequest" enctype="multipart/form-data">
+                
+                <form asp-action="Create" method="post" asp-controller="AdoptionRequest" enctype="multipart/form-data" id="adoptionRequestForm">
                     <fieldset class="p-4">
                         <input type="hidden" asp-for="PetId" />
                         <div class="col">
                             <div class="form-group mb-0">
                                 <label asp-for="CountryId" class="form-label">Country</label>
-                                <select asp-for="CountryId" class="form-control w-100" id="CountryId">
+                                <select asp-for="CountryId" class="nice-select form-control w-100 bg-white open" id="CountryId">
                                     <option selected disabled hidden value="">Select your country</option>
                                     @foreach (var country in Model.Countries)
                                     {
@@ -53,39 +54,37 @@
                             </div>
                             <div class="form-group mb-0">
                                 <label asp-for="IsRentedProperty" class="form-label">Do you live in a rented property?</label>
-                                <select asp-for="IsRentedProperty" class="form-control w-100">
-                                    <option selected disabled value="">Select</option>
-                                    <option value="true">Yes</option>
-                                    <option value="false">No</option>
-                                </select>
+                                <div class="radio-group">
+                                    <label class="radio-inline"><input type="radio" asp-for="IsRentedProperty" value="true"> Yes</label>
+                                    <label class="radio-inline"><input type="radio" asp-for="IsRentedProperty" value="false"> No</label>
+                                </div>
                                 <span asp-validation-for="IsRentedProperty" class="form-label input-error-text"></span>
                             </div>
+
                             <div class="form-group mb-0">
                                 <label asp-for="HasOutdoorSpace" class="form-label">Do you have outdoor space?</label>
-                                <select asp-for="HasOutdoorSpace" class="form-control w-100">
-                                    <option selected disabled value="">Select</option>
-                                    <option value="true">Yes</option>
-                                    <option value="false">No</option>
-                                </select>
+                                <div class="radio-group">
+                                    <label class="radio-inline"><input type="radio" asp-for="HasOutdoorSpace" value="true" onchange="toggleTextArea('HasOutdoorSpace', 'OutdoorSpaceDetails')"> Yes</label>
+                                    <label class="radio-inline"><input type="radio" asp-for="HasOutdoorSpace" value="false" onchange="toggleTextArea('HasOutdoorSpace', 'OutdoorSpaceDetails')"> No</label>
+                                </div>
                                 <span asp-validation-for="HasOutdoorSpace" class="form-label input-error-text"></span>
                             </div>
                             <div class="form-group mb-0">
                                 <label asp-for="OutdoorSpaceDetails" class="form-label">Outdoor Space Details</label>
-                                <textarea asp-for="OutdoorSpaceDetails" class="form-control w-100" placeholder="Describe your outdoor space"></textarea>
+                                <textarea asp-for="OutdoorSpaceDetails" id="OutdoorSpaceDetails" class="form-control w-100" placeholder="Describe your outdoor space"></textarea>
                                 <span asp-validation-for="OutdoorSpaceDetails" class="form-label input-error-text"></span>
                             </div>
                             <div class="form-group mb-0">
                                 <label asp-for="OwnsOtherPets" class="form-label">Do you own other pets?</label>
-                                <select asp-for="OwnsOtherPets" class="form-control w-100">
-                                    <option selected disabled value="">Select</option>
-                                    <option value="true">Yes</option>
-                                    <option value="false">No</option>
-                                </select>
+                                <div class="radio-group">
+                                    <label class="radio-inline"><input type="radio" asp-for="OwnsOtherPets" value="true" onchange="toggleTextArea('OwnsOtherPets', 'OtherPetsDetails')"> Yes</label>
+                                    <label class="radio-inline"><input type="radio" asp-for="OwnsOtherPets" value="false" onchange="toggleTextArea('OwnsOtherPets', 'OtherPetsDetails')"> No</label>
+                                </div>
                                 <span asp-validation-for="OwnsOtherPets" class="form-label input-error-text"></span>
                             </div>
                             <div class="form-group mb-0">
                                 <label asp-for="OtherPetsDetails" class="form-label">Other Pets Details</label>
-                                <textarea asp-for="OtherPetsDetails" class="form-control w-100" placeholder="Provide details about your other pets"></textarea>
+                                <textarea asp-for="OtherPetsDetails" id="OtherPetsDetails" class="form-control w-100" placeholder="Provide details about your other pets"></textarea>
                                 <span asp-validation-for="OtherPetsDetails" class="form-label input-error-text"></span>
                             </div>
                             <div class="form-group mb-0">
@@ -93,7 +92,6 @@
                                 <textarea asp-for="Message" class="form-control w-100" placeholder="Provide any additional comments"></textarea>
                                 <span asp-validation-for="Message" class="form-label input-error-text"></span>
                             </div>
-
                         </div>
 
                         @if (ViewData.ModelState.IsValid is false && ViewData.ModelState[string.Empty]?.Errors.Count > 0)
@@ -109,7 +107,7 @@
                         }
 
                         <div class="modal-footer d-flex justify-content-between mt-auto">
-                            <button type="button" class="btn btn-secondary mb-0" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-transparent mb-0" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary font-weight-bold mb-0">Submit</button>
                         </div>
                     </fieldset>
@@ -118,6 +116,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

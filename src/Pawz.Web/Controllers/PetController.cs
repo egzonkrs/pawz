@@ -25,9 +25,10 @@ public class PetController : Controller
     private readonly ICountryService _countryService;
     private readonly ICityService _cityService;
     private readonly IValidator<PetCreateViewModel> _validator;
-    private readonly IValidator<AdoptionRequestCreateModel> _adoptionRequestValidator;
     private readonly IMapper _mapper;
     private readonly IAdoptionRequestService _adoptionRequestService;
+    private readonly IUserAccessor _userAccessor;
+
 
     public PetController(
         IPetService petService,
@@ -39,8 +40,7 @@ public class PetController : Controller
         IValidator<PetCreateViewModel> validator,
         IUserAccessor userAccessor,
         IMapper mapper,
-        IAdoptionRequestService adoptionRequestService,
-        IValidator<AdoptionRequestCreateModel> adoptionRequestValidator)
+        IAdoptionRequestService adoptionRequestService)
     {
         _petService = petService;
         _breedService = breedService;
@@ -50,7 +50,7 @@ public class PetController : Controller
         _validator = validator;
         _mapper = mapper;
         _adoptionRequestService = adoptionRequestService;
-        _adoptionRequestValidator = adoptionRequestValidator;
+        _userAccessor = userAccessor;
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -218,15 +218,26 @@ public class PetController : Controller
 
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        var pet = await _petService.GetPetByIdAsync(id, cancellationToken);
-        return View(pet);
+        var petResult = await _petService.GetPetByIdAsync(id, cancellationToken);
+        if (!petResult.IsSuccess)
+        {
+            return NotFound();
+        }
+        return View(petResult.Value);
     }
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)
     {
-        await _petService.DeletePetAsync(id, cancellationToken);
+        var userId = _userAccessor.GetUserId();
+        var result = await _petService.DeletePetAsync(id, userId, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            result.AddErrorsToModelState(ModelState);
+            return View();
+        }
         return RedirectToAction(nameof(Index));
     }
 

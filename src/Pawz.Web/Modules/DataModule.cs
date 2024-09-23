@@ -9,7 +9,7 @@ using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
 using Pawz.Infrastructure.Repos;
 using Pawz.Infrastructure.Services;
-using Pawz.Web.Controllers;
+using Pawz.Web.Hubs;
 using System.Configuration;
 
 namespace Pawz.Web.Modules;
@@ -61,5 +61,9 @@ public class DataModule : IModule
         services.AddScoped<IAdoptionRepository, AdoptionRepository>();
 
         services.Configure<ApiSettings>(_configuration.GetSection(ApiSettings.SectionName));
+
+        services.AddScoped<IRealTimeNotificationSender, SignalRNotificationSender>();
+        services.AddScoped<INotificationHubContext, SignalRHubContext>();
+        services.AddScoped<IRealTimeNotificationSender, RealTimeNotificationSender>();
     }
 }
