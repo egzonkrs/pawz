@@ -152,7 +152,7 @@ public class AdoptionRequestService : IAdoptionRequestService
             {
                 _logger.LogInformation("Successfully updated Adoption Request with Id: {AdoptionRequestId} from UserId: {UserId}", adoptionRequest.Id,
                     adoptionRequest.RequesterUserId);
-                return Result<bool>.Success(true);
+                return Result<bool>.Success();
             }
 
             _logger.LogWarning("Failed to update Adoption Request with Id: {AdoptionRequestId} from UserId: {UserId}. No changes were detected.",
@@ -187,7 +187,7 @@ public class AdoptionRequestService : IAdoptionRequestService
             if (adoptionDeleted)
             {
                 _logger.LogInformation("Successfully deleted Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
-                return Result<bool>.Success(true);
+                return Result<bool>.Success();
             }
 
             _logger.LogWarning("Failed to delete Adoption Request with Id: {AdoptionRequestId}. No changes were detected.", adoptionRequestId);
@@ -263,7 +263,7 @@ public class AdoptionRequestService : IAdoptionRequestService
             {
                 _logger.LogInformation("Successfully accepted Adoption Request with Id: {AdoptionRequestId} and rejected other requests for PetId: {PetId}",
                     adoptionRequestId, adoptionRequest.PetId);
-                return Result<bool>.Success(true);
+                return Result<bool>.Success();
             }
 
             _logger.LogWarning("Failed to accept Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
@@ -313,7 +313,7 @@ public class AdoptionRequestService : IAdoptionRequestService
             if (changesSaved)
             {
                 _logger.LogInformation("Successfully rejected Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
-                return Result<bool>.Success(true);
+                return Result<bool>.Success();
             }
 
             _logger.LogWarning("Failed to reject Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
