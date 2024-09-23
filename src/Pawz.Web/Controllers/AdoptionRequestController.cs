@@ -164,14 +164,12 @@ public class AdoptionRequestController : Controller
         if (result.IsSuccess)
         {
             TempData["SuccessMessage"] = "Adoption request successfully accepted.";
+            return Redirect(Request.Headers["Referer"].ToString());
         }
-        else
-        {
-            TempData["ErrorMessage"] = "Failed to accept the adoption request.";
-        }
+
+        TempData["ErrorMessage"] = "Failed to accept the adoption request.";
         return Redirect(Request.Headers["Referer"].ToString());
     }
-
 
     [HttpPost]
     public async Task<IActionResult> RejectAdoptionRequest(int adoptionRequestId, CancellationToken cancellationToken)
@@ -181,12 +179,10 @@ public class AdoptionRequestController : Controller
         if (result.IsSuccess)
         {
             TempData["SuccessMessage"] = "Adoption request successfully rejected.";
+            return Redirect(Request.Headers["Referer"].ToString());
         }
-        else
-        {
-            TempData["ErrorMessage"] = "Failed to reject the adoption request.";
-        }
+
+        TempData["ErrorMessage"] = "Failed to reject the adoption request.";
         return Redirect(Request.Headers["Referer"].ToString());
     }
-
 }

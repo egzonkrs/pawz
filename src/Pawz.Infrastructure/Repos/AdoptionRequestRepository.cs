@@ -71,23 +71,10 @@ public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>
     /// </summary>
     /// <param name="adoptionRequests">The list of <see cref="AdoptionRequest"/> objects to be updated.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
-    /// <exception cref="ArgumentException">Thrown when the provided list of adoption requests is null or empty.</exception>
     /// <returns>A task representing the asynchronous update operation.</returns>
     public async Task UpdateListAsync(List<AdoptionRequest> adoptionRequests, CancellationToken cancellationToken)
     {
-        if (adoptionRequests == null || adoptionRequests.Count == 0)
-            throw new ArgumentException("No adoption requests provided for update.");
-
-        foreach (var adoptionRequest in adoptionRequests)
-        {
-            if (_dbSet.Local.All(ar => ar.Id != adoptionRequest.Id))
-            {
-                _dbSet.Attach(adoptionRequest);
-            }
-
-            _dbSet.Entry(adoptionRequest).State = EntityState.Modified;
-        }
-
+        _dbSet.UpdateRange(adoptionRequests);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

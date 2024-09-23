@@ -276,18 +276,42 @@ public class AdoptionRequestService : IAdoptionRequestService
         }
     }
 
-    private async Task RejectOtherAdoptionRequestsAsync(int petId, int approvedRequestId, CancellationToken cancellationToken)
+    private async Task<Result<bool>> RejectOtherAdoptionRequestsAsync(int petId, int approvedRequestId, CancellationToken cancellationToken)
     {
-        var pendingAdoptionRequests = await _adoptionRequestRepository.GetByPetIdAsync(petId, cancellationToken);
-        var rejectionCandidates = pendingAdoptionRequests.Where(request => request.Id != approvedRequestId).ToList();
-
-        foreach (var request in rejectionCandidates)
+        try
         {
-            request.Status = AdoptionRequestStatus.Rejected;
-            request.ResponseDate = DateTime.UtcNow;
-        }
+            var pendingAdoptionRequests = await _adoptionRequestRepository.GetByPetIdAsync(petId, cancellationToken);
 
-        await _adoptionRequestRepository.UpdateListAsync(rejectionCandidates, cancellationToken);
+            if (pendingAdoptionRequests is null || !pendingAdoptionRequests.Any())
+            {
+                _logger.LogWarning("No pending adoption requests found for pet with ID {PetId}", petId);
+                return Result<bool>.Failure(AdoptionRequestErrors.RetrievalError);
+            }
+
+            var rejectionCandidates = pendingAdoptionRequests.Where(request => request.Id != approvedRequestId).ToList();
+
+            if (rejectionCandidates is null || rejectionCandidates.Count == 0)
+            {
+                _logger.LogInformation("There are no other pending adoption requests for pet with ID {PetId}", petId);
+                return Result<bool>.Success();
+            }
+
+            foreach (var request in rejectionCandidates)
+            {
+                request.Status = AdoptionRequestStatus.Rejected;
+                request.ResponseDate = DateTime.UtcNow;
+            }
+
+            await _adoptionRequestRepository.UpdateListAsync(rejectionCandidates, cancellationToken);
+
+            return Result<bool>.Success();
+        }
+        catch (Exception ex)
+        {
+            // Log the exception and return failure
+            _logger.LogError(ex, "An unexpected error occurred while rejecting other adoption requests for pet with ID {PetId}", petId);
+            return Result<bool>.Failure(AdoptionRequestErrors.UpdateUnexpectedError);
+        }
     }
 
     public async Task<Result<bool>> RejectAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken)
