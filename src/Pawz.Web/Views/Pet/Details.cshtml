@@ -1,3 +1,4 @@
+@inject Pawz.Application.Interfaces.IUserAccessor UserAccessor
 @model Pawz.Web.Models.Pet.PetViewModel
 
 @{
@@ -107,7 +108,8 @@
             <div class="col-lg-4">
                 <div class="sidebar">
                     <div class="widget user text-center" style="margin-top: 6.9rem !important;">
-                        @* <img class="rounded-circle img-fluid" src="/images/userAvatar.jpg" alt="" style="padding: 0rem 7rem 0rem 7rem;"> *@
+                        <img src="/images/users/@(UserAccessor.GetUserInfo("profilepicture") ?? "userAvatar.jpg")"
+                             alt="@UserAccessor.GetUserFirstName()'s Profile Picture" class="rounded-circle user-avatar-image-150" />
                         <h4 class="text-capitalize">
                             <a>
                                 @Model.User?.FirstName
@@ -148,7 +150,7 @@
                         </p>
                     </div>
                     <div class="text-center">
-                        <button class="btn btn-transparent mb-4 adoption-request-button w-100" data-toggle="modal" data-target="#adoptionRequestModal">
+                        <button class="btn btn-transparent mb-4 adoption-request-button w-100 " data-toggle="modal" data-target="#adoptionRequestModal">
                             Request Adoption
                         </button>
                     </div>
