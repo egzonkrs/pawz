@@ -5,10 +5,6 @@
     font-size: 0.8rem;
 }
 
-   /* .input-error-text.field-validation-error {
-        color: red;
-    }
-*/
 .text-xs {
     font-size: 0.75rem; 
     line-height: 1rem; 
@@ -54,23 +50,71 @@
     line-height: 1;
 }
 
+/* Pet Details */
+
+/* User Widget */
+.widget-user {
+    background: #fff;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    padding: 0px 20px 20px 30px;
+    margin-bottom: 20px;
+    border-radius: 2px;
+}
+
+.btn-widget-contact {
+    background: #5672f9;
+    color: white;
+}
+/* Safety tips Widget */
+.widget-tips {
+    background: #fff;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    padding: 20px 30px 20px 30px;
+    margin-bottom: 20px;
+    border-radius: 2px;
+}
+
+/* Price Widget */
+.widget-price {
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    padding: 20px 20px 10px 0px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background: #5672f9;
+    color: white;
+}
+
+.price-p{
+    color:white;
+    font-size: 30px;
+    font-weight: bold
+}
+
+.price-h{
+    color:white
+}
+
+/* Adoption Request Button */
 .adoption-request-button {
-    font-size: 16px;
+    font-size: 30px !important;
     width: 80px;
     height: 70px !important;
-    padding: 0; 
+    padding: 58px 30px 58px;
+    margin-bottom: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border: 0px;
-    background-color: #ffffff;
+    border: 5px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    background: #5672f9;
+    color: white;
 }
 
 .adoption-request-button:hover {
-    transform: scale(1.05);  
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
-}
+    color: white;
+    background: #4054b8;
+ }
 
 .pet-thumbnail {
     border-radius: 10px; 
@@ -102,37 +146,71 @@
 }
 
 /* Pet Action Buttons */
-.pet-action-buttons {
-    font-size: 12px;
-}
 
-.link-button {
-    background: none !important;
+.pet-action-buttons.link-button {
+    background: none;
     border: none;
     padding: 0;
-    color: inherit;
-    text-decoration: none;
+    margin: 0 2px;
     cursor: pointer;
-    font: inherit;
+    transition: transform 0.2s ease;
 }
 
-.link-button i {
-    font-size: 20px; 
-    display: inline-block;
-    padding: 10px;
-    color: #343a40; 
-    background-color: #f0f0f0; 
+.pet-action-buttons.link-button i {
+    font-size: 18px;
+    width: 39px;
+    height: 39px;
+    line-height: 39px;
+    text-align: center;
+    color: #212121;
+    background-color: #D8D6D6;
     border-radius: 50%;
-    transition: background-color 0.3s ease; 
-    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.link-button i:hover {
-    background-color: red;
+.pet-action-buttons.link-button i:hover {
+    transform: scale(1.1);
+    color: white;
+ }
+
+.pet-action-buttons.link-button.view-button i:hover {
+    background-color: #007bff;
     color: white;
 }
 
+.pet-action-buttons.link-button.edit-button i:hover {
+    background-color: #ffc107;
+}
+
+.pet-action-buttons.link-button.delete-button i:hover {
+    background-color: red;
+ }
+   
+/* Adoption Request Modal */
 .radio-group label {
-    margin-right: 20px; 
+    margin-right: 20px;
+}
+
+.modal-dialog {
+    max-width: 80%; 
+}
+.span-required{
+    color: red;
+}
+
+.form-label-site {
+    color: #18191a;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.radio-inline{
+font-size: 25px;
+
+}
+
+.radio-style{
+    width:20px;
+    height:20px;
 }
 
