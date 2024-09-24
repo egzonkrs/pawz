@@ -26,6 +26,7 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default)
     {
         return await _dbSet
+            .AsSplitQuery()
             .Include(p => p.PetImages)
             .Include(p => p.Breed)
             .ThenInclude(b => b.Species)
@@ -48,7 +49,6 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     /// </returns>
     public IQueryable<Pet> QueryAllPetsWithRelatedEntities()
     {
-        // Return the query without executing it
         return _dbSet
             .AsSplitQuery()
             .Include(p => p.PetImages)
