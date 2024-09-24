@@ -63,5 +63,8 @@ public class DataModule : IModule
         services.AddScoped<IRealTimeNotificationSender, SignalRNotificationSender>();
         services.AddScoped<INotificationHubContext, SignalRHubContext>();
         services.AddScoped<IRealTimeNotificationSender, RealTimeNotificationSender>();
+        services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<INotificationRepository, NotificationRepository>();
+
     }
 }
