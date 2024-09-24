@@ -61,6 +61,10 @@
     border-radius: 2px;
 }
 
+.btn-widget-contact {
+    background: #5672f9;
+    color: white;
+}
 /* Safety tips Widget */
 .widget-tips {
     background: #fff;
