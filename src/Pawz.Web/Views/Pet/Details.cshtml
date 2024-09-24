@@ -107,7 +107,7 @@
             <!-- Right Sidebar -->
             <div class="col-lg-4">
                 <div class="sidebar">
-                    <div class="widget user text-center" style="margin-top: 6.9rem !important;">
+                    <div class="widget-user text-center" style="margin-top: 6.9rem !important;">
                         <img src="/images/users/@(UserAccessor.GetUserInfo("profilepicture") ?? "userAvatar.jpg")"
                              alt="@UserAccessor.GetUserFirstName()'s Profile Picture" class="rounded-circle user-avatar-image-150" />
                         <h4 class="text-capitalize">
@@ -127,7 +127,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="widget disclaimer">
+                    <div class="widget-tips">
                         <h5 class="widget-header">Safety Tips</h5>
                         <ul>
                             <li>Meet seller at a public place</li>
@@ -136,9 +136,9 @@
                             <li>Check recent photos of the pet.</li>
                         </ul>
                     </div>
-                    <div class="widget price text-center">
-                        <h4>Price</h4>
-                        <p>
+                    <div class="widget-price text-center">
+                        <h4 class="price-h">Price</h4>
+                        <p class="price-p">
                             @if (Model.Price < 1)
                             {
                                 @:Free
@@ -150,7 +150,7 @@
                         </p>
                     </div>
                     <div class="text-center">
-                        <button class="btn btn-transparent mb-4 adoption-request-button w-100 " data-toggle="modal" data-target="#adoptionRequestModal">
+                        <button class="btn mb-4 adoption-request-button w-100 " data-toggle="modal" data-target="#adoptionRequestModal">
                             Request Adoption
                         </button>
                     </div>
