@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
@@ -341,7 +342,7 @@ public class PetService : IPetService
 
     public async Task<IEnumerable<Pet>> GetFilteredPetsAsync(string? speciesName, string? breedName)
     {
-        var petsQuery = await _petRepository.GetAllPetsWithRelatedEntities();
+        var petsQuery = _petRepository.QueryAllPetsWithRelatedEntities();
 
         if (!string.IsNullOrEmpty(speciesName))
         {
@@ -353,7 +354,6 @@ public class PetService : IPetService
             petsQuery = petsQuery.Where(p => p.Breed.Name == breedName);
         }
 
-        var filteredPets = petsQuery.ToList();
-        return filteredPets;
+        return await petsQuery.ToListAsync();
     }
 }
