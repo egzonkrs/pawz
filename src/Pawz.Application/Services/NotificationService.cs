@@ -90,7 +90,8 @@ public class NotificationService : INotificationService
 
             if (!result)
             {
-                return Result<NotificationResponse>.Failure("Failed to create/update notification");
+                _logger.LogError("Error creating notification");
+                return Result<NotificationResponse>.Failure(NotificationErrors.CreationFailed);
             }
 
             var response = _mapper.Map<NotificationResponse>(existingNotification ?? notification);
@@ -101,8 +102,8 @@ public class NotificationService : INotificationService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error creating/updating notification");
-            return Result<NotificationResponse>.Failure("An unexpected error occurred");
+            _logger.LogError(ex, "An unexpected Error occured during notification creation");
+            return Result<NotificationResponse>.Failure(NotificationErrors.UnexpectedError);
         }
     }
 
@@ -119,7 +120,8 @@ public class NotificationService : INotificationService
             var notification = await _notificationRepository.GetNotificationByIdAsync(notificationId, cancellationToken);
             if (notification == null || notification.RecipientId != userId)
             {
-                return Result<NotificationResponse>.Failure("Notification not found or does not belong to the user");
+                _logger.LogError("Notification with ID: {notificationId} not found", notificationId);
+                return Result<NotificationResponse>.Failure(NotificationErrors.NotFound(notificationId));
             }
 
             var response = _mapper.Map<NotificationResponse>(notification);
@@ -128,7 +130,7 @@ public class NotificationService : INotificationService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error retrieving notification");
-            return Result<NotificationResponse>.Failure("An unexpected error occurred");
+            return Result<NotificationResponse>.Failure(NotificationErrors.UnexpectedError);
         }
     }
 
@@ -150,8 +152,8 @@ public class NotificationService : INotificationService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving notifications for user");
-            return Result<List<NotificationResponse>>.Failure("An unexpected error occurred");
+            _logger.LogError(ex, "An unexpected error occurred");
+            return Result<List<NotificationResponse>>.Failure(NotificationErrors.UnexpectedError);
         }
     }
 
@@ -165,14 +167,11 @@ public class NotificationService : INotificationService
     {
         try
         {
-            _logger.LogInformation($"Attempting to mark notification as read. ID: {id}");
-
             var notification = await _notificationRepository.GetNotificationByIdAsync(id, cancellationToken);
             if (notification == null)
             {
-                _logger.LogWarning($"Notification not found. ID: {id}");
-
-                return Result<bool>.Failure("Notification not found");
+                _logger.LogError("Notification with ID {id} not found", id);
+                return Result<bool>.Failure(NotificationErrors.NotFound(id));
             }
 
             notification.IsRead = true;
@@ -181,19 +180,18 @@ public class NotificationService : INotificationService
 
             if (!result)
             {
-                _logger.LogWarning($"Failed to mark notification as read. ID: {id}");
-
-                return Result<bool>.Failure("Failed to mark notification as read");
+                _logger.LogError("Failed to mark as read notification with ID: {id}", id);
+                return Result<bool>.Failure(NotificationErrors.FailedToMarkAsRead);
             }
-            _logger.LogInformation($"Successfully marked notification as read. ID: {id}");
+            _logger.LogInformation("Successfully marked as read notification with ID: {id}", id);
 
             var response = _mapper.Map<NotificationResponse>(notification);
             return Result<bool>.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error marking notification as read");
-            return Result<bool>.Failure("An unexpected error occurred");
+            _logger.LogError(ex, "An unexpected error occurred");
+            return Result<bool>.Failure(NotificationErrors.UnexpectedError);
         }
     }
 
@@ -208,16 +206,19 @@ public class NotificationService : INotificationService
         try
         {
             var notification = await _notificationRepository.GetNotificationByIdAsync(id, cancellationToken);
+
             if (notification == null)
             {
-                return Result<bool>.Failure("Notification not found");
+                return Result<bool>.Failure(NotificationErrors.NotFound(id));
             }
 
             await _notificationRepository.DeleteAsync(notification, cancellationToken);
+
             var result = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
             if (!result)
             {
+                _logger.LogError("Notification with ID {id} not found", id);
                 return Result<bool>.Failure("Failed to delete notification");
             }
 
@@ -225,8 +226,8 @@ public class NotificationService : INotificationService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error deleting notification");
-            return Result<bool>.Failure("An unexpected error occurred");
+            _logger.LogError(ex, "An unexpected error occurred");
+            return Result<bool>.Failure(NotificationErrors.UnexpectedError);
         }
     }
 }
