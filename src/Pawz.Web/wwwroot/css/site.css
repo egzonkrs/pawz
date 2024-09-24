@@ -180,3 +180,27 @@
     margin-right: 20px; 
 }
 
+/* Adoption Request Modal */
+.modal-dialog {
+    max-width: 80%; 
+}
+.span-required{
+    color: red;
+}
+
+.form-label-site {
+    color: #18191a;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.radio-inline{
+font-size: 25px;
+
+}
+
+.radio-style{
+    width:20px;
+    height:20px;
+}
+
