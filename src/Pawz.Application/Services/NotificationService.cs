@@ -14,8 +14,8 @@ namespace Pawz.Application.Services;
 
 /// <summary>
 /// Provides functionality for managing notifications, including creating, updating, retrieving,
-/// marking as read, and deleting notifications. This service interacts with the repository layer 
-/// and uses unit of work to ensure data consistency. Additionally, it handles real-time notification 
+/// marking as read, and deleting notifications. This service interacts with the repository layer
+/// and uses unit of work to ensure data consistency. Additionally, it handles real-time notification
 /// sending when necessary.
 /// </summary>
 public class NotificationService : INotificationService
@@ -65,7 +65,8 @@ public class NotificationService : INotificationService
                 SenderId = request.SenderId,
                 RecipientId = request.RecipientId,
                 PetId = request.PetId,
-                Type = request.Type
+                Type = request.Type,
+                Message = request.Message
             };
 
             var existingNotification = await _notificationRepository.GetExistingNotificationAsync(notification, cancellationToken);
@@ -79,12 +80,10 @@ public class NotificationService : INotificationService
                 existingNotification.Type = request.Type;
                 await _notificationRepository.UpdateAsync(existingNotification, cancellationToken);
             }
-            else
-            {
-                notification.CreatedAt = DateTime.UtcNow;
-                notification.IsRead = false;
-                await _notificationRepository.InsertAsync(notification, cancellationToken);
-            }
+
+            notification.CreatedAt = DateTime.UtcNow;
+            notification.IsRead = false;
+            await _notificationRepository.InsertAsync(notification, cancellationToken);
 
             var result = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 

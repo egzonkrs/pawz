@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
+using Pawz.Application.Models.NotificationModels;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
@@ -22,6 +23,8 @@ public class AdoptionRequestService : IAdoptionRequestService
     private readonly IMapper _mapper;
     private readonly ILocationService _locationService;
     private readonly IUserAccessor _userAccessor;
+    private readonly INotificationService _notificationService;
+    private readonly IPetRepository _petRepository;
 
     public AdoptionRequestService(
         IAdoptionRequestRepository adoptionRequestRepository,
@@ -29,14 +32,18 @@ public class AdoptionRequestService : IAdoptionRequestService
         ILogger<AdoptionService> logger,
         IMapper mapper,
         ILocationService locationService,
+        INotificationService notificationService,
+        IPetRepository petRepository,
         IUserAccessor userAccessor)
     {
+        _notificationService = notificationService;
         _adoptionRequestRepository = adoptionRequestRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
         _mapper = mapper;
         _locationService = locationService;
         _userAccessor = userAccessor;
+        _petRepository = petRepository;
     }
 
     public async Task<Result<bool>> CreateAdoptionRequestAsync(AdoptionRequestCreateRequest adoptionRequestCreateRequest, CancellationToken cancellationToken)
@@ -76,7 +83,37 @@ public class AdoptionRequestService : IAdoptionRequestService
             {
                 _logger.LogInformation("Created an Adoption Request with Id: {AdoptionRequestId} for UserId: {UserId}", adoptionRequest.Id,
                     adoptionRequest.RequesterUserId);
-                return Result<bool>.Success();
+
+                var pet = await _petRepository.GetByIdAsync(adoptionRequestCreateRequest.PetId, cancellationToken);
+                if (pet == null)
+                {
+                    _logger.LogError("Pet with Id: {PetId} not found", adoptionRequestCreateRequest.PetId);
+                    return Result<bool>.Failure(PetErrors.RetrievalError);
+                }
+
+                var recipientId = pet.PostedByUserId;
+
+                var firstName = _userAccessor.GetUserFirstName();
+                var lastName = _userAccessor.GetUserLastName();
+
+                var notificationRequest = new NotificationRequest
+                {
+                    SenderId = _userAccessor.GetUserId(),
+                    RecipientId = recipientId,
+                    PetId = adoptionRequestCreateRequest.PetId,
+                    Type = NotificationType.AdoptionRequest,
+                    Message = $"{firstName} {lastName} has made an adoption request for {adoptionRequest.Pet.Name}."
+                };
+
+                var notificationResult = await _notificationService.CreateNotificationAsync(notificationRequest, cancellationToken);
+
+                if (notificationResult.IsSuccess)
+                {
+                    return Result<bool>.Success();
+                }
+
+                _logger.LogWarning("Failed to create notification for Adoption Request with Id: {AdoptionRequestId}", adoptionRequest.Id);
+                return Result<bool>.Failure(NotificationErrors.CreationFailed);
             }
 
             _logger.LogWarning("Failed to create an Adoption Request with Id: {AdoptionRequestId} from UserId: {UserId}", adoptionRequest.Id,
@@ -224,5 +261,4 @@ public class AdoptionRequestService : IAdoptionRequestService
             return Result<List<AdoptionRequestResponse>>.Failure(AdoptionRequestErrors.RetrievalError);
         }
     }
-
 }

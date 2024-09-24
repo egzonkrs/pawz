@@ -26,22 +26,27 @@ public class AdoptionRequestCreateRequest
     public int PetId { get; set; }
 
     /// <summary>
-    /// The Id of the location 
+    /// The Id of the location
     /// </summary>
     public int LocationId { get; set; }
 
     /// <summary>
-    /// The Id of the city 
+    /// The Id of the city
     /// </summary>
     public int CityId { get; set; }
 
     /// <summary>
-    /// The address 
+    /// The ID of the pet owner (recipient of the notification).
+    /// </summary>
+    public string OwnerId { get; set; }
+
+    /// <summary>
+    /// The address
     /// </summary>
     public string Address { get; set; }
 
     /// <summary>
-    /// The postal code of the location 
+    /// The postal code of the location
     /// </summary>
     public string PostalCode { get; set; }
 
