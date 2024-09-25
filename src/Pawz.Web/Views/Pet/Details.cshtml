@@ -150,9 +150,18 @@
                         </p>
                     </div>
                     <div class="text-center">
-                        <button class="btn mb-4 adoption-request-button w-100 " data-toggle="modal" data-target="#adoptionRequestModal">
-                            Request Adoption
-                        </button>
+                        @if (UserAccessor.IsUserAuthenticated())
+                        {
+                            <button class="btn mb-4 adoption-request-button w-100" data-toggle="modal" data-target="#adoptionRequestModal">
+                                Request Adoption
+                            </button>
+                        }
+                        else
+                        {
+                            <a asp-controller="Users" asp-action="Register"  class="btn btn-primary mb-4 adoption-request-button w-100">
+                                Request Adoption
+                            </a>
+                        }
                     </div>
                 </div>
             </div>
