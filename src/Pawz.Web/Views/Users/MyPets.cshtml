@@ -1,6 +1,7 @@
-@model IEnumerable<Pawz.Application.Models.Pet.UserPetResponse>
+@using Pawz.Web.Models.User
+@model MyPetsViewModel<Pawz.Application.Models.Pet.UserPetResponse>
 
-@if (Model == null || !Model.Any())
+@if (Model == null)
 {
     <p>
         You haven't created any pets yet. Click
@@ -20,8 +21,8 @@ else
                 <th class="text-center">Action</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var pet in Model)
+        <tbody id="petsTableBody">
+            @foreach (var pet in Model.Pets)
             {
                 <tr>
                     <td class="product-thumb">
@@ -89,6 +90,37 @@ else
         </tbody>
     </table>
 
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @if (Model.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="#" data-page="@(Model.CurrentPage - 1)" data-cursor="" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="#" data-page="@i" data-cursor="@(i == Model.CurrentPage ? Model.NextCursor : "")">@i</a>
+                </li>
+            }
+
+            @if (Model.CurrentPage < Model.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="#" data-page="@(Model.CurrentPage + 1)" data-cursor="@Model.NextCursor" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+
+    @* <!-- Modali per Delete --> *@
     <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -119,3 +151,56 @@ else
         };
     }
 </script>
+
+<script>
+    $(document).ready(function () {
+        var cursors = {};
+        cursors['1'] = ''; 
+        cursors['@Model.CurrentPage'] = '@Model.NextCursor';
+
+        function updatePagination(result) {
+            $('#petsTableBody').html($(result).find('#petsTableBody').html());
+            $('.pagination').replaceWith($(result).find('.pagination'));
+
+            $('.pagination .page-link').each(function () {
+                var page = $(this).data('page');
+                var cursor = $(this).data('cursor');
+                if (cursor) {
+                    cursors[page] = cursor;
+                }
+            });
+
+            attachPaginationHandlers();
+        }
+
+        function attachPaginationHandlers() {
+            $('.pagination .page-link').off('click').click(function (e) {
+                e.preventDefault();
+                var targetPage = $(this).data('page');
+                var currentPage = parseInt($('.pagination .active').text());
+                var pageSize = @Model.PageSize;
+                var cursor = '';
+
+                if (targetPage > currentPage) {
+                    cursor = cursors[currentPage] || '';
+                } else if (targetPage < currentPage) {
+                    cursor = cursors[targetPage - 1] || '';
+                }
+
+                $.ajax({
+                    url: '@Url.Action("MyPets", "Users")',
+                    data: { page: targetPage, pageSize: pageSize, cursor: cursor },
+                    type: 'GET',
+                    success: updatePagination,
+                    error: function () {
+                        alert('Error loading pets. Please try again.');
+                    }
+                });
+            });
+        }
+
+        attachPaginationHandlers();
+    });
+</script>
+
+
