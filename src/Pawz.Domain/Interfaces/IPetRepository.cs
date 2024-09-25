@@ -50,4 +50,33 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A collection of pets associated with the specified user, along with the user's details.</returns>
     Task<IEnumerable<Pet>> GetPetsByUserIdWithUserDetailsAsync(string userId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Asynchronously retrieves a paginated list of pets for a specific user using cursor-based pagination.
+    /// </summary>
+    /// <param name="userId">The ID of the user whose pets are being retrieved.</param>
+    /// <param name="pageSize">The maximum number of pets to return per page.</param>
+    /// <param name="cursor">The cursor (pet ID) from which to start the next set of pets, or null for the first page.</param>
+    /// <param name="cancellationToken">A cancellation token to propagate notifications that the operation should be canceled.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains a tuple
+    /// with a collection of pets and the next cursor, which is the ID of the last pet 
+    /// in the list if more pets are available.
+    /// </returns>
+    Task<(IEnumerable<Pet> Pets, string NextCursor)> GetPetsByUserIdWithCursorPaginationAsync(
+    string userId, int pageSize, string cursor, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Asynchronously retrieves the total count of pets for a specific user.
+    /// </summary>
+    /// <param name="userId">The ID of the user whose pet count is being retrieved.</param>
+    /// <param name="cancellationToken">A cancellation token to propagate notifications that the operation should be canceled.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains the total
+    /// number of pets posted by the user.
+    /// </returns>
+    Task<int> GetTotalPetsCountForUserAsync(string userId, CancellationToken cancellationToken);
+
+
+
 }
