@@ -337,4 +337,65 @@ public class PetService : IPetService
             return Result<bool>.Failure(PetErrors.UpdateUnexpectedError);
         }
     }
+
+    /// <summary>
+    /// Asynchronously retrieves a paginated list of pets for the current user using cursor-based pagination.
+    /// </summary>
+    /// <param name="pageSize">The maximum number of pets to return per page.</param>
+    /// <param name="cursor">The cursor (pet ID) from which to start the next set of pets, or null for the first page.</param>
+    /// <param name="cancellationToken">A cancellation token to propagate notifications that the operation should be canceled.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains a <see cref="Result{T}"/> 
+    /// with a tuple of a collection of <see cref="UserPetResponse"/> and the next cursor string.
+    /// </returns>
+    public async Task<Result<(IEnumerable<UserPetResponse> Pets, string NextCursor)>> GetPetsByUserIdWithCursorPaginationAsync(
+        int pageSize, string cursor, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var userId = _userAccessor.GetUserId();
+            _logger.LogInformation("Started retrieving pets for UserId: {UserId} with cursor pagination", userId);
+
+            var (pets, nextCursor) = await _petRepository.GetPetsByUserIdWithCursorPaginationAsync(
+                userId, pageSize, cursor, cancellationToken);
+
+            var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
+
+            _logger.LogInformation("Successfully retrieved pets for UserId: {UserId} with cursor pagination", userId);
+            return Result<(IEnumerable<UserPetResponse>, string)>.Success((petResponses, nextCursor));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while retrieving pets for UserId: {UserId} with cursor pagination",
+                             _userAccessor.GetUserId());
+            return Result<(IEnumerable<UserPetResponse>, string)>.Failure(PetErrors.RetrievalError);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously retrieves the total count of pets for the current user.
+    /// </summary>
+    /// <param name="cancellationToken">A cancellation token to propagate notifications that the operation should be canceled.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains a <see cref="Result{T}"/> 
+    /// indicating the total number of pets posted by the user.
+    /// </returns>
+    public async Task<Result<int>> GetTotalPetsCountForUserAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            var userId = _userAccessor.GetUserId();
+            _logger.LogInformation("Getting total pet count for user: {UserId}", userId);
+
+            var count = await _petRepository.GetTotalPetsCountForUserAsync(userId, cancellationToken);
+
+            _logger.LogInformation("Total pet count for user {UserId}: {Count}", userId, count);
+            return Result<int>.Success(count);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting total pet count for user");
+            return Result<int>.Failure("Failed to get total pet count");
+        }
+    }
 }
