@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models.Identity;
 using Pawz.Application.Models.Pet;
-using Pawz.Application.Models.Identity;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models;
-using System.Collections.Generic;
+using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -39,10 +39,9 @@ public class UsersController : Controller
     [HttpGet]
     public IActionResult EditProfileForm()
     {
-        return View(); 
+        return View();
     }
 
-    [HttpPost]
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {
@@ -117,15 +116,44 @@ public class UsersController : Controller
         return View();
     }
 
-    [HttpGet]
-    public async Task<IActionResult> MyPets(CancellationToken cancellationToken)
+    public async Task<IActionResult> MyPets(int page = 1, int pageSize = 4, string cursor = null, CancellationToken cancellationToken = default)
     {
-        var result = await _petService.GetPetsByUserIdAsync(cancellationToken);
+        var totalCountResult = await _petService.GetTotalPetsCountForUserAsync(cancellationToken);
+        if (!totalCountResult.IsSuccess)
+        {
+            return View("Error", totalCountResult.Errors);
+        }
 
-        var pets = result.Value;
+        var totalCount = totalCountResult.Value;
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
-        var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
-        return PartialView("MyPets", petResponses);
+        page = Math.Max(1, Math.Min(page, totalPages));
+
+        var result = await _petService.GetPetsByUserIdWithCursorPaginationAsync(pageSize, cursor, cancellationToken);
+        if (!result.IsSuccess)
+        {
+            return View("Error", result.Errors);
+        }
+
+        var (pets, nextCursor) = result.Value;
+
+        if (!pets.Any() && page > 1)
+        {
+            page = totalPages;
+            result = await _petService.GetPetsByUserIdWithCursorPaginationAsync(pageSize, null, cancellationToken);
+            (pets, nextCursor) = result.Value;
+        }
+
+        var viewModel = new MyPetsViewModel<UserPetResponse>
+        {
+            Pets = pets,
+            NextCursor = nextCursor,
+            CurrentPage = page,
+            TotalPages = totalPages,
+            PageSize = pageSize
+        };
+
+        return PartialView("MyPets", viewModel);
     }
 
     [HttpGet]
@@ -145,5 +173,4 @@ public class UsersController : Controller
     {
         return PartialView("MyAdoptions");
     }
-
 }
