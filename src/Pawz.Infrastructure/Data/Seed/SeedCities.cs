@@ -15,7 +15,7 @@ public class SeedCities
         {
             new City
             {
-                Name = "Pristina",
+                Name = "Prishtinë",
                 CountryId = 1,
                 IsDeleted = false,
                 DeletedAt = null
@@ -29,14 +29,14 @@ public class SeedCities
             },
             new City
             {
-                Name = "Mitrovica",
+                Name = "Mitrovicë",
                 CountryId = 1,
                 IsDeleted = false,
                 DeletedAt = null
             },
             new City
             {
-                Name = "Peja",
+                Name = "Pejë",
                 CountryId = 1,
                 IsDeleted = false,
                 DeletedAt = null
@@ -50,28 +50,35 @@ public class SeedCities
             },
             new City
             {
-                Name = "Tirana",
+                Name = "Vushtrri",
+                CountryId = 1,
+                IsDeleted = false,
+                DeletedAt = null
+            },
+            new City
+            {
+                Name = "Tiranë",
                 CountryId = 2,
                 IsDeleted = false,
                 DeletedAt = null
             },
             new City
             {
-                Name = "Durres",
+                Name = "Durrës",
                 CountryId = 2,
                 IsDeleted = false,
                 DeletedAt = null
             },
             new City
             {
-                Name = "Shkoder",
+                Name = "Shkodër",
                 CountryId = 2,
                 IsDeleted = false,
                 DeletedAt = null
             },
             new City
             {
-                Name = "Vlora",
+                Name = "Vlorë",
                 CountryId = 2,
                 IsDeleted = false,
                 DeletedAt = null

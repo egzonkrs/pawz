@@ -199,7 +199,7 @@ public class PetController : Controller
         petCreateViewModel.Countries = new SelectList(countriesList, "Id", "Name");
         petCreateViewModel.Cities = new SelectList(citiesList, "Id", "Name");
 
-        return RedirectToAction("Create", "Pet");
+        return RedirectToAction("Details", "Pet", new { id = petCreateResult.Value });
     }
 
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
@@ -235,7 +235,7 @@ public class PetController : Controller
     public async Task<IActionResult> Edit(Pet pet, CancellationToken cancellationToken)
     {
         await _petService.UpdatePetAsync(pet, cancellationToken);
-        return RedirectToAction("Profile","Users");
+        return RedirectToAction("Profile", "Users");
     }
 
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
@@ -260,7 +260,7 @@ public class PetController : Controller
             result.AddErrorsToModelState(ModelState);
             return View();
         }
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction("Profile", "Users");
     }
 
 }
