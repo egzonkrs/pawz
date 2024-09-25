@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models.NotificationModels;
 using Pawz.Web.Models.NotificationModels;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Pawz.Web.Controllers;
@@ -72,5 +73,18 @@ public class NotificationController : Controller
         }
 
         return BadRequest(new { success = false, message = result.Errors });
+    }
+
+    public async Task<IActionResult> DeleteNotification(int id, CancellationToken cancellationToken)
+    {
+        var result = await _notificationService.DeleteNotificationAsync(id, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            TempData["ErrorMessage"] = "An unexpected error occurred while trying to delete the notification.";
+            return RedirectToAction("Error");
+        }
+
+        return RedirectToAction("NotificationsList");
     }
 }

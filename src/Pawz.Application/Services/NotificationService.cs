@@ -7,6 +7,7 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -144,14 +145,23 @@ public class NotificationService : INotificationService
         try
         {
             var notifications = await _notificationRepository.GetNotificationsForUserAsync(userId, cancellationToken);
-            var response = _mapper.Map<List<NotificationResponse>>(notifications);
+
+            if (notifications is null || !notifications.Any())
+            {
+                return Result<List<NotificationResponse>>.Failure("No notifications found.");
+            }
+
+            var sortedNotifications = notifications.OrderByDescending(n => n.CreatedAt).ToList();
+
+            var response = _mapper.Map<List<NotificationResponse>>(sortedNotifications);
+
             _logger.LogInformation("Mapped notifications: {@Notifications}", response);
 
             return Result<List<NotificationResponse>>.Success(response);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An unexpected error occurred");
+            _logger.LogError(ex, "An unexpected error occurred while fetching notifications for user with Id: {UserId}", userId);
             return Result<List<NotificationResponse>>.Failure(NotificationErrors.UnexpectedError);
         }
     }
@@ -167,29 +177,26 @@ public class NotificationService : INotificationService
         try
         {
             var notification = await _notificationRepository.GetNotificationByIdAsync(id, cancellationToken);
-            if (notification == null)
+            if (notification is null)
             {
-                _logger.LogError("Notification with ID {id} not found", id);
+                _logger.LogError("Notification with ID {Id} not found", id);
                 return Result<bool>.Failure(NotificationErrors.NotFound(id));
             }
 
             notification.IsRead = true;
             await _notificationRepository.UpdateAsync(notification, cancellationToken);
-            var result = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
-            if (!result)
+            if (await _unitOfWork.SaveChangesAsync(cancellationToken) > 0)
             {
-                _logger.LogError("Failed to mark as read notification with ID: {id}", id);
-                return Result<bool>.Failure(NotificationErrors.FailedToMarkAsRead);
+                return Result<bool>.Success(true);
             }
-            _logger.LogInformation("Successfully marked as read notification with ID: {id}", id);
 
-            var response = _mapper.Map<NotificationResponse>(notification);
-            return Result<bool>.Success();
+            _logger.LogError("Failed to mark notification with ID {Id} as read", id);
+            return Result<bool>.Failure(NotificationErrors.FailedToMarkAsRead);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An unexpected error occurred");
+            _logger.LogError(ex, "An unexpected error occurred while marking notification with ID {Id} as read", id);
             return Result<bool>.Failure(NotificationErrors.UnexpectedError);
         }
     }
