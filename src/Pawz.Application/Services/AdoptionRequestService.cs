@@ -353,6 +353,14 @@ public class AdoptionRequestService : IAdoptionRequestService
     {
         try
         {
+            userId = _userAccessor.GetUserId();
+
+            if (userId is null)
+            {
+                _logger.LogError("User with ID: {userId} doesn't exists", userId);
+                return Result<bool>.Failure(UsersErrors.NotFound(userId));
+            }
+
             var exists = await _adoptionRequestRepository.ExistsByUserIdAndPetIdAsync(userId, petId, cancellationToken);
             return Result<bool>.Success(exists);
         }

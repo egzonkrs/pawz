@@ -9,7 +9,6 @@ using Pawz.Web.Extensions;
 using Pawz.Web.Models.Breed;
 using Pawz.Web.Models.City;
 using Pawz.Web.Models.Pet;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -63,52 +62,38 @@ public class PetController : Controller
     [HttpGet("pet/details/{id:int}")]
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {
-        try
+        var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
+        var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
+        var countriesList = countriesResult.Value ?? new List<Country>();
+        var citiesList = citiesResult.Value ?? new List<City>();
+
+        var result = await _petService.GetPetByIdAsync(id, cancellationToken);
+
+        if (!result.IsSuccess || result.Value == null)
         {
-            var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
-            var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
-            var countriesList = countriesResult.Value ?? new List<Country>();
-            var citiesList = citiesResult.Value ?? new List<City>();
-
-            var result = await _petService.GetPetByIdAsync(id, cancellationToken);
-
-            if (!result.IsSuccess || result.Value == null)
-            {
-                return NotFound();
-            }
-
-            var petViewModel = _mapper.Map<PetViewModel>(result.Value);
-
-            var userId = _userAccessor.GetUserId();
-            var hasExistingRequest = false;
-
-            if (!string.IsNullOrEmpty(userId))
-            {
-                var requestResult = await _adoptionRequestService.HasUserMadeRequestForPetAsync(userId, id, cancellationToken);
-                hasExistingRequest = requestResult.IsSuccess && requestResult.Value;
-            }
-
-            petViewModel.AdoptionRequestCreateModel = new AdoptionRequestCreateModel
-            {
-                PetId = id,
-                Countries = new SelectList(countriesList, "Id", "Name"),
-                Cities = new SelectList(citiesList, "Id", "Name"),
-                AllCities = citiesList.Select(x => new CityViewModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    CountryId = x.CountryId,
-                }).ToList()
-            };
-
-            petViewModel.HasExistingAdoptionRequest = hasExistingRequest;
-
-            return View(petViewModel);
+            return NotFound();
         }
-        catch (Exception)
+
+        var petViewModel = _mapper.Map<PetViewModel>(result.Value);
+
+        petViewModel.AdoptionRequestCreateModel = new AdoptionRequestCreateModel
         {
-            return View("An error occurred while retrieving details for pet");
-        }
+            PetId = id,
+            Countries = new SelectList(countriesList, "Id", "Name"),
+            Cities = new SelectList(citiesList, "Id", "Name"),
+            AllCities = citiesList.Select(x => new CityViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                CountryId = x.CountryId,
+            }).ToList()
+        };
+
+        string userId = _userAccessor.GetUserId();
+        var requestResult = await _adoptionRequestService.HasUserMadeRequestForPetAsync(userId, id, cancellationToken);
+
+        petViewModel.HasExistingAdoptionRequest = requestResult.IsSuccess && requestResult.Value;
+        return View(petViewModel);
     }
 
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
