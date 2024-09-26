@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
+using Pawz.Application.Models.Pagination;
 using Pawz.Application.Models.Pet;
 using Pawz.Application.Models.PetModels;
 using Pawz.Domain.Common;
@@ -348,28 +349,34 @@ public class PetService : IPetService
     /// A task that represents the asynchronous operation. The task result contains a <see cref="Result{T}"/> 
     /// with a tuple of a collection of <see cref="UserPetResponse"/> and the next cursor string.
     /// </returns>
-    public async Task<Result<(IEnumerable<UserPetResponse> Pets, int TotalCount)>> GetPetsByUserIdWithPaginationAsync(
-    int page, int pageSize, CancellationToken cancellationToken)
+    public async Task<Result<PaginatedUserPetsResponse>> GetPaginatedPetsForUserAsync(int page, int pageSize, CancellationToken cancellationToken)
     {
         try
         {
             var userId = _userAccessor.GetUserId();
-
-            var (pets, totalCount) = await _petRepository.GetPetsByUserIdWithPaginationAsync(
-                userId, page, pageSize, cancellationToken);
+            var (pets, totalCount) = await _petRepository.GetPetsByUserIdWithPaginationAsync(userId, page, pageSize, cancellationToken);
 
             var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
-            _logger.LogInformation("Successfully retrieved pets for UserId: {UserId} with pagination", userId);
-            return Result<(IEnumerable<UserPetResponse>, int)>.Success((petResponses, totalCount));
+            var paginatedResponse = new PaginatedUserPetsResponse
+            {
+                Pets = petResponses,
+                TotalCount = totalCount,
+                CurrentPage = page,
+                TotalPages = totalPages,
+                PageSize = pageSize
+            };
+
+            return Result<PaginatedUserPetsResponse>.Success(paginatedResponse);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while retrieving pets for UserId: {UserId} with pagination",
-                             _userAccessor.GetUserId());
-            return Result<(IEnumerable<UserPetResponse>, int)>.Failure(PetErrors.RetrievalError);
+            _logger.LogError(ex, "An error occurred while retrieving paginated pets for UserId: {UserId}", _userAccessor.GetUserId());
+            return Result<PaginatedUserPetsResponse>.Failure(PetErrors.RetrievalError);
         }
     }
+
 
     /// <summary>
     /// Asynchronously retrieves the total count of pets for the current user.
