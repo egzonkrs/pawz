@@ -8,6 +8,7 @@ using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
 using Pawz.Domain.Interfaces;
+using Pawz.Domain.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -273,7 +274,21 @@ public class PetService : IPetService
         {
             _logger.LogInformation("Started retrieving all pets with related entities.");
 
-            var pets = await _petRepository.GetAllPetsWithRelatedEntities(cancellationToken);
+            // for testing only...
+            var specParams = new QueryParameters
+            {
+                Filters = new Dictionary<string, string>()
+                {
+                    { "breed", "persian" },
+                    // { "species", "asdasd" }
+                },
+                Sort = "name",
+                SearchTerm = "bub"
+            };
+
+            var spec = new PetSpecification(specParams);
+
+            var pets = await _petRepository.GetPetsWithSpecification(spec, cancellationToken);
 
             if (pets is null)
             {

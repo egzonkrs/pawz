@@ -1,4 +1,5 @@
 using Pawz.Domain.Entities;
+using Pawz.Domain.Specifications;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,13 +8,13 @@ namespace Pawz.Domain.Interfaces;
 
 public interface IPetRepository : IGenericRepository<Pet, int>
 {
-
     /// <summary>
     /// Retrieves all pets along with their related entities, including images, breed, species, user, and location.
     /// </summary>
+    /// <param name="petSpecification">The <see cref="PetSpecification"/>.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A collection of all pets with their related entities.</returns>
-    Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
+    Task<IEnumerable<Pet>> GetPetsWithSpecification(PetSpecification petSpecification, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Counts the total number of pets available in the database.
@@ -37,10 +38,10 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     /// <param name="id">The unique identifier of the Pet to retrieve.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
     /// <returns>
-    /// A task representing the asynchronous operation, containing the Pet entity with all related entities included, 
+    /// A task representing the asynchronous operation, containing the Pet entity with all related entities included,
     /// or null if no pet with the specified ID is found.
     /// </returns>
-    Task<Pet> GetPetByIdWithRelatedEntitiesAsync(int id, CancellationToken cancellationToken = default);
+    Task<Pet?> GetPetByIdWithRelatedEntitiesAsync(int id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieves all pets associated with a specific user by their unique user ID, including the details of the user.

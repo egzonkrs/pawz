@@ -33,4 +33,8 @@
   <ItemGroup>
     <Folder Include="wwwroot\images\users\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\images\pets\46f975c9-31c3-47e8-8d2f-8e789b8da65d.JPG" />
+  </ItemGroup>
 </Project>

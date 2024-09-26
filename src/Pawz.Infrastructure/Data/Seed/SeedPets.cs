@@ -141,7 +141,7 @@ public class SeedPets
             },
             new Pet
             {
-                Name = "Simba",
+                Name = "Simba bub",
                 BreedId = 4, // Persian
                 AgeYears = "3-4 Years",
                 About = "Luna is an endearing boy whose charming personality and delightful quirks make him an irresistible companion. If you're looking for a friend who exudes warmth and love, Robert could be your purr-fect match.",
@@ -167,7 +167,7 @@ public class SeedPets
             },
             new Pet
             {
-                Name = "Donny",
+                Name = "Donny bub",
                 BreedId = 2, // Labrador Retriever
                 AgeYears = "2-4 Years",
                 About = "Donny is so good with other dogs and knows how to appropriately correct boisterous dogs without causing injury and has been very useful in training sessions and has positive experiences during social time.",
@@ -180,7 +180,7 @@ public class SeedPets
             },
             new Pet
             {
-                Name = "Nala",
+                Name = "Nala bub",
                 BreedId = 3, // German Shepard
                 AgeYears = "1-2 Years",
                 About = "Nala is a sweet and gentle girl who is blossoming into a confident and loving companion. She has a tender heart and an eagerness to learn, making her an ideal addition to a family that can provide her with the patience.",
@@ -193,7 +193,7 @@ public class SeedPets
             },
             new Pet
             {
-                Name = "Dylan",
+                Name = "Dylan bub",
                 BreedId = 1, // Golden Retriver
                 AgeYears = "2-4 Years",
                 About = "Dylan is an energetic and affectionate young boy looking for a loving home. He loves playing games, loving companion and would be suited to an active family with older kids who will include him on all their adventures.",
@@ -206,7 +206,7 @@ public class SeedPets
             },
             new Pet
             {
-                Name = "Mia",
+                Name = "Miabub",
                 BreedId = 5, // Siamese
                 AgeYears = "2-3 Years",
                 About = "Mia is an endearing boy whose charming personality and delightful quirks make him an irresistible companion. If you're looking for a friend who exudes warmth and love, Robert could be your purr-fect match.",
