@@ -19,6 +19,8 @@ public class SpecificationEvaluator<TEntity, TKey> where TEntity : class, IEntit
 
         query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
 
+        query = spec.IncludeStrings.Aggregate(query, (current, include) => include(current));
+
         return query;
     }
 }

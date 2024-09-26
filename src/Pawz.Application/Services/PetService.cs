@@ -8,6 +8,7 @@ using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
 using Pawz.Domain.Interfaces;
+using Pawz.Domain.Specifications.PetSpecifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,7 +58,6 @@ public class PetService : IPetService
         try
         {
             petCreateRequest.PostedByUserId = _userAccessor.GetUserId();
-            _logger.LogInformation("Started creating a Pet with Id: {PetId} from UserId: {UserId}", petCreateRequest.Id, petCreateRequest.PostedByUserId);
 
             var location = new Location
             {
@@ -117,7 +117,6 @@ public class PetService : IPetService
                 return Result<int>.Failure(PetErrors.CreationFailed);
             }
 
-            _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
             return Result<int>.Success(pet.Id);
         }
         catch (Exception ex)
@@ -136,11 +135,8 @@ public class PetService : IPetService
     {
         try
         {
-            _logger.LogInformation("Started retrieving all pets.");
-
             var pets = await _petRepository.GetAllAsync(cancellationToken);
 
-            _logger.LogInformation("Successfully retrieved all pets.");
             return Result<IEnumerable<Pet>>.Success(pets);
         }
         catch (Exception ex)
@@ -161,8 +157,6 @@ public class PetService : IPetService
     {
         try
         {
-            _logger.LogInformation("Started retrieving Pet with Id: {PetId}", petId);
-
             var pet = await _petRepository.GetPetByIdWithRelatedEntitiesAsync(petId, cancellationToken);
 
             if (pet is null)
@@ -173,7 +167,6 @@ public class PetService : IPetService
 
             var petResponse = _mapper.Map<PetResponse>(pet);
 
-            _logger.LogInformation("Successfully retrieved Pet with Id: {PetId}", petId);
             return Result<PetResponse>.Success(petResponse);
         }
         catch (Exception ex)
@@ -195,8 +188,6 @@ public class PetService : IPetService
     {
         try
         {
-            _logger.LogInformation("Started deleting Pet with Id: {PetId}", petId);
-
             var pet = await _petRepository.GetByIdAsync(petId, cancellationToken);
             if (pet is null)
             {
@@ -218,7 +209,6 @@ public class PetService : IPetService
 
             if (petDeleted)
             {
-                _logger.LogInformation("Successfully soft-deleted Pet with Id: {PetId}", petId);
                 return Result<bool>.Success();
             }
 
@@ -244,19 +234,16 @@ public class PetService : IPetService
         try
         {
             userId = _userAccessor.GetUserId();
-            _logger.LogInformation("Started retrieving pets for UserId: {UserId}", userId);
 
             var pets = await _petRepository.GetByUserIdAsync(userId, cancellationToken);
 
             if (pets is null || !pets.Any())
             {
-                _logger.LogWarning("No pets found for UserId: {UserId}", userId);
                 return Result<IEnumerable<UserPetResponse>>.Failure(PetErrors.NoPetsFoundForUser(userId));
             }
 
             var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
 
-            _logger.LogInformation("Successfully retrieved pets for UserId: {UserId}", userId);
             return Result<IEnumerable<UserPetResponse>>.Success(petResponses);
         }
         catch (Exception ex)
@@ -271,19 +258,17 @@ public class PetService : IPetService
     {
         try
         {
-            _logger.LogInformation("Started retrieving all pets with related entities.");
+            var spec = new PetsWithAllRelatedEntitiesSpecification();
 
-            var pets = await _petRepository.GetAllPetsWithRelatedEntities(cancellationToken);
+            var pets = await _petRepository.GetAllPetsWithRelatedEntitiesAsync(spec, cancellationToken);
 
             if (pets is null)
             {
-                _logger.LogWarning("No pets were found with related entities.");
                 return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
             }
 
             var petResponses = _mapper.Map<IEnumerable<PetResponse>>(pets);
 
-            _logger.LogInformation("Successfully retrieved all pets with related entities.");
             return Result<IEnumerable<PetResponse>>.Success(petResponses);
         }
         catch (Exception ex)
@@ -298,7 +283,6 @@ public class PetService : IPetService
         try
         {
             var userId = _userAccessor.GetUserId();
-            _logger.LogInformation("Started updating Pet with Id: {PetId} from UserId: {UserId}", pet.Id, userId);
 
             var existingPet = await _petRepository.GetPetByIdWithRelatedEntitiesAsync(pet.Id, cancellationToken);
             if (existingPet == null)
@@ -310,7 +294,7 @@ public class PetService : IPetService
             if (existingPet.PostedByUserId != userId)
             {
                 _logger.LogWarning("UserId: {UserId} is not authorized to update Pet with Id: {PetId}", userId, pet.Id);
-                return Result<bool>.Failure(PetErrors.UpdateUnexpectedError);
+                return Result<bool>.Failure(UsersErrors.Unauthorized);
             }
 
             existingPet.Name = pet.Name;
@@ -323,7 +307,6 @@ public class PetService : IPetService
 
             if (petUpdated)
             {
-                _logger.LogInformation("Successfully updated Pet with Id: {PetId} from UserId: {UserId}", pet.Id, userId);
                 return Result<bool>.Success();
             }
 

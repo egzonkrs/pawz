@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
+using Pawz.Domain.Specifications;
 using Pawz.Infrastructure.Data;
 using System.Collections.Generic;
 using System.Threading;
@@ -18,24 +19,16 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     }
 
     /// <summary>
-    /// Asynchronously retrieves all pets from the database, including their related entities such as PetImages, Breed, Species, User, and Location.
-    /// This method ensures that the associated data is loaded together with the pets to avoid multiple queries or lazy loading issues.
+    /// Builds a query for retrieving all pets with their related entities based on the provided specification
+    /// and executes it asynchronously.
     /// </summary>
-    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-    /// <returns>An IEnumerable of Pet objects with their related entities fully loaded.</returns>
-    public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default)
+    /// <param name="spec">The specification defining criteria and includes for the query.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation, containing a list of pets with related entities.</returns>
+    public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(ISpecification<Pet> spec, CancellationToken cancellationToken = default)
     {
-        return await _dbSet
-            .AsSplitQuery()
-            .Include(p => p.PetImages)
-            .Include(p => p.Breed)
-            .ThenInclude(b => b.Species)
-            .Include(u => u.User)
-            .Include(l => l.Location)
-            .ThenInclude(l => l.City)
-            .ThenInclude(c => c.Country)
-            // .Include(ar => ar.AdoptionRequests)
-            .ToListAsync(cancellationToken);
+        var query = SpecificationEvaluator<Pet, int>.GetQuery(_dbSet.AsQueryable(), spec); // Assuming Pet has an int primary key
+        return await query.ToListAsync(cancellationToken);
     }
 
     /// <summary>

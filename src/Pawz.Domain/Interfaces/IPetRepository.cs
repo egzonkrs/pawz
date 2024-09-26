@@ -1,4 +1,5 @@
 using Pawz.Domain.Entities;
+using Pawz.Domain.Specifications;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -10,11 +11,13 @@ public interface IPetRepository : IGenericRepository<Pet, int>
 {
 
     /// <summary>
-    /// Retrieves all pets along with their related entities, including images, breed, species, user, and location.
+    /// Builds a query for retrieving all pets with their related entities based on the provided specification
+    /// and executes it asynchronously.
     /// </summary>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A collection of all pets with their related entities.</returns>
-    Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
+    /// <param name="spec">The specification defining criteria and includes for the query.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation, containing a list of pets with related entities.</returns>
+    Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(ISpecification<Pet> spec, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Counts the total number of pets available in the database.
