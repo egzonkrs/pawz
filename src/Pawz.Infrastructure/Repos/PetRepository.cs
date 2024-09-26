@@ -105,50 +105,35 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .ToListAsync(cancellationToken);
     }
 
-    /// <summary>
-    /// Retrieves a paginated list of pets posted by a specific user along with the total count of pets.
-    /// </summary>
-    /// <param name="userId">The ID of the user whose pets are to be retrieved.</param>
-    /// <param name="page">The current page number for pagination.</param>
-    /// <param name="pageSize">The number of pets to be returned per page.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>
-    /// A tuple containing:
-    /// 1. An IEnumerable of Pet entities representing the paginated list of pets.
-    /// 2. The total count of pets posted by the user.
-    /// </returns>
+
     public async Task<(IEnumerable<Pet> Pets, int TotalCount)> GetPetsByUserIdWithPaginationAsync(
-     string userId, int page, int pageSize, CancellationToken cancellationToken)
+        string userId, int page, int pageSize, CancellationToken cancellationToken)
     {
-        var query = _dbSet
+        var totalCount = await GetTotalPetsCountForUserAsync(userId, cancellationToken);
+        var pets = await GetPaginatedPetsQuery(userId, page, pageSize).ToListAsync(cancellationToken);
+
+        return (pets, totalCount);
+    }
+
+    public async Task<int> GetTotalPetsCountForUserAsync(string userId, CancellationToken cancellationToken)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Where(p => p.PostedByUserId == userId)
+            .CountAsync(cancellationToken);
+    }
+
+    private IQueryable<Pet> GetPaginatedPetsQuery(string userId, int page, int pageSize)
+    {
+        return _dbSet
             .AsNoTracking()
             .Where(pet => pet.PostedByUserId == userId)
             .Include(pet => pet.Location)
                 .ThenInclude(location => location.City)
             .Include(pet => pet.Breed)
             .Include(pet => pet.PetImages)
-            .OrderBy(pet => pet.Id);
-
-        var totalCount = await query.CountAsync(cancellationToken);
-
-        var pets = await query
+            .OrderByDescending(pet => pet.CreatedAt)
             .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
-
-        return (pets, totalCount);
-    }
-
-    /// <summary>
-    /// Gets the total count of pets for a specific user.
-    /// </summary>
-    /// <param name="userId">The ID of the user whose pet count is being retrieved.</param>
-    /// <param name="cancellationToken">Token to cancel the asynchronous operation.</param>
-    /// <returns>The total number of pets posted by the user.</returns>
-    public async Task<int> GetTotalPetsCountForUserAsync(string userId, CancellationToken cancellationToken)
-    {
-        return await _dbSet
-            .AsNoTracking()
-            .CountAsync(p => p.PostedByUserId == userId && !p.IsDeleted, cancellationToken);
+            .Take(pageSize);
     }
 }
