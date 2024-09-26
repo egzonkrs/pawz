@@ -106,18 +106,19 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     }
 
     /// <summary>
-    /// Retrieves a paginated list of pets for a user using cursor-based pagination.
+    /// Retrieves a paginated list of pets posted by a specific user along with the total count of pets.
     /// </summary>
-    /// <param name="userId">The ID of the user whose pets are being retrieved.</param>
-    /// <param name="pageSize">The maximum number of pets to return per page.</param>
-    /// <param name="cursor">The cursor (pet ID) from which to start the next set of pets, or null for the first page.</param>
-    /// <param name="cancellationToken">Token to cancel the asynchronous operation.</param>
+    /// <param name="userId">The ID of the user whose pets are to be retrieved.</param>
+    /// <param name="page">The current page number for pagination.</param>
+    /// <param name="pageSize">The number of pets to be returned per page.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>
-    /// A tuple containing a collection of pets and the next cursor, 
-    /// which is the ID of the last pet in the list if more pets are available.
+    /// A tuple containing:
+    /// 1. An IEnumerable of Pet entities representing the paginated list of pets.
+    /// 2. The total count of pets posted by the user.
     /// </returns>
-    public async Task<(IEnumerable<Pet> Pets, string NextCursor)> GetPetsByUserIdWithCursorPaginationAsync(
-                       string userId, int pageSize, string cursor, CancellationToken cancellationToken)
+    public async Task<(IEnumerable<Pet> Pets, int TotalCount)> GetPetsByUserIdWithPaginationAsync(
+     string userId, int page, int pageSize, CancellationToken cancellationToken)
     {
         var query = _dbSet
             .AsNoTracking()
@@ -128,24 +129,14 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .Include(pet => pet.PetImages)
             .OrderBy(pet => pet.Id);
 
-        if (!string.IsNullOrEmpty(cursor))
-        {
-            int cursorId = int.Parse(cursor);
-            query = (IOrderedQueryable<Pet>)query.Where(pet => pet.Id > cursorId);
-        }
+        var totalCount = await query.CountAsync(cancellationToken);
 
         var pets = await query
-            .Take(pageSize + 1)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync(cancellationToken);
 
-        string nextCursor = null;
-        if (pets.Count > pageSize)
-        {
-            nextCursor = pets.Last().Id.ToString();
-            pets = pets.Take(pageSize).ToList();
-        }
-
-        return (pets, nextCursor);
+        return (pets, totalCount);
     }
 
     /// <summary>
