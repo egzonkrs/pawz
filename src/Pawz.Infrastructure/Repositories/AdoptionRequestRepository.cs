@@ -78,11 +78,12 @@ public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>
     }
 
     /// <summary>
-    /// Checks if an adoption request exists for a specific user and pet combination.
+    /// Checks if an adoption request exists for a given user and pet in the database.
     /// </summary>
-    /// <param name="userId">The unique identifier of the user who made the adoption request.</param>
-    /// <param name="petId">The unique identifier of the pet for which the adoption request was made.</param>
+    /// <param name="userId">The ID of the user making the request.</param>
+    /// <param name="petId">The ID of the pet for which the request is being made.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
+    /// <returns>A task representing the asynchronous operation, containing a boolean indicating whether an adoption request exists.</returns>
     public async Task<bool> ExistsByUserIdAndPetIdAsync(string userId, int petId, CancellationToken cancellationToken)
     {
         return await _dbSet
