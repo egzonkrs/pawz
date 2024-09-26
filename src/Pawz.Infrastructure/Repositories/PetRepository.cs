@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 
-namespace Pawz.Infrastructure.Repos;
+namespace Pawz.Infrastructure.Repositories;
 
 public class PetRepository : GenericRepository<Pet, int>, IPetRepository
 {
@@ -44,7 +44,7 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     /// <param name="id">The unique identifier of the Pet to retrieve.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the asynchronous operation if needed.</param>
     /// <returns>
-    /// A task that represents the asynchronous operation. The task result contains the Pet entity with all related entities loaded, 
+    /// A task that represents the asynchronous operation. The task result contains the Pet entity with all related entities loaded,
     /// or null if no pet with the specified ID is found.
     /// </returns>
     public async Task<Pet> GetPetByIdWithRelatedEntitiesAsync(int id, CancellationToken cancellationToken = default)
@@ -57,7 +57,7 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .Include(p => p.Location)
                 .ThenInclude(p => p.City)
                     .ThenInclude(p => p.Country)
-            //TODO .Include(p => p.AdoptionRequests) 
+            //TODO .Include(p => p.AdoptionRequests)
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
