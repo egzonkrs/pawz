@@ -176,6 +176,11 @@
     height: 100px;
 }
 
+.user-avatar-image-70 {
+    width: 70px;
+    height: 70px;
+}
+
 .user-avatar-image-30 {
     width: 30px;
     height: 30px;
@@ -183,45 +188,49 @@
 }
 
 /* Pet Action Buttons */
-
-.pet-action-buttons.link-button {
-    background: none;
+.btn-action {
     border: none;
-    padding: 0;
-    margin: 0 2px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
+    padding: 0px;
+    border-radius: 50px;
+    height: 40px;
+    width: 40px;
 }
-
-.pet-action-buttons.link-button i {
+.btn-action:focus, btn-action:active{
+    outline: none;
+}
+.btn-edit {
+    background: transparent;
+    color: #f5dd2c;
+    border: 1px solid #f5dd2c;
     font-size: 18px;
-    width: 39px;
-    height: 39px;
-    line-height: 39px;
-    text-align: center;
-    color: #212121;
-    background-color: #D8D6D6;
-    border-radius: 50%;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.pet-action-buttons.link-button i:hover {
-    transform: scale(1.1);
+    margin-right: 5px;
+ }
+.btn-edit:hover {
+    background: #f5dd2c;
     color: white;
  }
-
-.pet-action-buttons.link-button.view-button i:hover {
-    background-color: #007bff;
+.btn-view {
+    background: transparent;
+    color: #5672f9;
+    border: 1px solid #5672f9;
+    font-size: 18px;
+    margin-right: 5px;
+}
+.btn-view:hover {
+    background: #5672f9;
+    color: #ededeb;
+ }
+.btn-delete {
+    background: transparent;
+    color: #a6194d;
+    border: 1px solid #a6194d;
+    font-size: 18px;
+    margin-right: 5px;
+}
+.btn-delete:hover {
+    background: #a6194d;
     color: white;
 }
-
-.pet-action-buttons.link-button.edit-button i:hover {
-    background-color: #ffc107;
-}
-
-.pet-action-buttons.link-button.delete-button i:hover {
-    background-color: red;
- }
    
 /* Adoption Request Modal */
 .radio-group label {
@@ -283,25 +292,33 @@ font-size: 25px;
 
 .btn-ar {
     border: none;
-    padding: 15px 20px;
-    border-radius: 4px;
-    font-size: 18px;
+    padding: 0px;
+    border-radius: 50px;
+    height: 40px;
+    width: 40px;
+}
+.btn-ar:focus, btn-ar:active {
+    outline: none;
 }
 .btn-ar-accept {
     background: transparent;
-    color: #16a663;
-    border: 2px solid #16a663;
+    color: #67a88a;
+    border: 1px solid #67a88a;
+    font-size: 17.5px;
+    margin-left:5px;
 }
 .btn-ar-reject {
     background: transparent;
-    color: #f56827;
-    border: 2px solid #f56827;
+    color: #a6194d;
+    border: 1px solid #a6194d;
+    font-size: 18px;
+    margin-right: 5px;
 }
 .btn-ar-accept:hover {
     background: #16a663;
     color:white;
 }
 .btn-ar-reject:hover {
-    background: #f56827;
+    background: #a6194d;
     color: white;
 }
