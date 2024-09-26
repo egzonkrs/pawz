@@ -155,4 +155,34 @@ public class AdoptionRequestController : Controller
 
         return View(viewModel);
     }
+
+    [HttpPost]
+    public async Task<IActionResult> AcceptAdoptionRequest(int adoptionRequestId, CancellationToken cancellationToken)
+    {
+        var result = await _adoptionRequestService.AcceptAdoptionRequestAsync(adoptionRequestId, cancellationToken);
+
+        if (result.IsSuccess)
+        {
+            TempData["SuccessMessage"] = "Adoption request successfully accepted.";
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        TempData["ErrorMessage"] = "Failed to accept the adoption request.";
+        return Redirect(Request.Headers["Referer"].ToString());
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> RejectAdoptionRequest(int adoptionRequestId, CancellationToken cancellationToken)
+    {
+        var result = await _adoptionRequestService.RejectAdoptionRequestAsync(adoptionRequestId, cancellationToken);
+
+        if (result.IsSuccess)
+        {
+            TempData["SuccessMessage"] = "Adoption request successfully rejected.";
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        TempData["ErrorMessage"] = "Failed to reject the adoption request.";
+        return Redirect(Request.Headers["Referer"].ToString());
+    }
 }

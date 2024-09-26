@@ -3,7 +3,7 @@ using Pawz.Infrastructure.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Pawz.Infrastructure.Repos;
+namespace Pawz.Infrastructure.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {

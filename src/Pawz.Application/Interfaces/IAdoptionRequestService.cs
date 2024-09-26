@@ -57,6 +57,27 @@ public interface IAdoptionRequestService
     Task<Result<List<AdoptionRequestResponse>>> GetAdoptionRequestsByPetIdAsync(int petId, CancellationToken cancellationToken);
 
     /// <summary>
+    /// Accepts a specific adoption request and automatically rejects all other pending requests for the same pet.
+    /// </summary>
+    /// <param name="adoptionRequestId">The ID of the adoption request to be accepted.</param>
+    /// <param name="cancellationToken">Token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// Returns a success result if the adoption request was successfully accepted and other requests were rejected.
+    /// Returns a failure result if the request was not found or an error occurred during the process.
+    /// </returns>
+    Task<Result<bool>> AcceptAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Rejects a specific adoption request by setting its status to "Rejected".
+    /// </summary>
+    /// <param name="adoptionRequestId">The ID of the adoption request to be rejected.</param>
+    /// <param name="cancellationToken">Token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// Returns a success result if the adoption request status was successfully set to "Rejected".
+    /// Returns a failure result if the request was not found or an error occurred during the update process.
+    /// </returns>
+    Task<Result<bool>> RejectAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken);
+    /// <summary>
     /// Checks if a user has already made an adoption request for a specific pet.
     /// </summary>
     /// <param name="userId">The unique identifier of the user.</param>
