@@ -116,11 +116,48 @@
     background: #4054b8;
  }
 
+.btn-request-submitted {
+    font-size: 30px !important;
+    width: 80px;
+    height: 70px !important;
+    padding: 58px 30px 58px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 5px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    background-color: #999999;
+    color: #e8e6e1;
+}
+
+.adoption-request-login {
+    font-size: 23px !important;
+    width: 80px;
+    height: 70px !important;
+    padding: 58px 30px 58px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 5px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    background: #5672f9;
+    color: white;
+}
+
+.adoption-request-login:hover {
+    color: white;
+    background: #4054b8;
+}
+
 .pet-thumbnail {
-    border-radius: 10px; 
-    padding: 5px; 
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
-    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .pet-thumbnail:hover {
