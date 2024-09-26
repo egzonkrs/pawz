@@ -79,7 +79,6 @@ public interface IPetService
     /// </returns>
     Task<Result<PaginatedUserPetsResponse>> GetPaginatedPetsForUserAsync(int page, int pageSize, CancellationToken cancellationToken);
 
-
     /// <summary>
     /// Asynchronously retrieves the total count of pets for the current user.
     /// </summary>

@@ -377,7 +377,6 @@ public class PetService : IPetService
         }
     }
 
-
     /// <summary>
     /// Asynchronously retrieves the total count of pets for the current user.
     /// </summary>

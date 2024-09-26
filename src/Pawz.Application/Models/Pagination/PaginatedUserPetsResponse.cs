@@ -2,6 +2,7 @@ using Pawz.Application.Models.Pet;
 using System.Collections.Generic;
 
 namespace Pawz.Application.Models.Pagination;
+
 public class PaginatedUserPetsResponse
 {
     /// <summary>
@@ -28,5 +29,4 @@ public class PaginatedUserPetsResponse
     /// The number of pets displayed per page.
     /// </summary>
     public int PageSize { get; set; }
-
 }

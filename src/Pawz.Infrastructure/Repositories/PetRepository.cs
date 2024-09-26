@@ -105,7 +105,14 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .ToListAsync(cancellationToken);
     }
 
-
+    /// <summary>
+    /// Retrieves a paginated list of pets posted by a specific user along with the total count of their pets.
+    /// </summary>
+    /// <param name="userId">The ID of the user to filter pets by.</param>
+    /// <param name="page">The current page number for pagination.</param>
+    /// <param name="pageSize">The number of pets to return per page.</param>
+    /// <param name="cancellationToken">A token to observe while waiting for the task to complete.</param>
+    /// <returns>A tuple containing the list of pets and the total count of pets posted by the user.</returns>
     public async Task<(IEnumerable<Pet> Pets, int TotalCount)> GetPetsByUserIdWithPaginationAsync(
         string userId, int page, int pageSize, CancellationToken cancellationToken)
     {
@@ -115,6 +122,12 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
         return (pets, totalCount);
     }
 
+    /// <summary>
+    /// Retrieves the total number of pets posted by a specific user.
+    /// </summary>
+    /// <param name="userId">The ID of the user to filter pets by.</param>
+    /// <param name="cancellationToken">A token to observe while waiting for the task to complete.</param>
+    /// <returns>The total number of pets posted by the user.</returns>
     public async Task<int> GetTotalPetsCountForUserAsync(string userId, CancellationToken cancellationToken)
     {
         return await _dbSet
@@ -123,6 +136,13 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .CountAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// Retrieves a paginated query for pets posted by a specific user.
+    /// </summary>
+    /// <param name="userId">The ID of the user to filter pets by.</param>
+    /// <param name="page">The current page number for pagination.</param>
+    /// <param name="pageSize">The number of pets to return per page.</param>
+    /// <returns>An <see cref="IQueryable{Pet}"/> representing the paginated query of pets.</returns>
     private IQueryable<Pet> GetPaginatedPetsQuery(string userId, int page, int pageSize)
     {
         return _dbSet
