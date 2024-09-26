@@ -230,7 +230,7 @@ public class AdoptionRequestService : IAdoptionRequestService
         try
         {
             var exists = await _adoptionRequestRepository.ExistsByUserIdAndPetIdAsync(userId, petId, cancellationToken);
-            return Result<bool>.Success();
+            return Result<bool>.Success(exists);
         }
         catch (Exception ex)
         {
