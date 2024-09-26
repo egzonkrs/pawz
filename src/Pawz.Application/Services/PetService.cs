@@ -354,7 +354,6 @@ public class PetService : IPetService
         try
         {
             var userId = _userAccessor.GetUserId();
-            _logger.LogInformation("Started retrieving pets for UserId: {UserId} with pagination", userId);
 
             var (pets, totalCount) = await _petRepository.GetPetsByUserIdWithPaginationAsync(
                 userId, page, pageSize, cancellationToken);
@@ -385,7 +384,6 @@ public class PetService : IPetService
         try
         {
             var userId = _userAccessor.GetUserId();
-            _logger.LogInformation("Getting total pet count for user: {UserId}", userId);
 
             var count = await _petRepository.GetTotalPetsCountForUserAsync(userId, cancellationToken);
 
