@@ -64,13 +64,5 @@ public interface IPetService
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
     /// <returns>A task representing the operation. The task result contains an <see cref="IEnumerable{Pet}"/> with all pets and their related entities, or an error if the operation fails.</returns>
     Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Retrieves a list of pets filtered by species and breed.
-    /// </summary>
-    /// <param name="speciesName">The name of the species to filter by. If null, no species filtering will be applied.</param>
-    /// <param name="breedName">The name of the breed to filter by. If null, no breed filtering will be applied.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains an <see cref="IEnumerable{T}"/> of <see cref="Pet"/> objects that match the specified filters.</returns>
-    Task<IEnumerable<Pet>> GetFilteredPetsAsync(string? speciesName, string? breedName);
 }
 

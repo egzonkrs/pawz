@@ -1,12 +1,10 @@
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
 using Pawz.Application.Models.Pet;
 using Pawz.Application.Models.PetModels;
 using Pawz.Domain.Common;
-using Pawz.Domain.Common.Specifications;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
 using Pawz.Domain.Interfaces;
@@ -338,14 +336,5 @@ public class PetService : IPetService
                 nameof(PetService), pet.Id, _userAccessor.GetUserId());
             return Result<bool>.Failure(PetErrors.UpdateUnexpectedError);
         }
-    }
-
-    public async Task<IEnumerable<Pet>> GetFilteredPetsAsync(string? speciesName, string? breedName)
-    {
-        var specification = new FilteredPetsSpecification(speciesName, breedName);
-
-        var filteredPets = await _petRepository.Query(specification).ToListAsync();
-
-        return filteredPets;
     }
 }
