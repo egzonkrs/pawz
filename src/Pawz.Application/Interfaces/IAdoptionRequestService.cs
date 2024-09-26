@@ -56,4 +56,14 @@ public interface IAdoptionRequestService
     /// <returns>A task representing the operation. The task result contains a collection of <see cref="AdoptionRequest"/> objects.</returns>
     Task<Result<List<AdoptionRequestResponse>>> GetAdoptionRequestsByPetIdAsync(int petId, CancellationToken cancellationToken);
 
+    /// <summary>
+    /// Checks if a user has already made an adoption request for a specific pet.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user.</param>
+    /// <param name="petId">The unique identifier of the pet.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation if necessary.</param>
+    /// <returns>
+    /// A Task representing the asynchronous operation. The task result is a Result<bool> where:
+    /// </returns>
+    Task<Result<bool>> HasUserMadeRequestForPetAsync(string userId, int petId, CancellationToken cancellationToken);
 }
