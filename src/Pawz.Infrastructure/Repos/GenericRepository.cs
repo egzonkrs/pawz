@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Pawz.Domain.Common.Specifications;
 using Pawz.Domain.Interfaces;
 using Pawz.Domain.Specifications;
 using Pawz.Infrastructure.Data;

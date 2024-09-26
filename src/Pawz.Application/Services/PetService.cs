@@ -6,6 +6,7 @@ using Pawz.Application.Models;
 using Pawz.Application.Models.Pet;
 using Pawz.Application.Models.PetModels;
 using Pawz.Domain.Common;
+using Pawz.Domain.Common.Specifications;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
 using Pawz.Domain.Interfaces;
@@ -341,18 +342,10 @@ public class PetService : IPetService
 
     public async Task<IEnumerable<Pet>> GetFilteredPetsAsync(string? speciesName, string? breedName)
     {
-        var petsQuery = _petRepository.QueryAllPetsWithRelatedEntities();
+        var specification = new FilteredPetsSpecification(speciesName, breedName);
 
-        if (!string.IsNullOrEmpty(speciesName))
-        {
-            petsQuery = petsQuery.Where(p => p.Breed.Species.Name == speciesName);
-        }
+        var filteredPets = await _petRepository.Query(specification).ToListAsync();
 
-        if (!string.IsNullOrEmpty(breedName))
-        {
-            petsQuery = petsQuery.Where(p => p.Breed.Name == breedName);
-        }
-
-        return await petsQuery.ToListAsync();
+        return filteredPets;
     }
 }
