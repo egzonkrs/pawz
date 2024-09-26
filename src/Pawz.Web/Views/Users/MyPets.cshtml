@@ -1,7 +1,7 @@
 @using Pawz.Web.Models.User
 @model MyPetsViewModel<Pawz.Application.Models.Pet.UserPetResponse>
 
-@if (Model == null)
+@if (Model == null || !Model.Pets.Any())
 {
     <p>
         You haven't created any pets yet. Click
