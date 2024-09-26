@@ -214,3 +214,30 @@ font-size: 25px;
     height:20px;
 }
 
+/* Notification Dropdwon List */
+#notification-dropdown .dropdown-menu {
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+#notification-list .dropdown-item {
+    white-space: normal;
+    word-wrap:break-word;
+}
+
+.notification-item {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s ease;
+}
+
+.notification-item.unread {
+   background-color: rgba(0, 0, 0, 0.2);
+
+}
+
+.notification-item:hover {
+   background-color: rgba(0, 0, 0, 0.1);
+}

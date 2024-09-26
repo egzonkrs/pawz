@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Pawz.Infrastructure.Repos;
+namespace Pawz.Infrastructure.Repositories;
 
 /// <summary>
 /// A repository for managing notifications in the database, inheriting from the generic repository.
