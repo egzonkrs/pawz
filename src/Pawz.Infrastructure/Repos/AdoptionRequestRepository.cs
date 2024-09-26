@@ -64,4 +64,16 @@ public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>
             .Where(ar => ar.RequesterUserId == userId)
             .ToListAsync(cancellationToken);
     }
+
+    /// <summary>
+    /// Checks if an adoption request exists for a specific user and pet combination.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user who made the adoption request.</param>
+    /// <param name="petId">The unique identifier of the pet for which the adoption request was made.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
+    public async Task<bool> ExistsByUserIdAndPetIdAsync(string userId, int petId, CancellationToken cancellationToken)
+    {
+        return await _dbSet
+            .AnyAsync(ar => ar.RequesterUserId == userId && ar.PetId == petId, cancellationToken);
+    }
 }
