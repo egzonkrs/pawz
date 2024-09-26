@@ -7,7 +7,6 @@ using Pawz.Application.Models.Pet;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -116,38 +115,22 @@ public class UsersController : Controller
         return View();
     }
 
-    public async Task<IActionResult> MyPets(int page = 1, int pageSize = 4, string cursor = null, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> MyPets(int page = 1, int pageSize = 5, CancellationToken cancellationToken = default)
     {
-        var totalCountResult = await _petService.GetTotalPetsCountForUserAsync(cancellationToken);
-        if (!totalCountResult.IsSuccess)
-        {
-            return View("Error", totalCountResult.Errors);
-        }
-
-        var totalCount = totalCountResult.Value;
-        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-
-        page = Math.Max(1, Math.Min(page, totalPages));
-
-        var result = await _petService.GetPetsByUserIdWithCursorPaginationAsync(pageSize, cursor, cancellationToken);
+        var result = await _petService.GetPetsByUserIdWithPaginationAsync(page, pageSize, cancellationToken);
         if (!result.IsSuccess)
         {
             return View("Error", result.Errors);
         }
 
-        var (pets, nextCursor) = result.Value;
+        var (pets, totalCount) = result.Value;
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
-        if (!pets.Any() && page > 1)
-        {
-            page = totalPages;
-            result = await _petService.GetPetsByUserIdWithCursorPaginationAsync(pageSize, null, cancellationToken);
-            (pets, nextCursor) = result.Value;
-        }
+        page = Math.Max(1, Math.Min(page, totalPages));
 
         var viewModel = new MyPetsViewModel<UserPetResponse>
         {
             Pets = pets,
-            NextCursor = nextCursor,
             CurrentPage = page,
             TotalPages = totalPages,
             PageSize = pageSize
