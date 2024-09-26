@@ -1,4 +1,5 @@
 using Pawz.Application.Models;
+using Pawz.Application.Models.Pagination;
 using Pawz.Application.Models.Pet;
 using Pawz.Application.Models.PetModels;
 using Pawz.Domain.Common;
@@ -76,8 +77,8 @@ public interface IPetService
     /// 1. A tuple with an IEnumerable of UserPetResponse representing the paginated list of pets.
     /// 2. The total count of pets.
     /// </returns>
-    Task<Result<(IEnumerable<UserPetResponse> Pets, int TotalCount)>> GetPetsByUserIdWithPaginationAsync(
-    int page, int pageSize, CancellationToken cancellationToken);
+    Task<Result<PaginatedUserPetsResponse>> GetPaginatedPetsForUserAsync(int page, int pageSize, CancellationToken cancellationToken);
+
 
     /// <summary>
     /// Asynchronously retrieves the total count of pets for the current user.
