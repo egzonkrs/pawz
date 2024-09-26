@@ -118,7 +118,7 @@ public class UsersController : Controller
     public async Task<IActionResult> MyPets(int page = 1, int pageSize = 5, CancellationToken cancellationToken = default)
     {
         var result = await _petService.GetPetsByUserIdWithPaginationAsync(page, pageSize, cancellationToken);
-        if (!result.IsSuccess)
+        if (result.IsSuccess is false)
         {
             return View("Error", result.Errors);
         }
@@ -128,7 +128,7 @@ public class UsersController : Controller
 
         page = Math.Max(1, Math.Min(page, totalPages));
 
-        var viewModel = new MyPetsViewModel<UserPetResponse>
+        var myPetsViewModel = new MyPetsViewModel<UserPetResponse>
         {
             Pets = pets,
             CurrentPage = page,
@@ -136,7 +136,7 @@ public class UsersController : Controller
             PageSize = pageSize
         };
 
-        return PartialView("MyPets", viewModel);
+        return PartialView("MyPets", myPetsViewModel);
     }
 
     [HttpGet]
