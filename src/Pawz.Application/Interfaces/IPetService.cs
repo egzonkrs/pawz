@@ -66,17 +66,18 @@ public interface IPetService
     Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Asynchronously retrieves a paginated list of pets for the current user using cursor-based pagination.
+    /// Retrieves a paginated list of pets for the current user along with the total count of pets.
     /// </summary>
-    /// <param name="pageSize">The maximum number of pets to return per page.</param>
-    /// <param name="cursor">The cursor (pet ID) from which to start the next set of pets, or null for the first page.</param>
-    /// <param name="cancellationToken">A cancellation token to propagate notifications that the operation should be canceled.</param>
+    /// <param name="page">The current page number for pagination.</param>
+    /// <param name="pageSize">The number of pets to be returned per page.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>
-    /// A task that represents the asynchronous operation. The task result contains a <see cref="Result{T}"/> 
-    /// with a tuple of a collection of <see cref="UserPetResponse"/> and the next cursor string.
+    /// A Result containing:
+    /// 1. A tuple with an IEnumerable of UserPetResponse representing the paginated list of pets.
+    /// 2. The total count of pets.
     /// </returns>
-    Task<Result<(IEnumerable<UserPetResponse> Pets, string NextCursor)>> GetPetsByUserIdWithCursorPaginationAsync(
-    int pageSize, string cursor, CancellationToken cancellationToken);
+    Task<Result<(IEnumerable<UserPetResponse> Pets, int TotalCount)>> GetPetsByUserIdWithPaginationAsync(
+    int page, int pageSize, CancellationToken cancellationToken);
 
     /// <summary>
     /// Asynchronously retrieves the total count of pets for the current user.
