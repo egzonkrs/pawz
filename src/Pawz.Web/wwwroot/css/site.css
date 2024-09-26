@@ -278,3 +278,30 @@ font-size: 25px;
 .notification-item:hover {
    background-color: rgba(0, 0, 0, 0.1);
 }
+
+/* Accept / Reject Adoption Request Buttons*/
+
+.btn-ar {
+    border: none;
+    padding: 15px 20px;
+    border-radius: 4px;
+    font-size: 18px;
+}
+.btn-ar-accept {
+    background: transparent;
+    color: #16a663;
+    border: 2px solid #16a663;
+}
+.btn-ar-reject {
+    background: transparent;
+    color: #f56827;
+    border: 2px solid #f56827;
+}
+.btn-ar-accept:hover {
+    background: #16a663;
+    color:white;
+}
+.btn-ar-reject:hover {
+    background: #f56827;
+    color: white;
+}
