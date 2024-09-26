@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Pawz.Domain.Common.Specifications;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 

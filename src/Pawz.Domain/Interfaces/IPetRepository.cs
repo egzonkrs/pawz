@@ -17,17 +17,6 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Constructs an IQueryable query for retrieving pets with their related entities,
-    /// including PetImages, Breed, Species, User, Location, City, and Country.
-    /// Utilizes AsSplitQuery to optimize query performance with multiple Includes.
-    /// The query is not executed and can be further filtered before execution.
-    /// </summary>
-    /// <returns>
-    /// An IQueryable of Pet entities with related data for further filtering and execution.
-    /// </returns>
-    IQueryable<Pet> QueryAllPetsWithRelatedEntities();
-
-    /// <summary>
     /// Counts the total number of pets available in the database.
     /// </summary>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>

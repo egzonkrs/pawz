@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Pawz.Domain.Common.Specifications;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
@@ -36,28 +37,6 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .ThenInclude(c => c.Country)
             // .Include(ar => ar.AdoptionRequests)
             .ToListAsync(cancellationToken);
-    }
-
-    /// <summary>
-    /// Constructs an IQueryable query for retrieving pets with their related entities,
-    /// including PetImages, Breed, Species, User, Location, City, and Country.
-    /// Utilizes AsSplitQuery to optimize query performance with multiple Includes.
-    /// The query is not executed and can be further filtered before execution.
-    /// </summary>
-    /// <returns>
-    /// An IQueryable of Pet entities with related data for further filtering and execution.
-    /// </returns>
-    public IQueryable<Pet> QueryAllPetsWithRelatedEntities()
-    {
-        return _dbSet
-            .AsSplitQuery()
-            .Include(p => p.PetImages)
-            .Include(p => p.Breed)
-            .ThenInclude(b => b.Species)
-            .Include(u => u.User)
-            .Include(l => l.Location)
-            .ThenInclude(l => l.City)
-            .ThenInclude(c => c.Country);
     }
 
     /// <summary>
@@ -128,4 +107,24 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .ToListAsync(cancellationToken);
     }
 
+    public IQueryable<TEntity> GetQuery(ISpecification<TEntity> specification)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (specification.IsSplitQuery)
+        {
+            query = query.AsSplitQuery();
+        }
+
+        if (specification.Criteria != null)
+        {
+            query = query.Where(specification.Criteria);
+        }
+
+        query = specification.Includes.Aggregate(query, (current, include) => current.Include(include));
+
+        query = specification.IncludeStrings.Aggregate(query, (current, include) => current.Include(include));
+
+        return query;
+    }
 }
