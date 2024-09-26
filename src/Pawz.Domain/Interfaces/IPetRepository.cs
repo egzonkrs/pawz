@@ -52,19 +52,19 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     Task<IEnumerable<Pet>> GetPetsByUserIdWithUserDetailsAsync(string userId, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Asynchronously retrieves a paginated list of pets for a specific user using cursor-based pagination.
+    /// Retrieves a paginated list of pets for a specific user along with the total count of pets.
     /// </summary>
     /// <param name="userId">The ID of the user whose pets are being retrieved.</param>
-    /// <param name="pageSize">The maximum number of pets to return per page.</param>
-    /// <param name="cursor">The cursor (pet ID) from which to start the next set of pets, or null for the first page.</param>
-    /// <param name="cancellationToken">A cancellation token to propagate notifications that the operation should be canceled.</param>
+    /// <param name="page">The current page number for pagination.</param>
+    /// <param name="pageSize">The number of pets to return per page.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>
-    /// A task that represents the asynchronous operation. The task result contains a tuple
-    /// with a collection of pets and the next cursor, which is the ID of the last pet 
-    /// in the list if more pets are available.
+    /// A Task that represents the asynchronous operation. The result contains:
+    /// 1. An IEnumerable of Pet objects representing the pets on the current page.
+    /// 2. The total count of pets belonging to the user.
     /// </returns>
-    Task<(IEnumerable<Pet> Pets, string NextCursor)> GetPetsByUserIdWithCursorPaginationAsync(
-    string userId, int pageSize, string cursor, CancellationToken cancellationToken);
+    Task<(IEnumerable<Pet> Pets, int TotalCount)> GetPetsByUserIdWithPaginationAsync(
+     string userId, int page, int pageSize, CancellationToken cancellationToken);
 
     /// <summary>
     /// Asynchronously retrieves the total count of pets for a specific user.
