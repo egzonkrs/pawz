@@ -118,6 +118,7 @@ public class UsersController : Controller
     public async Task<IActionResult> MyPets(int page = 1, int pageSize = 5, CancellationToken cancellationToken = default)
     {
         var result = await _petService.GetPetsByUserIdWithPaginationAsync(page, pageSize, cancellationToken);
+
         if (result.IsSuccess is false)
         {
             return View("Error", result.Errors);

@@ -7,7 +7,6 @@ namespace Pawz.Domain.Interfaces;
 
 public interface IPetRepository : IGenericRepository<Pet, int>
 {
-
     /// <summary>
     /// Retrieves all pets along with their related entities, including images, breed, species, user, and location.
     /// </summary>
@@ -76,7 +75,4 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     /// number of pets posted by the user.
     /// </returns>
     Task<int> GetTotalPetsCountForUserAsync(string userId, CancellationToken cancellationToken);
-
-
-
 }

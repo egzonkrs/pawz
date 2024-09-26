@@ -88,6 +88,5 @@ public interface IPetService
     /// indicating the total number of pets posted by the user.
     /// </returns>
     Task<Result<int>> GetTotalPetsCountForUserAsync(CancellationToken cancellationToken);
-
 }
 
