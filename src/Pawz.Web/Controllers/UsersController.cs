@@ -6,7 +6,6 @@ using Pawz.Application.Models.Identity;
 using Pawz.Application.Models.Pet;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -117,24 +116,20 @@ public class UsersController : Controller
 
     public async Task<IActionResult> MyPets(int page = 1, int pageSize = 5, CancellationToken cancellationToken = default)
     {
-        var result = await _petService.GetPetsByUserIdWithPaginationAsync(page, pageSize, cancellationToken);
+        var result = await _petService.GetPaginatedPetsForUserAsync(page, pageSize, cancellationToken);
 
         if (result.IsSuccess is false)
         {
             return View("Error", result.Errors);
         }
 
-        var (pets, totalCount) = result.Value;
-        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-
-        page = Math.Max(1, Math.Min(page, totalPages));
-
+        var paginatedResponse = result.Value;
         var myPetsViewModel = new MyPetsViewModel<UserPetResponse>
         {
-            Pets = pets,
-            CurrentPage = page,
-            TotalPages = totalPages,
-            PageSize = pageSize
+            Pets = paginatedResponse.Pets,
+            CurrentPage = paginatedResponse.CurrentPage,
+            TotalPages = paginatedResponse.TotalPages,
+            PageSize = paginatedResponse.PageSize
         };
 
         return PartialView("MyPets", myPetsViewModel);
