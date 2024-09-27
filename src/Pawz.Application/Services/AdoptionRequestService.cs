@@ -349,12 +349,11 @@ public class AdoptionRequestService : IAdoptionRequestService
             return Result<bool>.Failure(AdoptionRequestErrors.UpdateUnexpectedError);
         }
     }
-    public async Task<Result<bool>> HasUserMadeRequestForPetAsync(string userId, int petId, CancellationToken cancellationToken)
+    public async Task<Result<bool>> HasUserMadeRequestForPetAsync(int petId, CancellationToken cancellationToken)
     {
+        string userId = _userAccessor.GetUserId();
         try
         {
-            userId = _userAccessor.GetUserId();
-
             if (userId is null)
             {
                 _logger.LogError("User with ID: {userId} doesn't exists", userId);

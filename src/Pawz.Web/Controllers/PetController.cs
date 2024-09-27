@@ -89,8 +89,7 @@ public class PetController : Controller
             }).ToList()
         };
 
-        string userId = _userAccessor.GetUserId();
-        var requestResult = await _adoptionRequestService.HasUserMadeRequestForPetAsync(userId, id, cancellationToken);
+        var requestResult = await _adoptionRequestService.HasUserMadeRequestForPetAsync(id, cancellationToken);
 
         petViewModel.HasExistingAdoptionRequest = requestResult.IsSuccess && requestResult.Value;
         return View(petViewModel);

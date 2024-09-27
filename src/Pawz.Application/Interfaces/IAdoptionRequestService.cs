@@ -86,5 +86,5 @@ public interface IAdoptionRequestService
     /// <returns>
     /// A Task representing the asynchronous operation. The task result is a Result<bool> where:
     /// </returns>
-    Task<Result<bool>> HasUserMadeRequestForPetAsync(string userId, int petId, CancellationToken cancellationToken);
+    Task<Result<bool>> HasUserMadeRequestForPetAsync(int petId, CancellationToken cancellationToken);
 }
