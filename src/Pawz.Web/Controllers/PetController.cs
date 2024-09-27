@@ -69,8 +69,6 @@ public class PetController : Controller
         return View(petViewModels);
     }
 
-
-
     [HttpGet("pet/details/{id:int}")]
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {

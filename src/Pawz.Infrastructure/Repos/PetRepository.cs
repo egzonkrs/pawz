@@ -19,9 +19,10 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(PetFilterQueryParams filterParams = null,
+        CancellationToken cancellationToken = default)
     {
-        var spec = new PetsWithAllRelatedEntitiesSpecification();
+        var spec = new PetsWithAllRelatedEntitiesSpecification(filterParams);
         return await ListAsync(spec, cancellationToken);
     }
 

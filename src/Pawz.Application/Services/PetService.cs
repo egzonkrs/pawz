@@ -254,11 +254,12 @@ public class PetService : IPetService
         }
     }
 
-    public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default)
+    public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(PetFilterQueryParams filterParams = null,
+        CancellationToken cancellationToken = default)
     {
         try
         {
-            var pets = await _petRepository.GetAllPetsWithRelatedEntitiesAsync(cancellationToken);
+            var pets = await _petRepository.GetAllPetsWithRelatedEntitiesAsync(filterParams, cancellationToken);
 
             if (pets is null || !pets.Any())
             {
@@ -271,11 +272,11 @@ public class PetService : IPetService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets with related entities.", nameof(PetService));
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets with related entities.",
+                nameof(PetService));
             return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
-
 
     public async Task<Result<bool>> UpdatePetAsync(Pet pet, CancellationToken cancellationToken)
     {

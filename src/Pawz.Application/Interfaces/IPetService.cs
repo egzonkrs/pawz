@@ -3,6 +3,7 @@ using Pawz.Application.Models.Pet;
 using Pawz.Application.Models.PetModels;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Specifications.PetSpecifications;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,10 +60,14 @@ public interface IPetService
     Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(CancellationToken cancellationToken);
 
     /// <summary>
-    /// Retrieves all pets along with their associated related entities.
+    /// Retrieves all pets along with their associated related entities, with optional filtering based on breed and species.
     /// </summary>
+    /// <param name="filterParams">Optional filtering parameters for breed and species. If null, all pets are returned.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
-    /// <returns>A task representing the operation. The task result contains an <see cref="IEnumerable{Pet}"/> with all pets and their related entities, or an error if the operation fails.</returns>
-    Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
+    /// <returns>A task representing the operation. The task result contains a <see cref="Result{T}"/> with an <see cref="IEnumerable{PetResponse}"/>
+    /// of pets and their related entities, or an error if the operation fails.</returns>
+    Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(PetFilterQueryParams filterParams = null,
+        CancellationToken cancellationToken = default);
+
 }
 
