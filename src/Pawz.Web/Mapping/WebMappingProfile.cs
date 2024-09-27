@@ -30,8 +30,7 @@ public class WebMappingProfile : Profile
 
         CreateMap<PetCreateViewModel, PetCreateRequest>().ReverseMap();
 
-        CreateMap<Pet, PetViewModel>().ForMember(dest => dest.PetImages, opt => opt.MapFrom(src => src.PetImages))
-            .ReverseMap();; //I've added this temporarily to solve an automapper issue for now
+        CreateMap<Pet, PetViewModel>().ReverseMap();; //I've added this temporarily to solve an automapper issue for now
 
         CreateMap<BreedResponse, BreedViewModel>().ReverseMap();
         CreateMap<BreedRequest, BreedViewModel>().ReverseMap();
