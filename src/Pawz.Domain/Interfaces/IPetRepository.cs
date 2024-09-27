@@ -9,15 +9,7 @@ namespace Pawz.Domain.Interfaces;
 
 public interface IPetRepository : IGenericRepository<Pet, int>
 {
-
-    /// <summary>
-    /// Builds a query for retrieving all pets with their related entities based on the provided specification
-    /// and executes it asynchronously.
-    /// </summary>
-    /// <param name="spec">The specification defining criteria and includes for the query.</param>
-    /// <param name="cancellationToken">Token to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation, containing a list of pets with related entities.</returns>
-    Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(ISpecification<Pet> spec, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Counts the total number of pets available in the database.

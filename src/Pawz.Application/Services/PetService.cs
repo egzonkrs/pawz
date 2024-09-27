@@ -258,11 +258,9 @@ public class PetService : IPetService
     {
         try
         {
-            var spec = new PetsWithAllRelatedEntitiesSpecification();
+            var pets = await _petRepository.GetAllPetsWithRelatedEntitiesAsync(cancellationToken);
 
-            var pets = await _petRepository.GetAllPetsWithRelatedEntitiesAsync(spec, cancellationToken);
-
-            if (pets is null)
+            if (pets is null || !pets.Any())
             {
                 return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
             }
@@ -277,6 +275,7 @@ public class PetService : IPetService
             return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
+
 
     public async Task<Result<bool>> UpdatePetAsync(Pet pet, CancellationToken cancellationToken)
     {

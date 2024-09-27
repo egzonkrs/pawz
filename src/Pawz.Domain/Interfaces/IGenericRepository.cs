@@ -12,6 +12,8 @@ namespace Pawz.Domain.Interfaces;
 /// <typeparam name="TKey">The key of the entity that we're modifying the data.</typeparam>
 public interface IGenericRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>
 {
+    Task<IEnumerable<TEntity>> ListAsync(ISpecification<TEntity> spec, CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Retrieves an entity by its primary key.
     /// </summary>

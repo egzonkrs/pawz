@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
 using Pawz.Domain.Specifications;
+using Pawz.Domain.Specifications.PetSpecifications;
 using Pawz.Infrastructure.Data;
 using System.Collections.Generic;
 using System.Threading;
@@ -18,17 +19,10 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
         _context = context;
     }
 
-    /// <summary>
-    /// Builds a query for retrieving all pets with their related entities based on the provided specification
-    /// and executes it asynchronously.
-    /// </summary>
-    /// <param name="spec">The specification defining criteria and includes for the query.</param>
-    /// <param name="cancellationToken">Token to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation, containing a list of pets with related entities.</returns>
-    public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(ISpecification<Pet> spec, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default)
     {
-        var query = SpecificationEvaluator<Pet, int>.GetQuery(_dbSet.AsQueryable(), spec); // Assuming Pet has an int primary key
-        return await query.ToListAsync(cancellationToken);
+        var spec = new PetsWithAllRelatedEntitiesSpecification();
+        return await ListAsync(spec, cancellationToken);
     }
 
     /// <summary>

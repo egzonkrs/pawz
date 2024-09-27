@@ -20,6 +20,12 @@ public abstract class GenericRepository<TEntity, TKey> : IGenericRepository<TEnt
         _dbSet = _dbContext.Set<TEntity>();
     }
 
+    public async Task<IEnumerable<TEntity>> ListAsync(ISpecification<TEntity> spec, CancellationToken cancellationToken = default)
+    {
+        var query = SpecificationEvaluator<TEntity, TKey>.GetQuery(_dbSet.AsQueryable(), spec);
+        return await query.ToListAsync(cancellationToken);
+    }
+
     /// <summary>
     /// Retrieves an entity by its Id.
     /// </summary>
