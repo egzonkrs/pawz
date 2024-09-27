@@ -1,4 +1,3 @@
-using Pawz.Domain.Specifications;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,8 +11,6 @@ namespace Pawz.Domain.Interfaces;
 /// <typeparam name="TKey">The key of the entity that we're modifying the data.</typeparam>
 public interface IGenericRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>
 {
-    Task<IEnumerable<TEntity>> ListAsync(ISpecification<TEntity> spec, CancellationToken cancellationToken = default);
-
     /// <summary>
     /// Retrieves an entity by its primary key.
     /// </summary>
@@ -46,21 +43,4 @@ public interface IGenericRepository<TEntity, TKey> where TEntity : class, IEntit
     /// <param name="entity">The entity to update.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Retrieves a single entity that matches the given specification.
-    /// </summary>
-    /// <typeparam name="TEntity">The type of the entity.</typeparam>
-    /// <param name="spec">The specification used to filter the entity.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the entity that matches the specification.</returns>
-    Task<TEntity> GetEntityWithSpec(ISpecification<TEntity> spec);
-
-    /// <summary>
-    /// Retrieves a read-only list of entities that match the given specification.
-    /// </summary>
-    /// <typeparam name="TEntity">The type of the entities.</typeparam>
-    /// <param name="spec">The specification used to filter the entities.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains a read-only list of entities that match the specification.</returns>
-    Task<IReadOnlyList<TEntity>> ListAsync(ISpecification<TEntity> spec);
-
 }

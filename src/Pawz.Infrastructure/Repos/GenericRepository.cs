@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Pawz.Domain.Interfaces;
-using Pawz.Domain.Specifications;
 using Pawz.Infrastructure.Data;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,12 +16,6 @@ public abstract class GenericRepository<TEntity, TKey> : IGenericRepository<TEnt
     {
         _dbContext = context;
         _dbSet = _dbContext.Set<TEntity>();
-    }
-
-    public async Task<IEnumerable<TEntity>> ListAsync(ISpecification<TEntity> spec, CancellationToken cancellationToken = default)
-    {
-        var query = SpecificationEvaluator<TEntity, TKey>.GetQuery(_dbSet.AsQueryable(), spec);
-        return await query.ToListAsync(cancellationToken);
     }
 
     /// <summary>
@@ -79,20 +71,5 @@ public abstract class GenericRepository<TEntity, TKey> : IGenericRepository<TEnt
     public Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(_dbSet.Update(entity));
-    }
-
-    public async Task<TEntity> GetEntityWithSpec(ISpecification<TEntity> spec)
-    {
-        return await ApplySpecification(spec).FirstOrDefaultAsync();
-    }
-
-    public async Task<IReadOnlyList<TEntity>> ListAsync(ISpecification<TEntity> spec)
-    {
-        return await ApplySpecification(spec).ToListAsync();
-    }
-
-    private IQueryable<TEntity> ApplySpecification(ISpecification<TEntity> spec)
-    {
-        return SpecificationEvaluator<TEntity, TKey>.GetQuery(_dbSet.AsQueryable(), spec);
     }
 }

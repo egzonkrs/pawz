@@ -8,7 +8,6 @@ using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
 using Pawz.Domain.Interfaces;
-using Pawz.Domain.Specifications.PetSpecifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -254,12 +253,11 @@ public class PetService : IPetService
         }
     }
 
-    public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(PetFilterQueryParams filterParams = null,
-        CancellationToken cancellationToken = default)
+    public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default)
     {
         try
         {
-            var pets = await _petRepository.GetAllPetsWithRelatedEntitiesAsync(filterParams, cancellationToken);
+            var pets = await _petRepository.GetAllPetsWithRelatedEntitiesAsync(cancellationToken);
 
             if (pets is null || !pets.Any())
             {
@@ -318,6 +316,28 @@ public class PetService : IPetService
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to update Pet with Id: {PetId} for UserId: {UserId}",
                 nameof(PetService), pet.Id, _userAccessor.GetUserId());
             return Result<bool>.Failure(PetErrors.UpdateUnexpectedError);
+        }
+    }
+
+    public async Task<Result<IEnumerable<PetResponse>>> GetFilteredPetsAsync(string? breedName, string? speciesName, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var pets = await _petRepository.GetFilteredPetsAsync(breedName, speciesName, cancellationToken);
+
+            if (pets == null || !pets.Any())
+            {
+                return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
+            }
+
+            var petResponses = _mapper.Map<IEnumerable<PetResponse>>(pets);
+
+            return Result<IEnumerable<PetResponse>>.Success(petResponses);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve filtered pets.", nameof(PetService));
+            return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
 }

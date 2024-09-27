@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
-using Pawz.Domain.Specifications;
-using Pawz.Domain.Specifications.PetSpecifications;
 using Pawz.Infrastructure.Data;
 using System.Collections.Generic;
 using System.Threading;
@@ -19,11 +17,46 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(PetFilterQueryParams filterParams = null,
-        CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Pet>> GetFilteredPetsAsync(string? breedName, string? speciesName, CancellationToken cancellationToken = default)
     {
-        var spec = new PetsWithAllRelatedEntitiesSpecification(filterParams);
-        return await ListAsync(spec, cancellationToken);
+        IQueryable<Pet> query = _dbSet
+            .AsSplitQuery()
+            .Include(p => p.PetImages)
+            .Include(p => p.Breed)
+            .ThenInclude(b => b.Species)
+            .Include(p => p.User)
+            .Include(p => p.Location)
+            .ThenInclude(l => l.City)
+            .ThenInclude(c => c.Country)
+            .Include(p => p.AdoptionRequests);
+
+        if (!string.IsNullOrEmpty(breedName))
+        {
+            query = query.Where(p => p.Breed.Name.ToLower() == breedName.ToLower());
+        }
+
+        if (!string.IsNullOrEmpty(speciesName))
+        {
+            query = query.Where(p => p.Breed.Species.Name.ToLower() == speciesName.ToLower());
+        }
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
+
+    public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .AsSplitQuery()
+            .Include(p => p.PetImages)
+            .Include(p => p.Breed)
+            .ThenInclude(b => b.Species)
+            .Include(p => p.User)
+            .Include(p => p.Location)
+            .ThenInclude(l => l.City)
+            .ThenInclude(c => c.Country)
+            .Include(p => p.AdoptionRequests)
+            .ToListAsync(cancellationToken);
     }
 
     /// <summary>
