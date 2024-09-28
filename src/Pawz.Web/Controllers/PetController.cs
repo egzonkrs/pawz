@@ -29,7 +29,6 @@ public class PetController : Controller
     private readonly IAdoptionRequestService _adoptionRequestService;
     private readonly IUserAccessor _userAccessor;
 
-
     public PetController(
         IPetService petService,
         IBreedService breedService,
@@ -65,11 +64,16 @@ public class PetController : Controller
     {
         var countriesResult = await _countryService.GetAllCountriesAsync(cancellationToken);
         var citiesResult = await _cityService.GetAllCitiesAsync(cancellationToken);
-
         var countriesList = countriesResult.Value ?? new List<Country>();
         var citiesList = citiesResult.Value ?? new List<City>();
 
         var result = await _petService.GetPetByIdAsync(id, cancellationToken);
+
+        if (!result.IsSuccess || result.Value == null)
+        {
+            return NotFound();
+        }
+
         var petViewModel = _mapper.Map<PetViewModel>(result.Value);
 
         petViewModel.AdoptionRequestCreateModel = new AdoptionRequestCreateModel
@@ -85,6 +89,9 @@ public class PetController : Controller
             }).ToList()
         };
 
+        var requestResult = await _adoptionRequestService.HasUserMadeRequestForPetAsync(id, cancellationToken);
+
+        petViewModel.HasExistingAdoptionRequest = requestResult.IsSuccess && requestResult.Value;
         return View(petViewModel);
     }
 
@@ -262,6 +269,5 @@ public class PetController : Controller
         }
         return RedirectToAction("Profile", "Users");
     }
-
 }
 
