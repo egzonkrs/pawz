@@ -319,18 +319,30 @@ public class PetService : IPetService
         }
     }
 
-    public async Task<Result<IEnumerable<PetResponse>>> GetFilteredPetsAsync(string? breedName, string? speciesName, CancellationToken cancellationToken = default)
+    public async Task<Result<IEnumerable<PetResponse>>> GetFilteredPetsAsync(PetFilterQueryParams filterParams, CancellationToken cancellationToken = default)
     {
         try
         {
-            var pets = await _petRepository.GetFilteredPetsAsync(breedName, speciesName, cancellationToken);
+            // Log filter parameters for better traceability
+            _logger.LogInformation("Attempting to retrieve pets with filters: Species={SpeciesName}, Breed={BreedName}",
+                filterParams.SpeciesName, filterParams.BreedName);
+
+            var pets = await _petRepository.GetFilteredPetsAsync(filterParams, cancellationToken);
 
             if (pets == null || !pets.Any())
             {
+                _logger.LogWarning("No pets found for the provided filters: Species={SpeciesName}, Breed={BreedName}",
+                    filterParams.SpeciesName, filterParams.BreedName);
+
                 return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
             }
 
+            _logger.LogInformation("{Count} pets found for the provided filters: Species={SpeciesName}, Breed={BreedName}",
+                pets.Count(), filterParams.SpeciesName, filterParams.BreedName);
+
             var petResponses = _mapper.Map<IEnumerable<PetResponse>>(pets);
+
+            _logger.LogInformation("Successfully mapped {Count} pets to PetResponse objects", petResponses.Count());
 
             return Result<IEnumerable<PetResponse>>.Success(petResponses);
         }
@@ -340,4 +352,5 @@ public class PetService : IPetService
             return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
+
 }

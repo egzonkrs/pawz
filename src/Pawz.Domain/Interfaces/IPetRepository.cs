@@ -1,3 +1,4 @@
+using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading;
@@ -7,7 +8,7 @@ namespace Pawz.Domain.Interfaces;
 
 public interface IPetRepository : IGenericRepository<Pet, int>
 {
-    Task<IEnumerable<Pet>> GetFilteredPetsAsync(string? breedName, string? speciesName, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Pet>> GetFilteredPetsAsync(PetFilterQueryParams filterParams, CancellationToken cancellationToken = default);
 
     Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default);
 

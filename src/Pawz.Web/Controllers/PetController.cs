@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
+using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models.Breed;
@@ -53,9 +54,9 @@ public class PetController : Controller
         _userAccessor = userAccessor;
     }
 
-    public async Task<IActionResult> Index(string? species, string? breed, CancellationToken cancellationToken)
+    public async Task<IActionResult> Index(PetFilterQueryParams filterParams, CancellationToken cancellationToken)
     {
-        var result = await _petService.GetFilteredPetsAsync(breed, species, cancellationToken);
+        var result = await _petService.GetFilteredPetsAsync(filterParams, cancellationToken);
 
         if (!result.IsSuccess)
         {
