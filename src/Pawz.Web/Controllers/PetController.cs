@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
@@ -16,7 +17,6 @@ using System.Threading.Tasks;
 
 namespace Pawz.Web.Controllers;
 
-// [Authorize]
 public class PetController : Controller
 {
     private readonly IPetService _petService;
@@ -95,6 +95,7 @@ public class PetController : Controller
         return View(petViewModel);
     }
 
+    [Authorize]
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
     {
         var breedsResult = await _breedService.GetAllBreedsAsync(cancellationToken);
@@ -130,6 +131,7 @@ public class PetController : Controller
         return View(petCreateViewModel);
     }
 
+    [Authorize]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(PetCreateViewModel petCreateViewModel, CancellationToken cancellationToken)
@@ -209,6 +211,7 @@ public class PetController : Controller
         return RedirectToAction("Details", "Pet", new { id = petCreateResult.Value });
     }
 
+    [Authorize]
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
         var result = await _petService.GetPetByIdAsync(id, cancellationToken);
@@ -237,6 +240,7 @@ public class PetController : Controller
         return View(petEdit);
     }
 
+    [Authorize]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(Pet pet, CancellationToken cancellationToken)
