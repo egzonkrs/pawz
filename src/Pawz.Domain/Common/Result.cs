@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Pawz.Domain.Common;
 
@@ -21,12 +22,12 @@ public class Result<T>
     /// </summary>
     public IReadOnlyList<Error> Errors => _errors.AsReadOnly();
 
-    private Result(bool isSuccess, T value, IEnumerable<Error> errors)
+    private Result(bool isSuccess, T? value, IReadOnlyList<Error> errors)
     {
         IsSuccess = isSuccess;
         Value = value;
 
-        if (errors is not null)
+        if (errors.Any())
         {
             _errors.AddRange(errors);
         }
@@ -37,9 +38,9 @@ public class Result<T>
     /// </summary>
     /// <param name="value">The value to return in the result.</param>
     /// <returns>A successful <see cref="Result{T}"/> instance.</returns>
-    public static Result<T> Success(T value = default)
+    public static Result<T> Success(T? value = default)
     {
-        return new Result<T>(true, value, null);
+        return new Result<T>(isSuccess: true, value: value, errors: new List<Error>());
     }
 
     /// <summary>
@@ -49,7 +50,7 @@ public class Result<T>
     /// <returns>A failed <see cref="Result{T}"/> instance with the specified error message.</returns>
     public static Result<T> Failure(string error)
     {
-        return new Result<T>(false, default, new List<Error> { new Error("General.Error", error) });
+        return new Result<T>(isSuccess: false, value: default, errors: new List<Error> { new Error("General.Error", error) });
     }
 
     /// <summary>
@@ -59,6 +60,6 @@ public class Result<T>
     /// <returns>A failed <see cref="Result{T}"/> instance with the specified errors.</returns>
     public static Result<T> Failure(params Error[] errors)
     {
-        return new Result<T>(false, default, errors);
+        return new Result<T>(isSuccess: false, value: default, errors: errors);
     }
 }

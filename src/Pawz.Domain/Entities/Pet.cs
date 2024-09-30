@@ -15,7 +15,7 @@ public class Pet : IEntity<int>, ISoftDeletion
     /// <summary>
     /// The name of the pet
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// The Id of the breed of the pet
@@ -30,12 +30,12 @@ public class Pet : IEntity<int>, ISoftDeletion
     /// <summary>
     /// The age of the pet in years
     /// </summary>
-    public string AgeYears { get; set; }
+    public required string AgeYears { get; set; }
 
     /// <summary>
     /// Additional information about the pet
     /// </summary>
-    public string About { get; set; }
+    public required string About { get; set; }
 
     /// <summary>
     /// The price of the pet
@@ -75,7 +75,7 @@ public class Pet : IEntity<int>, ISoftDeletion
     /// <summary>
     /// The ID of the user who posted the pet.
     /// </summary>
-    public string PostedByUserId { get; set; }
+    public required string PostedByUserId { get; set; }
 
     /// <summary>
     /// The user who made the request.
@@ -84,13 +84,13 @@ public class Pet : IEntity<int>, ISoftDeletion
 
     /// <summary>
     /// Gets or sets a value indicating whether the entity is soft-deleted.
-    /// This property is implemented from the <see cref="ISoftDelete"/> interface.
+    /// This property is implemented from the <see cref="ISoftDeletion"/> interface.
     /// </summary>
     public bool IsDeleted { get; set; }
 
     /// <summary>
     /// Gets or sets the timestamp of when the entity was soft-deleted.
-    /// This property is implemented from the <see cref="ISoftDelete"/> interface.
+    /// This property is implemented from the <see cref="ISoftDeletion"/> interface.
     /// </summary>
     public DateTimeOffset? DeletedAt { get; set; }
 }

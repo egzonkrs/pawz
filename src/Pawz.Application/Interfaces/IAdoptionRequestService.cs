@@ -77,4 +77,14 @@ public interface IAdoptionRequestService
     /// Returns a failure result if the request was not found or an error occurred during the update process.
     /// </returns>
     Task<Result<bool>> RejectAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken);
+    /// <summary>
+    /// Checks if a user has already made an adoption request for a specific pet.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user.</param>
+    /// <param name="petId">The unique identifier of the pet.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation if necessary.</param>
+    /// <returns>
+    /// A Task representing the asynchronous operation. The task result is a Result<bool> where:
+    /// </returns>
+    Task<Result<bool>> HasUserMadeRequestForPetAsync(int petId, CancellationToken cancellationToken);
 }
