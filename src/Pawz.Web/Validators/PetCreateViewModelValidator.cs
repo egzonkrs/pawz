@@ -1,4 +1,5 @@
 using FluentValidation;
+using Pawz.Domain.Constants;
 using Pawz.Web.Models.Pet;
 using System.Linq;
 
@@ -55,7 +56,7 @@ public class PetCreateViewModelValidator : AbstractValidator<PetCreateViewModel>
         RuleFor(x => x.ImageFiles)
             .NotNull().WithMessage("At least one image is required.")
             .Must(images => images != null && images.Any()).WithMessage("You must upload at least one image.")
-            .Must(images => images == null || images.All(image => image.Length <= 10 * 1024 * 1024))
+            .Must(images => images == null || images.All(image => image.Length <= ImageValidationConstants.MaxImageFileSize))
             .WithMessage("Each image must be 10MB or smaller.");
     }
 }
