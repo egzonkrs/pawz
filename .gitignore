@@ -465,7 +465,5 @@ $RECYCLE.BIN/
 *.jpeg
 *.png
 *.gif
-*.jpg
-*.jpeg
 
 appsettings.Development.json
