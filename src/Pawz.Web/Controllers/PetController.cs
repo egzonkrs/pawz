@@ -89,10 +89,11 @@ public class PetController : Controller
             }).ToList()
         };
 
-        var requestResult = await _adoptionRequestService.HasUserMadeRequestForPetAsync(id, cancellationToken);
+        var userAdoptionRequestResult = await _adoptionRequestService.CheckUserAdoptionRequestForPetAsync(id, cancellationToken);
 
-        petViewModel.HasExistingAdoptionRequest = requestResult.IsSuccess && requestResult.Value;
-        return View(petViewModel);
+        (petViewModel.HasExistingAdoptionRequest, petViewModel.AdoptionRequestId) = userAdoptionRequestResult.Value;
+
+        return View(petViewModel); ;
     }
 
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
