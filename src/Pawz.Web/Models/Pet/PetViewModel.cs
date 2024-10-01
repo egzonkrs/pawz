@@ -22,6 +22,7 @@ public class PetViewModel
     public AdoptionRequestCreateModel AdoptionRequestCreateModel { get; set; }
     public Pawz.Domain.Entities.Pet Pet { get; set; }
     public bool HasExistingAdoptionRequest { get; set; }
+    public int? AdoptionRequestId { get; set; }
 }
 
 public class UserViewModel
