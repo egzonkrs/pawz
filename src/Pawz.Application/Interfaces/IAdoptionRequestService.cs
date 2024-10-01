@@ -77,6 +77,7 @@ public interface IAdoptionRequestService
     /// Returns a failure result if the request was not found or an error occurred during the update process.
     /// </returns>
     Task<Result<bool>> RejectAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken);
+
     /// <summary>
     /// Checks if a user has already made an adoption request for a specific pet.
     /// </summary>
@@ -87,4 +88,24 @@ public interface IAdoptionRequestService
     /// A Task representing the asynchronous operation. The task result is a Result<bool> where:
     /// </returns>
     Task<Result<bool>> HasUserMadeRequestForPetAsync(int petId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Checks if a user has an existing adoption request for a specific pet and returns the details of that request if it exists.
+    /// </summary>
+    /// <param name="petId">The unique identifier of the pet.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation if necessary.</param>
+    /// <returns>
+    /// A Task representing the asynchronous operation of boolean type indicating whether an adoption request exists or not.
+    /// </returns>
+    Task<Result<(bool HasExistingRequest, int? AdoptionRequestId)>> CheckUserAdoptionRequestForPetAsync(int petId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Cancels an adoption request by its ID.
+    /// </summary>
+    /// <param name="adoptionRequestId">The unique identifier of the adoption request to be cancelled.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation if necessary.</param>
+    /// <returns>
+    /// A Task representing the asynchronous operation indicating whether the cancellation was successful or not.
+    /// </returns>
+    Task<Result<bool>> CancelAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken);
 }
