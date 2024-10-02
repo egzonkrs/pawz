@@ -37,7 +37,7 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     /// A task representing the asynchronous operation, containing the Pet entity with all related entities included,
     /// or null if no pet with the specified ID is found.
     /// </returns>
-    Task<Pet> GetPetByIdWithRelatedEntitiesAsync(int id, CancellationToken cancellationToken = default);
+    Task<Pet?> GetPetByIdWithRelatedEntitiesAsync(int id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieves all pets associated with a specific user by their unique user ID, including the details of the user.

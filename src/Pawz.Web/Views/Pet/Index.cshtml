@@ -3,10 +3,10 @@
 <script>
     document.addEventListener("DOMContentLoaded", function ()
     {
-        var gridViewBtn = document.getElementById("grid-view-btn");
-        var listViewBtn = document.getElementById("list-view-btn");
-        var gridViewContainer = document.getElementById("pet-grid-view-container");
-        var listViewContainer = document.getElementById("pet-list-view-container");
+        const gridViewBtn = document.getElementById("grid-view-btn");
+        const listViewBtn = document.getElementById("list-view-btn");
+        const gridViewContainer = document.getElementById("pet-grid-view-container");
+        const listViewContainer = document.getElementById("pet-list-view-container");
 
         gridViewBtn.addEventListener("click", function (event)
         {
@@ -30,14 +30,14 @@
             <div class="col-md-12">
                 <div class="search-result bg-gray">
                     <h2>Results For "Pets"</h2>
-                    <p>123 Results on 12 December, 2017</p>
+                    <p>123 Results on 12 December 2017</p>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-3 col-md-4">
                 <div class="category-sidebar">
-                    @Html.Partial("CategorySidebar")
+                    <partial name="CategorySidebar" />
                 </div>
             </div>
             <div class="col-lg-9 col-md-8">
@@ -76,7 +76,7 @@
                 <div id="pet-grid-view-container">
                     @if (Model is not null || Model.Any())
                     {
-                        @Html.Partial("PetGridView", Model)
+                        <partial name="PetGridView" model="Model" />
                     }
                     else
                     {
@@ -91,7 +91,7 @@
                 <div id="pet-list-view-container" style="display:none; margin-bottom: 1rem;">
                     @if (Model is not null || Model.Any())
                     {
-                        @Html.Partial("PetListView", Model)
+                        <partial name="PetListView" model="Model" />
                     }
                     else
                     {

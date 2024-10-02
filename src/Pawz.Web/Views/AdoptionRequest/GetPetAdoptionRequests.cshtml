@@ -54,18 +54,45 @@
                             {
                                 <tr class="text-center">
                                     <th>
-                                        <img src="/images/users/@(request.User.ImageUrl ?? "userAvatar.jpg")"
-                                             alt="User Photo" class="rounded-circle user-avatar-image-100" />
+                                        <img src="/images/users/@(request.User.ImageUrl ?? "userAvatar.jpg")" alt="User Photo"
+                                             class="rounded-circle user-avatar-image-100" />
                                     </th>
                                     <td class="align-middle"> @textInfo.ToTitleCase(request.User.FirstName.ToLower()) </td>
                                     <td class="align-middle"> @textInfo.ToTitleCase(request.User.LastName.ToLower()) </td>
                                     <td class="align-middle">@request.RequestDate.ToString("dd/MM/yyyy")</td>
                                     <td class="align-middle">@request.Status</td>
                                     <td class="text-center align-middle">
-                                        <button class="btn btn-success"> <i class="fa fa-check" aria-hidden="true"></i></button>
-                                        <button class="btn btn-danger">
-                                            <i class="fa fa-times" aria-hidden="true"></i>
-                                        </button>
+                                        @if (request.Status == AdoptionRequestStatusViewModel.Approved)
+                                        {
+                                            <span class="badge badge-success">Request Approved</span>
+                                        }
+                                        else if (request.Status == AdoptionRequestStatusViewModel.Rejected)
+                                        {
+                                            <span class="badge badge-danger">Request Rejected</span>
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <div class="col-6 p-0">
+                                                    <form id="acceptAdoptionRequestForm" asp-controller="AdoptionRequest"
+                                                          asp-action="AcceptAdoptionRequest" method="post">
+                                                        <input type="hidden" name="adoptionRequestId" value="@(request.Id)" />
+                                                        <button type="submit" class="btn-ar btn-ar-accept">
+                                                            <i class="fa fa-check" aria-hidden="true"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                <div class="col-6 p-0">
+                                                    <form id="rejectAdoptionRequestForm" asp-controller="AdoptionRequest"
+                                                          asp-action="RejectAdoptionRequest" method="post">
+                                                        <input type="hidden" name="adoptionRequestId" value="@(request.Id)" />
+                                                        <button type="submit" class="btn-ar btn-ar-reject">
+                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -74,7 +101,7 @@
                 </div>
             }
             <!-- paginatipn -->
-            <div class="pagination justify-content-center">
+            <div class="pagination justify-content-center mb-5">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
                         <li class="page-item">
@@ -98,3 +125,4 @@
         </div> <!-- end col-for-table-->
     </div> <!-- end of row-->
 </div>
+

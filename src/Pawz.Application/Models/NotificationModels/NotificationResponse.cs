@@ -1,3 +1,4 @@
+using Pawz.Domain.Enums;
 using System;
 
 namespace Pawz.Application.Models.NotificationModels;
@@ -46,6 +47,11 @@ public class NotificationResponse
     /// Gets or sets the name of the pet associated with the notification.
     /// </summary>
     public string PetName { get; set; }
+
+    /// <summary>
+    /// Gets or sets the type of the notification.
+    /// </summary>
+    public NotificationType Type { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time when the notification was created.

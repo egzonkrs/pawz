@@ -20,6 +20,8 @@ public class PetViewModel
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public decimal Price { get; set; }
     public AdoptionRequestCreateModel AdoptionRequestCreateModel { get; set; }
+    public Pawz.Domain.Entities.Pet Pet { get; set; }
+    public bool HasExistingAdoptionRequest { get; set; }
 }
 
 public class UserViewModel

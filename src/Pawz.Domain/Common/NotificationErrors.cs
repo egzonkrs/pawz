@@ -75,4 +75,12 @@ public class NotificationErrors
     /// </summary>
     /// <returns>An <see cref="Error"/> indicating that the recipient is invalid.</returns>
     public static Error InvalidRecipient => new Error("Notification.InvalidRecipient", "The recipient of the notification is invalid or not specified");
+
+    /// <summary>
+    /// Returns an error indicating that marking a notification as read failed.
+    /// </summary>
+    /// <param name="id">The ID of the notification that failed to be marked as read.</param>
+    /// <returns>An <see cref="Error"/> indicating that marking the notification as read failed.</returns>
+    public static Error FailedToMarkAsRead => new Error("Notifications.FailedToMarkAsRead", "Failed to mark notificatio as read.");
 }
+

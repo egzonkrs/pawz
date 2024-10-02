@@ -17,7 +17,7 @@ public class AdoptionRequestViewModel
     /// <summary>
     /// The status of the adoption request
     /// </summary>
-    public AdoptionRequestStatus Status { get; set; }
+    public AdoptionRequestStatusViewModel Status { get; set; }
 
     /// <summary>
     /// The date when the adoption request was made
