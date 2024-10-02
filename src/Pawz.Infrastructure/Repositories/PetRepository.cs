@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Helpers;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
 using System.Collections.Generic;
@@ -16,10 +16,9 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     {
     }
 
-    public async Task<IEnumerable<Pet>> GetFilteredPetsAsync(PetFilterQueryParams filterParams, CancellationToken cancellationToken = default)
+    public async Task<List<Pet>> GetFilteredPetsQuery(QueryParams queryParams, CancellationToken cancellationToken = default)
     {
-        IQueryable<Pet> query = _dbSet
-            .AsSplitQuery()
+        var query = _dbSet
             .Include(p => p.PetImages)
             .Include(p => p.Breed)
             .ThenInclude(b => b.Species)
@@ -27,22 +26,15 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .Include(p => p.Location)
             .ThenInclude(l => l.City)
             .ThenInclude(c => c.Country)
-            .Include(p => p.AdoptionRequests);
+            .Include(p => p.AdoptionRequests)
+            .AsQueryable();
 
-        if (!string.IsNullOrEmpty(filterParams.BreedName))
-        {
-            query = query.Where(p => p.Breed.Name.ToLower() == filterParams.BreedName.ToLower());
-        }
-
-        if (!string.IsNullOrEmpty(filterParams.SpeciesName))
-        {
-            query = query.Where(p => p.Breed.Species.Name.ToLower() == filterParams.SpeciesName.ToLower());
-        }
+        query = query.ApplyQueryParams(queryParams, new[] { "name", "breed", "species" });
 
         return await query.ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default)
+    public async Task<List<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default)
     {
         return await _dbSet
             .AsSplitQuery()

@@ -3,6 +3,7 @@ using Pawz.Application.Models.Pet;
 using Pawz.Application.Models.PetModels;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Helpers;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace Pawz.Application.Interfaces;
 
 public interface IPetService
 {
+    Task<Result<IEnumerable<PetResponse>>> GetFilteredPetsAsync(QueryParams queryParams, CancellationToken cancellationToken);
+
     /// <summary>
     /// Creates a new pet.
     /// </summary>
@@ -59,7 +62,5 @@ public interface IPetService
     Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(CancellationToken cancellationToken);
 
     Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
-
-    Task<Result<IEnumerable<PetResponse>>> GetFilteredPetsAsync(PetFilterQueryParams filterParams, CancellationToken cancellationToken = default);
 }
 

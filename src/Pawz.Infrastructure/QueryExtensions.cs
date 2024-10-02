@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Pawz.Application.Helpers;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Helpers;
 using System;
 using System.Linq;
 

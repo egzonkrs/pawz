@@ -1,6 +1,6 @@
-namespace Pawz.Application.Helpers;
+namespace Pawz.Domain.Helpers;
 
-public sealed class QueryParams
+public class QueryParams
 {
     public string FilterBy { get; set; }
     public string FilterValue { get; set; }

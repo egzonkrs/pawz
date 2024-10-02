@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
@@ -7,6 +8,7 @@ using Pawz.Application.Models.PetModels;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
+using Pawz.Domain.Helpers;
 using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -320,38 +322,25 @@ public class PetService : IPetService
         }
     }
 
-    public async Task<Result<IEnumerable<PetResponse>>> GetFilteredPetsAsync(PetFilterQueryParams filterParams, CancellationToken cancellationToken = default)
+    public async Task<Result<IEnumerable<PetResponse>>> GetFilteredPetsAsync(QueryParams queryParams, CancellationToken cancellationToken)
     {
         try
         {
-            // Log filter parameters for better traceability
-            _logger.LogInformation("Attempting to retrieve pets with filters: Species={SpeciesName}, Breed={BreedName}",
-                filterParams.SpeciesName, filterParams.BreedName);
+            var pets = _petRepository.GetFilteredPetsQuery(queryParams, cancellationToken);
 
-            var pets = await _petRepository.GetFilteredPetsAsync(filterParams, cancellationToken);
-
-            if (pets == null || !pets.Any())
+            if (pets is null)
             {
-                _logger.LogWarning("No pets found for the provided filters: Species={SpeciesName}, Breed={BreedName}",
-                    filterParams.SpeciesName, filterParams.BreedName);
-
                 return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
             }
 
-            _logger.LogInformation("{Count} pets found for the provided filters: Species={SpeciesName}, Breed={BreedName}",
-                pets.Count(), filterParams.SpeciesName, filterParams.BreedName);
-
             var petResponses = _mapper.Map<IEnumerable<PetResponse>>(pets);
-
-            _logger.LogInformation("Successfully mapped {Count} pets to PetResponse objects", petResponses.Count());
 
             return Result<IEnumerable<PetResponse>>.Success(petResponses);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve filtered pets.", nameof(PetService));
+            _logger.LogError(ex, "An error occurred while trying to retrieve pets.");
             return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
-
 }

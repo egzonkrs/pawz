@@ -467,5 +467,5 @@ $RECYCLE.BIN/
 *.gif
 
 appsettings.Development.json
-src/Pawz.Web/wwwroot/images/pets/2800c4e4-ca03-44c7-b10d-5a53a2009fb2.jpeg
-src/Pawz.Web/wwwroot/images/pets/45f6ce24-0d04-4afb-8efe-a8f8f894d66a.jpeg
+*.jpg
+*.jpeg

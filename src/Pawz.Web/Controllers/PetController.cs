@@ -7,6 +7,7 @@ using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Helpers;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models.Breed;
 using Pawz.Web.Models.City;
@@ -53,7 +54,7 @@ public class PetController : Controller
         _userAccessor = userAccessor;
     }
 
-    public async Task<IActionResult> Index(PetFilterQueryParams filterParams, CancellationToken cancellationToken)
+    public async Task<IActionResult> Index(QueryParams filterParams, CancellationToken cancellationToken)
     {
         var result = await _petService.GetFilteredPetsAsync(filterParams, cancellationToken);
 
