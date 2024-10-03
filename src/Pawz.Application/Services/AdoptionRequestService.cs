@@ -349,4 +349,24 @@ public class AdoptionRequestService : IAdoptionRequestService
             return Result<bool>.Failure(AdoptionRequestErrors.UpdateUnexpectedError);
         }
     }
+    public async Task<Result<bool>> HasUserMadeRequestForPetAsync(int petId, CancellationToken cancellationToken)
+    {
+        string userId = _userAccessor.GetUserId();
+        try
+        {
+            if (userId is null)
+            {
+                _logger.LogError("User with ID: {userId} doesn't exists", userId);
+                return Result<bool>.Failure(UsersErrors.NotFound(userId));
+            }
+
+            var exists = await _adoptionRequestRepository.ExistsByUserIdAndPetIdAsync(userId, petId, cancellationToken);
+            return Result<bool>.Success(exists);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while checking if user {UserId} has made a request for pet {PetId}", userId, petId);
+            return Result<bool>.Failure(AdoptionRequestErrors.RetrievalError);
+        }
+    }
 }

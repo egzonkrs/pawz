@@ -21,5 +21,10 @@ public class AuthModule : IModule
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddScoped<IUserAccessor, UserAccessor>();
+
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.LoginPath = "/Users/Login";
+        });
     }
 }

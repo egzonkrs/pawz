@@ -27,6 +27,11 @@
                                 </a>
                             </li>
                             <li>
+                                <a asp-controller="Pet" asp-action="Create">
+                                    <i class="fa fa-plus"></i> Add New Pet
+                                </a>
+                            </li>
+                            <li>
                                 <a href="#" class="partial-view-link"
                                     data-url="@Url.Action("AdoptionRequest", "Users")">
                                     <i class="fa fa-handshake-o"></i> Adoption Requests
@@ -52,6 +57,7 @@
                 </div>
             </div>
             <div class="col-lg-8">
+               
                 <!-- Div for Partial View -->
                 <div class="widget dashboard-container my-adslist">
                     <div id="partialViewContainer"></div>

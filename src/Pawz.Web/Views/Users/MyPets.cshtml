@@ -50,7 +50,7 @@ else
                                     <form asp-controller="Pet" asp-action="Details" method="get">
                                         <input type="hidden" name="id" value="@pet.Id" />
                                         <button type="submit"
-                                                class="pet-action-buttons link-button view-button"
+                                                class="btn-action btn-view"
                                                 data-toggle="tooltip"
                                                 data-placement="top"
                                                 title="View">
@@ -62,7 +62,7 @@ else
                                     <form asp-controller="Pet" asp-action="Edit" method="get">
                                         <input type="hidden" name="id" value="@pet.Id" />
                                         <button type="submit"
-                                                class="pet-action-buttons link-button edit-button"
+                                                class="btn-action btn-edit"
                                                 data-toggle="tooltip"
                                                 data-placement="top"
                                                 title="Edit">
@@ -72,7 +72,7 @@ else
                                 </li>
                                 <li class="list-inline-item">
                                     <button type="submit"
-                                            class="pet-action-buttons link-button delete-button"
+                                            class="btn-action btn-delete"
                                             data-toggle="modal" data-target="#deleteConfirmationModal"
                                             onclick="setDeleteFormAction('@pet.Id', '@pet.Name')"
                                             title="Delete">

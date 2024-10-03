@@ -92,7 +92,7 @@ public class PetService : IPetService
 
             var imageFilesList = petCreateRequest.ImageFiles.ToList();
 
-            for (int i = 0; i < imageFilesList.Count; i++)
+            for (var i = 0; i < imageFilesList.Count; i++)
             {
                 var imageFile = imageFilesList[i];
 
@@ -103,8 +103,9 @@ public class PetService : IPetService
                 {
                     PetId = pet.Id,
                     ImageUrl = fileName,
-                    IsPrimary = i == 0 ? true : false,
+                    IsPrimary = i is 0,
                     UploadedAt = DateTime.UtcNow,
+                    Pet = pet
                 };
 
                 await _petImageRepository.InsertAsync(petImage, cancellationToken);

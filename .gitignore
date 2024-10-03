@@ -461,9 +461,9 @@ $RECYCLE.BIN/
 ##
 ## Photo extensions of pets.
 ##
-*.png
-*.gif
 *.jpg
 *.jpeg
+*.png
+*.gif
 
 appsettings.Development.json

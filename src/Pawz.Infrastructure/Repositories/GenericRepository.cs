@@ -9,13 +9,11 @@ namespace Pawz.Infrastructure.Repositories;
 
 public abstract class GenericRepository<TEntity, TKey> : IGenericRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>
 {
-    private readonly AppDbContext _dbContext;
     protected readonly DbSet<TEntity> _dbSet;
 
     protected GenericRepository(AppDbContext context)
     {
-        _dbContext = context;
-        _dbSet = _dbContext.Set<TEntity>();
+        _dbSet = context.Set<TEntity>();
     }
 
     /// <summary>

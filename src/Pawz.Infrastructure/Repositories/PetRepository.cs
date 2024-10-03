@@ -11,10 +11,8 @@ namespace Pawz.Infrastructure.Repositories;
 
 public class PetRepository : GenericRepository<Pet, int>, IPetRepository
 {
-    private readonly AppDbContext _context;
     public PetRepository(AppDbContext context) : base(context)
     {
-        _context = context;
     }
 
     /// <summary>
@@ -47,7 +45,7 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     /// A task that represents the asynchronous operation. The task result contains the Pet entity with all related entities loaded,
     /// or null if no pet with the specified ID is found.
     /// </returns>
-    public async Task<Pet> GetPetByIdWithRelatedEntitiesAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<Pet?> GetPetByIdWithRelatedEntitiesAsync(int id, CancellationToken cancellationToken = default)
     {
         return await _dbSet
             .Include(p => p.PetImages)
