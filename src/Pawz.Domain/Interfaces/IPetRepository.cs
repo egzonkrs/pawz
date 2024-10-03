@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Pawz.Domain.Helpers;
+using System.Linq;
 
 namespace Pawz.Domain.Interfaces;
 
 public interface IPetRepository : IGenericRepository<Pet, int>
 {
     Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default);
+
+    IQueryable<Pet> GetAllPetsWithRelatedEntitiesAsQueryable(string? speciesName, string? breedName);
 
     /// <summary>
     /// Counts the total number of pets available in the database.

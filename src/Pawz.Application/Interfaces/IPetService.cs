@@ -61,6 +61,7 @@ public interface IPetService
 
     Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Pet>> GetFilteredPetsAsync(string? speciesName, string? breedName);
+    Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(string speciesName, string breedName,
+        CancellationToken cancellationToken = default);
 }
 

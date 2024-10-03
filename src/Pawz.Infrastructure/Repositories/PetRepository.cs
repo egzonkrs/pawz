@@ -17,6 +17,33 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     {
     }
 
+    public IQueryable<Pet> GetAllPetsWithRelatedEntitiesAsQueryable(string speciesName, string breedName)
+    {
+        IQueryable<Pet> petsQuery = _dbSet
+            .AsSplitQuery()
+            .Include(p => p.PetImages)
+            .Include(p => p.Breed)
+            .ThenInclude(b => b.Species)
+            .Include(p => p.User)
+            .Include(p => p.Location)
+            .ThenInclude(l => l.City)
+            .ThenInclude(c => c.Country)
+            .Include(p => p.AdoptionRequests)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(speciesName))
+        {
+            petsQuery = petsQuery.Where(p => p.Breed.Species.Name == speciesName);
+        }
+
+        if (!string.IsNullOrEmpty(breedName))
+        {
+            petsQuery = petsQuery.Where(p => p.Breed.Name == breedName);
+        }
+
+        return petsQuery;
+    }
+
     public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default)
     {
         return await _dbSet

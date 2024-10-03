@@ -56,26 +56,17 @@ public class PetController : Controller
 
     public async Task<IActionResult> Index(string? species, string? breed, CancellationToken cancellationToken)
     {
-        var result = await _petService.GetAllPetsWithRelatedEntities(cancellationToken);
+        var result = await _petService.GetAllPetsWithRelatedEntities(species, breed, cancellationToken);
 
         if (!result.IsSuccess)
         {
             return View("Error");
         }
 
-        var pets = result.Value;
-
-        if (!string.IsNullOrEmpty(species) || !string.IsNullOrEmpty(breed))
-        {
-            pets = pets.Where(p => (string.IsNullOrEmpty(species) || p.Breed.Species.Name == species)
-                                   && (string.IsNullOrEmpty(breed) || p.Breed.Name == breed)).ToList();
-        }
-
-        var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(pets);
+        var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
 
         return View(petViewModels);
     }
-
 
     [HttpGet("pet/details/{id:int}")]
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)

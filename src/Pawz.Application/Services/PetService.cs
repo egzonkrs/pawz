@@ -123,7 +123,8 @@ public class PetService : IPetService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in {ServiceName} while attempting to create a Pet for UserId: {UserId}", nameof(PetService), petCreateRequest.PostedByUserId);
+            _logger.LogError(ex, "An error occurred in {ServiceName} while attempting to create a Pet for UserId: {UserId}", nameof(PetService),
+                petCreateRequest.PostedByUserId);
             return Result<int>.Failure(PetErrors.CreationUnexpectedError);
         }
     }
@@ -282,6 +283,43 @@ public class PetService : IPetService
         }
     }
 
+    public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(string speciesName, string breedName,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(speciesName) && string.IsNullOrEmpty(breedName))
+            {
+                var allPets = await _petRepository.GetAllPetsWithRelatedEntitiesAsync(cancellationToken);
+
+                if (allPets is null || !allPets.Any())
+                {
+                    return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
+                }
+
+                var allPetResponses = _mapper.Map<IEnumerable<PetResponse>>(allPets);
+                return Result<IEnumerable<PetResponse>>.Success(allPetResponses);
+            }
+
+            var filteredPetsQuery = _petRepository.GetAllPetsWithRelatedEntitiesAsQueryable(speciesName, breedName);
+            var filteredPets = await filteredPetsQuery.ToListAsync(cancellationToken);
+
+            if (filteredPets is null || !filteredPets.Any())
+            {
+                _logger.LogWarning("No pets were found with the specified filters.");
+                return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
+            }
+
+            var filteredPetResponses = _mapper.Map<IEnumerable<PetResponse>>(filteredPets);
+            return Result<IEnumerable<PetResponse>>.Success(filteredPetResponses);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve pets with related entities.", nameof(PetService));
+            return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
+        }
+    }
+
     public async Task<Result<bool>> UpdatePetAsync(Pet pet, CancellationToken cancellationToken)
     {
         try
@@ -323,23 +361,5 @@ public class PetService : IPetService
                 nameof(PetService), pet.Id, _userAccessor.GetUserId());
             return Result<bool>.Failure(PetErrors.UpdateUnexpectedError);
         }
-    }
-
-    public async Task<IEnumerable<Pet>> GetFilteredPetsAsync(string? speciesName, string? breedName)
-    {
-        var petsQuery = await _petRepository.GetAllPetsWithRelatedEntitiesAsync();
-
-        if (!string.IsNullOrEmpty(speciesName))
-        {
-            petsQuery = petsQuery.Where(p => p.Breed.Species.Name == speciesName);
-        }
-
-        if (!string.IsNullOrEmpty(breedName))
-        {
-            petsQuery = petsQuery.Where(p => p.Breed.Name == breedName);
-        }
-
-        var filteredPets = petsQuery.ToList();
-        return filteredPets;
     }
 }

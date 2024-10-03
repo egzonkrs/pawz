@@ -31,7 +31,14 @@ public class HomeController : Controller
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var result = await _petService.GetAllPetsWithRelatedEntities(cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return View("Error");
+        }
+
         var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
+
         return View(petViewModels);
     }
 
