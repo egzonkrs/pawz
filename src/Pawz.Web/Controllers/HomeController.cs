@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
+using Pawz.Domain.Helpers;
 using Pawz.Web.Models;
 using Pawz.Web.Models.Pet;
 using System.Collections;

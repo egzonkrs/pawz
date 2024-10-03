@@ -1,6 +1,5 @@
 using Pawz.Domain.Entities;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Pawz.Domain.Helpers;
@@ -9,9 +8,7 @@ namespace Pawz.Domain.Interfaces;
 
 public interface IPetRepository : IGenericRepository<Pet, int>
 {
-    Task<List<Pet>> GetFilteredPetsQuery(QueryParams queryParams, CancellationToken cancellationToken = default);
-
-    Task<List<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Counts the total number of pets available in the database.

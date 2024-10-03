@@ -260,21 +260,24 @@ public class PetService : IPetService
     {
         try
         {
+            _logger.LogInformation("Started retrieving all pets with related entities.");
+
             var pets = await _petRepository.GetAllPetsWithRelatedEntitiesAsync(cancellationToken);
 
-            if (pets is null || !pets.Any())
+            if (pets is null)
             {
+                _logger.LogWarning("No pets were found with related entities.");
                 return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
             }
 
             var petResponses = _mapper.Map<IEnumerable<PetResponse>>(pets);
 
+            _logger.LogInformation("Successfully retrieved all pets with related entities.");
             return Result<IEnumerable<PetResponse>>.Success(petResponses);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets with related entities.",
-                nameof(PetService));
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets with related entities.", nameof(PetService));
             return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
@@ -322,25 +325,21 @@ public class PetService : IPetService
         }
     }
 
-    public async Task<Result<IEnumerable<PetResponse>>> GetFilteredPetsAsync(QueryParams queryParams, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Pet>> GetFilteredPetsAsync(string? speciesName, string? breedName)
     {
-        try
+        var petsQuery = await _petRepository.GetAllPetsWithRelatedEntitiesAsync();
+
+        if (!string.IsNullOrEmpty(speciesName))
         {
-            var pets = _petRepository.GetFilteredPetsQuery(queryParams, cancellationToken);
-
-            if (pets is null)
-            {
-                return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
-            }
-
-            var petResponses = _mapper.Map<IEnumerable<PetResponse>>(pets);
-
-            return Result<IEnumerable<PetResponse>>.Success(petResponses);
+            petsQuery = petsQuery.Where(p => p.Breed.Species.Name == speciesName);
         }
-        catch (Exception ex)
+
+        if (!string.IsNullOrEmpty(breedName))
         {
-            _logger.LogError(ex, "An error occurred while trying to retrieve pets.");
-            return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
+            petsQuery = petsQuery.Where(p => p.Breed.Name == breedName);
         }
+
+        var filteredPets = petsQuery.ToList();
+        return filteredPets;
     }
 }

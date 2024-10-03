@@ -3,6 +3,7 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Helpers;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,36 +17,17 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     {
     }
 
-    public async Task<List<Pet>> GetFilteredPetsQuery(QueryParams queryParams, CancellationToken cancellationToken = default)
-    {
-        var query = _dbSet
-            .Include(p => p.PetImages)
-            .Include(p => p.Breed)
-            .ThenInclude(b => b.Species)
-            .Include(p => p.User)
-            .Include(p => p.Location)
-            .ThenInclude(l => l.City)
-            .ThenInclude(c => c.Country)
-            .Include(p => p.AdoptionRequests)
-            .AsQueryable();
-
-        query = query.ApplyQueryParams(queryParams, new[] { "name", "breed", "species" });
-
-        return await query.ToListAsync(cancellationToken);
-    }
-
-    public async Task<List<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default)
     {
         return await _dbSet
-            .AsSplitQuery()
             .Include(p => p.PetImages)
             .Include(p => p.Breed)
             .ThenInclude(b => b.Species)
-            .Include(p => p.User)
-            .Include(p => p.Location)
+            .Include(u => u.User)
+            .Include(l => l.Location)
             .ThenInclude(l => l.City)
             .ThenInclude(c => c.Country)
-            .Include(p => p.AdoptionRequests)
+            // .Include(ar => ar.AdoptionRequests)
             .ToListAsync(cancellationToken);
     }
 

@@ -54,9 +54,9 @@ public class PetController : Controller
         _userAccessor = userAccessor;
     }
 
-    public async Task<IActionResult> Index(QueryParams filterParams, CancellationToken cancellationToken)
+    public async Task<IActionResult> Index(string? species, string? breed, CancellationToken cancellationToken)
     {
-        var result = await _petService.GetFilteredPetsAsync(filterParams, cancellationToken);
+        var result = await _petService.GetAllPetsWithRelatedEntities(cancellationToken);
 
         if (!result.IsSuccess)
         {
@@ -65,10 +65,17 @@ public class PetController : Controller
 
         var pets = result.Value;
 
+        if (!string.IsNullOrEmpty(species) || !string.IsNullOrEmpty(breed))
+        {
+            pets = pets.Where(p => (string.IsNullOrEmpty(species) || p.Breed.Species.Name == species)
+                                   && (string.IsNullOrEmpty(breed) || p.Breed.Name == breed)).ToList();
+        }
+
         var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(pets);
 
         return View(petViewModels);
     }
+
 
     [HttpGet("pet/details/{id:int}")]
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)

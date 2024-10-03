@@ -12,8 +12,6 @@ namespace Pawz.Application.Interfaces;
 
 public interface IPetService
 {
-    Task<Result<IEnumerable<PetResponse>>> GetFilteredPetsAsync(QueryParams queryParams, CancellationToken cancellationToken);
-
     /// <summary>
     /// Creates a new pet.
     /// </summary>
@@ -62,5 +60,7 @@ public interface IPetService
     Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(CancellationToken cancellationToken);
 
     Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<Pet>> GetFilteredPetsAsync(string? speciesName, string? breedName);
 }
 
