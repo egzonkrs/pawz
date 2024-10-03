@@ -17,7 +17,7 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     {
     }
 
-    public IQueryable<Pet> GetAllPetsWithRelatedEntitiesAsQueryable(string speciesName, string breedName)
+    public IQueryable<Pet> GetAllPetsWithRelatedEntitiesAsQueryable(PetQueryParams queryParams)
     {
         IQueryable<Pet> petsQuery = _dbSet
             .AsSplitQuery()
@@ -31,18 +31,21 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .Include(p => p.AdoptionRequests)
             .AsQueryable();
 
-        if (!string.IsNullOrEmpty(speciesName))
+        // Apply species filter if provided
+        if (!string.IsNullOrEmpty(queryParams.SpeciesName))
         {
-            petsQuery = petsQuery.Where(p => p.Breed.Species.Name == speciesName);
+            petsQuery = petsQuery.Where(p => p.Breed.Species.Name == queryParams.SpeciesName);
         }
 
-        if (!string.IsNullOrEmpty(breedName))
+        // Apply breed filter if provided
+        if (!string.IsNullOrEmpty(queryParams.BreedName))
         {
-            petsQuery = petsQuery.Where(p => p.Breed.Name == breedName);
+            petsQuery = petsQuery.Where(p => p.Breed.Name == queryParams.BreedName);
         }
 
         return petsQuery;
     }
+
 
     public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default)
     {

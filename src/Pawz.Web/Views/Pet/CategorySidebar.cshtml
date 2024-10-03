@@ -17,7 +17,7 @@
                       .Distinct())                                                  // Remove duplicates by species name
         {
             <li>
-                <a href="@Url.Action("Index", "Pet", new { species = species })">
+                <a href="@Url.Action("Index", "Pet", new { SpeciesName = species })">
                     @species
                 </a>
             </li>
@@ -35,7 +35,7 @@
                       .Distinct())                                                  // Remove duplicates by breed name
         {
             <li>
-                <a href="@Url.Action("Index", "Pet", new { breed = breed })">
+                <a href="@Url.Action("Index", "Pet", new { BreedName = breed })">
                     @breed
                 </a>
             </li>

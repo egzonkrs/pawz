@@ -10,8 +10,7 @@ namespace Pawz.Domain.Interfaces;
 public interface IPetRepository : IGenericRepository<Pet, int>
 {
     Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default);
-
-    IQueryable<Pet> GetAllPetsWithRelatedEntitiesAsQueryable(string? speciesName, string? breedName);
+    IQueryable<Pet> GetAllPetsWithRelatedEntitiesAsQueryable(PetQueryParams queryParams);
 
     /// <summary>
     /// Counts the total number of pets available in the database.

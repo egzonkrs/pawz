@@ -283,12 +283,11 @@ public class PetService : IPetService
         }
     }
 
-    public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(string speciesName, string breedName,
-        CancellationToken cancellationToken = default)
+    public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(PetQueryParams queryParams, CancellationToken cancellationToken = default)
     {
         try
         {
-            if (string.IsNullOrEmpty(speciesName) && string.IsNullOrEmpty(breedName))
+            if (string.IsNullOrEmpty(queryParams.SpeciesName) && string.IsNullOrEmpty(queryParams.BreedName))
             {
                 var allPets = await _petRepository.GetAllPetsWithRelatedEntitiesAsync(cancellationToken);
 
@@ -301,12 +300,11 @@ public class PetService : IPetService
                 return Result<IEnumerable<PetResponse>>.Success(allPetResponses);
             }
 
-            var filteredPetsQuery = _petRepository.GetAllPetsWithRelatedEntitiesAsQueryable(speciesName, breedName);
+            var filteredPetsQuery = _petRepository.GetAllPetsWithRelatedEntitiesAsQueryable(queryParams);
             var filteredPets = await filteredPetsQuery.ToListAsync(cancellationToken);
 
             if (filteredPets is null || !filteredPets.Any())
             {
-                _logger.LogWarning("No pets were found with the specified filters.");
                 return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
             }
 

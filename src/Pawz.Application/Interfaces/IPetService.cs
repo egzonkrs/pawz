@@ -58,10 +58,7 @@ public interface IPetService
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a collection of pet entities.</returns>
     Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(CancellationToken cancellationToken);
-
     Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
-
-    Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(string speciesName, string breedName,
-        CancellationToken cancellationToken = default);
+    Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(PetQueryParams queryParams, CancellationToken cancellationToken = default);
 }
 
