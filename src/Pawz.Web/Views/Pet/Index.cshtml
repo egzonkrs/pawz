@@ -1,19 +1,22 @@
 @model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var gridViewBtn = document.getElementById("grid-view-btn");
-        var listViewBtn = document.getElementById("list-view-btn");
-        var gridViewContainer = document.getElementById("pet-grid-view-container");
-        var listViewContainer = document.getElementById("pet-list-view-container");
+    document.addEventListener("DOMContentLoaded", function ()
+    {
+        const gridViewBtn = document.getElementById("grid-view-btn");
+        const listViewBtn = document.getElementById("list-view-btn");
+        const gridViewContainer = document.getElementById("pet-grid-view-container");
+        const listViewContainer = document.getElementById("pet-list-view-container");
 
-        gridViewBtn.addEventListener("click", function (event) {
+        gridViewBtn.addEventListener("click", function (event)
+        {
             event.preventDefault();
             gridViewContainer.style.display = "block";
             listViewContainer.style.display = "none";
         });
 
-        listViewBtn.addEventListener("click", function (event) {
+        listViewBtn.addEventListener("click", function (event)
+        {
             event.preventDefault();
             gridViewContainer.style.display = "none";
             listViewContainer.style.display = "block";
@@ -26,15 +29,15 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="search-result bg-gray">
-                    <h2>Results For "@ViewBag.SearchTerm"</h2>
-                    <p>@Model.Count() Results</p> <!-- Display the count of results -->
+                    <h2>Results For "Pets"</h2>
+                    <p>123 Results on 12 December 2017</p>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-3 col-md-4">
                 <div class="category-sidebar">
-                    @Html.Partial("CategorySidebar")
+                    <partial name="CategorySidebar" />
                 </div>
             </div>
             <div class="col-lg-9 col-md-8">
@@ -54,12 +57,13 @@
                                 <strong>Views</strong>
                                 <ul class="list-inline view-switcher">
                                     <li class="list-inline-item">
-                                        <a href="#!" id="grid-view-btn" class="text-info">
+                                        <a href="#!" id="grid-view-btn" onclick="event.preventDefault();"
+                                            class="text-info">
                                             <i class="fa fa-th-large"></i>
                                         </a>
                                     </li>
                                     <li class="list-inline-item">
-                                        <a href="#!" id="list-view-btn">
+                                        <a href="#!" id="list-view-btn" onclick="event.preventDefault();">
                                             <i class="fa fa-reorder"></i>
                                         </a>
                                     </li>
@@ -70,9 +74,9 @@
                 </div>
 
                 <div id="pet-grid-view-container">
-                    @if (Model != null && Model.Any())
+                    @if (Model is not null || Model.Any())
                     {
-                        @Html.Partial("PetGridView", Model)
+                        <partial name="PetGridView" model="Model" />
                     }
                     else
                     {
@@ -85,9 +89,9 @@
                 </div>
 
                 <div id="pet-list-view-container" style="display:none; margin-bottom: 1rem;">
-                    @if (Model != null && Model.Any())
+                    @if (Model is not null || Model.Any())
                     {
-                        @Html.Partial("PetListView", Model)
+                        <partial name="PetListView" model="Model" />
                     }
                     else
                     {
@@ -110,6 +114,7 @@
                             </li>
                             <li class="page-item"><a class="page-link" href="category.html">1</a></li>
                             <li class="page-item active"><a class="page-link" href="category.html">2</a></li>
+                            <li class="page-item"><a class="page-link" href="category.html">3</a></li>
                             <li class="page-item">
                                 <a class="page-link" href="category.html" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>

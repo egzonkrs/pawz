@@ -14,12 +14,12 @@ public class Species : IEntity<int>, ISoftDeletion
     /// <summary>
     /// The name of the species
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Description of the species
     /// </summary>
-    public string Description { get; set; }
+    public required string Description { get; set; }
 
     /// <summary>
     /// The date and time when the species record was created

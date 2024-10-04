@@ -493,15 +493,20 @@ namespace Pawz.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("PetId");
 
                     b.HasIndex("RecipientId");
 
                     b.HasIndex("SenderId");
-
-                    b.HasIndex("IsDeleted", "CreatedAt");
 
                     b.ToTable("Notifications");
                 });

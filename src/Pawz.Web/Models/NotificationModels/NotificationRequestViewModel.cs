@@ -1,3 +1,4 @@
+using Pawz.Domain.Enums;
 using System;
 
 namespace Pawz.Web.Models.NotificationModels;
@@ -36,6 +37,11 @@ public class NotificationRequestViewModel
     /// Gets or sets the name of the sender of the notification.
     /// </summary>
     public string? SenderName { get; set; }
+
+    /// <summary>
+    /// Gets or sets the type of the notification.
+    /// </summary>
+    public NotificationType Type { get; set; }
 
     /// <summary>
     /// Gets or sets the creation timestamp of the notification.

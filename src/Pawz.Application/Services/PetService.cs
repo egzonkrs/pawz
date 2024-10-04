@@ -52,7 +52,7 @@ public class PetService : IPetService
     /// <param name="pet">The pet entity to create.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A result indicating whether the creation was successful.</returns>
-    public async Task<Result<bool>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken)
+    public async Task<Result<int>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken)
     {
         try
         {
@@ -71,7 +71,7 @@ public class PetService : IPetService
             if (!locationInsertResult.IsSuccess)
             {
                 _logger.LogError("Failed to create a location for the pet with Id: {PetId}", petCreateRequest.Id);
-                return Result<bool>.Failure(LocationErrors.CreationFailed);
+                return Result<int>.Failure(LocationErrors.CreationFailed);
             }
 
             var pet = _mapper.Map<Pet>(petCreateRequest);
@@ -86,12 +86,12 @@ public class PetService : IPetService
             if (petCreated is false)
             {
                 _logger.LogError("Failed to create a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
-                return Result<bool>.Failure(PetErrors.CreationFailed);
+                return Result<int>.Failure(PetErrors.CreationFailed);
             }
 
             var imageFilesList = petCreateRequest.ImageFiles.ToList();
 
-            for (int i = 0; i < imageFilesList.Count; i++)
+            for (var i = 0; i < imageFilesList.Count; i++)
             {
                 var imageFile = imageFilesList[i];
 
@@ -102,8 +102,9 @@ public class PetService : IPetService
                 {
                     PetId = pet.Id,
                     ImageUrl = fileName,
-                    IsPrimary = i == 0 ? true : false,
+                    IsPrimary = i is 0,
                     UploadedAt = DateTime.UtcNow,
+                    Pet = pet
                 };
 
                 await _petImageRepository.InsertAsync(petImage, cancellationToken);
@@ -114,16 +115,16 @@ public class PetService : IPetService
             if (arePetImagesSaved is false)
             {
                 _logger.LogError("Failed to save pet images; the pet creation process cannot be completed.");
-                return Result<bool>.Failure(PetErrors.CreationFailed);
+                return Result<int>.Failure(PetErrors.CreationFailed);
             }
 
             _logger.LogInformation("Successfully created a Pet with Id: {PetId} from UserId: {UserId}", pet.Id, pet.PostedByUserId);
-            return Result<bool>.Success();
+            return Result<int>.Success(pet.Id);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in {ServiceName} while attempting to create a Pet for UserId: {UserId}", nameof(PetService), petCreateRequest.PostedByUserId);
-            return Result<bool>.Failure(PetErrors.CreationUnexpectedError);
+            return Result<int>.Failure(PetErrors.CreationUnexpectedError);
         }
     }
 

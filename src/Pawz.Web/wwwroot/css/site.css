@@ -5,10 +5,6 @@
     font-size: 0.8rem;
 }
 
-   /* .input-error-text.field-validation-error {
-        color: red;
-    }
-*/
 .text-xs {
     font-size: 0.75rem; 
     line-height: 1rem; 
@@ -54,29 +50,114 @@
     line-height: 1;
 }
 
+/* Pet Details */
+
+/* User Widget */
+.widget-user {
+    background: #fff;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    padding: 0px 20px 20px 30px;
+    margin-bottom: 20px;
+    border-radius: 2px;
+}
+
+.btn-widget-contact {
+    background: #5672f9;
+    color: white;
+}
+/* Safety tips Widget */
+.widget-tips {
+    background: #fff;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    padding: 20px 30px 20px 30px;
+    margin-bottom: 20px;
+    border-radius: 2px;
+}
+
+/* Price Widget */
+.widget-price {
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    padding: 20px 20px 10px 0px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background: #5672f9;
+    color: white;
+}
+
+.price-p{
+    color:white;
+    font-size: 30px;
+    font-weight: bold
+}
+
+.price-h{
+    color:white
+}
+
+/* Adoption Request Button */
 .adoption-request-button {
-    font-size: 16px;
+    font-size: 30px !important;
     width: 80px;
     height: 70px !important;
-    padding: 0; 
+    padding: 58px 30px 58px;
+    margin-bottom: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border: 0px;
-    background-color: #ffffff;
+    border: 5px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    background: #5672f9;
+    color: white;
 }
 
 .adoption-request-button:hover {
-    transform: scale(1.05);  
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
+    color: white;
+    background: #4054b8;
+ }
+
+.btn-request-submitted {
+    font-size: 30px !important;
+    width: 80px;
+    height: 70px !important;
+    padding: 58px 30px 58px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 5px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    background-color: #999999;
+    color: #e8e6e1;
+}
+
+.adoption-request-login {
+    font-size: 23px !important;
+    width: 80px;
+    height: 70px !important;
+    padding: 58px 30px 58px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 5px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    background: #5672f9;
+    color: white;
+}
+
+.adoption-request-login:hover {
+    color: white;
+    background: #4054b8;
 }
 
 .pet-thumbnail {
-    border-radius: 10px; 
-    padding: 5px; 
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
-    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .pet-thumbnail:hover {
@@ -95,6 +176,11 @@
     height: 100px;
 }
 
+.user-avatar-image-70 {
+    width: 70px;
+    height: 70px;
+}
+
 .user-avatar-image-30 {
     width: 30px;
     height: 30px;
@@ -102,37 +188,137 @@
 }
 
 /* Pet Action Buttons */
-.pet-action-buttons {
-    font-size: 12px;
-}
-
-.link-button {
-    background: none !important;
+.btn-action {
     border: none;
-    padding: 0;
-    color: inherit;
-    text-decoration: none;
-    cursor: pointer;
-    font: inherit;
+    padding: 0px;
+    border-radius: 50px;
+    height: 40px;
+    width: 40px;
 }
-
-.link-button i {
-    font-size: 20px; 
-    display: inline-block;
-    padding: 10px;
-    color: #343a40; 
-    background-color: #f0f0f0; 
-    border-radius: 50%;
-    transition: background-color 0.3s ease; 
-    border: none;
+.btn-action:focus, btn-action:active{
+    outline: none;
 }
-
-.link-button i:hover {
-    background-color: red;
+.btn-edit {
+    background: transparent;
+    color: #f5dd2c;
+    border: 1px solid #f5dd2c;
+    font-size: 18px;
+    margin-right: 5px;
+ }
+.btn-edit:hover {
+    background: #f5dd2c;
+    color: white;
+ }
+.btn-view {
+    background: transparent;
+    color: #5672f9;
+    border: 1px solid #5672f9;
+    font-size: 18px;
+    margin-right: 5px;
+}
+.btn-view:hover {
+    background: #5672f9;
+    color: #ededeb;
+ }
+.btn-delete {
+    background: transparent;
+    color: #a6194d;
+    border: 1px solid #a6194d;
+    font-size: 18px;
+    margin-right: 5px;
+}
+.btn-delete:hover {
+    background: #a6194d;
     color: white;
 }
-
+   
+/* Adoption Request Modal */
 .radio-group label {
-    margin-right: 20px; 
+    margin-right: 20px;
 }
 
+.modal-dialog {
+    max-width: 80%; 
+}
+.span-required{
+    color: red;
+}
+
+.form-label-site {
+    color: #18191a;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.radio-inline{
+font-size: 25px;
+
+}
+
+.radio-style{
+    width:20px;
+    height:20px;
+}
+
+/* Notification Dropdwon List */
+#notification-dropdown .dropdown-menu {
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+#notification-list .dropdown-item {
+    white-space: normal;
+    word-wrap:break-word;
+}
+
+.notification-item {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s ease;
+}
+
+.notification-item.unread {
+   background-color: rgba(0, 0, 0, 0.2);
+
+}
+
+.notification-item:hover {
+   background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Accept / Reject Adoption Request Buttons*/
+
+.btn-ar {
+    border: none;
+    padding: 0px;
+    border-radius: 50px;
+    height: 40px;
+    width: 40px;
+}
+.btn-ar:focus, btn-ar:active {
+    outline: none;
+}
+.btn-ar-accept {
+    background: transparent;
+    color: #67a88a;
+    border: 1px solid #67a88a;
+    font-size: 17.5px;
+    margin-left:5px;
+}
+.btn-ar-reject {
+    background: transparent;
+    color: #a6194d;
+    border: 1px solid #a6194d;
+    font-size: 18px;
+    margin-right: 5px;
+}
+.btn-ar-accept:hover {
+    background: #16a663;
+    color:white;
+}
+.btn-ar-reject:hover {
+    background: #a6194d;
+    color: white;
+}
