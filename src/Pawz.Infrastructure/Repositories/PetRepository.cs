@@ -102,4 +102,25 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .Include(pet => pet.User)
             .ToListAsync(cancellationToken);
     }
+
+    /// <summary>
+    /// Searches for pets based on their breed name (or part of the breed name).
+    /// </summary>
+    /// <param name="breedName">The breed name or part of the breed name to search for.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A collection of pets that match the breed search criteria, including related breed, species, images, user details, and location information.</returns>
+    public async Task<IEnumerable<Pet>> SearchPetsByBreedAsync(string breedName, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Where(p => p.Breed.Name.Contains(breedName))
+            .Include(p => p.PetImages)
+            .Include(p => p.Breed)
+                .ThenInclude(b => b.Species)
+            .Include(p => p.User)
+            .Include(p => p.Location)
+                .ThenInclude(l => l.City)
+                    .ThenInclude(c => c.Country)
+            .ToListAsync(cancellationToken);
+    }
 }
