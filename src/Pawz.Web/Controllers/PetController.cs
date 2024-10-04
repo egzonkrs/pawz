@@ -55,19 +55,30 @@ public class PetController : Controller
     [HttpGet]
     public async Task<IActionResult> Index(string searchTerm, CancellationToken cancellationToken)
     {
+        IEnumerable<PetViewModel> petViewModels;
+
         if (string.IsNullOrEmpty(searchTerm))
         {
-            return View(new List<PetViewModel>());
+            var allPetsResult = await _petService.GetAllPetsWithRelatedEntities(cancellationToken);
+
+            if (!allPetsResult.IsSuccess)
+            {
+                return View(new List<PetViewModel>());
+            }
+
+            petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(allPetsResult.Value);
         }
-
-        var result = await _petService.SearchPetsByBreedAsync(searchTerm, cancellationToken);
-
-        if (!result.IsSuccess)
+        else
         {
-            return View(new List<PetViewModel>());
-        }
+            var searchResult = await _petService.SearchPetsByBreedAsync(searchTerm, cancellationToken);
 
-        var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
+            if (!searchResult.IsSuccess)
+            {
+                return View(new List<PetViewModel>());
+            }
+
+            petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(searchResult.Value);
+        }
 
         ViewBag.SearchTerm = searchTerm;
 
