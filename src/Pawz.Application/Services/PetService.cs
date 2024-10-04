@@ -257,6 +257,12 @@ public class PetService : IPetService
         }
     }
 
+    /// <summary>
+    /// Asynchronously retrieves all pets along with their related entities.
+    /// </summary>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation,
+    /// containing a <see cref="Result{T}"/> of an <see cref="IEnumerable{PetResponse}"/> with pets and their related entities.</returns>
     public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default)
     {
         try
@@ -283,6 +289,13 @@ public class PetService : IPetService
         }
     }
 
+    /// <summary>
+    /// Asynchronously retrieves a filtered collection of pets with related entities based on the provided query parameters.
+    /// </summary>
+    /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation,
+    /// containing a <see cref="Result{T}"/> of an <see cref="IEnumerable{PetResponse}"/> with pets and their related entities.</returns>
     public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(PetQueryParams queryParams, CancellationToken cancellationToken = default)
     {
         try

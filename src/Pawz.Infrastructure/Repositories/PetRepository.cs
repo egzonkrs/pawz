@@ -3,7 +3,6 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Helpers;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +16,11 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     {
     }
 
+    /// <summary>
+    /// Retrieves a queryable collection of pets with related entities, allowing for further filtering, sorting, or pagination.
+    /// </summary>
+    /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
+    /// <returns>An <see cref="IQueryable{Pet}"/> containing pets with their related entities.</returns>
     public IQueryable<Pet> GetAllPetsWithRelatedEntitiesAsQueryable(PetQueryParams queryParams)
     {
         IQueryable<Pet> petsQuery = _dbSet
@@ -31,13 +35,11 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .Include(p => p.AdoptionRequests)
             .AsQueryable();
 
-        // Apply species filter if provided
         if (!string.IsNullOrEmpty(queryParams.SpeciesName))
         {
             petsQuery = petsQuery.Where(p => p.Breed.Species.Name == queryParams.SpeciesName);
         }
 
-        // Apply breed filter if provided
         if (!string.IsNullOrEmpty(queryParams.BreedName))
         {
             petsQuery = petsQuery.Where(p => p.Breed.Name == queryParams.BreedName);
@@ -46,7 +48,11 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
         return petsQuery;
     }
 
-
+    /// <summary>
+    /// Asynchronously retrieves all pets along with their related entities.
+    /// </summary>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>An <see cref="IEnumerable{Pet}"/> containing all pets with their related entities.</returns>
     public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default)
     {
         return await _dbSet
@@ -83,11 +89,6 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
                     .ThenInclude(p => p.Country)
             //TODO .Include(p => p.AdoptionRequests)
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-    }
-
-    public async Task<int> CountPetsAsync(CancellationToken cancellationToken = default)
-    {
-        return await _dbSet.CountAsync(cancellationToken);
     }
 
     /// <summary>
