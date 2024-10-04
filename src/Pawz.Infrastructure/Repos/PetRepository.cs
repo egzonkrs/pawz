@@ -105,4 +105,21 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .ToListAsync(cancellationToken);           
     }
 
+    public async Task<IEnumerable<Pet>> SearchPetsByBreedAsync(string breedName, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Where(p => p.Breed.Name.Contains(breedName)) 
+            .Include(p => p.PetImages)
+            .Include(p => p.Breed)
+                .ThenInclude(b => b.Species)
+            .Include(p => p.User)
+            .Include(p => p.Location)
+                .ThenInclude(l => l.City)
+                    .ThenInclude(c => c.Country)
+            .ToListAsync(cancellationToken);
+    }
+
+    
+
 }
