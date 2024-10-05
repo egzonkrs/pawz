@@ -53,11 +53,11 @@ public class PetController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index(string searchTerm, CancellationToken cancellationToken)
+    public async Task<IActionResult> Index(string searchTerm, string location, CancellationToken cancellationToken)
     {
         IEnumerable<PetViewModel> petViewModels;
 
-        if (string.IsNullOrEmpty(searchTerm))
+        if (string.IsNullOrEmpty(searchTerm) && string.IsNullOrEmpty(location))
         {
             var allPetsResult = await _petService.GetAllPetsWithRelatedEntities(cancellationToken);
 
@@ -70,7 +70,7 @@ public class PetController : Controller
         }
         else
         {
-            var searchResult = await _petService.SearchPetsByBreedAsync(searchTerm, cancellationToken);
+            var searchResult = await _petService.SearchPetsByBreedAndLocationAsync(searchTerm, location, cancellationToken);
 
             if (!searchResult.IsSuccess)
             {
@@ -81,6 +81,7 @@ public class PetController : Controller
         }
 
         ViewBag.SearchTerm = searchTerm;
+        ViewBag.Location = location;
 
         return View(petViewModels);
     }

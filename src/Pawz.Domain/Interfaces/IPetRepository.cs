@@ -52,10 +52,11 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     Task<IEnumerable<Pet>> GetPetsByUserIdWithUserDetailsAsync(string userId, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Searches for pets by their breed (or part of the breed name).
+    /// Searches for pets by breed and location.
     /// </summary>
-    /// <param name="breedName">The breed name or part of the breed name to search for.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <param name="breedName">The breed name to search for.</param>
+    /// <param name="location">The location to search for.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A collection of pets that match the search criteria.</returns>
-    Task<IEnumerable<Pet>> SearchPetsByBreedAsync(string breedName, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Pet>> SearchPetsByBreedAndLocationAsync(string breedName, string location, CancellationToken cancellationToken);
 }

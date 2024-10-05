@@ -1,22 +1,19 @@
 @model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function ()
-    {
+    document.addEventListener("DOMContentLoaded", function () {
         const gridViewBtn = document.getElementById("grid-view-btn");
         const listViewBtn = document.getElementById("list-view-btn");
         const gridViewContainer = document.getElementById("pet-grid-view-container");
         const listViewContainer = document.getElementById("pet-list-view-container");
 
-        gridViewBtn.addEventListener("click", function (event)
-        {
+        gridViewBtn.addEventListener("click", function (event) {
             event.preventDefault();
             gridViewContainer.style.display = "block";
             listViewContainer.style.display = "none";
         });
 
-        listViewBtn.addEventListener("click", function (event)
-        {
+        listViewBtn.addEventListener("click", function (event) {
             event.preventDefault();
             gridViewContainer.style.display = "none";
             listViewContainer.style.display = "block";
@@ -31,7 +28,14 @@
                 <div class="search-result bg-gray">
                     @if (!string.IsNullOrEmpty(ViewBag.SearchTerm))
                     {
-                        <h2>Results For "@ViewBag.SearchTerm"</h2>
+                        @if (!string.IsNullOrEmpty(ViewBag.Location))
+                        {
+                            <h2>Results for "@ViewBag.SearchTerm" in @ViewBag.Location</h2>
+                        }
+                        else
+                        {
+                            <h2>Results for "@ViewBag.SearchTerm"</h2>
+                        }
                     }
                     else
                     {
@@ -65,7 +69,7 @@
                                 <ul class="list-inline view-switcher">
                                     <li class="list-inline-item">
                                         <a href="#!" id="grid-view-btn" onclick="event.preventDefault();"
-                                            class="text-info">
+                                           class="text-info">
                                             <i class="fa fa-th-large"></i>
                                         </a>
                                     </li>

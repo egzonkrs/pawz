@@ -339,30 +339,11 @@ public class PetService : IPetService
         }
     }
 
-    /*public async Task<Result<IEnumerable<Pet>>> SearchPetsByNameAsync(string searchQuery, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<Pet>>> SearchPetsByBreedAndLocationAsync(string breedName, string location, CancellationToken cancellationToken)
     {
         try
         {
-            var pets = await _petRepository.SearchPetsByNameAsync(searchQuery, cancellationToken);
-
-            if (pets == null || !pets.Any())
-            {
-                return Result<IEnumerable<Pet>>.Failure("No pets found for the search query.");
-            }
-
-            return Result<IEnumerable<Pet>>.Success(pets);
-        }
-        catch (Exception ex)
-        {
-            return Result<IEnumerable<Pet>>.Failure("An error occurred while searching for pets: " + ex.Message);
-        }
-    }*/
-
-    public async Task<Result<IEnumerable<Pet>>> SearchPetsByBreedAsync(string breedName, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var pets = await _petRepository.SearchPetsByBreedAsync(breedName, cancellationToken);
+            var pets = await _petRepository.SearchPetsByBreedAndLocationAsync(breedName, location, cancellationToken);
 
             if (pets == null || !pets.Any())
             {
