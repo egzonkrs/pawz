@@ -3,9 +3,9 @@
 <div class="widget category-list">
     <h4 class="widget-header">All Species</h4>
     <ul class="category-list">
-        @foreach (var species in Model.Select(pet => pet.Breed.Species).Distinct())
+        @foreach (var species in Model.GroupBy(pet => pet.Breed.Species.Name))
         {
-            <li><a href="#">@species.Name <span>10</span></a></li>
+            <li><a href="#">@species.Key <span>@species.Count()</span></a></li>
         }
     </ul>
 </div>
@@ -13,9 +13,9 @@
 <div class="widget category-list">
     <h4 class="widget-header">All Breeds</h4>
     <ul class="category-list">
-        @foreach (var breed in Model.Select(pet => pet.Breed).Distinct())
+        @foreach (var breed in Model.GroupBy(pet => pet.Breed.Name))
         {
-            <li><a href="#">@breed.Name <span>10</span></a></li>
+            <li><a href="#">@breed.Key <span>@breed.Count()</span></a></li>
         }
     </ul>
 </div>
