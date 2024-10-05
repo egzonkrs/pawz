@@ -10,6 +10,8 @@ using Pawz.Infrastructure.Data;
 using Pawz.Infrastructure.Repositories;
 using Pawz.Infrastructure.Services;
 using Pawz.Web.Hubs;
+using StackExchange.Redis;
+using System;
 using System.Configuration;
 
 namespace Pawz.Web.Modules;
@@ -27,6 +29,8 @@ public class DataModule : IModule
     {
         var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
+        var redisConnectionString = Environment.GetEnvironmentVariable("REDIS_URL");
+
         if (connectionString is null)
         {
             throw new ConfigurationErrorsException("Cannot find 'DefaultConnection' section inside the configuration");
@@ -37,6 +41,8 @@ public class DataModule : IModule
                 .UseSqlServer(connectionString)
                 .AddInterceptors(new SoftDeleteInterceptor())
         );
+
+        services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -67,6 +73,5 @@ public class DataModule : IModule
         services.AddScoped<IRealTimeNotificationSender, RealTimeNotificationSender>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<INotificationRepository, NotificationRepository>();
-
     }
 }

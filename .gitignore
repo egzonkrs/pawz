@@ -467,3 +467,4 @@ $RECYCLE.BIN/
 *.gif
 
 appsettings.Development.json
+.env

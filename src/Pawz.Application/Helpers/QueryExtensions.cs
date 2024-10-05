@@ -1,10 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using Pawz.Application.Helpers;
 using Pawz.Domain.Entities;
 using System;
 using System.Linq;
 
-namespace Pawz.Infrastructure;
+namespace Pawz.Application.Helpers;
 
 public static class QueryExtensions
 {
@@ -53,9 +51,9 @@ public static class QueryExtensions
         {
             query = property.ToLower() switch
             {
-                "name" => query.Where(p => EF.Functions.Contains(p.Name, searchQuery)),
-                "breed" => query.Where(p => EF.Functions.Contains(p.Breed.Name, searchQuery)),
-                "species" => query.Where(p => EF.Functions.Contains(p.Breed.Species.Name, searchQuery)),
+                "name" => query.Where(p => p.Name.Contains(searchQuery)),
+                "breed" => query.Where(p => p.Breed.Name.Contains(searchQuery)),
+                "species" => query.Where(p => p.Breed.Species.Name.Contains(searchQuery)),
                 _ => query
             };
         }
@@ -70,9 +68,9 @@ public static class QueryExtensions
     {
         return filterBy.ToLower() switch
         {
-            "name" => query.Where(p => EF.Functions.Contains(p.Name, filterValue)),
-            "breed" => query.Where(p => EF.Functions.Contains(p.Breed.Name, filterValue)),
-            "species" => query.Where(p => EF.Functions.Contains(p.Breed.Species.Name, filterValue)),
+            "name" => query.Where(p => p.Name.Contains(filterValue)),
+            "breed" => query.Where(p => p.Breed.Name.Contains(filterValue)),
+            "species" => query.Where(p => p.Breed.Species.Name.Contains(filterValue)),
             _ => query
         };
     }
