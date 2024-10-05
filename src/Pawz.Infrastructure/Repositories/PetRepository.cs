@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Pawz.Application.Helpers;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Helpers;
 using Pawz.Domain.Interfaces;
@@ -21,7 +22,7 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     /// </summary>
     /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
     /// <returns>An <see cref="IQueryable{Pet}"/> containing pets with their related entities.</returns>
-    public IQueryable<Pet> GetAllPetsWithRelatedEntitiesAsQueryable(PetQueryParams queryParams)
+    public IQueryable<Pet> GetAllPetsWithRelatedEntitiesAsQueryable(QueryParams queryParams)
     {
         IQueryable<Pet> petsQuery = _dbSet
             .AsSplitQuery()
@@ -35,15 +36,9 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .Include(p => p.AdoptionRequests)
             .AsQueryable();
 
-        if (!string.IsNullOrEmpty(queryParams.SpeciesName))
-        {
-            petsQuery = petsQuery.Where(p => p.Breed.Species.Name == queryParams.SpeciesName);
-        }
+        string[] filterProperties = { "name", "breed", "species" };
 
-        if (!string.IsNullOrEmpty(queryParams.BreedName))
-        {
-            petsQuery = petsQuery.Where(p => p.Breed.Name == queryParams.BreedName);
-        }
+        petsQuery = petsQuery.ApplyQueryParams(queryParams, filterProperties);
 
         return petsQuery;
     }

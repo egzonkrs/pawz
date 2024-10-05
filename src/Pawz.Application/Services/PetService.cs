@@ -296,33 +296,22 @@ public class PetService : IPetService
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation,
     /// containing a <see cref="Result{T}"/> of an <see cref="IEnumerable{PetResponse}"/> with pets and their related entities.</returns>
-    public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(PetQueryParams queryParams, CancellationToken cancellationToken = default)
+    public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(QueryParams queryParams, CancellationToken cancellationToken = default)
     {
         try
         {
-            if (string.IsNullOrEmpty(queryParams.SpeciesName) && string.IsNullOrEmpty(queryParams.BreedName))
-            {
-                var allPets = await _petRepository.GetAllPetsWithRelatedEntitiesAsync(cancellationToken);
+            // Use the modified GetAllPetsWithRelatedEntitiesAsQueryable method with filtering applied
+            var petsQuery = _petRepository.GetAllPetsWithRelatedEntitiesAsQueryable(queryParams);
 
-                if (allPets is null || !allPets.Any())
-                {
-                    return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
-                }
+            var pets = await petsQuery.ToListAsync(cancellationToken);
 
-                var allPetResponses = _mapper.Map<IEnumerable<PetResponse>>(allPets);
-                return Result<IEnumerable<PetResponse>>.Success(allPetResponses);
-            }
-
-            var filteredPetsQuery = _petRepository.GetAllPetsWithRelatedEntitiesAsQueryable(queryParams);
-            var filteredPets = await filteredPetsQuery.ToListAsync(cancellationToken);
-
-            if (filteredPets is null || !filteredPets.Any())
+            if (pets is null || !pets.Any())
             {
                 return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
             }
 
-            var filteredPetResponses = _mapper.Map<IEnumerable<PetResponse>>(filteredPets);
-            return Result<IEnumerable<PetResponse>>.Success(filteredPetResponses);
+            var petResponses = _mapper.Map<IEnumerable<PetResponse>>(pets);
+            return Result<IEnumerable<PetResponse>>.Success(petResponses);
         }
         catch (Exception ex)
         {

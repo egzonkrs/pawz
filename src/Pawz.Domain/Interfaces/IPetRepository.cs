@@ -21,7 +21,7 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     /// </summary>
     /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
     /// <returns>An <see cref="IQueryable{Pet}"/> containing pets with their related entities.</returns>
-    IQueryable<Pet> GetAllPetsWithRelatedEntitiesAsQueryable(PetQueryParams queryParams);
+    public IQueryable<Pet> GetAllPetsWithRelatedEntitiesAsQueryable(QueryParams queryParams);
 
     /// <summary>
     /// Retrieves all pets associated with a specific user by their unique user ID.
