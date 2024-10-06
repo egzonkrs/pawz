@@ -1,3 +1,4 @@
+using dotenv.net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,14 +23,13 @@ public class DataModule : IModule
 
     public DataModule(IConfiguration configuration)
     {
+        DotEnv.Load();
         _configuration = configuration;
     }
 
     public void Load(IServiceCollection services)
     {
         var connectionString = _configuration.GetConnectionString("DefaultConnection");
-
-        var redisConnectionString = Environment.GetEnvironmentVariable("REDIS_URL");
 
         if (connectionString is null)
         {
@@ -42,7 +42,21 @@ public class DataModule : IModule
                 .AddInterceptors(new SoftDeleteInterceptor())
         );
 
-        services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
+        services.AddSingleton<IConnectionMultiplexer>(config =>
+        {
+            var redisUrl = Environment.GetEnvironmentVariable("UPSTASH_REDIS_URL");
+
+            if (string.IsNullOrEmpty(redisUrl))
+            {
+                throw new Exception("Cannot get Redis URL from environment variables.");
+            }
+
+            var configuration = ConfigurationOptions.Parse(redisUrl, true);
+            configuration.AbortOnConnectFail = false;
+            return ConnectionMultiplexer.Connect(configuration);
+        });
+
+        services.AddSingleton<IWishlistService, WishlistService>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

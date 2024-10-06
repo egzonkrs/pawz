@@ -6,10 +6,16 @@
         {
             <div class="col-lg-4 col-md-6">
                 <div class="product-item">
-                    <div class="card">
-                        <img class="card-img-top img-fluid"
-                            src="/images/pets/@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")"
-                            alt="Pet Image" />
+                    <div class="card" data-pet-id="@pet.Id">
+                        <img class="card-img-top img-fluid hover-effects"
+                             src="/images/pets/@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")"
+                             alt="Pet Image" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="wishlist-heart bi bi-heart" viewBox="0 0 16 16">
+                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="wishlist-heart bi bi-heart-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                        </svg>
                     </div>
                     <div class="card-body">
                         <h4 class="card-title">
@@ -34,3 +40,28 @@
         }
     </div>
 </div>
+
+<script>
+    function addToWishlist(petId) {
+        // Make an AJAX POST request to add the pet to the wishlist
+        $.ajax({
+            url: '/Wishlist/SetWishlist',
+            type: 'POST',
+            data: {
+                Id: petId
+            },
+            success: function (result) {
+                // Success: Show the filled heart icon and hide the outline heart
+                const card = document.querySelector(`[data-pet-id="${petId}"]`);
+                const heartOutline = card.querySelector('.bi-heart');
+                const heartFilled = card.querySelector('.bi-heart-fill');
+
+                heartOutline.style.display = 'none';
+                heartFilled.style.display = 'block';
+            },
+            error: function (xhr, status, error) {
+                console.log('Failed to add to wishlist: ', error);
+            }
+        });
+    }
+</script>
