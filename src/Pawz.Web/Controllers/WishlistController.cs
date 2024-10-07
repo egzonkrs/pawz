@@ -20,7 +20,7 @@ public class WishlistController : Controller
     {
         if (string.IsNullOrEmpty(key))
         {
-            ViewBag.Message = "No items in wishlist";
+            ViewBag.Message = "No key provided";
             return Json(new Wishlist { Id = key, Pets = new List<Pet>() });
         }
 
@@ -34,6 +34,7 @@ public class WishlistController : Controller
 
         return Json(wishlist);
     }
+
 
     [HttpPost]
     public async Task<ActionResult<Wishlist>> UpdateWishlist(Wishlist wishlist)
