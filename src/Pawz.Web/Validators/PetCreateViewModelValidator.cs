@@ -1,5 +1,5 @@
 using FluentValidation;
-using Pawz.Web.Models;
+using Pawz.Domain.Constants;
 using Pawz.Web.Models.Pet;
 using System.Linq;
 
@@ -10,7 +10,6 @@ public class PetCreateViewModelValidator : AbstractValidator<PetCreateViewModel>
     public PetCreateViewModelValidator()
     {
         RuleFor(x => x.Name)
-            .NotNull()
             .NotEmpty().WithMessage("Name is required.")
             .MaximumLength(50).WithMessage("Name must be 50 characters or fewer.")
             .Matches(@"^[^\d][a-zA-Z\s]*$").WithMessage("Name must not start with a number and should not contain numbers.");
@@ -21,16 +20,14 @@ public class PetCreateViewModelValidator : AbstractValidator<PetCreateViewModel>
             .GreaterThan(0).WithMessage("Breed must be selected.");
 
         RuleFor(x => x.SpeciesId)
-                .NotNull()
-                .NotEmpty().WithMessage("Species is required.")
-                .GreaterThan(0).WithMessage("Species must be selected.");
+            .NotNull()
+            .NotEmpty().WithMessage("Species is required.")
+            .GreaterThan(0).WithMessage("Species must be selected.");
 
         RuleFor(x => x.AgeYears)
-            .NotNull()
             .NotEmpty().WithMessage("Age is required.");
 
         RuleFor(x => x.About)
-            .NotNull()
             .NotEmpty().WithMessage("About section is required.")
             .MaximumLength(500).WithMessage("About section must be 500 characters or fewer.");
 
@@ -49,19 +46,17 @@ public class PetCreateViewModelValidator : AbstractValidator<PetCreateViewModel>
             .GreaterThan(0).WithMessage("Country must be selected.");
 
         RuleFor(x => x.Address)
-            .NotNull()
             .NotEmpty().WithMessage("Address is required.")
             .MaximumLength(200).WithMessage("Address must be 200 characters or fewer.");
 
         RuleFor(x => x.PostalCode)
-            .NotNull()
             .NotEmpty().WithMessage("Postal code is required.")
             .MaximumLength(10).WithMessage("Postal code must be 10 characters or fewer.");
 
         RuleFor(x => x.ImageFiles)
-              .NotNull().WithMessage("At least one image is required.")
-              .Must(images => images != null && images.Any()).WithMessage("You must upload at least one image.")
-              .Must(images => images.All(image => image.Length <= 10 * 1024 * 1024))
-              .WithMessage("Each image must be 10MB or smaller.");
+            .NotNull().WithMessage("At least one image is required.")
+            .Must(images => images != null && images.Any()).WithMessage("You must upload at least one image.")
+            .Must(images => images == null || images.All(image => image.Length <= ImageValidationConstants.MaxImageFileSize))
+            .WithMessage("Each image must be 10MB or smaller.");
     }
 }

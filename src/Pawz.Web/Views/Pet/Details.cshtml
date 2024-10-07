@@ -150,9 +150,23 @@
                         </p>
                     </div>
                     <div class="text-center">
-                        <button class="btn mb-4 adoption-request-button w-100 " data-toggle="modal" data-target="#adoptionRequestModal">
-                            Request Adoption
-                        </button>
+                        @if(@UserAccessor.IsUserAuthenticated())
+                        {
+                            @if (Model.HasExistingAdoptionRequest)
+                            {
+                                <button class="btn-request-submitted  w-100 " disabled>Request Submitted</button>
+                            }
+                            else
+                            {
+                                <button class="btn adoption-request-button w-100" data-toggle="modal" data-target="#adoptionRequestModal">
+                                    Request Adoption
+                                </button>
+                            }
+                        }
+                        else
+                        {
+                            <a asp-controller="Users" asp-action="Login" class="btn adoption-request-login w-100">Log in to Request Adoption</a>
+                        }
                     </div>
                 </div>
             </div>

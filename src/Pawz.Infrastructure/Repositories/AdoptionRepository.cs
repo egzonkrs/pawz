@@ -2,7 +2,7 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
 
-namespace Pawz.Infrastructure.Repos;
+namespace Pawz.Infrastructure.Repositories;
 
 public class AdoptionRepository : GenericRepository<Adoption, int>, IAdoptionRepository
 {

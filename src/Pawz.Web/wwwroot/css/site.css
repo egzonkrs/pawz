@@ -116,11 +116,48 @@
     background: #4054b8;
  }
 
+.btn-request-submitted {
+    font-size: 30px !important;
+    width: 80px;
+    height: 70px !important;
+    padding: 58px 30px 58px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 5px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    background-color: #999999;
+    color: #e8e6e1;
+}
+
+.adoption-request-login {
+    font-size: 23px !important;
+    width: 80px;
+    height: 70px !important;
+    padding: 58px 30px 58px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 5px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+    background: #5672f9;
+    color: white;
+}
+
+.adoption-request-login:hover {
+    color: white;
+    background: #4054b8;
+}
+
 .pet-thumbnail {
-    border-radius: 10px; 
-    padding: 5px; 
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
-    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .pet-thumbnail:hover {
@@ -139,6 +176,11 @@
     height: 100px;
 }
 
+.user-avatar-image-70 {
+    width: 70px;
+    height: 70px;
+}
+
 .user-avatar-image-30 {
     width: 30px;
     height: 30px;
@@ -146,45 +188,49 @@
 }
 
 /* Pet Action Buttons */
-
-.pet-action-buttons.link-button {
-    background: none;
+.btn-action {
     border: none;
-    padding: 0;
-    margin: 0 2px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
+    padding: 0px;
+    border-radius: 50px;
+    height: 40px;
+    width: 40px;
 }
-
-.pet-action-buttons.link-button i {
+.btn-action:focus, btn-action:active{
+    outline: none;
+}
+.btn-edit {
+    background: transparent;
+    color: #f5dd2c;
+    border: 1px solid #f5dd2c;
     font-size: 18px;
-    width: 39px;
-    height: 39px;
-    line-height: 39px;
-    text-align: center;
-    color: #212121;
-    background-color: #D8D6D6;
-    border-radius: 50%;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.pet-action-buttons.link-button i:hover {
-    transform: scale(1.1);
+    margin-right: 5px;
+ }
+.btn-edit:hover {
+    background: #f5dd2c;
     color: white;
  }
-
-.pet-action-buttons.link-button.view-button i:hover {
-    background-color: #007bff;
+.btn-view {
+    background: transparent;
+    color: #5672f9;
+    border: 1px solid #5672f9;
+    font-size: 18px;
+    margin-right: 5px;
+}
+.btn-view:hover {
+    background: #5672f9;
+    color: #ededeb;
+ }
+.btn-delete {
+    background: transparent;
+    color: #a6194d;
+    border: 1px solid #a6194d;
+    font-size: 18px;
+    margin-right: 5px;
+}
+.btn-delete:hover {
+    background: #a6194d;
     color: white;
 }
-
-.pet-action-buttons.link-button.edit-button i:hover {
-    background-color: #ffc107;
-}
-
-.pet-action-buttons.link-button.delete-button i:hover {
-    background-color: red;
- }
    
 /* Adoption Request Modal */
 .radio-group label {
@@ -201,7 +247,7 @@
 .form-label-site {
     color: #18191a;
     font-weight: 400;
-    font-size: 18px;
+    font-size: 15px;
 }
 
 .radio-inline{
@@ -214,3 +260,65 @@ font-size: 25px;
     height:20px;
 }
 
+/* Notification Dropdwon List */
+#notification-dropdown .dropdown-menu {
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+#notification-list .dropdown-item {
+    white-space: normal;
+    word-wrap:break-word;
+}
+
+.notification-item {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s ease;
+}
+
+.notification-item.unread {
+   background-color: rgba(0, 0, 0, 0.2);
+
+}
+
+.notification-item:hover {
+   background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Accept / Reject Adoption Request Buttons*/
+
+.btn-ar {
+    border: none;
+    padding: 0px;
+    border-radius: 50px;
+    height: 40px;
+    width: 40px;
+}
+.btn-ar:focus, btn-ar:active {
+    outline: none;
+}
+.btn-ar-accept {
+    background: transparent;
+    color: #67a88a;
+    border: 1px solid #67a88a;
+    font-size: 17.5px;
+    margin-left:5px;
+}
+.btn-ar-reject {
+    background: transparent;
+    color: #a6194d;
+    border: 1px solid #a6194d;
+    font-size: 18px;
+    margin-right: 5px;
+}
+.btn-ar-accept:hover {
+    background: #16a663;
+    color:white;
+}
+.btn-ar-reject:hover {
+    background: #a6194d;
+    color: white;
+}

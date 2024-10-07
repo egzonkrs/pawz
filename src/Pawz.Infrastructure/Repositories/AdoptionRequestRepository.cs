@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Pawz.Infrastructure.Repos;
+namespace Pawz.Infrastructure.Repositories;
 
 public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>, IAdoptionRequestRepository
 {
@@ -63,5 +63,30 @@ public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>
         return await _dbSet
             .Where(ar => ar.RequesterUserId == userId)
             .ToListAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Updates a list of adoption requests in the database.
+    /// </summary>
+    /// <param name="adoptionRequests">The list of <see cref="AdoptionRequest"/> objects to be updated.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
+    /// <returns>A task representing the asynchronous update operation.</returns>
+    public Task UpdateListAsync(List<AdoptionRequest> adoptionRequests, CancellationToken cancellationToken)
+    {
+        _dbSet.UpdateRange(adoptionRequests);
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Checks if an adoption request exists for a given user and pet in the database.
+    /// </summary>
+    /// <param name="userId">The ID of the user making the request.</param>
+    /// <param name="petId">The ID of the pet for which the request is being made.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
+    /// <returns>A task representing the asynchronous operation, containing a boolean indicating whether an adoption request exists.</returns>
+    public async Task<bool> ExistsByUserIdAndPetIdAsync(string userId, int petId, CancellationToken cancellationToken)
+    {
+        return await _dbSet
+            .AnyAsync(ar => ar.RequesterUserId == userId && ar.PetId == petId, cancellationToken);
     }
 }

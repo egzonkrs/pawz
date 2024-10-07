@@ -22,7 +22,7 @@ public class FileUploaderService : IFileUploaderService
         _logger = logger;
     }
 
-    public static readonly string PetImagesDirectory = "wwwroot/images/pets";
+    private const string PetImagesDirectory = "wwwroot/images/pets";
     private readonly string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
     private const int maxFileSize = 10 * 1024 * 1024;
 

@@ -23,7 +23,7 @@ public class PetImage : IEntity<int>, ISoftDeletion
     /// <summary>
     /// The URL of the pet image
     /// </summary>
-    public string ImageUrl { get; set; }
+    public required string ImageUrl { get; set; }
 
     /// <summary>
     /// Indicates if the image is the primary one for the pet
