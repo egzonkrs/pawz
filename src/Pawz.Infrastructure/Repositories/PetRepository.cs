@@ -22,7 +22,7 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     /// </summary>
     /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
     /// <returns>An <see cref="IQueryable{Pet}"/> containing pets with their related entities.</returns>
-    public IQueryable<Pet> GetAllPetsWithRelatedEntitiesAsQueryable(QueryParams queryParams)
+    public IQueryable<Pet> GetAllPetsWithRelatedEntitiesAsQueryable(PetQueryParams queryParams)
     {
         IQueryable<Pet> petsQuery = _dbSet
             .AsSplitQuery()
@@ -36,9 +36,15 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .Include(p => p.AdoptionRequests)
             .AsQueryable();
 
-        string[] filterProperties = { "name", "breed", "species" };
+        if (!string.IsNullOrEmpty(queryParams.BreedName))
+        {
+            petsQuery = petsQuery.Where(p => p.Breed.Name == queryParams.BreedName);
+        }
 
-        petsQuery = petsQuery.ApplyQueryParams(queryParams, filterProperties);
+        if (!string.IsNullOrEmpty(queryParams.SpeciesName))
+        {
+            petsQuery = petsQuery.Where(p => p.Breed.Species.Name == queryParams.SpeciesName);
+        }
 
         return petsQuery;
     }

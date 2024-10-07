@@ -296,11 +296,10 @@ public class PetService : IPetService
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation,
     /// containing a <see cref="Result{T}"/> of an <see cref="IEnumerable{PetResponse}"/> with pets and their related entities.</returns>
-    public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(QueryParams queryParams, CancellationToken cancellationToken = default)
+    public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(PetQueryParams queryParams, CancellationToken cancellationToken = default)
     {
         try
         {
-            // Use the modified GetAllPetsWithRelatedEntitiesAsQueryable method with filtering applied
             var petsQuery = _petRepository.GetAllPetsWithRelatedEntitiesAsQueryable(queryParams);
 
             var pets = await petsQuery.ToListAsync(cancellationToken);

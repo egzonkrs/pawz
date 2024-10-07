@@ -469,3 +469,5 @@ $RECYCLE.BIN/
 appsettings.Development.json
 *.jpg
 *.jpeg
+
+.env
