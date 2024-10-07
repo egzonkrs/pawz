@@ -4,6 +4,7 @@ using Pawz.Domain.Entities;
 using Pawz.Domain.Helpers;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,11 +22,15 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     /// Retrieves a queryable collection of pets with related entities, allowing for further filtering, sorting, or pagination.
     /// </summary>
     /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>An <see cref="IQueryable{Pet}"/> containing pets with their related entities.</returns>
-    public IQueryable<Pet>? GetAllPetsWithRelatedEntitiesAsQueryable(PetQueryParams queryParams)
+    public async Task<List<Pet>> GetAllPetsWithRelatedEntitiesAsQueryable(QueryParams queryParams, CancellationToken cancellationToken)
     {
-        IQueryable<Pet> petsQuery = _dbSet
-            .AsSplitQuery()
+        queryParams.SearchQuery = "Golden";
+        queryParams.FilterBy = "Breed";
+        queryParams.FilterValue = "Golden";
+
+        var petsQuery = _dbSet
             .AsNoTracking()
             .Include(p => p.PetImages)
             .Include(p => p.Breed)
@@ -37,17 +42,12 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .Include(p => p.AdoptionRequests)
             .AsQueryable();
 
-        if (!string.IsNullOrEmpty(queryParams.BreedName))
-        {
-            petsQuery = petsQuery.Where(p => p.Breed.Name == queryParams.BreedName);
-        }
+        petsQuery.ApplyQueryParams(queryParams, new[] { "breed" });
 
-        if (!string.IsNullOrEmpty(queryParams.SpeciesName))
-        {
-            petsQuery = petsQuery.Where(p => p.Breed.Species.Name == queryParams.SpeciesName);
-        }
+        var sqlQuery = petsQuery.ToQueryString();
+        var qwe = await petsQuery.ToListAsync(cancellationToken);
 
-        return petsQuery;
+        return qwe;
     }
 
     /// <summary>

@@ -20,25 +20,25 @@ public static class QueryExtensions
             query = ApplyFilter(query, queryParams.FilterBy, queryParams.FilterValue);
         }
 
-        if (string.IsNullOrEmpty(queryParams.SortBy) is false)
-        {
-            query = ApplySorting(query, queryParams.SortBy, queryParams.SortDescending);
-        }
+        // if (string.IsNullOrEmpty(queryParams.SortBy) is false)
+        // {
+        //     query = ApplySorting(query, queryParams.SortBy, queryParams.SortDescending);
+        // }
 
-        queryParams.TotalPages = (int)Math.Ceiling(queryParams.TotalCount / (double)queryParams.PageSize);
-
-        queryParams.CurrentPage = queryParams.CurrentPage > queryParams.TotalPages
-            ? queryParams.TotalPages
-            : queryParams.CurrentPage;
-
-        if (queryParams.CurrentPage < 1)
-        {
-            queryParams.CurrentPage = 1;
-        }
-
-        var queryable = query
-            .Skip((queryParams.CurrentPage - 1) * queryParams.PageSize)
-            .Take(queryParams.PageSize);
+        // queryParams.TotalPages = (int)Math.Ceiling(queryParams.TotalCount / (double)queryParams.PageSize);
+        //
+        // queryParams.CurrentPage = queryParams.CurrentPage > queryParams.TotalPages
+        //     ? queryParams.TotalPages
+        //     : queryParams.CurrentPage;
+        //
+        // if (queryParams.CurrentPage < 1)
+        // {
+        //     queryParams.CurrentPage = 1;
+        // }
+        //
+        // var queryable = query
+        //     .Skip((queryParams.CurrentPage - 1) * queryParams.PageSize)
+        //     .Take(queryParams.PageSize);
 
         return queryable;
     }

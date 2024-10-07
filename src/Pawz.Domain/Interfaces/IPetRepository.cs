@@ -20,8 +20,9 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     /// Retrieves a queryable collection of pets with related entities, allowing for further filtering, sorting, or pagination.
     /// </summary>
     /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>An <see cref="IQueryable{Pet}"/> containing pets with their related entities.</returns>
-    public IQueryable<Pet>? GetAllPetsWithRelatedEntitiesAsQueryable(PetQueryParams queryParams);
+    Task<List<Pet>> GetAllPetsWithRelatedEntitiesAsQueryable(QueryParams queryParams, CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves all pets associated with a specific user by their unique user ID.
