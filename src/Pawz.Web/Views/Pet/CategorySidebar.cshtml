@@ -2,7 +2,7 @@
 
 <!-- Remove All Filters Button -->
 <div class="widget">
-    <a href="@Url.Action("Index", "Pet")">
+    <a asp-controller="Pet" asp-action="Index">
         Remove Applied Filters
     </a>
 </div>
@@ -17,7 +17,7 @@
                       .Distinct())                                                  // Remove duplicates by species name
         {
             <li>
-                <a href="@Url.Action("Index", "Pet", new { SpeciesName = species })">
+                <a asp-controller="Pet" asp-action="Index" asp-route-SpeciesName="@species">
                     @species
                 </a>
             </li>
@@ -35,7 +35,7 @@
                       .Distinct())                                                  // Remove duplicates by breed name
         {
             <li>
-                <a href="@Url.Action("Index", "Pet", new { BreedName = breed })">
+                <a asp-controller="Pet" asp-action="Index" asp-route-BreedName="@breed">
                     @breed
                 </a>
             </li>

@@ -22,10 +22,11 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     /// </summary>
     /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
     /// <returns>An <see cref="IQueryable{Pet}"/> containing pets with their related entities.</returns>
-    public IQueryable<Pet> GetAllPetsWithRelatedEntitiesAsQueryable(PetQueryParams queryParams)
+    public IQueryable<Pet>? GetAllPetsWithRelatedEntitiesAsQueryable(PetQueryParams queryParams)
     {
         IQueryable<Pet> petsQuery = _dbSet
             .AsSplitQuery()
+            .AsNoTracking()
             .Include(p => p.PetImages)
             .Include(p => p.Breed)
             .ThenInclude(b => b.Species)
