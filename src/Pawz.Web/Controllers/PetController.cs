@@ -74,6 +74,7 @@ public class PetController : Controller
 
             if (!searchResult.IsSuccess)
             {
+                TempData["ErrorMessage"] = "No pets were found matching the search criteria.";
                 return View(new List<PetViewModel>());
             }
 
