@@ -31,4 +31,18 @@ public class WishlistService(IConnectionMultiplexer redis) : IWishlistService
     {
         return await _database.KeyDeleteAsync(key);
     }
+
+    public async Task<bool> TestRedisConnectionAsync()
+    {
+        try
+        {
+            var ping = await _database.PingAsync();  // Ping the Redis server to test connection
+            return ping.TotalMilliseconds >= 0;  // If ping succeeds, return true
+        }
+        catch (Exception)
+        {
+            return false;  // Return false if there's an error or exception during ping
+        }
+    }
+
 }
