@@ -58,5 +58,5 @@ public class QueryParams
     /// <summary>
     /// The number of items per page for pagination.
     /// </summary>
-    public int PageSize { get; set; }
+    public int PageSize { get; set; } = 5;
 }

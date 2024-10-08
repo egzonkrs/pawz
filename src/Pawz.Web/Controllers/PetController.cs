@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
-using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Helpers;
 using Pawz.Web.Extensions;
@@ -35,7 +34,6 @@ public class PetController : Controller
         IPetService petService,
         IBreedService breedService,
         ISpeciesService speciesService,
-        ILocationService locationService,
         ICountryService countryService,
         ICityService cityService,
         IValidator<PetCreateViewModel> validator,

@@ -49,6 +49,27 @@ public class PetService : IPetService
     }
 
     /// <summary>
+    /// Retrieves all pets along with their related entities.
+    /// </summary>
+    /// <param name="queryParams">The <see cref="QueryParams"/>.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    public async Task<Result<List<PetResponse>>> GetAllPetsWithDetailsAsync(QueryParams queryParams, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var pets = await _petRepository.GetAllPetsWithDetailsAsync(queryParams, cancellationToken);
+            var petResponses = _mapper.Map<List<PetResponse>>(pets.Pets);
+
+            return Result<List<PetResponse>>.Success(petResponses);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets with related entities.", nameof(PetService));
+            return Result<List<PetResponse>>.Failure(PetErrors.RetrievalError);
+        }
+    }
+
+    /// <summary>
     /// Creates a new pet in the system.
     /// </summary>
     /// <param name="petCreateRequest">The <see cref="PetCreateRequest"/>.</param>
@@ -125,27 +146,6 @@ public class PetService : IPetService
             _logger.LogError(ex, "An error occurred in {ServiceName} while attempting to create a Pet for UserId: {UserId}", nameof(PetService),
                 petCreateRequest.PostedByUserId);
             return Result<int>.Failure(PetErrors.CreationUnexpectedError);
-        }
-    }
-
-    /// <summary>
-    /// Retrieves all pets from the system.
-    /// </summary>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A result containing a collection of all pets.</returns>
-    public async Task<Result<IEnumerable<Pet>>> GetAllPetsAsync(CancellationToken cancellationToken)
-    {
-        try
-        {
-            var pets = await _petRepository.GetAllAsync(cancellationToken);
-
-            return Result<IEnumerable<Pet>>.Success(pets);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets.",
-                nameof(PetService));
-            return Result<IEnumerable<Pet>>.Failure(PetErrors.RetrievalError);
         }
     }
 
@@ -251,27 +251,6 @@ public class PetService : IPetService
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve pets for UserId: {UserId}",
                 nameof(PetService), _userAccessor.GetUserId());
             return Result<IEnumerable<UserPetResponse>>.Failure(PetErrors.RetrievalError);
-        }
-    }
-
-    /// <summary>
-    /// Asynchronously retrieves all pets along with their related entities.
-    /// </summary>
-    /// <param name="queryParams">The <see cref="QueryParams"/>.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    public async Task<Result<List<PetResponse>>> GetAllPetsWithDetailsAsync(QueryParams queryParams, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            var pets = await _petRepository.GetAllPetsWithDetailsAsync(queryParams, cancellationToken);
-            var petResponses = _mapper.Map<List<PetResponse>>(pets);
-
-            return Result<List<PetResponse>>.Success(petResponses);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets with related entities.", nameof(PetService));
-            return Result<List<PetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
 

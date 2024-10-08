@@ -21,13 +21,6 @@ public interface IPetService
     Task<Result<int>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Retrieves all pets.
-    /// </summary>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>A task representing the operation. The task result contains a collection of pet entities.</returns>
-    Task<Result<IEnumerable<Pet>>> GetAllPetsAsync(CancellationToken cancellationToken);
-
-    /// <summary>
     /// Retrieves a pet by its ID.
     /// </summary>
     /// <param name="petId">The ID of the pet to retrieve.</param>
