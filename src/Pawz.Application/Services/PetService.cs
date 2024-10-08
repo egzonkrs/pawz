@@ -267,19 +267,14 @@ public class PetService : IPetService
     {
         try
         {
-            _logger.LogInformation("Started retrieving all pets with related entities.");
-
             var pets = await _petRepository.GetAllPetsWithRelatedEntitiesAsync(cancellationToken);
 
             if (pets is null)
             {
-                _logger.LogWarning("No pets were found with related entities.");
                 return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
             }
 
             var petResponses = _mapper.Map<IEnumerable<PetResponse>>(pets);
-
-            _logger.LogInformation("Successfully retrieved all pets with related entities.");
             return Result<IEnumerable<PetResponse>>.Success(petResponses);
         }
         catch (Exception ex)
@@ -300,16 +295,14 @@ public class PetService : IPetService
     {
         try
         {
-            var petsQuery = _petRepository.GetAllPetsWithRelatedEntitiesAsQueryable(queryParams);
+            var petsQuery = await _petRepository.GetAllPetsWithRelatedEntitiesAsQueryable(queryParams, cancellationToken);
 
-            var pets = await petsQuery.ToListAsync(cancellationToken);
-
-            if (pets is null || !pets.Any())
+            if (petsQuery is null)
             {
                 return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
             }
 
-            var petResponses = _mapper.Map<IEnumerable<PetResponse>>(pets);
+            var petResponses = _mapper.Map<IEnumerable<PetResponse>>(petsQuery);
             return Result<IEnumerable<PetResponse>>.Success(petResponses);
         }
         catch (Exception ex)

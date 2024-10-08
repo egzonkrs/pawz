@@ -22,10 +22,9 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     /// </summary>
     /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
     /// <returns>An <see cref="IQueryable{Pet}"/> containing pets with their related entities.</returns>
-    public IQueryable<Pet>? GetAllPetsWithRelatedEntitiesAsQueryable(PetQueryParams queryParams)
+    public async Task<List<Pet>> GetAllPetsWithRelatedEntitiesAsQueryable(PetQueryParams queryParams, CancellationToken cancellationToken = default)
     {
-        IQueryable<Pet> petsQuery = _dbSet
-            .AsSplitQuery()
+        var petsQuery = _dbSet
             .AsNoTracking()
             .Include(p => p.PetImages)
             .Include(p => p.Breed)
@@ -39,15 +38,17 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
 
         if (!string.IsNullOrEmpty(queryParams.BreedName))
         {
-            petsQuery = petsQuery.Where(p => p.Breed.Name == queryParams.BreedName);
+            petsQuery = petsQuery.Where(p => p.Breed.Name.Contains(queryParams.BreedName));
         }
 
         if (!string.IsNullOrEmpty(queryParams.SpeciesName))
         {
-            petsQuery = petsQuery.Where(p => p.Breed.Species.Name == queryParams.SpeciesName);
+            petsQuery = petsQuery.Where(p => p.Breed.Species.Name.Contains(queryParams.SpeciesName));
         }
 
-        return petsQuery;
+        petsQuery = petsQuery.ApplyQueryParams(queryParams, new[] { "FilterQuery" });
+
+        return await petsQuery.ToListAsync(cancellationToken);
     }
 
     /// <summary>
