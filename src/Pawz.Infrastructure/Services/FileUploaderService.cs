@@ -15,24 +15,21 @@ namespace Pawz.Infrastructure.Services;
 /// </summary>
 public class FileUploaderService : IFileUploaderService
 {
-    private readonly ILogger<PetService> _logger;
+    private readonly ILogger<FileUploaderService> _logger;
 
-    public FileUploaderService(ILogger<PetService> logger)
+    public FileUploaderService(ILogger<FileUploaderService> logger)
     {
         _logger = logger;
     }
 
     private const string PetImagesDirectory = "wwwroot/images/pets";
-    private readonly string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
-    private const int maxFileSize = 10 * 1024 * 1024;
+    private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+    private const int MaxFileSize = 10 * 1024 * 1024;
 
     /// <summary>
     /// Uploads a file to the specified directory after validating it.
     /// </summary>
     /// <param name="file">The file to be uploaded.</param>
-    /// <param name="directory">The directory where the file will be saved.</param>
-    /// <returns>The relative path of the uploaded file.</returns>
-    /// <exception cref="ArgumentException">Thrown when the file is null, empty, too large, or has an invalid type.</exception>
     public async Task<Result<string>> UploadFileAsync(IFormFile file)
     {
         try
@@ -43,17 +40,17 @@ public class FileUploaderService : IFileUploaderService
                 return Result<string>.Failure(FileUploadErrors.InvalidFile);
             }
 
-            if (file.Length > maxFileSize)
+            if (file.Length > MaxFileSize)
             {
-                _logger.LogError("File upload failed: file size {FileSize} exceeds the maximum allowed size of {MaxFileSize}.", file.Length, maxFileSize);
-                return Result<string>.Failure(new Error(FileUploadErrors.MaxFileSize.Code, $"{FileUploadErrors.MaxFileSize.Description}: {maxFileSize / (1024 * 1024)} MB."));
+                _logger.LogError("File upload failed: file size {FileSize} exceeds the maximum allowed size of {MaxFileSize}.", file.Length, MaxFileSize);
+                return Result<string>.Failure(new Error(FileUploadErrors.MaxFileSize.Code, $"{FileUploadErrors.MaxFileSize.Description}: {MaxFileSize / (1024 * 1024)} MB."));
             }
 
             var fileExtension = Path.GetExtension(file.FileName).ToLower();
 
-            if (!allowedExtensions.Contains(fileExtension))
+            if (!_allowedExtensions.Contains(fileExtension))
             {
-                var allowedTypes = string.Join(", ", allowedExtensions);
+                var allowedTypes = string.Join(", ", _allowedExtensions);
                 _logger.LogError("File upload failed: file extension {FileExtension} is not allowed.", fileExtension);
                 return Result<string>.Failure(new Error(FileUploadErrors.UnsupportedFileFormat.Code, $"{FileUploadErrors.UnsupportedFileFormat.Description} Allowed types are: {allowedTypes}"));
             }

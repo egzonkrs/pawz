@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Pawz.Domain.Abstractions;
 using Pawz.Web.Models;
+using Pawz.Web.Models.Identity;
 using Pawz.Web.Models.Pet;
 using Pawz.Web.Validators;
 

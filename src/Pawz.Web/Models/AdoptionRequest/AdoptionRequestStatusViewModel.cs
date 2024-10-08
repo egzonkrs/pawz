@@ -1,4 +1,5 @@
-namespace Pawz.Web.Models;
+namespace Pawz.Web.Models.AdoptionRequest;
+
 public enum AdoptionRequestStatusViewModel
 {
     Pending = 1,

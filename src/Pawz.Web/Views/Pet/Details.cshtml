@@ -127,45 +127,55 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="widget-tips">
-                        <h5 class="widget-header">Safety Tips</h5>
-                        <ul>
-                            <li>Meet seller at a public place</li>
-                            <li>Check the item before you buy</li>
-                            <li>Pay only after collecting the item</li>
-                            <li>Check recent photos of the pet.</li>
+                    <div class="widget-tips mb-3">
+                        <h5 class="widget-header text-center">Safety Tips</h5>
+                        <ul class="list-unstyled text-left">
+                            <li><i class="bi bi-check-circle-fill text-success"></i> Meet seller at a public place</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> Check the item before you buy</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> Pay only after collecting the item</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> Check recent photos of the pet.</li>
                         </ul>
                     </div>
-                    <div class="widget-price text-center">
-                        <h4 class="price-h">Price</h4>
-                        <p class="price-p">
-                            @if (Model.Price < 1)
-                            {
-                                @:Free
-                            }
-                            else
-                            {
-                                @Model.Price.ToString("C")
-                            }
-                        </p>
+
+                    <div class="widget-price text-center mb-3">
+                        <div class="btn btn-primary w-100 main-button-color">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <span>
+                                    Price
+                                    @if (Model.Price < 1)
+                                    {
+                                        @:Free
+                                    }
+                                    else
+                                    {
+                                        @Model.Price.ToString("C")
+                                    }
+                                </span>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="text-center">
-                        @if(@UserAccessor.IsUserAuthenticated())
+                        @if(UserAccessor.IsUserAuthenticated())
                         {
                             @if (Model.HasExistingAdoptionRequest)
                             {
-                                <button class="btn-request-submitted  w-100 " disabled>Request Submitted</button>
+                                <button class="btn btn-primary w-100 mb-2 main-button-color" disabled>
+                                    Request Submitted
+                                </button>
                             }
                             else
                             {
-                                <button class="btn adoption-request-button w-100" data-toggle="modal" data-target="#adoptionRequestModal">
+                                <button class="btn btn-primary w-100 mb-2 main-button-color" data-toggle="modal" data-target="#adoptionRequestModal">
                                     Request Adoption
                                 </button>
                             }
                         }
                         else
                         {
-                            <a asp-controller="Users" asp-action="Login" class="btn adoption-request-login w-100">Log in to Request Adoption</a>
+                            <a asp-controller="Users" asp-action="Login" class="btn btn-primary w-100 mb-2 main-button-color">
+                                Request Adoption
+                            </a>
                         }
                     </div>
                 </div>
@@ -229,7 +239,7 @@
         function toggleTextArea(groupName, textAreaId) {
             var radios = document.querySelectorAll('input[name="' + groupName + '"]');
             var textarea = document.getElementById(textAreaId);
-          
+
             for (var i = 0; i < radios.length; i++) {
                 if (radios[i].checked) {
                     if (radios[i].value === 'true') {
@@ -289,10 +299,10 @@
                             toastr.success('Adoption request submitted successfully!');
                             $('#adoptionRequestModal').modal('hide');
                         } else {
-                            
+
                             $.each(response.errors, function(key, errorMessages) {
-                                var input = $('[name="' + key + '"]'); 
-                                input.addClass('is-invalid'); 
+                                var input = $('[name="' + key + '"]');
+                                input.addClass('is-invalid');
 
                                 var errorHtml = errorMessages.join('<br>');
                                 if (input.is(':radio')) {

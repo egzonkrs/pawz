@@ -3,6 +3,7 @@ using Pawz.Application.Models.Pet;
 using Pawz.Application.Models.PetModels;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Helpers;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,17 +15,10 @@ public interface IPetService
     /// <summary>
     /// Creates a new pet.
     /// </summary>
-    /// <param name="pet">The pet entity to create.</param>
+    /// <param name="petCreateRequest">The pet entity to create.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
     Task<Result<int>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Retrieves all pets.
-    /// </summary>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>A task representing the operation. The task result contains a collection of pet entities.</returns>
-    Task<Result<IEnumerable<Pet>>> GetAllPetsAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves a pet by its ID.
@@ -59,10 +53,10 @@ public interface IPetService
     Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(CancellationToken cancellationToken);
 
     /// <summary>
-    /// Retrieves all pets along with their associated related entities.
+    /// Retrieves all pets along with their related entities.
     /// </summary>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
-    /// <returns>A task representing the operation. The task result contains an <see cref="IEnumerable{Pet}"/> with all pets and their related entities, or an error if the operation fails.</returns>
-    Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
+    /// <param name="queryParams">The <see cref="QueryParams"/>.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    Task<Result<List<PetResponse>>> GetAllPetsWithDetailsAsync(QueryParams queryParams, CancellationToken cancellationToken = default);
 }
 

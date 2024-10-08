@@ -24,8 +24,7 @@ public class AdoptionRequestModelValidator : AbstractValidator<AdoptionRequestCr
             .MaximumLength(10).WithMessage("Postal code must be 10 characters or fewer.");
 
         RuleFor(x => x.ContactNumber)
-            .NotEmpty().WithMessage("Contact number is required.")
-            .Matches(@"^\+?\d{1,3}\s?\d{2}\s?\d{3}\s?\d{3}$").WithMessage("Contact number must be in the format +XXX XX XXX XXX.");
+            .NotEmpty().WithMessage("Contact number is required.");
 
         RuleFor(x => x.IsRentedProperty)
             .NotEmpty().WithMessage("Please specify whether you live in a rented property.");

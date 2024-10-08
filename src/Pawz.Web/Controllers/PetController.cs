@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Helpers;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models.Breed;
 using Pawz.Web.Models.City;
@@ -33,7 +34,6 @@ public class PetController : Controller
         IPetService petService,
         IBreedService breedService,
         ISpeciesService speciesService,
-        ILocationService locationService,
         ICountryService countryService,
         ICityService cityService,
         IValidator<PetCreateViewModel> validator,
@@ -52,10 +52,17 @@ public class PetController : Controller
         _userAccessor = userAccessor;
     }
 
-    public async Task<IActionResult> Index(CancellationToken cancellationToken)
+    public async Task<IActionResult> Index(QueryParams queryParams, CancellationToken cancellationToken)
     {
-        var result = await _petService.GetAllPetsWithRelatedEntities(cancellationToken);
+        var result = await _petService.GetAllPetsWithDetailsAsync(queryParams, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return View("Error");
+        }
+
         var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
+
         return View(petViewModels);
     }
 

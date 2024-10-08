@@ -6,7 +6,7 @@ using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
 using Pawz.Domain.Entities;
 using Pawz.Web.Extensions;
-using Pawz.Web.Models;
+using Pawz.Web.Models.AdoptionRequest;
 using Pawz.Web.Models.City;
 using Pawz.Web.Models.Pet;
 using System.Collections.Generic;
@@ -22,7 +22,6 @@ public class AdoptionRequestController : Controller
     private readonly IValidator<AdoptionRequestCreateModel> _validator;
     private readonly ICountryService _countryService;
     private readonly ICityService _cityService;
-    private readonly IPetService _petservice;
     private readonly IMapper _mapper;
 
     public AdoptionRequestController(
@@ -30,15 +29,13 @@ public class AdoptionRequestController : Controller
         IValidator<AdoptionRequestCreateModel> validator,
         ICountryService countryService,
         ICityService cityService,
-        IMapper mapper,
-        IPetService petservice)
+        IMapper mapper)
     {
         _adoptionRequestService = adoptionRequestService;
         _validator = validator;
         _countryService = countryService;
         _cityService = cityService;
         _mapper = mapper;
-        _petservice = petservice;
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
