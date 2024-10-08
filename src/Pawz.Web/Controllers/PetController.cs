@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
+using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Helpers;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models.Breed;
 using Pawz.Web.Models.City;
@@ -52,10 +54,17 @@ public class PetController : Controller
         _userAccessor = userAccessor;
     }
 
-    public async Task<IActionResult> Index(CancellationToken cancellationToken)
+    public async Task<IActionResult> Index(PetQueryParams queryParams, CancellationToken cancellationToken)
     {
-        var result = await _petService.GetAllPetsWithRelatedEntities(cancellationToken);
+        var result = await _petService.GetAllPetsWithRelatedEntities(queryParams, cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return View("Error");
+        }
+
         var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
+
         return View(petViewModels);
     }
 

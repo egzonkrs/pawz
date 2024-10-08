@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
+using Pawz.Domain.Helpers;
 using Pawz.Web.Models;
 using Pawz.Web.Models.Pet;
 using System.Collections;
@@ -30,7 +31,14 @@ public class HomeController : Controller
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var result = await _petService.GetAllPetsWithRelatedEntities(cancellationToken);
+
+        if (!result.IsSuccess)
+        {
+            return View("Error");
+        }
+
         var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
+
         return View(petViewModels);
     }
 

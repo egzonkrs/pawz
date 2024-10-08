@@ -19,6 +19,12 @@ public static class UsersErrors
     public static Error NoChangesDetected => new Error("Users.NoChanges", "No changes were detected during the operation.");
 
     /// <summary>
+    /// Returns an error indicating that the user is not authorized to perform the requested action.
+    /// </summary>
+    /// <returns>An <see cref="Error"/> indicating that the user is not authorized.</returns>
+    public static Error Unauthorized => new Error("Users.Unauthorized", "User is not authorized to perform this action.");
+
+    /// <summary>
     /// Returns an error indicating that the user could not be created due to a database failure.
     /// </summary>
     /// <returns>An <see cref="Error"/> indicating that the user creation failed due to a database issue.</returns>

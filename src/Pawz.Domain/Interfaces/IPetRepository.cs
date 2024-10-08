@@ -2,25 +2,26 @@ using Pawz.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Pawz.Domain.Helpers;
+using System.Linq;
 
 namespace Pawz.Domain.Interfaces;
 
 public interface IPetRepository : IGenericRepository<Pet, int>
 {
-
     /// <summary>
-    /// Retrieves all pets along with their related entities, including images, breed, species, user, and location.
+    /// Asynchronously retrieves all pets along with their related entities.
     /// </summary>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A collection of all pets with their related entities.</returns>
-    Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
+    /// <returns>An <see cref="IEnumerable{Pet}"/> containing all pets with their related entities.</returns>
+    Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Counts the total number of pets available in the database.
+    /// Retrieves a queryable collection of pets with related entities, allowing for further filtering, sorting, or pagination.
     /// </summary>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>The total count of pets.</returns>
-    Task<int> CountPetsAsync(CancellationToken cancellationToken = default);
+    /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
+    /// <returns>An <see cref="IQueryable{Pet}"/> containing pets with their related entities.</returns>
+    Task<List<Pet>> GetAllPetsWithRelatedEntitiesAsQueryable(PetQueryParams queryParams, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieves all pets associated with a specific user by their unique user ID.
@@ -37,7 +38,7 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     /// <param name="id">The unique identifier of the Pet to retrieve.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
     /// <returns>
-    /// A task representing the asynchronous operation, containing the Pet entity with all related entities included, 
+    /// A task representing the asynchronous operation, containing the Pet entity with all related entities included,
     /// or null if no pet with the specified ID is found.
     /// </returns>
     Task<Pet?> GetPetByIdWithRelatedEntitiesAsync(int id, CancellationToken cancellationToken = default);

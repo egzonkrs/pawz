@@ -1,6 +1,6 @@
-namespace Pawz.Application.Helpers;
+namespace Pawz.Domain.Helpers;
 
-public sealed class QueryParams
+public class QueryParams
 {
     public string FilterBy { get; set; }
     public string FilterValue { get; set; }
@@ -13,4 +13,6 @@ public sealed class QueryParams
     public int CurrentPage { get; set; }
     public int TotalPages { get; set; }
     public int PageSize { get; set; }
+
+    public string Type { get; set; }
 }

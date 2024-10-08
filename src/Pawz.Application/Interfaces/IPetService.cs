@@ -3,6 +3,7 @@ using Pawz.Application.Models.Pet;
 using Pawz.Application.Models.PetModels;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Helpers;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,10 +60,20 @@ public interface IPetService
     Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(CancellationToken cancellationToken);
 
     /// <summary>
-    /// Retrieves all pets along with their associated related entities.
+    /// Asynchronously retrieves all pets along with their related entities.
     /// </summary>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
-    /// <returns>A task representing the operation. The task result contains an <see cref="IEnumerable{Pet}"/> with all pets and their related entities, or an error if the operation fails.</returns>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation,
+    /// containing a <see cref="Result{T}"/> of an <see cref="IEnumerable{PetResponse}"/> with pets and their related entities.</returns>
     Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Asynchronously retrieves a filtered collection of pets with related entities based on the provided query parameters.
+    /// </summary>
+    /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation,
+    /// containing a <see cref="Result{T}"/> of an <see cref="IEnumerable{PetResponse}"/> with pets and their related entities.</returns>
+    Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(PetQueryParams queryParams, CancellationToken cancellationToken = default);
 }
 

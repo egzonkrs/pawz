@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Pawz.Application.Helpers;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Helpers;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
 using System.Collections.Generic;
@@ -16,12 +18,45 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     }
 
     /// <summary>
-    /// Asynchronously retrieves all pets from the database, including their related entities such as PetImages, Breed, Species, User, and Location.
-    /// This method ensures that the associated data is loaded together with the pets to avoid multiple queries or lazy loading issues.
+    /// Retrieves a queryable collection of pets with related entities, allowing for further filtering, sorting, or pagination.
     /// </summary>
-    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-    /// <returns>An IEnumerable of Pet objects with their related entities fully loaded.</returns>
-    public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default)
+    /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
+    /// <returns>An <see cref="IQueryable{Pet}"/> containing pets with their related entities.</returns>
+    public async Task<List<Pet>> GetAllPetsWithRelatedEntitiesAsQueryable(PetQueryParams queryParams, CancellationToken cancellationToken = default)
+    {
+        var petsQuery = _dbSet
+            .AsNoTracking()
+            .Include(p => p.PetImages)
+            .Include(p => p.Breed)
+            .ThenInclude(b => b.Species)
+            .Include(p => p.User)
+            .Include(p => p.Location)
+            .ThenInclude(l => l.City)
+            .ThenInclude(c => c.Country)
+            .Include(p => p.AdoptionRequests)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(queryParams.BreedName))
+        {
+            petsQuery = petsQuery.Where(p => p.Breed.Name.Contains(queryParams.BreedName));
+        }
+
+        if (!string.IsNullOrEmpty(queryParams.SpeciesName))
+        {
+            petsQuery = petsQuery.Where(p => p.Breed.Species.Name.Contains(queryParams.SpeciesName));
+        }
+
+        petsQuery = petsQuery.ApplyQueryParams(queryParams, new[] { "FilterQuery" });
+
+        return await petsQuery.ToListAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Asynchronously retrieves all pets along with their related entities.
+    /// </summary>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>An <see cref="IEnumerable{Pet}"/> containing all pets with their related entities.</returns>
+    public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default)
     {
         return await _dbSet
             .Include(p => p.PetImages)
@@ -29,8 +64,8 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .ThenInclude(b => b.Species)
             .Include(u => u.User)
             .Include(l => l.Location)
-             .ThenInclude(l => l.City)
-                .ThenInclude(c => c.Country)
+            .ThenInclude(l => l.City)
+            .ThenInclude(c => c.Country)
             // .Include(ar => ar.AdoptionRequests)
             .ToListAsync(cancellationToken);
     }
@@ -57,11 +92,6 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
                     .ThenInclude(p => p.Country)
             //TODO .Include(p => p.AdoptionRequests)
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-    }
-
-    public async Task<int> CountPetsAsync(CancellationToken cancellationToken = default)
-    {
-        return await _dbSet.CountAsync(cancellationToken);
     }
 
     /// <summary>
