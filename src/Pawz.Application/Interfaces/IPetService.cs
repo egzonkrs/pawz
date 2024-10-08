@@ -3,6 +3,7 @@ using Pawz.Application.Models.Pet;
 using Pawz.Application.Models.PetModels;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Helpers;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -71,7 +72,7 @@ public interface IPetService
     /// <param name="breedName">The breed name or partial breed name to search for.</param>
     /// <param name="cancellationToken">A token to observe for cancellation requests during the asynchronous operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a collection of pets that match the breed name search criteria, or an error if the operation fails.</returns>
-    Task<Result<IEnumerable<Pet>>> SearchPetsByBreedAndLocationAsync(string breedName, string location, CancellationToken cancellationToken);
+    Task<Result<IEnumerable<Pet>>> SearchPetsByBreedAndLocationAsync(QueryParams queryParams, CancellationToken cancellationToken);
 
 }
 

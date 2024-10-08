@@ -1,4 +1,4 @@
-namespace Pawz.Application.Helpers;
+namespace Pawz.Domain.Helpers;
 
 public sealed class QueryParams
 {
@@ -7,7 +7,8 @@ public sealed class QueryParams
     public string SortBy { get; set; }
     public bool SortDescending { get; set; } = false;
     public string SearchQuery { get; set; }
-
+    public string Breed { get; set; } 
+    public string Location { get; set; }
     public int PageNumber { get; set; } = 1;
     public int TotalCount { get; set; }
     public int CurrentPage { get; set; }

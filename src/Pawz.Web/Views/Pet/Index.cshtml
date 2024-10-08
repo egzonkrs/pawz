@@ -26,15 +26,15 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="search-result bg-gray">
-                    @if (!string.IsNullOrEmpty(ViewBag.SearchTerm))
+                    @if (!string.IsNullOrEmpty(ViewBag.SearchQuery))
                     {
-                        @if (!string.IsNullOrEmpty(ViewBag.Location))
+                        if (!string.IsNullOrEmpty(ViewBag.Location))
                         {
-                            <h2>Results for "@ViewBag.SearchTerm" in @ViewBag.Location</h2>
+                            <h2>Results for "@ViewBag.SearchQuery" in @ViewBag.Location</h2>
                         }
                         else
                         {
-                            <h2>Results for "@ViewBag.SearchTerm"</h2>
+                            <h2>Results for "@ViewBag.SearchQuery"</h2>
                         }
                     }
                     else

@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Pawz.Application.Helpers;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
 using Pawz.Application.Models.Pet;
@@ -7,6 +8,7 @@ using Pawz.Application.Models.PetModels;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
+using Pawz.Domain.Helpers;
 using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -339,11 +341,11 @@ public class PetService : IPetService
         }
     }
 
-    public async Task<Result<IEnumerable<Pet>>> SearchPetsByBreedAndLocationAsync(string breedName, string location, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<Pet>>> SearchPetsByBreedAndLocationAsync(QueryParams queryParams, CancellationToken cancellationToken)
     {
         try
         {
-            var pets = await _petRepository.SearchPetsByBreedAndLocationAsync(breedName, location, cancellationToken);
+            var pets = await _petRepository.SearchPetsByBreedAndLocationAsync(queryParams, cancellationToken);
 
             if (pets == null || !pets.Any())
             {

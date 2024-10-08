@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using Pawz.Domain.Helpers;
+using Pawz.Application.Helpers;
+using System;
 
 namespace Pawz.Infrastructure.Repositories;
 
@@ -109,12 +112,10 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     /// <param name="breedName">The breed name or part of the breed name to search for.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A collection of pets that match the breed search criteria, including related breed, species, images, user details, and location information.</returns>
-    public async Task<IEnumerable<Pet>> SearchPetsByBreedAndLocationAsync(string breedName, string location, CancellationToken cancellationToken)
+    public async Task<List<Pet>> SearchPetsByBreedAndLocationAsync(QueryParams queryParams, CancellationToken cancellationToken)
     {
-        return await _dbSet
+        var petsQuery = _dbSet
             .AsNoTracking()
-            .Where(p => (string.IsNullOrEmpty(breedName) || p.Breed.Name.Contains(breedName)) &&
-                        (string.IsNullOrEmpty(location) || p.Location.City.Name.Contains(location)))
             .Include(p => p.PetImages)
             .Include(p => p.Breed)
                 .ThenInclude(b => b.Species)
@@ -122,7 +123,24 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .Include(p => p.Location)
                 .ThenInclude(l => l.City)
                     .ThenInclude(c => c.Country)
-            .ToListAsync(cancellationToken);
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(queryParams.SearchQuery) || !string.IsNullOrEmpty(queryParams.Location))
+        {
+            Console.WriteLine($"Searching for Breed: {queryParams.SearchQuery}, Location: {queryParams.Location}");
+
+            petsQuery = petsQuery.Where(p =>
+                (string.IsNullOrEmpty(queryParams.SearchQuery) || p.Breed.Name.Contains(queryParams.SearchQuery)) &&
+                (string.IsNullOrEmpty(queryParams.Location) || p.Location.City.Name.Contains(queryParams.Location)));
+        }
+
+        petsQuery = petsQuery.ApplyQueryParams(queryParams, new[] { "SearchQuery"});
+
+        var result = await petsQuery.ToListAsync(cancellationToken);
+
+        Console.WriteLine($"Found {result.Count} pets.");
+
+        return result;
     }
 
 }

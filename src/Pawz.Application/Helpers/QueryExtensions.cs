@@ -1,10 +1,9 @@
-using Microsoft.EntityFrameworkCore;
-using Pawz.Application.Helpers;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Helpers;
 using System;
 using System.Linq;
 
-namespace Pawz.Infrastructure;
+namespace Pawz.Application.Helpers;
 
 public static class QueryExtensions
 {
@@ -16,7 +15,7 @@ public static class QueryExtensions
             query = ApplySearchFilters(query, searchProperties, queryParams.SearchQuery);
         }
 
-        if (string.IsNullOrEmpty(queryParams.FilterBy) is false && !string.IsNullOrEmpty(queryParams.FilterValue))
+       /* if (string.IsNullOrEmpty(queryParams.FilterBy) is false && !string.IsNullOrEmpty(queryParams.FilterValue))
         {
             query = ApplyFilter(query, queryParams.FilterBy, queryParams.FilterValue);
         }
@@ -24,9 +23,9 @@ public static class QueryExtensions
         if (string.IsNullOrEmpty(queryParams.SortBy) is false)
         {
             query = ApplySorting(query, queryParams.SortBy, queryParams.SortDescending);
-        }
+        }*/
 
-        queryParams.TotalPages = (int)Math.Ceiling(queryParams.TotalCount / (double)queryParams.PageSize);
+        /*queryParams.TotalPages = (int)Math.Ceiling(queryParams.TotalCount / (double)queryParams.PageSize);
 
         queryParams.CurrentPage = queryParams.CurrentPage > queryParams.TotalPages
             ? queryParams.TotalPages
@@ -39,23 +38,22 @@ public static class QueryExtensions
 
         var queryable = query
             .Skip((queryParams.CurrentPage - 1) * queryParams.PageSize)
-            .Take(queryParams.PageSize);
+            .Take(queryParams.PageSize)*/
 
-        return queryable;
+        return query;
     }
 
     private static IQueryable<TEntity> ApplySearchFilters<TEntity>(
-        IQueryable<TEntity> query,
-        string[] searchProperties,
-        string searchQuery) where TEntity : Pet
+    IQueryable<TEntity> query,
+    string[] searchProperties,
+    string searchQuery) where TEntity : Pet
     {
         foreach (var property in searchProperties)
         {
             query = property.ToLower() switch
             {
-                "name" => query.Where(p => EF.Functions.Contains(p.Name, searchQuery)),
-                "breed" => query.Where(p => EF.Functions.Contains(p.Breed.Name, searchQuery)),
-                "species" => query.Where(p => EF.Functions.Contains(p.Breed.Species.Name, searchQuery)),
+                "breed" => query.Where(p => p.Breed.Name.Contains(searchQuery)),
+                "location" => query.Where(p => p.Location.City.Name.Contains(searchQuery)),
                 _ => query
             };
         }
@@ -70,9 +68,9 @@ public static class QueryExtensions
     {
         return filterBy.ToLower() switch
         {
-            "name" => query.Where(p => EF.Functions.Contains(p.Name, filterValue)),
-            "breed" => query.Where(p => EF.Functions.Contains(p.Breed.Name, filterValue)),
-            "species" => query.Where(p => EF.Functions.Contains(p.Breed.Species.Name, filterValue)),
+            "name" => query.Where(p => p.Name.Contains(filterValue)),
+            "breed" => query.Where(p => p.Breed.Name.Contains(filterValue)),
+            "species" => query.Where(p => p.Breed.Species.Name.Contains(filterValue)),
             _ => query
         };
     }

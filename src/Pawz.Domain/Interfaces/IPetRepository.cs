@@ -1,4 +1,5 @@
 using Pawz.Domain.Entities;
+using Pawz.Domain.Helpers;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -58,5 +59,5 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     /// <param name="location">The location to search for.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A collection of pets that match the search criteria.</returns>
-    Task<IEnumerable<Pet>> SearchPetsByBreedAndLocationAsync(string breedName, string location, CancellationToken cancellationToken);
+    Task<List<Pet>> SearchPetsByBreedAndLocationAsync(QueryParams queryParams, CancellationToken cancellationToken);
 }

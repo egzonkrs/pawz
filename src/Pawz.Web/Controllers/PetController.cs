@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Helpers;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models.Breed;
 using Pawz.Web.Models.City;
@@ -51,13 +52,12 @@ public class PetController : Controller
         _adoptionRequestService = adoptionRequestService;
         _userAccessor = userAccessor;
     }
-
     [HttpGet]
-    public async Task<IActionResult> Index(string searchTerm, string location, CancellationToken cancellationToken)
+    public async Task<IActionResult> Index(QueryParams queryParams, CancellationToken cancellationToken)
     {
         IEnumerable<PetViewModel> petViewModels;
 
-        if (string.IsNullOrEmpty(searchTerm) && string.IsNullOrEmpty(location))
+        if (string.IsNullOrEmpty(queryParams.SearchQuery) && string.IsNullOrEmpty(queryParams.Location))
         {
             var allPetsResult = await _petService.GetAllPetsWithRelatedEntities(cancellationToken);
 
@@ -70,7 +70,7 @@ public class PetController : Controller
         }
         else
         {
-            var searchResult = await _petService.SearchPetsByBreedAndLocationAsync(searchTerm, location, cancellationToken);
+            var searchResult = await _petService.SearchPetsByBreedAndLocationAsync(queryParams, cancellationToken);
 
             if (!searchResult.IsSuccess)
             {
@@ -80,11 +80,12 @@ public class PetController : Controller
             petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(searchResult.Value);
         }
 
-        ViewBag.SearchTerm = searchTerm;
-        ViewBag.Location = location;
+        ViewBag.SearchQuery = queryParams.SearchQuery;
+        ViewBag.Location = queryParams.Location;
 
         return View(petViewModels);
     }
+
 
 
     [HttpGet("pet/details/{id:int}")]
