@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Pawz.Application.Helpers;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Services;
 using Pawz.Domain.Abstractions;
@@ -9,6 +8,7 @@ using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
 using Pawz.Infrastructure.Repositories;
 using Pawz.Infrastructure.Services;
+using Pawz.Web.Configurations;
 using Pawz.Web.Hubs;
 using System.Configuration;
 
@@ -59,8 +59,6 @@ public class DataModule : IModule
         services.AddScoped<ICityService, CityService>();
         services.AddScoped<IAdoptionRequestService, AdoptionRequestService>();
         services.AddScoped<IAdoptionRepository, AdoptionRepository>();
-
-        services.Configure<ApiSettings>(_configuration.GetSection(ApiSettings.SectionName));
 
         services.AddScoped<IRealTimeNotificationSender, SignalRNotificationSender>();
         services.AddScoped<INotificationHubContext, SignalRHubContext>();

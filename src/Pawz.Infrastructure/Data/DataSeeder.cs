@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Data;
 
-public class DataSeeder
+public static class DataSeeder
 {
     public static async Task SeedData(AppDbContext context, IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
     {

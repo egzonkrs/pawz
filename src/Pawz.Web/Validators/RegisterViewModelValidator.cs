@@ -1,5 +1,6 @@
 using FluentValidation;
 using Pawz.Web.Models;
+using Pawz.Web.Models.Identity;
 
 namespace Pawz.Web.Validators;
 

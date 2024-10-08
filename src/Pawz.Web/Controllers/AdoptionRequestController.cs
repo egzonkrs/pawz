@@ -7,6 +7,7 @@ using Pawz.Application.Models;
 using Pawz.Domain.Entities;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models;
+using Pawz.Web.Models.AdoptionRequest;
 using Pawz.Web.Models.City;
 using Pawz.Web.Models.Pet;
 using System.Collections.Generic;

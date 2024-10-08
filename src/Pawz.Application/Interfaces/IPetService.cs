@@ -15,7 +15,7 @@ public interface IPetService
     /// <summary>
     /// Creates a new pet.
     /// </summary>
-    /// <param name="pet">The pet entity to create.</param>
+    /// <param name="petCreateRequest">The pet entity to create.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the operation. The task result contains a boolean indicating success or failure.</returns>
     Task<Result<int>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken);
@@ -60,20 +60,10 @@ public interface IPetService
     Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(CancellationToken cancellationToken);
 
     /// <summary>
-    /// Asynchronously retrieves all pets along with their related entities.
+    /// Retrieves all pets along with their related entities.
     /// </summary>
+    /// <param name="queryParams">The <see cref="QueryParams"/>.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation,
-    /// containing a <see cref="Result{T}"/> of an <see cref="IEnumerable{PetResponse}"/> with pets and their related entities.</returns>
-    Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Asynchronously retrieves a filtered collection of pets with related entities based on the provided query parameters.
-    /// </summary>
-    /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation,
-    /// containing a <see cref="Result{T}"/> of an <see cref="IEnumerable{PetResponse}"/> with pets and their related entities.</returns>
-    Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntitiesAsync(QueryParams queryParams, CancellationToken cancellationToken = default);
+    Task<Result<List<PetResponse>>> GetAllPetsWithDetailsAsync(QueryParams queryParams, CancellationToken cancellationToken = default);
 }
 

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Data.Seed;
 
-public class SeedLocations
+public static class SeedLocations
 {
     public static async Task SeedLocationData(AppDbContext context)
     {

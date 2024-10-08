@@ -56,7 +56,7 @@ public class PetController : Controller
 
     public async Task<IActionResult> Index(QueryParams queryParams, CancellationToken cancellationToken)
     {
-        var result = await _petService.GetAllPetsWithRelatedEntitiesAsync(queryParams, cancellationToken);
+        var result = await _petService.GetAllPetsWithDetailsAsync(queryParams, cancellationToken);
 
         if (!result.IsSuccess)
         {

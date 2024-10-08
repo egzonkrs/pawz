@@ -1,10 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using Pawz.Application.Helpers;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Helpers;
 using Pawz.Domain.Interfaces;
+using Pawz.Infrastructure.Common;
 using Pawz.Infrastructure.Data;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,49 +23,76 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
     /// <param name="cancellationToken"></param>
     /// <returns>An <see cref="IQueryable{Pet}"/> containing pets with their related entities.</returns>
-    public async Task<List<Pet>> GetAllPetsWithRelatedEntitiesAsQueryable(QueryParams queryParams, CancellationToken cancellationToken)
+    public async Task<List<Pet>> GetAllPetsWithDetailsAsync(QueryParams queryParams, CancellationToken cancellationToken)
     {
-        queryParams.SearchQuery = "Golden";
-        queryParams.FilterBy = "Breed";
-        queryParams.FilterValue = "Golden";
-
-        var petsQuery = _dbSet
+        var query = _dbSet
             .AsNoTracking()
-            .Include(p => p.PetImages)
-            .Include(p => p.Breed)
-            .ThenInclude(b => b.Species)
-            .Include(p => p.User)
-            .Include(p => p.Location)
-            .ThenInclude(l => l.City)
-            .ThenInclude(c => c.Country)
-            .Include(p => p.AdoptionRequests)
+            .Select(p => new Pet
+            {
+                Id = p.Id,
+                Name = p.Name,
+                AgeYears = p.AgeYears,
+                About = p.About,
+                Price = p.Price,
+                Status = p.Status,
+                CreatedAt = p.CreatedAt,
+                BreedId = p.BreedId,
+                LocationId = p.LocationId,
+                PostedByUserId = p.PostedByUserId,
+                Breed = new Breed
+                {
+                    Id = p.Breed.Id,
+                    Name = p.Breed.Name,
+                    SpeciesId = p.Breed.SpeciesId,
+                    Species = new Species
+                    {
+                        Id = p.Breed.Species.Id,
+                        Name = p.Breed.Species.Name,
+                        Description = p.Breed.Species.Description
+                    }
+                },
+                Location = new Location
+                {
+                    Id = p.Location.Id,
+                    Address = p.Location.Address,
+                    PostalCode = p.Location.PostalCode,
+                    CityId = p.Location.CityId,
+                    City = new City
+                    {
+                        Id = p.Location.City.Id,
+                        Name = p.Location.City.Name,
+                        CountryId = p.Location.City.CountryId,
+                        Country = new Country
+                        {
+                            Id = p.Location.City.Country.Id,
+                            Name = p.Location.City.Country.Name
+                        }
+                    }
+                },
+                PetImages = p.PetImages.Select(pi => new PetImage
+                {
+                    Id = pi.Id,
+                    ImageUrl = pi.ImageUrl,
+                    IsPrimary = pi.IsPrimary,
+                    PetId = pi.PetId
+                }).ToList(),
+                User = new ApplicationUser
+                {
+                    Id = p.User.Id,
+                    FirstName = p.User.FirstName,
+                    LastName = p.User.LastName,
+                    Email = p.User.Email,
+                    UserName = p.User.UserName
+                }
+            })
             .AsQueryable();
 
-        petsQuery.ApplyQueryParams(queryParams, new[] { "breed" });
+        query = query.ApplyQueryParams(queryParams);
 
-        var sqlQuery = petsQuery.ToQueryString();
-        var qwe = await petsQuery.ToListAsync(cancellationToken);
+        var generatedSql = query.ToQueryString(); // For debugging only!
+        var result = await query.ToListAsync(cancellationToken);
 
-        return qwe;
-    }
-
-    /// <summary>
-    /// Asynchronously retrieves all pets along with their related entities.
-    /// </summary>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>An <see cref="IEnumerable{Pet}"/> containing all pets with their related entities.</returns>
-    public async Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default)
-    {
-        return await _dbSet
-            .Include(p => p.PetImages)
-            .Include(p => p.Breed)
-            .ThenInclude(b => b.Species)
-            .Include(u => u.User)
-            .Include(l => l.Location)
-            .ThenInclude(l => l.City)
-            .ThenInclude(c => c.Country)
-            // .Include(ar => ar.AdoptionRequests)
-            .ToListAsync(cancellationToken);
+        return result;
     }
 
     /// <summary>
@@ -124,8 +150,8 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .AsSplitQuery()
             .Where(pet => pet.PostedByUserId == userId)
             .Include(p => p.Location)
-                .ThenInclude(p => p.City)
-                    .ThenInclude(p => p.Country)
+            .ThenInclude(p => p.City)
+            .ThenInclude(p => p.Country)
             .Include(pet => pet.Breed)
             .Include(pet => pet.PetImages)
             .Include(pet => pet.User)

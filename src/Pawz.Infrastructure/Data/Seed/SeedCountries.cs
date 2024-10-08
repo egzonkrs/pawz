@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Data.Seed;
-public class SeedCountries
+public static class SeedCountries
 {
     public static async Task SeedCountryData(AppDbContext context)
     {

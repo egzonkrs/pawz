@@ -10,19 +10,12 @@ namespace Pawz.Domain.Interfaces;
 public interface IPetRepository : IGenericRepository<Pet, int>
 {
     /// <summary>
-    /// Asynchronously retrieves all pets along with their related entities.
-    /// </summary>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>An <see cref="IEnumerable{Pet}"/> containing all pets with their related entities.</returns>
-    Task<IEnumerable<Pet>> GetAllPetsWithRelatedEntitiesAsync(CancellationToken cancellationToken = default);
-
-    /// <summary>
     /// Retrieves a queryable collection of pets with related entities, allowing for further filtering, sorting, or pagination.
     /// </summary>
     /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
     /// <param name="cancellationToken"></param>
     /// <returns>An <see cref="IQueryable{Pet}"/> containing pets with their related entities.</returns>
-    Task<List<Pet>> GetAllPetsWithRelatedEntitiesAsQueryable(QueryParams queryParams, CancellationToken cancellationToken);
+    Task<List<Pet>> GetAllPetsWithDetailsAsync(QueryParams queryParams, CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves all pets associated with a specific user by their unique user ID.

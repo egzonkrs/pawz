@@ -51,9 +51,8 @@ public class PetService : IPetService
     /// <summary>
     /// Creates a new pet in the system.
     /// </summary>
-    /// <param name="pet">The pet entity to create.</param>
+    /// <param name="petCreateRequest">The <see cref="PetCreateRequest"/>.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A result indicating whether the creation was successful.</returns>
     public async Task<Result<int>> CreatePetAsync(PetCreateRequest petCreateRequest, CancellationToken cancellationToken)
     {
         try
@@ -233,26 +232,24 @@ public class PetService : IPetService
     /// <returns>A result containing a collection of pets associated with the user, or an error if not found.</returns>
     public async Task<Result<IEnumerable<UserPetResponse>>> GetPetsByUserIdAsync(CancellationToken cancellationToken)
     {
-        string userId = null;
         try
         {
-            userId = _userAccessor.GetUserId();
+            var userId = _userAccessor.GetUserId();
 
             var pets = await _petRepository.GetByUserIdAsync(userId, cancellationToken);
 
-            if (pets is null || !pets.Any())
+            if (!pets.Any())
             {
                 return Result<IEnumerable<UserPetResponse>>.Failure(PetErrors.NoPetsFoundForUser(userId));
             }
 
             var petResponses = _mapper.Map<IEnumerable<UserPetResponse>>(pets);
-
             return Result<IEnumerable<UserPetResponse>>.Success(petResponses);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve pets for UserId: {UserId}",
-                nameof(PetService), userId);
+                nameof(PetService), _userAccessor.GetUserId());
             return Result<IEnumerable<UserPetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
@@ -260,60 +257,21 @@ public class PetService : IPetService
     /// <summary>
     /// Asynchronously retrieves all pets along with their related entities.
     /// </summary>
+    /// <param name="queryParams">The <see cref="QueryParams"/>.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation,
-    /// containing a <see cref="Result{T}"/> of an <see cref="IEnumerable{PetResponse}"/> with pets and their related entities.</returns>
-    public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default)
+    public async Task<Result<List<PetResponse>>> GetAllPetsWithDetailsAsync(QueryParams queryParams, CancellationToken cancellationToken = default)
     {
         try
         {
-            _logger.LogInformation("Started retrieving all pets with related entities.");
+            var pets = await _petRepository.GetAllPetsWithDetailsAsync(queryParams, cancellationToken);
+            var petResponses = _mapper.Map<List<PetResponse>>(pets);
 
-            var pets = await _petRepository.GetAllPetsWithRelatedEntitiesAsync(cancellationToken);
-
-            if (pets is null)
-            {
-                _logger.LogWarning("No pets were found with related entities.");
-                return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
-            }
-
-            var petResponses = _mapper.Map<IEnumerable<PetResponse>>(pets);
-
-            _logger.LogInformation("Successfully retrieved all pets with related entities.");
-            return Result<IEnumerable<PetResponse>>.Success(petResponses);
+            return Result<List<PetResponse>>.Success(petResponses);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets with related entities.", nameof(PetService));
-            return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
-        }
-    }
-
-    /// <summary>
-    /// Asynchronously retrieves a filtered collection of pets with related entities based on the provided query parameters.
-    /// </summary>
-    /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation,
-    /// containing a <see cref="Result{T}"/> of an <see cref="IEnumerable{PetResponse}"/> with pets and their related entities.</returns>
-    public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntitiesAsync(QueryParams queryParams, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            var pets = await _petRepository.GetAllPetsWithRelatedEntitiesAsQueryable(queryParams, cancellationToken);
-
-            if (pets is null || !pets.Any())
-            {
-                return Result<IEnumerable<PetResponse>>.Failure(PetErrors.NoPetsFound());
-            }
-
-            var petResponses = _mapper.Map<IEnumerable<PetResponse>>(pets);
-            return Result<IEnumerable<PetResponse>>.Success(petResponses);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve pets with related entities.", nameof(PetService));
-            return Result<IEnumerable<PetResponse>>.Failure(PetErrors.RetrievalError);
+            return Result<List<PetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
 
@@ -324,7 +282,7 @@ public class PetService : IPetService
             var userId = _userAccessor.GetUserId();
 
             var existingPet = await _petRepository.GetPetByIdWithRelatedEntitiesAsync(pet.Id, cancellationToken);
-            if (existingPet == null)
+            if (existingPet is null)
             {
                 _logger.LogWarning("Pet with Id: {PetId} not found", pet.Id);
                 return Result<bool>.Failure(PetErrors.NoPetsFound());

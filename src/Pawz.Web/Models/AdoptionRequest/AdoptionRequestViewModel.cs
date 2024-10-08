@@ -1,11 +1,10 @@
 using Pawz.Domain.Entities;
-using Pawz.Domain.Enums;
 using Pawz.Web.Models.Location;
 using Pawz.Web.Models.Pet;
 using System;
 using System.Collections.Generic;
 
-namespace Pawz.Web.Models;
+namespace Pawz.Web.Models.AdoptionRequest;
 
 public class AdoptionRequestViewModel
 {
