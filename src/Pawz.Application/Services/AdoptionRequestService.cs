@@ -53,9 +53,6 @@ public class AdoptionRequestService : IAdoptionRequestService
     {
         try
         {
-            _logger.LogInformation("Started creating an Adoption Request with Id: {AdoptionRequestId} from UserId: {UserId}", adoptionRequestCreateRequest.Id,
-                adoptionRequestCreateRequest);
-
             var location = new Location
             {
                 CityId = adoptionRequestCreateRequest.CityId,
@@ -84,9 +81,6 @@ public class AdoptionRequestService : IAdoptionRequestService
 
             if (isAdoptionRequestCreated)
             {
-                _logger.LogInformation("Created an Adoption Request with Id: {AdoptionRequestId} for UserId: {UserId}", adoptionRequest.Id,
-                    adoptionRequest.RequesterUserId);
-
                 var pet = await _petRepository.GetByIdAsync(adoptionRequestCreateRequest.PetId, cancellationToken);
                 if (pet == null)
                 {
@@ -115,12 +109,9 @@ public class AdoptionRequestService : IAdoptionRequestService
                     return Result<bool>.Success();
                 }
 
-                _logger.LogWarning("Failed to create notification for Adoption Request with Id: {AdoptionRequestId}", adoptionRequest.Id);
                 return Result<bool>.Failure(NotificationErrors.CreationFailed);
             }
 
-            _logger.LogWarning("Failed to create an Adoption Request with Id: {AdoptionRequestId} from UserId: {UserId}", adoptionRequest.Id,
-                adoptionRequest.RequesterUserId);
             return Result<bool>.Failure(AdoptionRequestErrors.CreationFailed);
         }
         catch (Exception ex)

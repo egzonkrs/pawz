@@ -3,7 +3,7 @@ let connection;
 document.addEventListener('DOMContentLoaded', function () {
     if (userIsLoggedIn()) {
         initializeNotificationSystem();
-    } 
+    }
 });
 
 function initializeNotificationSystem() {
