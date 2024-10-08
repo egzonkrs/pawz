@@ -107,11 +107,11 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     }
 
     /// <summary>
-    /// Searches for pets based on their breed name (or part of the breed name).
+    /// Searches for pets based on breed name (or part of the breed name) and location.
     /// </summary>
-    /// <param name="breedName">The breed name or part of the breed name to search for.</param>
+    /// <param name="queryParams">Search parameters including breed name and location.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A collection of pets that match the breed search criteria, including related breed, species, images, user details, and location information.</returns>
+    /// <returns>A list of pets matching the search criteria, including associated breed, species, images, user, and location (with city and country) information.</returns>
     public async Task<List<Pet>> SearchPetsByBreedAndLocationAsync(QueryParams queryParams, CancellationToken cancellationToken)
     {
         var petsQuery = _dbSet
@@ -127,18 +127,14 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
 
         if (!string.IsNullOrEmpty(queryParams.SearchQuery) || !string.IsNullOrEmpty(queryParams.Location))
         {
-            Console.WriteLine($"Searching for Breed: {queryParams.SearchQuery}, Location: {queryParams.Location}");
-
             petsQuery = petsQuery.Where(p =>
                 (string.IsNullOrEmpty(queryParams.SearchQuery) || p.Breed.Name.Contains(queryParams.SearchQuery)) &&
                 (string.IsNullOrEmpty(queryParams.Location) || p.Location.City.Name.Contains(queryParams.Location)));
         }
 
-        petsQuery = petsQuery.ApplyQueryParams(queryParams, new[] { "SearchQuery"});
+        petsQuery = petsQuery.ApplyQueryParams(queryParams, new[] { "SearchQuery" });
 
         var result = await petsQuery.ToListAsync(cancellationToken);
-
-        Console.WriteLine($"Found {result.Count} pets.");
 
         return result;
     }

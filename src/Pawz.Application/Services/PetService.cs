@@ -270,6 +270,11 @@ public class PetService : IPetService
         }
     }
 
+    /// <summary>
+    /// Retrieves all pets, including their related entities such as breed, species, images, and location.
+    /// </summary>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A result containing a collection of pets with related entities, or an error if no pets are found.</returns>
     public async Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default)
     {
         try
@@ -296,6 +301,12 @@ public class PetService : IPetService
         }
     }
 
+    /// <summary>
+    /// Updates a pet's details, ensuring that the user is authorized to perform the update.
+    /// </summary>
+    /// <param name="pet">The pet entity containing updated information.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A result indicating whether the update was successful.</returns>
     public async Task<Result<bool>> UpdatePetAsync(Pet pet, CancellationToken cancellationToken)
     {
         try
@@ -341,6 +352,12 @@ public class PetService : IPetService
         }
     }
 
+    /// <summary>
+    /// Searches for pets based on breed name and location using the provided search parameters.
+    /// </summary>
+    /// <param name="queryParams">Search parameters, including breed name and location.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A result containing a collection of pets that match the breed and location search criteria, or an error if the search fails.</returns>
     public async Task<Result<IEnumerable<Pet>>> SearchPetsByBreedAndLocationAsync(QueryParams queryParams, CancellationToken cancellationToken)
     {
         try

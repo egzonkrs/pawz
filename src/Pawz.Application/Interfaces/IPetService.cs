@@ -67,11 +67,11 @@ public interface IPetService
     Task<Result<IEnumerable<PetResponse>>> GetAllPetsWithRelatedEntities(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Searches for pets by their breed name (or part of the breed name).
+    /// Searches for pets by breed name (or part of the breed name) and location.
     /// </summary>
-    /// <param name="breedName">The breed name or partial breed name to search for.</param>
-    /// <param name="cancellationToken">A token to observe for cancellation requests during the asynchronous operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains a collection of pets that match the breed name search criteria, or an error if the operation fails.</returns>
+    /// <param name="queryParams">Search parameters including breed name and location.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests during the asynchronous operation.</param>
+    /// <returns>A task representing the asynchronous operation, with a result containing a collection of pets that match the search criteria, or an error if the operation fails.</returns>
     Task<Result<IEnumerable<Pet>>> SearchPetsByBreedAndLocationAsync(QueryParams queryParams, CancellationToken cancellationToken);
 
 }

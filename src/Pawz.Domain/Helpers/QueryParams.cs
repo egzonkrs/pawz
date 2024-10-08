@@ -7,7 +7,7 @@ public sealed class QueryParams
     public string SortBy { get; set; }
     public bool SortDescending { get; set; } = false;
     public string SearchQuery { get; set; }
-    public string Breed { get; set; } 
+    public string Breed { get; set; }
     public string Location { get; set; }
     public int PageNumber { get; set; } = 1;
     public int TotalCount { get; set; }

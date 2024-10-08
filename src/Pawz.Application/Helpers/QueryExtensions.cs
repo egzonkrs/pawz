@@ -15,7 +15,7 @@ public static class QueryExtensions
             query = ApplySearchFilters(query, searchProperties, queryParams.SearchQuery);
         }
 
-       /* if (string.IsNullOrEmpty(queryParams.FilterBy) is false && !string.IsNullOrEmpty(queryParams.FilterValue))
+        if (string.IsNullOrEmpty(queryParams.FilterBy) is false && !string.IsNullOrEmpty(queryParams.FilterValue))
         {
             query = ApplyFilter(query, queryParams.FilterBy, queryParams.FilterValue);
         }
@@ -23,9 +23,9 @@ public static class QueryExtensions
         if (string.IsNullOrEmpty(queryParams.SortBy) is false)
         {
             query = ApplySorting(query, queryParams.SortBy, queryParams.SortDescending);
-        }*/
+        }
 
-        /*queryParams.TotalPages = (int)Math.Ceiling(queryParams.TotalCount / (double)queryParams.PageSize);
+        queryParams.TotalPages = (int)Math.Ceiling(queryParams.TotalCount / (double)queryParams.PageSize);
 
         queryParams.CurrentPage = queryParams.CurrentPage > queryParams.TotalPages
             ? queryParams.TotalPages
@@ -38,7 +38,7 @@ public static class QueryExtensions
 
         var queryable = query
             .Skip((queryParams.CurrentPage - 1) * queryParams.PageSize)
-            .Take(queryParams.PageSize)*/
+            .Take(queryParams.PageSize);
 
         return query;
     }
