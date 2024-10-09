@@ -319,14 +319,8 @@ public class PetService : IPetService
 
             var userAdoptionRequest = pet.AdoptionRequests.FirstOrDefault();
 
-            if (userAdoptionRequest is null)
-            {
-                petResponse.HasExistingAdoptionRequest = false;
-                petResponse.AdoptionRequestId = null;
-            }
-
-            petResponse.HasExistingAdoptionRequest = true;
-            petResponse.AdoptionRequestId = userAdoptionRequest.Id;
+            petResponse.HasExistingAdoptionRequest = userAdoptionRequest != null;
+            petResponse.AdoptionRequestId = userAdoptionRequest?.Id;
 
             return Result<PetResponse>.Success(petResponse);
         }
