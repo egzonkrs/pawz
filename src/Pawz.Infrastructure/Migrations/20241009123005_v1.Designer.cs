@@ -12,8 +12,8 @@ using Pawz.Infrastructure.Data;
 namespace Pawz.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240918133942_AddedNotificationEntity_ToDB")]
-    partial class AddedNotificationEntity_ToDB
+    [Migration("20241009123005_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -197,14 +197,40 @@ namespace Pawz.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ContactNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HasOutdoorSpace")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsRentedProperty")
+                        .HasColumnType("bit");
+
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherPetsDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OutdoorSpaceDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("OwnsOtherPets")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("PetId")
                         .HasColumnType("int");
@@ -216,7 +242,7 @@ namespace Pawz.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("ResponseDate")
+                    b.Property<DateTime?>("ResponseDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
@@ -470,15 +496,20 @@ namespace Pawz.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("PetId");
 
                     b.HasIndex("RecipientId");
 
                     b.HasIndex("SenderId");
-
-                    b.HasIndex("IsDeleted", "CreatedAt");
 
                     b.ToTable("Notifications");
                 });
@@ -604,6 +635,36 @@ namespace Pawz.Infrastructure.Migrations
                     b.ToTable("Species");
                 });
 
+            modelBuilder.Entity("Pawz.Domain.Entities.Wishlist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PetId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PetId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Wishlists");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -681,7 +742,7 @@ namespace Pawz.Infrastructure.Migrations
                     b.HasOne("Pawz.Domain.Entities.ApplicationUser", "User")
                         .WithMany("AdoptionRequests")
                         .HasForeignKey("RequesterUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Location");
@@ -756,19 +817,19 @@ namespace Pawz.Infrastructure.Migrations
                     b.HasOne("Pawz.Domain.Entities.Breed", "Breed")
                         .WithMany("Pets")
                         .HasForeignKey("BreedId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Pawz.Domain.Entities.Location", "Location")
                         .WithMany("Pets")
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Pawz.Domain.Entities.ApplicationUser", "User")
                         .WithMany("Pets")
                         .HasForeignKey("PostedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Breed");
@@ -789,6 +850,25 @@ namespace Pawz.Infrastructure.Migrations
                     b.Navigation("Pet");
                 });
 
+            modelBuilder.Entity("Pawz.Domain.Entities.Wishlist", b =>
+                {
+                    b.HasOne("Pawz.Domain.Entities.Pet", "Pet")
+                        .WithMany("WishlistedByUsers")
+                        .HasForeignKey("PetId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Pawz.Domain.Entities.ApplicationUser", "User")
+                        .WithMany("WishlistedPets")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Pet");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Pawz.Domain.Entities.AdoptionRequest", b =>
                 {
                     b.Navigation("Adoption")
@@ -800,6 +880,8 @@ namespace Pawz.Infrastructure.Migrations
                     b.Navigation("AdoptionRequests");
 
                     b.Navigation("Pets");
+
+                    b.Navigation("WishlistedPets");
                 });
 
             modelBuilder.Entity("Pawz.Domain.Entities.Breed", b =>
@@ -829,6 +911,8 @@ namespace Pawz.Infrastructure.Migrations
                     b.Navigation("AdoptionRequests");
 
                     b.Navigation("PetImages");
+
+                    b.Navigation("WishlistedByUsers");
                 });
 
             modelBuilder.Entity("Pawz.Domain.Entities.Species", b =>
