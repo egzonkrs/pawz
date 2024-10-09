@@ -15,9 +15,7 @@ public class WishlistEntityTypeConfiguration : IEntityTypeConfiguration<Wishlist
             .HasForeignKey(w => w.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(w => w.Pet)
-            .WithMany(p => p.WishlistedByUsers)
-            .HasForeignKey(w => w.PetId)
-            .OnDelete(DeleteBehavior.Restrict);
+        builder.HasMany(w => w.Pets)
+            .WithMany(p => p.WishlistedByUsers);
     }
 }

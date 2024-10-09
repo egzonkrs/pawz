@@ -24,6 +24,7 @@ public class WishlistRepository : GenericRepository<Wishlist, int>, IWishlistRep
     public async Task<Wishlist?> GetWishlistItemAsync(string userId, int petId)
     {
         return await _dbSet
-            .FirstOrDefaultAsync(w => w.UserId == userId && w.PetId == petId && !w.IsDeleted);
+            .Include(w => w.Pets)
+            .FirstOrDefaultAsync(w => w.UserId == userId && !w.IsDeleted && w.Pets.Any(p => p.Id == petId));
     }
 }

@@ -16,13 +16,20 @@ public class WishlistService : IWishlistService
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<WishlistService> _logger;
     private readonly IUserAccessor _userAccessor;
+    private readonly IPetRepository _petRepository;
 
-    public WishlistService(IWishlistRepository wishlistRepository, IUnitOfWork unitOfWork, ILogger<WishlistService> logger, IUserAccessor userAccessor)
+    public WishlistService(
+        IWishlistRepository wishlistRepository,
+        IUnitOfWork unitOfWork,
+        ILogger<WishlistService> logger,
+        IUserAccessor userAccessor,
+        IPetRepository petRepository)
     {
         _wishlistRepository = wishlistRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
         _userAccessor = userAccessor;
+        _petRepository = petRepository;
     }
 
     public async Task<Result<List<Wishlist>>> AddPetToWishlistAsync(string userId, int petId)
@@ -36,10 +43,12 @@ public class WishlistService : IWishlistService
                 return Result<List<Wishlist>>.Failure(UsersErrors.RetrievalError);
             }
 
+            var pet = await _petRepository.GetByIdAsync(petId);
+
             var wishlistEntry = new Wishlist
             {
                 UserId = userId,
-                PetId = petId,
+                Pets = new List<Pet> { pet },
                 IsDeleted = false
             };
 
@@ -93,5 +102,4 @@ public class WishlistService : IWishlistService
             return Result<List<Wishlist>>.Failure($"Error removing pet from wishlist: {ex.Message}");
         }
     }
-
 }
