@@ -5,9 +5,9 @@ using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Common;
 using Pawz.Infrastructure.Data;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
 
 namespace Pawz.Infrastructure.Repositories;
 
@@ -120,8 +120,34 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
             .Include(p => p.Location)
                 .ThenInclude(p => p.City)
                     .ThenInclude(p => p.Country)
-            //TODO .Include(p => p.AdoptionRequests)
+            //TODO  .Include(p => p.AdoptionRequests) 
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+    }
+
+    /// <summary>
+    /// Retrieves a single Pet entity by its ID, including all related entities such as PetImages, Breed, Species, User, and Location.
+    /// This method uses eager loading to ensure all related entities are loaded in the same query to prevent additional database calls.
+    /// </summary>
+    /// <param name="id">The unique identifier of the Pet to retrieve.</param>
+    /// <param name="userId"> The unique identifier of the User who has made a adoption request.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the asynchronous operation if needed.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains the Pet entity with all related entities loaded,
+    /// or null if no pet with the specified ID is found.
+    /// </returns>
+    public async Task<Pet?> GetPetByIdWithRelatedEntitiesAsync(int id, string userId, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(p => p.PetImages)
+            .Include(p => p.Breed)
+                .ThenInclude(b => b.Species)
+            .Include(p => p.User)
+            .Include(p => p.Location)
+                .ThenInclude(p => p.City)
+                .ThenInclude(p => p.Country)
+           .Include(p => p.AdoptionRequests
+               .Where(ar => ar.RequesterUserId == userId))
+           .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
     /// <summary>
