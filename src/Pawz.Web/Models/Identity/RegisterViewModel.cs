@@ -1,4 +1,4 @@
-namespace Pawz.Web.Models;
+namespace Pawz.Web.Models.Identity;
 
 public class RegisterViewModel
 {

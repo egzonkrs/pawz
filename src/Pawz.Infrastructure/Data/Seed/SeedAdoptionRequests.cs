@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Data.Seed;
 
-public class SeedAdoptionRequests
+public static class SeedAdoptionRequests
 {
     public static async Task SeedAdoptionRequestData(AppDbContext context)
     {

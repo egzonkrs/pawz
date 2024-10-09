@@ -77,7 +77,6 @@
 /* Price Widget */
 .widget-price {
     box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
-    padding: 20px 20px 10px 0px;
     margin-bottom: 20px;
     border-radius: 5px;
     background: #5672f9;
@@ -92,6 +91,10 @@
 
 .price-h {
     color: white
+}
+
+.main-button-color {
+    background: #5672f9 !important;
 }
 
 /* Adoption Request Button */
@@ -171,10 +174,10 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-    .pet-thumbnail:hover {
-        transform: scale(1.08);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-    }
+.pet-thumbnail:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
 
 /* User Avatar */
 .user-avatar-image-150 {
@@ -244,18 +247,17 @@
     font-size: 18px;
     margin-right: 5px;
 }
-
-    .btn-delete:hover {
-        background: #a6194d;
-        color: white;
-    }
+.btn-delete:hover {
+    background: #a6194d;
+    color: white;
+}
 
 /* Adoption Request Modal */
 .radio-group label {
     margin-right: 20px;
 }
 
-.modal-width-80{
+.modal-dialog {
     max-width: 80%;
 }
 

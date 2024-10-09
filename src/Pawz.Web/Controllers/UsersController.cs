@@ -6,6 +6,7 @@ using Pawz.Application.Models.Identity;
 using Pawz.Application.Models.Pet;
 using Pawz.Web.Extensions;
 using Pawz.Web.Models;
+using Pawz.Web.Models.Identity;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;

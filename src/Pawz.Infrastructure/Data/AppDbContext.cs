@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Reflection;
 
 namespace Pawz.Infrastructure.Data;
+
 public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
     private readonly IConfiguration _configuration;

@@ -8,6 +8,7 @@ using Pawz.Application.Models.PetModels;
 using Pawz.Application.Models.SpeciesModels;
 using Pawz.Domain.Entities;
 using Pawz.Web.Models;
+using Pawz.Web.Models.AdoptionRequest;
 using Pawz.Web.Models.Breed;
 using Pawz.Web.Models.Location;
 using Pawz.Web.Models.NotificationModels;

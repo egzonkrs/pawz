@@ -104,12 +104,12 @@
                                         <label class="radio-inline"><input class="radio-style" type="radio" asp-for="HasOutdoorSpace" value="true" onchange="toggleTextArea('HasOutdoorSpace', 'OutdoorSpaceDetails')"> Yes</label>
                                         <label class="radio-inline"><input class="radio-style" type="radio" asp-for="HasOutdoorSpace" value="false" onchange="toggleTextArea('HasOutdoorSpace', 'OutdoorSpaceDetails')"> No</label>
                                         <span asp-validation-for="HasOutdoorSpace" class="form-label input-error-text"></span>
-                                    </div>                                   
+                                    </div>
                                 </div>
                                 <div class="col-4">
-                                    <div class="form-group"> 
+                                    <div class="form-group">
                                         <textarea asp-for="OutdoorSpaceDetails" id="OutdoorSpaceDetails" class="form-control w-100" placeholder="Provide more outdoor space details..."></textarea>
-                                        <span asp-validation-for="OutdoorSpaceDetails" class="form-label input-error-text"></span>  
+                                        <span asp-validation-for="OutdoorSpaceDetails" class="form-label input-error-text"></span>
                                         <span class="form-label input-error-text"></span>
                                     </div>
                                 </div>
@@ -119,7 +119,7 @@
                                             <label class="radio-inline"><input class="radio-style" type="radio" asp-for="OwnsOtherPets" value="true" onchange="toggleTextArea('OwnsOtherPets', 'OtherPetsDetails')"> Yes</label>
                                             <label class="radio-inline"><input class="radio-style" type="radio" asp-for="OwnsOtherPets" value="false" onchange="toggleTextArea('OwnsOtherPets', 'OtherPetsDetails')"> No</label>
                                             <span asp-validation-for="OwnsOtherPets" class="form-label input-error-text"></span>
-                                        </div>                                      
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -130,7 +130,7 @@
                                 </div>
                             </div>
                             <div action="row">
-                                <div class="col-12 ">
+                                <div class="">
                                     <div class="form-group">
                                         <label asp-for="Message" class="form-label-site">Additional Message or Comments</label>
                                         <textarea asp-for="Message" class="form-control w-100" placeholder="Provide any additional comments"></textarea>

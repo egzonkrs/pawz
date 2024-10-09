@@ -126,28 +126,34 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="widget-tips">
-                        <h5 class="widget-header">Safety Tips</h5>
-                        <ul>
-                            <li>Meet seller at a public place</li>
-                            <li>Check the item before you buy</li>
-                            <li>Pay only after collecting the item</li>
-                            <li>Check recent photos of the pet.</li>
+                    <div class="widget-tips mb-3">
+                        <h5 class="widget-header text-center">Safety Tips</h5>
+                        <ul class="list-unstyled text-left">
+                            <li><i class="bi bi-check-circle-fill text-success"></i> Meet seller at a public place</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> Check the item before you buy</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> Pay only after collecting the item</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> Check recent photos of the pet.</li>
                         </ul>
                     </div>
-                    <div class="widget-price text-center">
-                        <h4 class="price-h">Price</h4>
-                        <p class="price-p">
-                            @if (Model.Price < 1)
-                            {
-                                @:Free
-                            }
-                            else
-                            {
-                                @Model.Price.ToString("C")
-                            }
-                        </p>
+
+                    <div class="widget-price text-center mb-3">
+                        <div class="btn btn-primary w-100 main-button-color">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <span>
+                                    Price
+                                    @if (Model.Price < 1)
+                                    {
+                                        @:Free
+                                    }
+                                    else
+                                    {
+                                        @Model.Price.ToString("C")
+                                    }
+                                </span>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="text-center">
                         @if (@UserAccessor.IsUserAuthenticated())
                         {
@@ -170,7 +176,9 @@
                         }
                         else
                         {
-                            <a asp-controller="Users" asp-action="Login" class="btn adoption-request-login w-100">Log in to Request Adoption</a>
+                            <a asp-controller="Users" asp-action="Login" class="btn btn-primary w-100 mb-2 main-button-color">
+                                Request Adoption
+                            </a>
                         }
                     </div>
                 </div>
