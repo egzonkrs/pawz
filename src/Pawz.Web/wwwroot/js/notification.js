@@ -16,7 +16,6 @@ function initializeNotificationSystem() {
     setupNotificationUI();
 }
 
-
 function initializeSignalR() {
     connection = new signalR.HubConnectionBuilder()
         .withUrl("/notificationHub")
@@ -31,7 +30,6 @@ function initializeSignalR() {
     });
 }
 
-
 function getUserNotifications() {
     fetch('/api/v1.0/Notification/user')
         .then(response => response.json())
@@ -41,7 +39,6 @@ function getUserNotifications() {
         })
         .catch(error => console.error('Error fetching notifications:', error));
 }
-
 
 function setupNotificationUI() {
     const notificationDropdown = document.getElementById('notification-dropdown');
@@ -72,6 +69,7 @@ function addNotificationToUI(notification) {
         const notificationElement = document.createElement('div');
         notificationElement.className = 'notification-item' + (notification.isRead ? '' : ' unread');
 
+        // Përdorni një ID alternative nëse 'id' mungon
         const notificationId = notification.id || `temp-${Date.now()}`;
         notificationElement.setAttribute('data-notification-id', notificationId);
 
@@ -79,6 +77,7 @@ function addNotificationToUI(notification) {
             <p>${notification.message}</p>
         `;
         notificationList.prepend(notificationElement);
+        console.log('Added notification to UI:', notification);
     }
 }
 
@@ -118,9 +117,9 @@ function markNotificationAsRead(notificationId) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    const messageButton = document.getElementById('messageButton');
-    if (messageButton) {
-        messageButton.addEventListener('click', function () {
+    const makeAdoptionRequest = document.getElementById('makeAdoptionRequest');
+    if (makeAdoptionRequest) {
+        makeAdoptionRequest.addEventListener('click', function () {
             const petId = this.getAttribute('data-pet-id');
             const ownerId = this.getAttribute('data-owner-id');
             sendNotification(ownerId, petId);
@@ -134,7 +133,7 @@ window.sendNotification = function (recipientId, petId) {
     }
 
     const message = `A user requested to adopt the pet: with ID: ${petId}`;
-    fetch('/api/Notification/send', {
+    fetch('/api/v1.0/Notification/send', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
