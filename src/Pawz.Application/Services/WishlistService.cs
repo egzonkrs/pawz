@@ -29,16 +29,16 @@ public class WishlistService : IWishlistService
     {
         try
         {
-            var loggedInUserId = _userAccessor.GetUserId();
+            userId = _userAccessor.GetUserId();
 
-            if (string.IsNullOrEmpty(loggedInUserId))
+            if (string.IsNullOrEmpty(userId))
             {
                 return Result<List<Wishlist>>.Failure(UsersErrors.RetrievalError);
             }
 
             var wishlistEntry = new Wishlist
             {
-                UserId = loggedInUserId,
+                UserId = userId,
                 PetId = petId,
                 IsDeleted = false
             };
@@ -47,7 +47,7 @@ public class WishlistService : IWishlistService
 
             await _unitOfWork.SaveChangesAsync();
 
-            var userWishlist = await _wishlistRepository.GetWishlistForUserAsync(loggedInUserId);
+            var userWishlist = await _wishlistRepository.GetWishlistForUserAsync(userId);
 
             return Result<List<Wishlist>>.Success(userWishlist.ToList());
         }
@@ -62,14 +62,14 @@ public class WishlistService : IWishlistService
     {
         try
         {
-            var loggedInUserId = _userAccessor.GetUserId();
+            userId = _userAccessor.GetUserId();
 
-            if (string.IsNullOrEmpty(loggedInUserId))
+            if (string.IsNullOrEmpty(userId))
             {
                 return Result<List<Wishlist>>.Failure(UsersErrors.RetrievalError);
             }
 
-            var wishlistItem = await _wishlistRepository.GetWishlistItemAsync(loggedInUserId, petId);
+            var wishlistItem = await _wishlistRepository.GetWishlistItemAsync(userId, petId);
 
             if (wishlistItem == null)
             {
@@ -83,7 +83,7 @@ public class WishlistService : IWishlistService
 
             await _unitOfWork.SaveChangesAsync();
 
-            var userWishlist = await _wishlistRepository.GetWishlistForUserAsync(loggedInUserId);
+            var userWishlist = await _wishlistRepository.GetWishlistForUserAsync(userId);
 
             return Result<List<Wishlist>>.Success(userWishlist.ToList());
         }

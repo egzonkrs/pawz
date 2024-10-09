@@ -78,7 +78,7 @@
 
             $.ajax({
                 url: '/Wishlist/RemoveFromWishlist',
-                type: 'POST',
+                type: 'POST', // Changed from DELETE to POST
                 data: { petId: petId },
                 success: function (result) {
                     if (result.success) {
@@ -95,5 +95,6 @@
             });
         });
     });
+
 
 </script>
