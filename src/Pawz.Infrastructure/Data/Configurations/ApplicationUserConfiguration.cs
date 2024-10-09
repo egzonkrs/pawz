@@ -11,11 +11,13 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
         builder
             .HasMany(u => u.Pets)
             .WithOne(p => p.User)
-            .HasForeignKey(p => p.PostedByUserId);
+            .HasForeignKey(p => p.PostedByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasMany(u => u.AdoptionRequests)
             .WithOne(ar => ar.User)
-            .HasForeignKey(ar => ar.RequesterUserId);
+            .HasForeignKey(ar => ar.RequesterUserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

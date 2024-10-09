@@ -23,7 +23,10 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Pet> Pets { get; set; }
     public DbSet<PetImage> PetImages { get; set; }
     public DbSet<Species> Species { get; set; }
+
     public DbSet<Notification> Notifications { get; set; }
+
+    public DbSet<Wishlist> Wishlists { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -78,6 +81,9 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<Notification>()
           .HasQueryFilter(x => x.IsDeleted == false);
+
+        modelBuilder.Entity<Wishlist>()
+            .HasQueryFilter(x => x.IsDeleted == false);
 
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(modelBuilder);

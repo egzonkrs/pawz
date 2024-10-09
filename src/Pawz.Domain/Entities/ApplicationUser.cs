@@ -43,6 +43,8 @@ public class ApplicationUser : IdentityUser, ISoftDeletion
     /// </summary>
     public ICollection<AdoptionRequest> AdoptionRequests { get; set; }
 
+    public ICollection<Wishlist> WishlistedPets { get; set; }
+
     /// <summary>
     /// Gets or sets a value indicating whether the entity is soft-deleted.
     /// This property is implemented from the <see cref="ISoftDelete"/> interface.

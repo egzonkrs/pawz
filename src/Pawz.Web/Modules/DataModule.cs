@@ -23,7 +23,6 @@ public class DataModule : IModule
 
     public DataModule(IConfiguration configuration)
     {
-        DotEnv.Load();
         _configuration = configuration;
     }
 
@@ -41,24 +40,6 @@ public class DataModule : IModule
                 .UseSqlServer(connectionString)
                 .AddInterceptors(new SoftDeleteInterceptor())
         );
-
-        services.AddSingleton<IConnectionMultiplexer>(config =>
-        {
-            var redisConnection = config.GetRequiredService<IConfiguration>().GetConnectionString("RedisConnection");
-
-            if (string.IsNullOrEmpty(redisConnection))
-            {
-                throw new Exception("Cannot get Redis connection string from appsettings.Development.json.");
-            }
-
-            var configuration = ConfigurationOptions.Parse(redisConnection, true);
-            configuration.AbortOnConnectFail = false;
-            configuration.ConnectTimeout = 20000;
-            configuration.Ssl = true;
-            return ConnectionMultiplexer.Connect(configuration);
-        });
-
-        services.AddSingleton<IWishlistService, WishlistService>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

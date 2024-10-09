@@ -72,6 +72,8 @@ public class Pet : IEntity<int>, ISoftDeletion
     /// </summary>
     public ICollection<AdoptionRequest> AdoptionRequests { get; set; } = new List<AdoptionRequest>();
 
+    public ICollection<Wishlist> WishlistedByUsers { get; set; }
+
     /// <summary>
     /// The ID of the user who posted the pet.
     /// </summary>

@@ -1,47 +1,96 @@
+using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
+using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
-using StackExchange.Redis;
+using Pawz.Domain.Interfaces;
 using System;
-using System.Text.Json;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Pawz.Application.Services;
 
-public class WishlistService(IConnectionMultiplexer redis) : IWishlistService
+public class WishlistService : IWishlistService
 {
-    private readonly IDatabase _database = redis.GetDatabase();
+    private readonly IWishlistRepository _wishlistRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<WishlistService> _logger;
+    private readonly IUserAccessor _userAccessor;
 
-    public async Task<Wishlist> GetWishlistAsync(string key)
+    public WishlistService(IWishlistRepository wishlistRepository, IUnitOfWork unitOfWork, ILogger<WishlistService> logger, IUserAccessor userAccessor)
     {
-        var data = await _database.StringGetAsync(key);
-
-        return data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<Wishlist>(data!);
+        _wishlistRepository = wishlistRepository;
+        _unitOfWork = unitOfWork;
+        _logger = logger;
+        _userAccessor = userAccessor;
     }
 
-    public async Task<Wishlist> SetWishlistAsync(Wishlist wishlist)
-    {
-        var created = await _database.StringSetAsync(wishlist.Id,
-            JsonSerializer.Serialize(wishlist), TimeSpan.FromDays(1));
-
-        if (!created) return null;
-        return await GetWishlistAsync(wishlist.Id);
-    }
-
-    public async Task<bool> DeleteWishlistAsync(string key)
-    {
-        return await _database.KeyDeleteAsync(key);
-    }
-
-    public async Task<bool> TestRedisConnectionAsync()
+    public async Task<Result<List<Wishlist>>> AddPetToWishlistAsync(string userId, int petId)
     {
         try
         {
-            var ping = await _database.PingAsync();  // Ping the Redis server to test connection
-            return ping.TotalMilliseconds >= 0;  // If ping succeeds, return true
+            var loggedInUserId = _userAccessor.GetUserId();
+
+            if (string.IsNullOrEmpty(loggedInUserId))
+            {
+                return Result<List<Wishlist>>.Failure(UsersErrors.RetrievalError);
+            }
+
+            var wishlistEntry = new Wishlist
+            {
+                UserId = loggedInUserId,
+                PetId = petId,
+                IsDeleted = false
+            };
+
+            await _wishlistRepository.InsertAsync(wishlistEntry);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            var userWishlist = await _wishlistRepository.GetWishlistForUserAsync(loggedInUserId);
+
+            return Result<List<Wishlist>>.Success(userWishlist.ToList());
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return false;  // Return false if there's an error or exception during ping
+            _logger.LogError($"Error adding pet with ID {petId} to wishlist for user {userId}: {ex.Message}");
+            return Result<List<Wishlist>>.Failure($"Error adding pet to wishlist: {ex.Message}");
+        }
+    }
+
+    public async Task<Result<List<Wishlist>>> RemovePetFromWishlistAsync(string userId, int petId)
+    {
+        try
+        {
+            var loggedInUserId = _userAccessor.GetUserId();
+
+            if (string.IsNullOrEmpty(loggedInUserId))
+            {
+                return Result<List<Wishlist>>.Failure(UsersErrors.RetrievalError);
+            }
+
+            var wishlistItem = await _wishlistRepository.GetWishlistItemAsync(loggedInUserId, petId);
+
+            if (wishlistItem == null)
+            {
+                return Result<List<Wishlist>>.Failure("The pet is not in the user's wishlist.");
+            }
+
+            wishlistItem.IsDeleted = true;
+            wishlistItem.DeletedAt = DateTimeOffset.Now;
+
+            await _wishlistRepository.UpdateAsync(wishlistItem);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            var userWishlist = await _wishlistRepository.GetWishlistForUserAsync(loggedInUserId);
+
+            return Result<List<Wishlist>>.Success(userWishlist.ToList());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error removing pet with ID {petId} from wishlist for user {userId}: {ex.Message}");
+            return Result<List<Wishlist>>.Failure($"Error removing pet from wishlist: {ex.Message}");
         }
     }
 

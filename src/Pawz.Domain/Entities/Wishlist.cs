@@ -1,9 +1,15 @@
-using System.Collections.Generic;
+using Pawz.Domain.Interfaces;
+using System;
 
 namespace Pawz.Domain.Entities;
 
-public class Wishlist
+public class Wishlist : IEntity<int>, ISoftDeletion
 {
-    public required string Id { get; set; }
-    public List<Pet> Pets { get; set; } = [];
+    public int Id { get; set; }
+    public string UserId { get; set; }
+    public ApplicationUser User { get; set; }
+    public int PetId { get; set; }
+    public Pet Pet { get; set; }
+    public bool IsDeleted { get; set; }
+    public DateTimeOffset? DeletedAt { get; set; }
 }

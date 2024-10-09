@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
-using Pawz.Domain.Entities;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Pawz.Web.Controllers;
@@ -15,45 +14,33 @@ public class WishlistController : Controller
         _wishlistService = wishlistService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<Wishlist>> GetWishlist(string key)
-    {
-        var wishlist = await _wishlistService.GetWishlistAsync(key);
-
-        return View("Index", wishlist ?? new Wishlist{Id = key});
-    }
-
     [HttpPost]
-    public async Task<ActionResult<Wishlist>> UpdateWishlist(Wishlist wishlist)
+    public async Task<IActionResult> AddToWishlist(int petId)
     {
-        var updatedWishlist = await _wishlistService.SetWishlistAsync(wishlist);
+        var userId = User.FindFirst("sub")?.Value;
 
-        if (updatedWishlist == null) return BadRequest("Problem with wishlist");
+        var result = await _wishlistService.AddPetToWishlistAsync(userId, petId);
 
-        return View("Index", updatedWishlist);
+        if (result.IsSuccess)
+        {
+            return Ok(result.Value);
+        }
+
+        return BadRequest(result.Errors);
     }
 
     [HttpDelete]
-    public async Task<ActionResult> DeleteWishlist(string id)
+    public async Task<IActionResult> RemoveFromWishlist(int petId)
     {
-        var result = await _wishlistService.DeleteWishlistAsync(id);
+        var userId = User.FindFirst("sub")?.Value;
 
-        if (!result) return BadRequest("Problem deleting wishlist");
+        var result = await _wishlistService.RemovePetFromWishlistAsync(userId, petId);
 
-        return NoContent();
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> TestRedisConnection()
-    {
-        var isRedisConnected = await _wishlistService.TestRedisConnectionAsync();
-        if (isRedisConnected)
+        if (result.IsSuccess)
         {
-            return Json(new { Success = true, Message = "Redis connection is healthy." });
+            return Ok(result.Value);
         }
-        else
-        {
-            return Json(new { Success = false, Message = "Failed to connect to Redis." });
-        }
+
+        return BadRequest(result.Errors);
     }
 }
