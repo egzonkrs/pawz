@@ -169,7 +169,12 @@
                             {
                                 <button class="btn adoption-request-button w-100"
                                         data-toggle="modal"
-                                        data-target="#adoptionRequestModal">
+                                        data-target="#adoptionRequestModal"
+                                        id="makeAdoptionRequest"
+                                        data-pet-id="@Model.Id"
+                                        data-owner-id="@Model.User?.Id"
+                                        data-pet-name="@Model.Name"
+                                        data-sender-name="@User.Identity.Name">
                                     Request Adoption
                                 </button>
                             }
