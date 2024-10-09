@@ -38,9 +38,11 @@ public class WishlistService : IWishlistService
         {
             var loggedInUser = _userAccessor.GetUserId();
 
+            Console.WriteLine($"Logged in user's id: {loggedInUser}");
+
             if (string.IsNullOrEmpty(loggedInUser))
             {
-                return Result<Wishlist>.Failure(UsersErrors.RetrievalError);
+                return Result<Wishlist>.Failure(UsersErrors.NotFound(loggedInUser));
             }
 
             var userWishlist = await _wishlistRepository.GetWishlistForUserAsync(loggedInUser);
@@ -67,7 +69,7 @@ public class WishlistService : IWishlistService
 
             if (string.IsNullOrEmpty(loggedInUser))
             {
-                return Result<Wishlist>.Failure(UsersErrors.RetrievalError);
+                return Result<Wishlist>.Failure(UsersErrors.NotFound(loggedInUser));
             }
 
             var pet = await _petRepository.GetByIdAsync(petId);
@@ -102,7 +104,7 @@ public class WishlistService : IWishlistService
 
             if (string.IsNullOrEmpty(loggedInUser))
             {
-                return Result<Wishlist>.Failure(UsersErrors.RetrievalError);
+                return Result<Wishlist>.Failure(UsersErrors.NotFound(loggedInUser));
             }
 
             var wishlistItem = await _wishlistRepository.GetWishlistItemAsync(loggedInUser, petId);

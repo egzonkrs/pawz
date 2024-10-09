@@ -7,20 +7,19 @@
 
 <h2>Your Wishlist</h2>
 
-<p>This is a test message to check if the view is rendering</p>
-
 @if (Model?.Pets == null || !Model.Pets.Any())
 {
-    <p>No items in your wishlist.</p>
+<p>No items in your wishlist.</p>
 }
 else
 {
-    <ul>
-        @foreach (var pet in Model.Pets)
-        {
-            <li>
-                <strong>Pet Name:</strong> @pet.Name <br />
-            </li>
-        }
-    </ul>
+<ul>
+    @foreach (var pet in Model.Pets)
+    {
+    <li>
+        <strong>Pet Name:</strong> @pet.Name <br />
+    </li>
+    }
+</ul>
 }
+

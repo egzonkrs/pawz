@@ -16,10 +16,30 @@ public class WishlistRepository : GenericRepository<Wishlist, int>, IWishlistRep
     public async Task<Wishlist?> GetWishlistForUserAsync(string userId)
     {
         return await _dbSet
-            .Include(w => w.Pets)
-            .ThenInclude(p => p.Breed)
-            .ThenInclude(b => b.Species)
-            .FirstOrDefaultAsync(w => w.UserId == userId && !w.IsDeleted);
+            .Where(w => w.UserId == userId && !w.IsDeleted)
+            .Select(w => new Wishlist
+            {
+                Id = w.Id,
+                UserId = w.UserId,
+                Pets = w.Pets.Select(p => new Pet
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    AgeYears = p.AgeYears,  // Include the required AgeYears property
+                    About = p.About,        // Include the required About property
+                    PostedByUserId = p.PostedByUserId,  // Include the required PostedByUserId property
+                    Breed = new Breed
+                    {
+                        Name = p.Breed.Name,
+                        Species = new Species
+                        {
+                            Name = p.Breed.Species.Name,
+                            Description = p.Breed.Species.Description
+                        }
+                    }
+                }).ToList()
+            })
+            .FirstOrDefaultAsync();
     }
 
     public async Task<Wishlist?> GetWishlistItemAsync(string userId, int petId)
