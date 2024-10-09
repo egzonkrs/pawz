@@ -9,20 +9,23 @@ namespace Pawz.Web.Controllers;
 public class WishlistController : Controller
 {
     private readonly IWishlistService _wishlistService;
-    private readonly IUserAccessor _userAccessor;
-
-    public WishlistController(IWishlistService wishlistService, IUserAccessor userAccessor)
+    public WishlistController(IWishlistService wishlistService)
     {
         _wishlistService = wishlistService;
-        _userAccessor = userAccessor;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        var result = await _wishlistService.GetWishlistForUserAsync();
+
+        return View("Index", result.Value);
     }
 
     [HttpPost]
     public async Task<IActionResult> AddToWishlist(int petId)
     {
-        var loggedinUserId = _userAccessor.GetUserId();
-
-        var result = await _wishlistService.AddPetToWishlistAsync(loggedinUserId, petId);
+        var result = await _wishlistService.AddPetToWishlistAsync(petId);
 
         if (!result.IsSuccess)
         {
@@ -35,9 +38,7 @@ public class WishlistController : Controller
     [HttpDelete]
     public async Task<IActionResult> RemoveFromWishlist(int petId)
     {
-        var loggedinUserId = _userAccessor.GetUserId();
-
-        var result = await _wishlistService.RemovePetFromWishlistAsync(loggedinUserId, petId);
+        var result = await _wishlistService.RemovePetFromWishlistAsync(petId);
 
         if (!result.IsSuccess)
         {

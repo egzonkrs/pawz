@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Pawz.Domain.Entities;
+using System.Collections.Generic;
 
 namespace Pawz.Infrastructure.Data.Configurations;
 
@@ -11,11 +12,30 @@ public class WishlistEntityTypeConfiguration : IEntityTypeConfiguration<Wishlist
         builder.HasKey(w => w.Id);
 
         builder.HasOne(w => w.User)
-            .WithMany(u => u.WishlistedPets)
-            .HasForeignKey(w => w.UserId)
+            .WithOne(u => u.Wishlist)
+            .HasForeignKey<Wishlist>(w => w.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(w => w.Pets)
             .WithMany(p => p.WishlistedByUsers);
+
+        builder.HasMany(w => w.Pets)
+            .WithMany(p => p.WishlistedByUsers)
+            .UsingEntity<Dictionary<string, object>>(
+                "WishlistPets",
+                j => j.HasOne<Pet>()
+                    .WithMany()
+                    .HasForeignKey("PetId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                j => j.HasOne<Wishlist>()
+                    .WithMany()
+                    .HasForeignKey("WishlistId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                j =>
+                {
+                    j.HasKey("WishlistId", "PetId");
+                    j.ToTable("WishlistPets");
+                }
+            );
     }
 }

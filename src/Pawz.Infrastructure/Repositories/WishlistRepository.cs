@@ -1,7 +1,6 @@
 using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -14,11 +13,13 @@ public class WishlistRepository : GenericRepository<Wishlist, int>, IWishlistRep
     {
     }
 
-    public async Task<List<Wishlist>> GetWishlistForUserAsync(string userId)
+    public async Task<Wishlist?> GetWishlistForUserAsync(string userId)
     {
         return await _dbSet
-            .Where(w => w.UserId == userId && !w.IsDeleted)
-            .ToListAsync();
+            .Include(w => w.Pets)
+            .ThenInclude(p => p.Breed)
+            .ThenInclude(b => b.Species)
+            .FirstOrDefaultAsync(w => w.UserId == userId && !w.IsDeleted);
     }
 
     public async Task<Wishlist?> GetWishlistItemAsync(string userId, int petId)

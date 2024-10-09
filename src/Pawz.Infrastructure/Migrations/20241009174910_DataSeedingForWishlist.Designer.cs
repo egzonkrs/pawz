@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pawz.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Pawz.Infrastructure.Data;
 namespace Pawz.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241009174910_DataSeedingForWishlist")]
+    partial class DataSeedingForWishlist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -330,9 +333,6 @@ namespace Pawz.Infrastructure.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<int>("WishlistId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -655,25 +655,24 @@ namespace Pawz.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Wishlists");
                 });
 
-            modelBuilder.Entity("WishlistPets", b =>
+            modelBuilder.Entity("PetWishlist", b =>
                 {
-                    b.Property<int>("WishlistId")
+                    b.Property<int>("PetsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PetId")
+                    b.Property<int>("WishlistedByUsersId")
                         .HasColumnType("int");
 
-                    b.HasKey("WishlistId", "PetId");
+                    b.HasKey("PetsId", "WishlistedByUsersId");
 
-                    b.HasIndex("PetId");
+                    b.HasIndex("WishlistedByUsersId");
 
-                    b.ToTable("WishlistPets", (string)null);
+                    b.ToTable("PetWishlist");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -864,25 +863,25 @@ namespace Pawz.Infrastructure.Migrations
             modelBuilder.Entity("Pawz.Domain.Entities.Wishlist", b =>
                 {
                     b.HasOne("Pawz.Domain.Entities.ApplicationUser", "User")
-                        .WithOne("Wishlist")
-                        .HasForeignKey("Pawz.Domain.Entities.Wishlist", "UserId")
+                        .WithMany("WishlistedPets")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WishlistPets", b =>
+            modelBuilder.Entity("PetWishlist", b =>
                 {
                     b.HasOne("Pawz.Domain.Entities.Pet", null)
                         .WithMany()
-                        .HasForeignKey("PetId")
+                        .HasForeignKey("PetsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Pawz.Domain.Entities.Wishlist", null)
                         .WithMany()
-                        .HasForeignKey("WishlistId")
+                        .HasForeignKey("WishlistedByUsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -899,8 +898,7 @@ namespace Pawz.Infrastructure.Migrations
 
                     b.Navigation("Pets");
 
-                    b.Navigation("Wishlist")
-                        .IsRequired();
+                    b.Navigation("WishlistedPets");
                 });
 
             modelBuilder.Entity("Pawz.Domain.Entities.Breed", b =>

@@ -6,6 +6,6 @@ namespace Pawz.Domain.Interfaces;
 
 public interface IWishlistRepository : IGenericRepository<Wishlist, int>
 {
-    Task<List<Wishlist>> GetWishlistForUserAsync(string userId);
+    Task<Wishlist> GetWishlistForUserAsync(string userId);
     Task<Wishlist?> GetWishlistItemAsync(string userId, int petId);
 }

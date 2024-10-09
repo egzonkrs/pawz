@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pawz.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Pawz.Infrastructure.Data;
 namespace Pawz.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241009180348_WishlistAndPetJointTable")]
+    partial class WishlistAndPetJointTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -330,9 +333,6 @@ namespace Pawz.Infrastructure.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<int>("WishlistId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -655,8 +655,7 @@ namespace Pawz.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Wishlists");
                 });
@@ -864,8 +863,8 @@ namespace Pawz.Infrastructure.Migrations
             modelBuilder.Entity("Pawz.Domain.Entities.Wishlist", b =>
                 {
                     b.HasOne("Pawz.Domain.Entities.ApplicationUser", "User")
-                        .WithOne("Wishlist")
-                        .HasForeignKey("Pawz.Domain.Entities.Wishlist", "UserId")
+                        .WithMany("WishlistedPets")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -899,8 +898,7 @@ namespace Pawz.Infrastructure.Migrations
 
                     b.Navigation("Pets");
 
-                    b.Navigation("Wishlist")
-                        .IsRequired();
+                    b.Navigation("WishlistedPets");
                 });
 
             modelBuilder.Entity("Pawz.Domain.Entities.Breed", b =>

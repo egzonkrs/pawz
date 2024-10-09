@@ -32,22 +32,49 @@ public class WishlistService : IWishlistService
         _petRepository = petRepository;
     }
 
-    public async Task<Result<List<Wishlist>>> AddPetToWishlistAsync(string userId, int petId)
+    public async Task<Result<Wishlist>> GetWishlistForUserAsync()
     {
         try
         {
-            userId = _userAccessor.GetUserId();
+            var loggedInUser = _userAccessor.GetUserId();
 
-            if (string.IsNullOrEmpty(userId))
+            if (string.IsNullOrEmpty(loggedInUser))
             {
-                return Result<List<Wishlist>>.Failure(UsersErrors.RetrievalError);
+                return Result<Wishlist>.Failure(UsersErrors.RetrievalError);
+            }
+
+            var userWishlist = await _wishlistRepository.GetWishlistForUserAsync(loggedInUser);
+
+            if (userWishlist == null)
+            {
+                return Result<Wishlist>.Failure("No wishlist found for the user.");
+            }
+
+            return Result<Wishlist>.Success(userWishlist);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error fetching wishlist: {ex.Message}");
+            return Result<Wishlist>.Failure("An error occurred while fetching the wishlist.");
+        }
+    }
+
+    public async Task<Result<Wishlist>> AddPetToWishlistAsync(int petId)
+    {
+        try
+        {
+            var loggedInUser = _userAccessor.GetUserId();
+
+            if (string.IsNullOrEmpty(loggedInUser))
+            {
+                return Result<Wishlist>.Failure(UsersErrors.RetrievalError);
             }
 
             var pet = await _petRepository.GetByIdAsync(petId);
 
             var wishlistEntry = new Wishlist
             {
-                UserId = userId,
+                UserId = loggedInUser,
                 Pets = new List<Pet> { pet },
                 IsDeleted = false
             };
@@ -56,33 +83,33 @@ public class WishlistService : IWishlistService
 
             await _unitOfWork.SaveChangesAsync();
 
-            var userWishlist = await _wishlistRepository.GetWishlistForUserAsync(userId);
+            var userWishlist = await _wishlistRepository.GetWishlistForUserAsync(loggedInUser);
 
-            return Result<List<Wishlist>>.Success(userWishlist.ToList());
+            return Result<Wishlist>.Success(userWishlist);
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error adding pet with ID {petId} to wishlist for user {userId}: {ex.Message}");
-            return Result<List<Wishlist>>.Failure($"Error adding pet to wishlist: {ex.Message}");
+            _logger.LogError($"Error adding pet with ID {petId}: {ex.Message}");
+            return Result<Wishlist>.Failure($"Error adding pet to wishlist: {ex.Message}");
         }
     }
 
-    public async Task<Result<List<Wishlist>>> RemovePetFromWishlistAsync(string userId, int petId)
+    public async Task<Result<Wishlist>> RemovePetFromWishlistAsync(int petId)
     {
         try
         {
-            userId = _userAccessor.GetUserId();
+            var loggedInUser = _userAccessor.GetUserId();
 
-            if (string.IsNullOrEmpty(userId))
+            if (string.IsNullOrEmpty(loggedInUser))
             {
-                return Result<List<Wishlist>>.Failure(UsersErrors.RetrievalError);
+                return Result<Wishlist>.Failure(UsersErrors.RetrievalError);
             }
 
-            var wishlistItem = await _wishlistRepository.GetWishlistItemAsync(userId, petId);
+            var wishlistItem = await _wishlistRepository.GetWishlistItemAsync(loggedInUser, petId);
 
             if (wishlistItem == null)
             {
-                return Result<List<Wishlist>>.Failure("The pet is not in the user's wishlist.");
+                return Result<Wishlist>.Failure("The pet is not in the user's wishlist.");
             }
 
             wishlistItem.IsDeleted = true;
@@ -92,14 +119,14 @@ public class WishlistService : IWishlistService
 
             await _unitOfWork.SaveChangesAsync();
 
-            var userWishlist = await _wishlistRepository.GetWishlistForUserAsync(userId);
+            var userWishlist = await _wishlistRepository.GetWishlistForUserAsync(loggedInUser);
 
-            return Result<List<Wishlist>>.Success(userWishlist.ToList());
+            return Result<Wishlist>.Success(userWishlist);
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error removing pet with ID {petId} from wishlist for user {userId}: {ex.Message}");
-            return Result<List<Wishlist>>.Failure($"Error removing pet from wishlist: {ex.Message}");
+            _logger.LogError($"Error removing pet with ID {petId}: {ex.Message}");
+            return Result<Wishlist>.Failure($"Error removing pet from wishlist: {ex.Message}");
         }
     }
 }
