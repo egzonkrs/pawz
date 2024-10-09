@@ -65,7 +65,8 @@ public class NotificationService : INotificationService
                 SenderId = request.SenderId,
                 RecipientId = request.RecipientId,
                 PetId = request.PetId,
-                Type = request.Type
+                Type = request.Type,
+                CreatedAt = DateTime.UtcNow
             };
 
             var existingNotification = await _notificationRepository.GetExistingNotificationAsync(notification, cancellationToken);
@@ -96,7 +97,7 @@ public class NotificationService : INotificationService
 
             var response = _mapper.Map<NotificationResponse>(existingNotification ?? notification);
 
-            await _realTimeNotificationSender.SendNotificationAsync(request.RecipientId, response.Message, cancellationToken);
+            await _realTimeNotificationSender.SendNotificationAsync(request.RecipientId, response, cancellationToken);
 
             return Result<NotificationResponse>.Success(response);
         }
