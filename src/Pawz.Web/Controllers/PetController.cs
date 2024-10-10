@@ -63,6 +63,9 @@ public class PetController : Controller
 
         var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
 
+        ViewData["SearchQuery"] = queryParams.SearchQuery ?? "Pets";
+        ViewData["ResultCount"] = petViewModels.Count();
+
         return View(petViewModels);
     }
 
