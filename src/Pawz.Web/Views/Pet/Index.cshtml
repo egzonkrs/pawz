@@ -39,6 +39,19 @@
     });
 </script>
 
+<script>
+    function applySorting() {
+        const sortBySelect = document.getElementById("sortBySelect");
+        const [sortBy, sortDescending] = sortBySelect.value.split('|');
+        const urlParams = new URLSearchParams(window.location.search);
+
+        urlParams.set('SortBy', sortBy);
+        urlParams.set('SortDescending', sortDescending);
+
+        window.location.search = urlParams.toString();
+    }
+</script>
+
 <section class="section-sm">
     <div class="container">
         <div class="row">
@@ -60,11 +73,11 @@
                     <div class="row">
                         <div class="col-md-6 text-center text-md-left">
                             <strong>Sort</strong>
-                            <select>
-                                <option>Most Recent</option>
-                                <option value="1">Most Popular</option>
-                                <option value="2">Lowest Price</option>
-                                <option value="4">Highest Price</option>
+                            <select id="sortBySelect" onchange="applySorting()">
+                                <option value="createdAt|false">Most Recent</option>
+                                <option value="popularity|true">Most Popular</option>
+                                <option value="price|false">Lowest Price</option>
+                                <option value="price|true">Highest Price</option>
                             </select>
                         </div>
                         <div class="col-md-6 text-center text-md-right mt-2 mt-md-0">

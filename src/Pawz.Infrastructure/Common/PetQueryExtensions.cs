@@ -76,6 +76,7 @@ public static class PetQueryExtensions
             "name" => pet => pet.Name,
             "breed" => pet => pet.Breed.Name,
             "species" => pet => pet.Breed.Species.Name,
+            "price" => pet => pet.Price,
             _ => pet => pet.Id
         };
     }
