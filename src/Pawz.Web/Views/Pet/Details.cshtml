@@ -155,28 +155,32 @@
                     </div>
 
                     <div class="text-center">
-                        @if (@UserAccessor.IsUserAuthenticated())
+                        @if (UserAccessor.IsUserAuthenticated())
                         {
-                            @if (Model.HasExistingAdoptionRequest)
+                            if (UserAccessor.GetUserFirstName() == Model.User?.FirstName)
                             {
-                                <button id="cancelRequestButton"
-                                        class="btn-request-cancelled w-100"
-                                        data-adoption-request-id="@Model.AdoptionRequestId">
-                                    Cancel Request
+                                <button class="btn btn-primary w-100 mb-2 main-button-color" disabled>
+                                    You posted this pet
                                 </button>
                             }
                             else
                             {
-                                <button class="btn adoption-request-button w-100"
-                                        id="makeAdoptionRequest"
-                                        data-toggle="modal"
-                                        data-target="#adoptionRequestModal"
-                                        data-pet-id="@Model.Id"
-                                        data-owner-id="@Model.User?.Id"
-                                        data-pet-name="@Model.Name"
-                                        data-sender-name="@UserAccessor.GetUserFirstName()">
-                                    Request Adoption
-                                </button>
+                                @if (Model.HasExistingAdoptionRequest)
+                                {
+                                    <button id="cancelRequestButton"
+                                            class="btn-request-cancelled w-100"
+                                            data-adoption-request-id="@Model.AdoptionRequestId">
+                                        Cancel Request
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn adoption-request-button w-100"
+                                            data-toggle="modal"
+                                            data-target="#adoptionRequestModal">
+                                        Request Adoption
+                                    </button>
+                                }
                             }
                         }
                         else

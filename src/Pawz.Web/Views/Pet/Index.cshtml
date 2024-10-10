@@ -24,13 +24,41 @@
     });
 </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        const searchQuery = getQueryParam("SearchQuery");
+
+        if (searchQuery) {
+            document.getElementById("search-result-heading").innerText = `Results For "${searchQuery}"`;
+        }
+    });
+</script>
+
+<script>
+    function applySorting() {
+        const sortBySelect = document.getElementById("sortBySelect");
+        const [sortBy, sortDescending] = sortBySelect.value.split('|');
+        const urlParams = new URLSearchParams(window.location.search);
+
+        urlParams.set('SortBy', sortBy);
+        urlParams.set('SortDescending', sortDescending);
+
+        window.location.search = urlParams.toString();
+    }
+</script>
+
 <section class="section-sm">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="search-result bg-gray">
-                    <h2>Results For "Pets"</h2>
-                    <p>123 Results on 12 December 2017</p>
+                    <h2 id="search-result-heading">Results For</h2>
+                    <p>@Model.Count() Results on @DateTime.Now.ToString("dd MMMM yyyy")</p>
                 </div>
             </div>
         </div>
@@ -45,11 +73,11 @@
                     <div class="row">
                         <div class="col-md-6 text-center text-md-left">
                             <strong>Sort</strong>
-                            <select>
-                                <option>Most Recent</option>
-                                <option value="1">Most Popular</option>
-                                <option value="2">Lowest Price</option>
-                                <option value="4">Highest Price</option>
+                            <select id="sortBySelect" onchange="applySorting()">
+                                <option value="createdAt|false">Most Recent</option>
+                                <option value="popularity|true">Most Popular</option>
+                                <option value="price|false">Lowest Price</option>
+                                <option value="price|true">Highest Price</option>
                             </select>
                         </div>
                         <div class="col-md-6 text-center text-md-right mt-2 mt-md-0">
