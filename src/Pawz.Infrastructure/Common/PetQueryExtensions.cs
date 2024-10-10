@@ -45,7 +45,8 @@ public static class PetQueryExtensions
         return query.Where(p =>
             (searchProperties.Contains("name") && EF.Functions.Like(p.Name.ToLower(), $"%{searchQuery}%")) ||
             (searchProperties.Contains("breed") && EF.Functions.Like(p.Breed.Name.ToLower(), $"%{searchQuery}%")) ||
-            (searchProperties.Contains("species") && EF.Functions.Like(p.Breed.Species.Name.ToLower(), $"%{searchQuery}%"))
+            (searchProperties.Contains("species") && EF.Functions.Like(p.Breed.Species.Name.ToLower(), $"%{searchQuery}%")) ||
+            (searchProperties.Contains("location") && EF.Functions.Like(p.Location.City.Name.ToLower(), $"%{searchQuery}%"))
         );
     }
 
