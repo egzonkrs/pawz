@@ -349,6 +349,7 @@ public class AdoptionRequestService : IAdoptionRequestService
             return Result<bool>.Failure(AdoptionRequestErrors.UpdateUnexpectedError);
         }
     }
+
     public async Task<Result<bool>> HasUserMadeRequestForPetAsync(int petId, CancellationToken cancellationToken)
     {
         string userId = _userAccessor.GetUserId();
@@ -367,6 +368,69 @@ public class AdoptionRequestService : IAdoptionRequestService
         {
             _logger.LogError(ex, "An error occurred while checking if user {UserId} has made a request for pet {PetId}", userId, petId);
             return Result<bool>.Failure(AdoptionRequestErrors.RetrievalError);
+        }
+    }
+
+    public async Task<Result<(bool HasExistingRequest, int? AdoptionRequestId)>> CheckUserAdoptionRequestForPetAsync(int petId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var currentUserId = _userAccessor.GetUserId();
+            var requestResult = await GetAdoptionRequestsByPetIdAsync(petId, cancellationToken);
+
+            if (!requestResult.IsSuccess)
+            {
+                _logger.LogError("Failed to retrieve adoption requests for pet with ID {PetId}", petId);
+                return Result<(bool, int?)>.Failure(AdoptionRequestErrors.FailedToRetrieveAdoptionRequests);
+            }
+
+            var userAdoptionRequest = requestResult.Value.FirstOrDefault(req => req.RequesterUserId == currentUserId);
+
+            if (userAdoptionRequest != null)
+            {
+                return Result<(bool, int?)>.Success((true, userAdoptionRequest.Id));
+            }
+
+            return Result<(bool, int?)>.Success((false, null));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while checking user adoption request for pet with ID {PetId}", petId);
+            return Result<(bool, int?)>.Failure(AdoptionRequestErrors.RetrievalError);
+        }
+    }
+
+    public async Task<Result<bool>> CancelAdoptionRequestAsync(int adoptionRequestId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var adoptionRequest = await _adoptionRequestRepository.GetByIdAsync(adoptionRequestId, cancellationToken);
+            if (adoptionRequest is null)
+            {
+                _logger.LogWarning("Adoption Request with Id: {AdoptionRequestId} was not found.", adoptionRequestId);
+                return Result<bool>.Failure(AdoptionRequestErrors.NotFound(adoptionRequestId));
+            }
+
+            adoptionRequest.Status = AdoptionRequestStatus.Cancelled;
+            adoptionRequest.IsDeleted = true;
+            adoptionRequest.ResponseDate = DateTime.UtcNow;
+
+            await _adoptionRequestRepository.UpdateAsync(adoptionRequest, cancellationToken);
+            var changesSaved = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
+
+            if (changesSaved)
+            {
+                _logger.LogInformation("Successfully cancelled Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
+                return Result<bool>.Success();
+            }
+
+            _logger.LogWarning("Failed to cancel Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
+            return Result<bool>.Failure(AdoptionRequestErrors.UpdateUnexpectedError);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while cancelling Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
+            return Result<bool>.Failure(AdoptionRequestErrors.UpdateUnexpectedError);
         }
     }
 }

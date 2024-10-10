@@ -182,4 +182,17 @@ public class AdoptionRequestController : Controller
         TempData["ErrorMessage"] = "Failed to reject the adoption request.";
         return Redirect(Request.Headers["Referer"].ToString());
     }
+
+    [HttpPost]
+    public async Task<IActionResult> CancelAdoptionRequest(int adoptionRequestId, CancellationToken cancellationToken)
+    {
+        var result = await _adoptionRequestService.CancelAdoptionRequestAsync(adoptionRequestId, cancellationToken);
+
+        if (result.IsSuccess)
+        {
+            return Json(new { success = true, message = "Adoption request successfully cancelled." });
+        }
+
+        return Json(new { success = false, message = "Failed to cancel the adoption request." });
+    }
 }

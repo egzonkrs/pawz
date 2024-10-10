@@ -74,7 +74,7 @@ public class PetController : Controller
         var countriesList = countriesResult.Value ?? new List<Country>();
         var citiesList = citiesResult.Value ?? new List<City>();
 
-        var result = await _petService.GetPetByIdAsync(id, cancellationToken);
+        var result = await _petService.GetPetByIdWithUserAdoptionsAsync(id, cancellationToken);
 
         if (!result.IsSuccess || result.Value == null)
         {
@@ -96,10 +96,10 @@ public class PetController : Controller
             }).ToList()
         };
 
-        var requestResult = await _adoptionRequestService.HasUserMadeRequestForPetAsync(id, cancellationToken);
+        petViewModel.HasExistingAdoptionRequest = result.Value.HasExistingAdoptionRequest;
+        petViewModel.AdoptionRequestId = result.Value.AdoptionRequestId;
 
-        petViewModel.HasExistingAdoptionRequest = requestResult.IsSuccess && requestResult.Value;
-        return View(petViewModel);
+        return View(petViewModel); ;
     }
 
     [Authorize]

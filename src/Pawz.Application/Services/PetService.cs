@@ -1,5 +1,4 @@
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
@@ -294,6 +293,42 @@ public class PetService : IPetService
             _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to update Pet with Id: {PetId} for UserId: {UserId}",
                 nameof(PetService), pet.Id, _userAccessor.GetUserId());
             return Result<bool>.Failure(PetErrors.UpdateUnexpectedError);
+        }
+    }
+
+    /// <summary>
+    /// Retrieves a pet by its unique ID and gets petadoption based on current user
+    /// </summary>
+    /// <param name="petId">The ID of the pet to retrieve.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A result containing the pet entity if found, or an error if not found.</returns>
+    public async Task<Result<PetResponse>> GetPetByIdWithUserAdoptionsAsync(int petId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var userId = _userAccessor.GetUserId();
+            var pet = await _petRepository.GetPetByIdWithRelatedEntitiesAsync(petId, userId, cancellationToken);
+
+            if (pet is null)
+            {
+                _logger.LogError("Pet with Id: {PetId} was not found.", petId);
+                return Result<PetResponse>.Failure(PetErrors.NotFound(petId));
+            }
+
+            var petResponse = _mapper.Map<PetResponse>(pet);
+
+            var userAdoptionRequest = pet.AdoptionRequests.FirstOrDefault();
+
+            petResponse.HasExistingAdoptionRequest = userAdoptionRequest != null;
+            petResponse.AdoptionRequestId = userAdoptionRequest?.Id;
+
+            return Result<PetResponse>.Success(petResponse);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve Pet with Id: {PetId}",
+                nameof(PetService), petId);
+            return Result<PetResponse>.Failure(PetErrors.RetrievalError);
         }
     }
 }
