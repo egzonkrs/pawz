@@ -77,7 +77,7 @@ function addNotificationToUI(notification) {
             <p>${notification.message}</p>
         `;
         notificationList.prepend(notificationElement);
-        console.log('Added notification to UI:', notification);
+       console.log('Added notification to UI:', notification);
     }
 }
 
@@ -121,18 +121,20 @@ document.addEventListener('DOMContentLoaded', function () {
     if (makeAdoptionRequest) {
         makeAdoptionRequest.addEventListener('click', function () {
             const petId = this.getAttribute('data-pet-id');
+            const petName = this.getAttribute('data-pet-name');
             const ownerId = this.getAttribute('data-owner-id');
-            sendNotification(ownerId, petId);
+            const senderName = this.getAttribute('data-sender-name');
+            sendNotification(senderName, ownerId, petId, petName);
         });
     }
 });
 
-window.sendNotification = function (recipientId, petId) {
+window.sendNotification = function (senderName, recipientId, petId, petName) {
     if (!userIsLoggedIn()) {
         return;
     }
 
-    const message = `A user requested to adopt the pet: with ID: ${petId}`;
+    const message = `${senderName} requested to adopt you pet: ${petName}`;
     fetch('/api/v1.0/Notification/send', {
         method: 'POST',
         headers: {
@@ -141,11 +143,13 @@ window.sendNotification = function (recipientId, petId) {
         body: JSON.stringify({
             recipientId: recipientId,
             message: message,
-            petId: petId
+            petId: petId,
+            petName: petName,
+            senderName: senderName
         }),
     })
         .then(response => response.json())
-        .then(data => console.log('Notification sent:', data))
+      //  .then(data => console.log('Notification sent:', data))
         .catch((error) => console.error('Error sending notification:', error));
 };
 

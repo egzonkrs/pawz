@@ -168,13 +168,13 @@
                             else
                             {
                                 <button class="btn adoption-request-button w-100"
+                                        id="makeAdoptionRequest"
                                         data-toggle="modal"
                                         data-target="#adoptionRequestModal"
-                                        id="makeAdoptionRequest"
                                         data-pet-id="@Model.Id"
                                         data-owner-id="@Model.User?.Id"
                                         data-pet-name="@Model.Name"
-                                        data-sender-name="@User.Identity.Name">
+                                        data-sender-name="@UserAccessor.GetUserFirstName()">
                                     Request Adoption
                                 </button>
                             }
@@ -219,7 +219,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const allCities = @Html.Raw(@Json.Serialize(Model.AdoptionRequestCreateModel.AllCities));
-            console.log("All Cities:", allCities);
 
             function populateDropdown(parentId, allItems, childId, defaultText, parentKey) {
                 const childSelect = document.querySelector(`#${childId}`);
@@ -238,7 +237,6 @@
 
                 if (parentId) {
                     const filteredItems = allItems.filter(item => item[parentKey] === parseInt(parentId));
-                    console.log(`Filtered ${defaultText}:`, filteredItems);
 
                     filteredItems.forEach(item => {
                         const option = document.createElement('option');
@@ -247,7 +245,6 @@
                         childSelect.appendChild(option);
                     });
 
-                    console.log(`${defaultText} dropdown HTML:`, childSelect.innerHTML);
                 }
 
                 $(childSelect).niceSelect('update');
@@ -258,7 +255,6 @@
 
             $('#CountryId').on('change', function () {
                 const countryId = $(this).val();
-                console.log("Selected Country ID:", countryId);
                 populateDropdown(countryId, allCities, 'CityId', 'City', 'countryId');
             });
         })
@@ -329,9 +325,9 @@
                             toastr.success('Adoption request submitted successfully!');
                             $('#adoptionRequestModal').modal('hide');
 
-                            setTimeout(function () {
-                                location.reload();
-                            }, 1000);
+                            // setTimeout(function () {
+                            //     location.reload();
+                            // }, 1000);
                         } else {
 
                             $.each(response.errors, function (key, errorMessages) {

@@ -4,6 +4,7 @@ using Pawz.Application.Interfaces;
 using Pawz.Application.Models.NotificationModels;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
+using Pawz.Domain.Enums;
 using Pawz.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -60,29 +61,22 @@ public class NotificationService : INotificationService
     {
         try
         {
-            var notification = new Notification
-            {
-                SenderId = request.SenderId,
-                RecipientId = request.RecipientId,
-                PetId = request.PetId,
-                Type = request.Type,
-                CreatedAt = DateTime.UtcNow
-            };
+            var notification = _mapper.Map<Notification>(request);
+
+            notification.CreatedAt = DateTime.UtcNow;
+            notification.Type = NotificationType.AdoptionRequest;
 
             var existingNotification = await _notificationRepository.GetExistingNotificationAsync(notification, cancellationToken);
 
-            notification = _mapper.Map<Notification>(request);
-
-            if (existingNotification != null)
+            if (existingNotification is not null)
             {
                 existingNotification.Message = request.Message;
                 existingNotification.IsRead = false;
-                existingNotification.Type = request.Type;
+                existingNotification.Type = NotificationType.AdoptionRequest;
                 await _notificationRepository.UpdateAsync(existingNotification, cancellationToken);
             }
             else
             {
-                notification.CreatedAt = DateTime.UtcNow;
                 notification.IsRead = false;
                 await _notificationRepository.InsertAsync(notification, cancellationToken);
             }
@@ -95,7 +89,19 @@ public class NotificationService : INotificationService
                 return Result<NotificationResponse>.Failure(NotificationErrors.CreationFailed);
             }
 
-            var response = _mapper.Map<NotificationResponse>(existingNotification ?? notification);
+            var response = new NotificationResponse
+            {
+                SenderName = (existingNotification?.Sender?.FirstName ?? notification.Sender?.FirstName) ?? "Unknown Sender",
+                PetName = (existingNotification?.Pet?.Name ?? notification.Pet?.Name) ?? "Unknown Pet",
+                Message = existingNotification?.Message ?? notification.Message,
+                PetId = notification.PetId,
+                RecipientId = notification.RecipientId,
+                SenderId = notification.SenderId,
+                Type = notification.Type,
+                CreatedAt = notification.CreatedAt,
+                IsRead = notification.IsRead,
+                Id = notification.Id
+            };
 
             await _realTimeNotificationSender.SendNotificationAsync(request.RecipientId, response, cancellationToken);
 
