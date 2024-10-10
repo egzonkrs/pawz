@@ -155,21 +155,23 @@
                     </div>
 
                     <div class="text-center">
-                        @if (@UserAccessor.IsUserAuthenticated())
+                        @if (UserAccessor.IsUserAuthenticated())
                         {
-                            @if (Model.HasExistingAdoptionRequest)
+                            if (UserAccessor.GetUserFirstName() == Model.User?.FirstName)
                             {
-                                <button id="cancelRequestButton"
-                                        class="btn-request-cancelled w-100"
-                                        data-adoption-request-id="@Model.AdoptionRequestId">
-                                    Cancel Request
+                                <button class="btn btn-primary w-100 mb-2 main-button-color" disabled>
+                                    You posted this pet
+                                </button>
+                            }
+                            else if (Model.HasExistingAdoptionRequest)
+                            {
+                                <button class="btn btn-primary w-100 mb-2 main-button-color" disabled>
+                                    Request Submitted
                                 </button>
                             }
                             else
                             {
-                                <button class="btn adoption-request-button w-100"
-                                        data-toggle="modal"
-                                        data-target="#adoptionRequestModal">
+                                <button class="btn btn-primary w-100 mb-2 main-button-color" data-toggle="modal" data-target="#adoptionRequestModal">
                                     Request Adoption
                                 </button>
                             }
