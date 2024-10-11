@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Models;
+using Pawz.Application.Models.NotificationModels;
 using Pawz.Domain.Common;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Enums;
@@ -23,6 +24,8 @@ public class AdoptionRequestService : IAdoptionRequestService
     private readonly IMapper _mapper;
     private readonly ILocationService _locationService;
     private readonly IUserAccessor _userAccessor;
+    private readonly INotificationService _notificationService;
+    private readonly IPetRepository _petRepository;
 
     public AdoptionRequestService(
         IAdoptionRequestRepository adoptionRequestRepository,
@@ -31,7 +34,9 @@ public class AdoptionRequestService : IAdoptionRequestService
         IMapper mapper,
         ILocationService locationService,
         IUserAccessor userAccessor,
-        IAdoptionRepository adoptionRepository)
+        IAdoptionRepository adoptionRepository,
+        INotificationService notificationService,
+        IPetRepository petRepository)
     {
         _adoptionRequestRepository = adoptionRequestRepository;
         _unitOfWork = unitOfWork;
@@ -40,15 +45,14 @@ public class AdoptionRequestService : IAdoptionRequestService
         _locationService = locationService;
         _userAccessor = userAccessor;
         _adoptionRepository = adoptionRepository;
+        _notificationService = notificationService;
+        _petRepository = petRepository;
     }
 
     public async Task<Result<bool>> CreateAdoptionRequestAsync(AdoptionRequestCreateRequest adoptionRequestCreateRequest, CancellationToken cancellationToken)
     {
         try
         {
-            _logger.LogInformation("Started creating an Adoption Request with Id: {AdoptionRequestId} from UserId: {UserId}", adoptionRequestCreateRequest.Id,
-                adoptionRequestCreateRequest);
-
             var location = new Location
             {
                 CityId = adoptionRequestCreateRequest.CityId,
@@ -64,12 +68,20 @@ public class AdoptionRequestService : IAdoptionRequestService
                 return Result<bool>.Failure(LocationErrors.CreationFailed);
             }
 
+            var pet = await _petRepository.GetPetByIdWithRelatedEntitiesAsync(adoptionRequestCreateRequest.PetId, adoptionRequestCreateRequest.RequesterUserId, cancellationToken);
+            if (pet == null)
+            {
+                _logger.LogError("Pet with Id: {PetId} not found.", adoptionRequestCreateRequest.PetId);
+                return Result<bool>.Failure(PetErrors.NoPetsFound());
+            }
+
             var adoptionRequest = _mapper.Map<AdoptionRequest>(adoptionRequestCreateRequest);
             adoptionRequest.RequestDate = DateTime.Now;
             adoptionRequest.Location = locationInsertResult.Value;
             adoptionRequest.RequesterUserId = _userAccessor.GetUserId();
             adoptionRequest.Status = AdoptionRequestStatus.Pending;
             adoptionRequest.Email = _userAccessor.GetEmail();
+            adoptionRequest.Pet = pet;
 
             await _adoptionRequestRepository.InsertAsync(adoptionRequest, cancellationToken);
 
@@ -77,12 +89,27 @@ public class AdoptionRequestService : IAdoptionRequestService
 
             if (isAdoptionRequestCreated)
             {
-                _logger.LogInformation("Created an Adoption Request with Id: {AdoptionRequestId} for UserId: {UserId}", adoptionRequest.Id,
-                    adoptionRequest.RequesterUserId);
+                var notificationRequest = new NotificationRequest
+                {
+                    SenderId = adoptionRequest.RequesterUserId,
+                    RecipientId = pet.User.Id,
+                    PetId = pet.Id,
+                    Message = $"{_userAccessor.GetUserFirstName().ToUpper()} has made an adoption request for your pet: {adoptionRequest.Pet.Name}.",
+                    Type = NotificationType.AdoptionRequest
+                };
+
+                var notificationResult = await _notificationService.CreateNotificationAsync(notificationRequest, cancellationToken);
+
+                if (!notificationResult.IsSuccess)
+                {
+                    _logger.LogError("Failed to create notification for the Adoption Request Id: {AdoptionRequestId}", adoptionRequest.Id);
+                    return Result<bool>.Failure(NotificationErrors.CreationFailed);
+                }
+
                 return Result<bool>.Success();
             }
 
-            _logger.LogWarning("Failed to create an Adoption Request with Id: {AdoptionRequestId} from UserId: {UserId}", adoptionRequest.Id,
+            _logger.LogError("Failed to create an Adoption Request with Id: {AdoptionRequestId} from UserId: {UserId}", adoptionRequest.Id,
                 adoptionRequest.RequesterUserId);
             return Result<bool>.Failure(AdoptionRequestErrors.CreationFailed);
         }
