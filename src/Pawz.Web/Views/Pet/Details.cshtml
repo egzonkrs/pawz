@@ -329,9 +329,9 @@
                             toastr.success('Adoption request submitted successfully!');
                             $('#adoptionRequestModal').modal('hide');
 
-                            // setTimeout(function () {
-                            //     location.reload();
-                            // }, 1000);
+                            setTimeout(function () {
+                                location.reload();
+                            }, 700);
                         } else {
 
                             $.each(response.errors, function (key, errorMessages) {

@@ -34,6 +34,7 @@ function getUserNotifications() {
     fetch('/api/v1.0/Notification/user')
         .then(response => response.json())
         .then(notifications => {
+            notifications.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
             notifications.forEach(addNotificationToUI);
             updateNotificationCount();
         })
@@ -68,16 +69,28 @@ function addNotificationToUI(notification) {
     if (notificationList) {
         const notificationElement = document.createElement('div');
         notificationElement.className = 'notification-item' + (notification.isRead ? '' : ' unread');
-
-        // Përdorni një ID alternative nëse 'id' mungon
+        
         const notificationId = notification.id || `temp-${Date.now()}`;
         notificationElement.setAttribute('data-notification-id', notificationId);
 
+        const notificationDate = new Date(notification.createdAt);
+        const formattedDate = notificationDate.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+
+        const formattedTime = notificationDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
         notificationElement.innerHTML = `
-            <p>${notification.message}</p>
+         <div class="notification-content">
+                <p>${notification.message}</p>
+                <div class="notification-time-container">
+                    <small class="notification-time">${formattedDate} ${formattedTime}</small>
+                </div>
+            </div>
         `;
         notificationList.prepend(notificationElement);
-       console.log('Added notification to UI:', notification);
     }
 }
 
@@ -156,8 +169,6 @@ window.sendNotification = function (senderName, recipientId, petId, petName) {
 window.onSuccessfulLogin = function () {
     initializeNotificationSystem();
 };
-
-
 
 window.onLogout = function () {
     if (connection) {
