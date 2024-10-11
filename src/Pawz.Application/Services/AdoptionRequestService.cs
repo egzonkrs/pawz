@@ -68,7 +68,8 @@ public class AdoptionRequestService : IAdoptionRequestService
                 return Result<bool>.Failure(LocationErrors.CreationFailed);
             }
 
-            var pet = await _petRepository.GetPetByIdWithRelatedEntitiesAsync(adoptionRequestCreateRequest.PetId, adoptionRequestCreateRequest.RequesterUserId, cancellationToken);
+            var pet = await _petRepository.GetPetByIdWithRelatedEntitiesAsync(adoptionRequestCreateRequest.PetId, cancellationToken);
+
             if (pet == null)
             {
                 _logger.LogError("Pet with Id: {PetId} not found.", adoptionRequestCreateRequest.PetId);
