@@ -3,5 +3,6 @@ namespace Pawz.Domain.Enums;
 public enum NotificationType
 {
     AdoptionRequest = 1,
-    AdoptionRequestResponse = 2,
+    RequestAccepted = 2,
+    RequestRejected = 3,
 }
