@@ -223,7 +223,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const allCities = @Html.Raw(@Json.Serialize(Model.AdoptionRequestCreateModel.AllCities));
-            console.log("All Cities:", allCities);
 
             function populateDropdown(parentId, allItems, childId, defaultText, parentKey) {
                 const childSelect = document.querySelector(`#${childId}`);
@@ -242,7 +241,6 @@
 
                 if (parentId) {
                     const filteredItems = allItems.filter(item => item[parentKey] === parseInt(parentId));
-                    console.log(`Filtered ${defaultText}:`, filteredItems);
 
                     filteredItems.forEach(item => {
                         const option = document.createElement('option');
@@ -251,7 +249,6 @@
                         childSelect.appendChild(option);
                     });
 
-                    console.log(`${defaultText} dropdown HTML:`, childSelect.innerHTML);
                 }
 
                 $(childSelect).niceSelect('update');
@@ -262,7 +259,6 @@
 
             $('#CountryId').on('change', function () {
                 const countryId = $(this).val();
-                console.log("Selected Country ID:", countryId);
                 populateDropdown(countryId, allCities, 'CityId', 'City', 'countryId');
             });
         })
@@ -335,7 +331,7 @@
 
                             setTimeout(function () {
                                 location.reload();
-                            }, 1000);
+                            }, 700);
                         } else {
 
                             $.each(response.errors, function (key, errorMessages) {

@@ -62,11 +62,13 @@ public class NotificationRepository : GenericRepository<Notification, int>, INot
     public async Task<Notification?> GetExistingNotificationAsync(Notification request, CancellationToken cancellationToken)
     {
         return await _dbSet
-            .FirstOrDefaultAsync(n =>
-                n.SenderId == request.SenderId &&
-                n.RecipientId == request.RecipientId &&
-                n.PetId == request.PetId &&
-                n.Type == request.Type,
-                cancellationToken);
+           .Include(n => n.Pet)
+           .Include(n => n.Sender)
+           .FirstOrDefaultAsync(n =>
+              n.SenderId == request.SenderId &&
+              n.RecipientId == request.RecipientId &&
+              n.PetId == request.PetId &&
+              n.Type == request.Type,
+              cancellationToken);
     }
 }

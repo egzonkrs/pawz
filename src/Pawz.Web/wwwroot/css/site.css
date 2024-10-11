@@ -299,13 +299,31 @@
     transition: background-color 0.3s ease;
 }
 
-    .notification-item.unread {
-        background-color: rgba(0, 0, 0, 0.2);
-    }
+.notification-item.unread {
+    background-color: rgba(0, 0, 0, 0.2);
+ }
 
-    .notification-item:hover {
-        background-color: rgba(0, 0, 0, 0.1);
-    }
+.notification-item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.notification-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-time-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+}
+
+.notification-time {
+    color: gray;
+    font-size: 0.9em;
+    white-space: nowrap;
+    text-align: right;
+}
 
 /* Accept / Reject Adoption Request Buttons*/
 

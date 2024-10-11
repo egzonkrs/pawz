@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Pawz.Application.Interfaces;
+using Pawz.Application.Models.NotificationModels;
 using Pawz.Domain.Common;
 using System;
 using System.Threading;
@@ -34,7 +35,7 @@ public class RealTimeNotificationSender : IRealTimeNotificationSender
     /// <param name="notification">The notification data to be sent to the user.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
     /// <returns>A task representing the asynchronous operation of sending the notification.</returns>
-    public async Task<Result<bool>> SendNotificationAsync(string userId, string notification, CancellationToken cancellationToken)
+    public async Task<Result<bool>> SendNotificationAsync(string userId, NotificationResponse notification, CancellationToken cancellationToken)
     {
         try
         {

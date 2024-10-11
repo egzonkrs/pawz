@@ -1,3 +1,4 @@
+using Pawz.Application.Models.NotificationModels;
 using Pawz.Domain.Common;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,5 +17,5 @@ public interface IRealTimeNotificationSender
     /// <param name="notification">The notification to be sent.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A task representing the asynchronous send operation.</returns>
-    Task<Result<bool>> SendNotificationAsync(string userId, string notification, CancellationToken cancellationToken);
+    Task<Result<bool>> SendNotificationAsync(string userId, NotificationResponse notification, CancellationToken cancellationToken);
 }
