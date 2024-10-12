@@ -64,7 +64,6 @@ public class NotificationService : INotificationService
             var notification = _mapper.Map<Notification>(request);
 
             notification.CreatedAt = DateTime.UtcNow;
-            notification.Type = NotificationType.AdoptionRequest;
 
             var existingNotification = await _notificationRepository.GetExistingNotificationAsync(notification, cancellationToken);
 
