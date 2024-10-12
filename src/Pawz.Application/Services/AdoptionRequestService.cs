@@ -95,7 +95,7 @@ public class AdoptionRequestService : IAdoptionRequestService
                     SenderId = adoptionRequest.RequesterUserId,
                     RecipientId = pet.User.Id,
                     PetId = pet.Id,
-                    Message = $"{_userAccessor.GetUserFirstName().ToUpper()} has made an adoption request for your pet: {adoptionRequest.Pet.Name}.",
+                    Message = $"{_userAccessor.GetUserFirstName()} has made an adoption request for your pet: {adoptionRequest.Pet.Name}.",
                     Type = NotificationType.AdoptionRequest
                 };
 
@@ -283,7 +283,7 @@ public class AdoptionRequestService : IAdoptionRequestService
 
             await _adoptionRepository.InsertAsync(adoption, cancellationToken);
 
-            await RejectOtherAdoptionRequestsAsync(adoptionRequest.PetId.Value, adoptionRequestId, cancellationToken);
+            await RejectOtherAdoptionRequestsAsync(adoptionRequest.PetId!.Value, adoptionRequestId, cancellationToken);
 
             var changesSaved = await _unitOfWork.SaveChangesAsync(cancellationToken) > 0;
 
@@ -291,6 +291,24 @@ public class AdoptionRequestService : IAdoptionRequestService
             {
                 _logger.LogInformation("Successfully accepted Adoption Request with Id: {AdoptionRequestId} and rejected other requests for PetId: {PetId}",
                     adoptionRequestId, adoptionRequest.PetId);
+
+                var notificationRequest = new NotificationRequest
+                {
+                    SenderId = _userAccessor.GetUserId(), // Pet owner (logged-in user)
+                    RecipientId = adoptionRequest.RequesterUserId, // Adoption requestor
+                    PetId = adoptionRequest.PetId!.Value, // or you could use the null-check operator earlier.
+                    Message = $"Your adoption request for the pet: {adoptionRequest.Pet!.Name} has been accepted.",
+                    Type = NotificationType.RequestAccepted
+                };
+
+                var notificationResult = await _notificationService.CreateNotificationAsync(notificationRequest, cancellationToken);
+
+                if (!notificationResult.IsSuccess)
+                {
+                    _logger.LogError("Failed to create notification for the Adoption Request Id: {AdoptionRequestId}", adoptionRequest.Id);
+                    return Result<bool>.Failure(NotificationErrors.CreationFailed);
+                }
+
                 return Result<bool>.Success();
             }
 
