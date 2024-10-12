@@ -1,5 +1,4 @@
 @model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
-@inject Pawz.Domain.Helpers.QueryParams QueryParams
 
 <script>
     document.addEventListener("DOMContentLoaded", function ()
@@ -53,6 +52,47 @@
     }
 </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const totalPages = 4;
+        let currentPage = new URLSearchParams(window.location.search).get('PageNumber') || 1;
+
+        function renderPagination() {
+            const paginationLinks = document.getElementById('pagination-links');
+            paginationLinks.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageItem = document.createElement('li');
+                pageItem.className = `page-item ${i == currentPage ? 'active' : ''}`;
+
+                const pageLink = document.createElement('a');
+                pageLink.className = 'page-link';
+                pageLink.href = `?PageNumber=${i}`;
+                pageLink.innerText = i;
+
+                pageItem.appendChild(pageLink);
+                paginationLinks.parentNode.insertBefore(pageItem, paginationLinks);
+            }
+
+            document.getElementById('previous-page').classList.toggle('disabled', currentPage == 1);
+            document.getElementById('next-page').classList.toggle('disabled', currentPage == totalPages);
+        }
+
+        function navigateToPage(action) {
+            if (action === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (action === 'next' && currentPage < totalPages) {
+                currentPage++;
+            }
+            window.location.search = `?PageNumber=${currentPage}`;
+        }
+
+        window.navigateToPage = navigateToPage;
+
+        renderPagination();
+    });
+</script>
+
 <section class="section-sm">
     <div class="container">
         <div class="row">
@@ -66,7 +106,7 @@
         <div class="row">
             <div class="col-lg-3 col-md-4">
                 <div class="category-sidebar">
-                    <partial name="CategorySidebar" />
+                    <partial name="CategorySidebar"/>
                 </div>
             </div>
             <div class="col-lg-9 col-md-8">
@@ -87,7 +127,7 @@
                                 <ul class="list-inline view-switcher">
                                     <li class="list-inline-item">
                                         <a href="#!" id="grid-view-btn" onclick="event.preventDefault();"
-                                            class="text-info">
+                                           class="text-info">
                                             <i class="fa fa-th-large"></i>
                                         </a>
                                     </li>
@@ -105,7 +145,7 @@
                 <div id="pet-grid-view-container">
                     @if (Model is not null || Model.Any())
                     {
-                        <partial name="PetGridView" model="Model" />
+                        <partial name="PetGridView" model="Model"/>
                     }
                     else
                     {
@@ -120,7 +160,7 @@
                 <div id="pet-list-view-container" style="display:none; margin-bottom: 1rem;">
                     @if (Model is not null || Model.Any())
                     {
-                        <partial name="PetListView" model="Model" />
+                        <partial name="PetListView" model="Model"/>
                     }
                     else
                     {
@@ -135,30 +175,19 @@
                 <div class="pagination justify-content-center">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
-                            @if (QueryParams.PageNumber > 1)
-                            {
-                            <li class="page-item">
-                                <a class="page-link" href="?PageNumber=@(QueryParams.PageNumber - 1)" aria-label="Previous">
+                            <li class="page-item" id="previous-page">
+                                <a class="page-link" href="javascript:void(0);" aria-label="Previous" onclick="navigateToPage('prev')">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
-                            }
 
-                            @for (var i = 1; i <= QueryParams.TotalPages; i++)
-                            {
-                            <li class="page-item @(QueryParams.PageNumber == i ? "active" : "")">
-                                <a class="page-link" href="?PageNumber=@i">@i</a>
-                            </li>
-                            }
+                            <li id="pagination-links"></li>
 
-                            @if (QueryParams.PageNumber < QueryParams.TotalPages)
-                            {
-                            <li class="page-item">
-                                <a class="page-link" href="?PageNumber=@(QueryParams.PageNumber + 1)" aria-label="Next">
+                            <li class="page-item" id="next-page">
+                                <a class="page-link" href="javascript:void(0);" aria-label="Next" onclick="navigateToPage('next')">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
-                            }
                         </ul>
                     </nav>
                 </div>
