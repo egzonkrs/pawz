@@ -17,6 +17,14 @@ public interface IAdoptionRequestRepository : IGenericRepository<AdoptionRequest
     Task<IEnumerable<AdoptionRequest>> GetRequestsByStatusAsync(AdoptionRequestStatus status, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Retrieves an adoption request by its Id, including the associated pet and its related entities.
+    /// </summary>
+    /// <param name="id">The Id of the adoption request to retrieve.</param>
+    /// <param name="cancellationToken">A cancellation token for asynchronous operation.</param>
+    /// <returns>The adoption request with the specified Id, including its associated pet, or null if not found.</returns>
+    Task<AdoptionRequest> GetByAdoptionIdAsync(int id, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Retrieves adoption requests based on the associated pet's ID.
     /// </summary>
     /// <param name="petId">The ID of the pet associated with the adoption requests to retrieve.</param>
