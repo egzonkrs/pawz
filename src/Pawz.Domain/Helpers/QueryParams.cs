@@ -33,7 +33,7 @@ public class QueryParams
     /// <summary>
     /// The search query to filter the results by matching specific fields.
     /// </summary>
-    public string[]? SearchProperties { get; set; } = ["name"];
+    public string[]? SearchProperties { get; set; } = ["breed"];
 
     /// <summary>
     /// The current page number for pagination. Defaults to 1.

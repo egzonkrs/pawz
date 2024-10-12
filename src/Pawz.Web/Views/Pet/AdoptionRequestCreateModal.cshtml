@@ -2,7 +2,7 @@
 
 
 <div class="modal fade" id="adoptionRequestModal" tabindex="-1" role="dialog" aria-labelledby="adoptionRequestModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-width-80" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="adoptionRequestModalLabel">Adoption Request</h5>
@@ -15,7 +15,7 @@
                     <fieldset class="p-2">
                         <input type="hidden" asp-for="PetId" />
                         <div class="modal-body">
-                            <div class="row">
+                            <div class="row m-1">
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label asp-for="CountryId" class="form-label-site">Country <span class="span-required">*</span></label>
@@ -54,7 +54,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row m-1">
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label asp-for="PostalCode" class="form-label-site">
@@ -86,7 +86,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row m-1">
                                 <div class="col-6 ">
                                     <label asp-for="OutdoorSpaceDetails" class="form-label-site">
                                         Outdoor Space Details <span class="span-required">*</span>
@@ -98,7 +98,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="row align-items-center">
+                            <div class="row align-items-center m-1">
                                 <div class="col-2 d-flex ">
                                     <div class="radio-group">
                                         <label class="radio-inline"><input class="radio-style" type="radio" asp-for="HasOutdoorSpace" value="true" onchange="toggleTextArea('HasOutdoorSpace', 'OutdoorSpaceDetails')"> Yes</label>
@@ -139,9 +139,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer d-flex justify-content-between mt-auto">
-                            <button type="button" class="btn btn-outline-danger mb-0" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary font-weight-bold mb-0">Submit</button>
+                        <div class="row m-3 justify-content-center">
+                            <div class="col-6 text-center">
+                                <button type="button" class="btn btn-outline-danger w-75 mb-0 " data-dismiss="modal">Close</button>
+
+                            </div>
+                            <div class="col-6 text-center">
+                                <button type="submit" class="btn btn-primary font-weight-bold w-75 mb-0">Submit</button>
+
+                            </div>
                         </div>
                     </fieldset>
                 </form>
@@ -152,4 +158,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
 }

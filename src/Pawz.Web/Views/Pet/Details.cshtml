@@ -5,7 +5,7 @@
     ViewBag.Title = "title";
 }
 
-<partial name="AdoptionRequestCreateModal" model="@Model.AdoptionRequestCreateModel"/>
+<partial name="AdoptionRequestCreateModal" model="@Model.AdoptionRequestCreateModel" />
 
 <section class="section bg-gray">
     <!-- Container Start -->
@@ -120,8 +120,7 @@
                         <a>See all listings</a>
                         <ul class="list-inline mt-20">
                             <li class="list-inline-item">
-                                <a
-                                    class="btn btn-widget-contact d-inline-block px-lg-5 my-1 px-md-3">
+                                <a class="btn btn-widget-contact d-inline-block px-lg-5 my-1 px-md-3">
                                     Message
                                 </a>
                             </li>
@@ -156,19 +155,32 @@
                     </div>
 
                     <div class="text-center">
-                        @if(UserAccessor.IsUserAuthenticated())
+                        @if (UserAccessor.IsUserAuthenticated())
                         {
-                            @if (Model.HasExistingAdoptionRequest)
+                            if (UserAccessor.GetUserFirstName() == Model.User?.FirstName)
                             {
                                 <button class="btn btn-primary w-100 mb-2 main-button-color" disabled>
-                                    Request Submitted
+                                    You posted this pet
                                 </button>
                             }
                             else
                             {
-                                <button class="btn btn-primary w-100 mb-2 main-button-color" data-toggle="modal" data-target="#adoptionRequestModal">
-                                    Request Adoption
-                                </button>
+                                @if (Model.HasExistingAdoptionRequest)
+                                {
+                                    <button id="cancelRequestButton"
+                                            class="btn-request-cancelled w-100"
+                                            data-adoption-request-id="@Model.AdoptionRequestId">
+                                        Cancel Request
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn adoption-request-button w-100"
+                                            data-toggle="modal"
+                                            data-target="#adoptionRequestModal">
+                                        Request Adoption
+                                    </button>
+                                }
                             }
                         }
                         else
@@ -183,14 +195,34 @@
         </div>
     </div>
     <!-- Container End -->
+    <!-- Cancel Confirmation Modal -->
+    <div class="modal fade" id="cancelConfirmationModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelModalLabel">Cancel Adoption Request</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4">
+                    Are you sure you want to cancel your adoption request?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="confirmCancelButton">Confirm</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_ValidationScriptsPartial" />
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const allCities = @Html.Raw(@Json.Serialize(Model.AdoptionRequestCreateModel.AllCities));
-            console.log("All Cities:", allCities);
 
             function populateDropdown(parentId, allItems, childId, defaultText, parentKey) {
                 const childSelect = document.querySelector(`#${childId}`);
@@ -209,7 +241,6 @@
 
                 if (parentId) {
                     const filteredItems = allItems.filter(item => item[parentKey] === parseInt(parentId));
-                    console.log(`Filtered ${defaultText}:`, filteredItems);
 
                     filteredItems.forEach(item => {
                         const option = document.createElement('option');
@@ -218,7 +249,6 @@
                         childSelect.appendChild(option);
                     });
 
-                    console.log(`${defaultText} dropdown HTML:`, childSelect.innerHTML);
                 }
 
                 $(childSelect).niceSelect('update');
@@ -229,7 +259,6 @@
 
             $('#CountryId').on('change', function () {
                 const countryId = $(this).val();
-                console.log("Selected Country ID:", countryId);
                 populateDropdown(countryId, allCities, 'CityId', 'City', 'countryId');
             });
         })
@@ -281,8 +310,9 @@
     </script>
 
     <script>
-        $(document).ready(function() {
-            $('#adoptionRequestForm').on('submit', function(e) {
+        // create adoption
+        $(document).ready(function () {
+            $('#adoptionRequestForm').on('submit', function (e) {
                 e.preventDefault();
 
                 $('.input-error-text').html('');
@@ -294,13 +324,17 @@
                     type: 'POST',
                     url: '@Url.Action("Create", "AdoptionRequest")',
                     data: formData,
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             toastr.success('Adoption request submitted successfully!');
                             $('#adoptionRequestModal').modal('hide');
+
+                            setTimeout(function () {
+                                location.reload();
+                            }, 700);
                         } else {
 
-                            $.each(response.errors, function(key, errorMessages) {
+                            $.each(response.errors, function (key, errorMessages) {
                                 var input = $('[name="' + key + '"]');
                                 input.addClass('is-invalid');
 
@@ -313,12 +347,86 @@
                             });
                         }
                     },
-                    error: function() {
+                    error: function () {
                         var errorMessage = '@TempData["ErrorMessage"]';
                         toastr.error(errorMessage);
                     }
                 });
             });
         });
+    </script>
+
+    <script>
+        // Cancel Adoption Request Button
+
+        function bindCancelRequestButton() {
+            $(document).on('click', '#cancelRequestButton', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var adoptionRequestId = $(this).data('adoption-request-id');
+                $('#cancelConfirmationModal').modal('show');
+
+                $('#confirmCancelButton').off('click').on('click', function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("CancelAdoptionRequest", "AdoptionRequest")',
+                        data: { adoptionRequestId: adoptionRequestId },
+                        success: function (response) {
+                            $('#cancelConfirmationModal').modal('hide');
+                            if (response.success) {
+                                toastr.success(response.message);
+                                updateUIAfterCancellation();
+                            } else {
+                                toastr.error(response.message || 'Failed to cancel the adoption request.');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            $('#cancelConfirmationModal').modal('hide');
+                            toastr.error('An error occurred while trying to cancel the adoption request: ' + error);
+                        }
+                    });
+                });
+            });
+        }
+
+        function updateUIAfterCancellation() {
+            var $cancelButton = $('#cancelRequestButton');
+
+            if ($cancelButton.length) {
+                $cancelButton
+                    .removeClass('btn-request-cancelled')
+                    .addClass('adoption-request-button')
+                    .text('Request Adoption')
+                    .removeAttr('id')
+                    .attr('data-toggle', 'modal')
+                    .attr('data-target', '#adoptionRequestModal')
+                    .removeAttr('data-adoption-request-id');
+
+                $cancelButton.off('click');
+
+                bindAdoptionRequestButton();
+            } else {
+                console.error('Cancel button not found');
+            }
+        }
+
+        function bindAdoptionRequestButton() {
+            $('.adoption-request-button').on('click', function (e) {
+                e.preventDefault();
+                $('#adoptionRequestModal').modal('show');
+            });
+        }
+
+        $(document).ready(function () {
+            bindCancelRequestButton();
+            bindAdoptionRequestButton();
+
+            $('#adoptionRequestModal').on('show.bs.modal', function (e) {
+                if ($(e.relatedTarget).hasClass('btn-request-cancelled')) {
+                    e.preventDefault();
+                }
+            });
+        });
+
     </script>
 }

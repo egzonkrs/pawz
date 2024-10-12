@@ -1,9 +1,9 @@
 using Pawz.Domain.Entities;
+using Pawz.Domain.Helpers;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Pawz.Domain.Helpers;
-using System.Linq;
 
 namespace Pawz.Domain.Interfaces;
 
@@ -36,6 +36,19 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     /// or null if no pet with the specified ID is found.
     /// </returns>
     Task<Pet?> GetPetByIdWithRelatedEntitiesAsync(int id, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Retrieves a single Pet entity by its ID, including all related entities such as PetImages, Breed, Species, User, and Location.
+    /// This method uses eager loading to ensure all related entities are loaded in the same query to prevent additional database calls.
+    /// </summary>
+    /// <param name="id">The unique identifier of the Pet to retrieve.</param>
+    /// <param name="userId"> The unique identifier of the User who has made a adoption request.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the asynchronous operation if needed.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains the Pet entity with all related entities loaded,
+    /// or null if no pet with the specified ID is found.
+    /// </returns>
+    Task<Pet?> GetPetByIdWithRelatedEntitiesAsync(int id, string userId, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieves all pets associated with a specific user by their unique user ID, including the details of the user.
