@@ -23,7 +23,7 @@ public static class SeedAdoptionRequests
         {
             new AdoptionRequest
             {
-                Status = AdoptionRequestStatus.Pending,
+                Status = AdoptionRequestStatus.Approved,
                 RequestDate = DateTime.UtcNow,
                 ResponseDate = DateTime.UtcNow,
                 PetId = 1,
@@ -42,7 +42,7 @@ public static class SeedAdoptionRequests
             },
             new AdoptionRequest
             {
-                Status = AdoptionRequestStatus.Pending,
+                Status = AdoptionRequestStatus.Rejected,
                 RequestDate = DateTime.UtcNow,
                 ResponseDate = DateTime.UtcNow,
                 PetId = 1,
@@ -61,7 +61,7 @@ public static class SeedAdoptionRequests
             },
             new AdoptionRequest
             {
-                Status = AdoptionRequestStatus.Pending,
+                Status = AdoptionRequestStatus.Rejected,
                 RequestDate = DateTime.UtcNow,
                 ResponseDate = DateTime.UtcNow,
                 PetId = 2,
@@ -80,7 +80,7 @@ public static class SeedAdoptionRequests
             },
             new AdoptionRequest
             {
-                Status = AdoptionRequestStatus.Pending,
+                Status = AdoptionRequestStatus.Approved,
                 RequestDate = DateTime.UtcNow,
                 ResponseDate = DateTime.UtcNow,
                 PetId = 2,
