@@ -118,6 +118,7 @@
         color: white;
         background: #4054b8;
     }
+
     .adoption-request-button:focus, adoption-request-button:active {
         outline: none;
     }
@@ -142,7 +143,8 @@
         background: #c23047;
         color: white;
     }
-   .btn-request-cancelled:focus, btn-request-cancelled:active {
+
+    .btn-request-cancelled:focus, btn-request-cancelled:active {
         outline: none;
     }
 
@@ -174,10 +176,10 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.pet-thumbnail:hover {
-    transform: scale(1.08);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-}
+    .pet-thumbnail:hover {
+        transform: scale(1.08);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
 
 /* User Avatar */
 .user-avatar-image-150 {
@@ -247,10 +249,11 @@
     font-size: 18px;
     margin-right: 5px;
 }
-.btn-delete:hover {
+
+    .btn-delete:hover {
     background: #a6194d;
-    color: white;
-}
+        color: white;
+    }
 
 /* Adoption Request Modal */
 .radio-group label {
@@ -260,7 +263,6 @@
 .modal-dialog {
     max-width: 80%;
 }
-
 .span-required {
     color: red;
 }
@@ -299,13 +301,13 @@
     transition: background-color 0.3s ease;
 }
 
-.notification-item.unread {
-    background-color: rgba(0, 0, 0, 0.2);
- }
+    .notification-item.unread {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
 
-.notification-item:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
+    .notification-item:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
 
 .notification-content {
     display: flex;
@@ -326,7 +328,6 @@
 }
 
 /* Accept / Reject Adoption Request Buttons*/
-
 .btn-ar {
     border: none;
     padding: 0px;
@@ -335,7 +336,7 @@
     width: 40px;
 }
 
-    .btn-ar:focus, btn-ar:active {
+ .btn-ar:focus, btn-ar:active {
         outline: none;
     }
 
@@ -361,6 +362,87 @@
 }
 
 .btn-ar-reject:hover {
-    background: #a6194d;
+    background: #ec3a56;
     color: white;
+}
+
+/*Create a new pet */
+.create-pet-header {
+    background: #5672f9;
+    color: white;
+}
+
+/*Most used buttons*/
+.btn-blue {
+    background: #5672f9;
+    color: white;
+}
+
+    .btn-blue:focus, btn-action:active {
+        outline: none;
+        color: white;
+    }
+
+    .btn-blue:hover {
+        background: #465ecf;
+        color: white;
+    }
+
+.btn-blue-outline {
+    border-color: #5672f9;
+    background: white;
+    color: #5672f9;
+}
+
+    .btn-blue-outline:focus, btn-action:active, .btn-blue-outline:hover {
+        background: #5672f9;
+        color: white;
+    }
+
+.btn-red {
+    background: #ec3a56;
+    color: white;
+}
+
+    .btn-red:focus, btn-action:active {
+        outline: none;
+        color: white;
+    }
+
+    .btn-red:hover {
+        background: #d1344d;
+        color: white;
+    }
+
+.btn-red-outline {
+    background: white;
+    color: #ec3a56;
+}
+
+    .btn-red-outline:focus, btn-action:active {
+        outline: none;
+        background: #ec3a56;
+        color: white;
+    }
+
+    .btn-red-outline:hover {
+        background: #ec3a56;
+        color: white;
+    }
+
+/*Underline form Create a Pet*/
+h2.position-relative {
+    display: inline-block;
+}
+
+h2 .underline {
+    content: '';
+    display: block;
+    width: 80px; /* Adjust the length of the underline */
+    height: 4px; /* Adjust the thickness of the underline */
+    background-color: #5672f9; /* Adjust the color of the underline */
+    margin: 0 auto; /* Center the underline */
+    position: absolute;
+    bottom: -1px; /* Adjust the distance of the underline from the text */
+    left: 6%;
 }
