@@ -66,4 +66,14 @@ public interface IPetService
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A result containing the pet entity if found, or an error if not found.</returns>
     Task<Result<PetResponse>> GetPetByIdWithUserAdoptionsAsync(int petId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Retrieves a list of available pets (excluding pets with Approved status) with their related entities such as breed, location, and images.
+    /// </summary>
+    /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// A result containing a list of available pets and related details.
+    /// </returns>
+    Task<Result<List<PetResponse>>> GetAvailablePetsWithDetailsAsync(QueryParams queryParams, CancellationToken cancellationToken);
 }
