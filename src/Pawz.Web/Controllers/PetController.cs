@@ -55,6 +55,7 @@ public class PetController : Controller
     public async Task<IActionResult> Index(QueryParams queryParams, CancellationToken cancellationToken)
     {
         var result = await _petService.GetAllPetsWithDetailsAsync(queryParams, cancellationToken);
+        var totalPages = queryParams.TotalPages;
 
         if (!result.IsSuccess)
         {
@@ -62,8 +63,14 @@ public class PetController : Controller
         }
 
         var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
+        var petListViewModel = new PetListViewModel
+        {
+            TotalPages = totalPages,
+            CurrentPage = queryParams.CurrentPage,
+            Pets = petViewModels // Assuming 'Pets' is a property in 'PetListViewModel'
+        };
 
-        return View(petViewModels);
+        return View(petListViewModel);
     }
 
     [HttpGet("pet/details/{id:int}")]

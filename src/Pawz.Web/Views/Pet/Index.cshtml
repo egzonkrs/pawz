@@ -1,4 +1,4 @@
-@model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
+@model Pawz.Web.Models.Pet.PetListViewModel
 
 <script>
     document.addEventListener("DOMContentLoaded", function ()
@@ -54,8 +54,8 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const totalPages = 4;
-        let currentPage = new URLSearchParams(window.location.search).get('PageNumber') || 1;
+        const totalPages = @Model.TotalPages;
+        let currentPage = @Model.CurrentPage || 1;
 
         function renderPagination() {
             const paginationLinks = document.getElementById('pagination-links');
@@ -99,7 +99,7 @@
             <div class="col-md-12">
                 <div class="search-result bg-gray">
                     <h2 id="search-result-heading">Results For Pets</h2>
-                    <p>@Model.Count() Results on @DateTime.Now.ToString("dd MMMM yyyy")</p>
+                    <p>@Model.Pets.Count() Results on @DateTime.Now.ToString("dd MMMM yyyy")</p>
                 </div>
             </div>
         </div>
@@ -143,7 +143,7 @@
                 </div>
 
                 <div id="pet-grid-view-container">
-                    @if (Model is not null || Model.Any())
+                    @if (Model is not null || Model.Pets.Any())
                     {
                         <partial name="PetGridView" model="Model"/>
                     }
@@ -158,7 +158,7 @@
                 </div>
 
                 <div id="pet-list-view-container" style="display:none; margin-bottom: 1rem;">
-                    @if (Model is not null || Model.Any())
+                    @if (Model is not null || Model.Pets.Any())
                     {
                         <partial name="PetListView" model="Model"/>
                     }
