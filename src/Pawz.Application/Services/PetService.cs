@@ -355,5 +355,4 @@ public class PetService : IPetService
             return Result<List<PetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
-
 }
