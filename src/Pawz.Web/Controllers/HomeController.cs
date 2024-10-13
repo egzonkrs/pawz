@@ -1,11 +1,11 @@
 using AutoMapper;
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
 using Pawz.Domain.Helpers;
 using Pawz.Web.Models;
 using Pawz.Web.Models.Pet;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,7 +24,7 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index(QueryParams queryParams, CancellationToken cancellationToken)
     {
-        var result = await _petService.GetAllPetsWithDetailsAsync(queryParams, cancellationToken);
+        var result = await _petService.GetAvailablePetsWithDetailsAsync(queryParams, cancellationToken);
 
         if (!result.IsSuccess)
         {
