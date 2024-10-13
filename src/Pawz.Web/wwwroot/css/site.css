@@ -263,6 +263,10 @@
 .modal-dialog {
     max-width: 80%;
 }
+.modal-dialog-40 {
+    width: 40% !important;
+}
+
 .span-required {
     color: red;
 }

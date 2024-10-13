@@ -160,7 +160,12 @@
                                 }
                                 <div class="row m-3 justify-content-center">
                                     <div class="col-6 text-left">
-                                        <button asp-action="profile" asp-controller="users" class="btn btn-red w-75 mb-0" data-dismiss="modal">Close</button>
+                                        <button type="button"
+                                                class="btn btn-red w-75 mb-0"
+                                                data-toggle="modal"
+                                                data-target="#cancelConfirmationModal">
+                                            Cancel
+                                        </button>
                                     </div>
                                     <div class="col-6 text-right">
                                         <button type="submit" class="btn btn-blue font-weight-bold w-75 mb-0">Submit</button>
@@ -173,6 +178,27 @@
             </div>
         </div>
     </section>
+
+    <!-- Confirmation Modal for Cancel -->
+    <div class="modal fade" id="cancelConfirmationModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-40">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelModalLabel">Confirm Cancel</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-5 text-base">
+                    Are you sure you want to cancel adding the new pet? Any unsaved changes will be lost.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="confirmCancelButton" class="btn btn-danger">Yes, Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No, Stay Here</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 @section Scripts {
@@ -251,6 +277,18 @@
             if (errorMessage) {
                 toastr.error(errorMessage);
             }
+        });
+    </script>
+
+
+    <script type="text/javascript">
+        // Cancel Confirm Modal
+        document.addEventListener('DOMContentLoaded', function () {
+            // Attach event listener to the confirmation cancel button
+            document.getElementById('confirmCancelButton').addEventListener('click', function () {
+                // Redirect to profile page after confirmation
+                window.location.href = '@Url.Action("Profile", "Users")';
+            });
         });
     </script>
 }
