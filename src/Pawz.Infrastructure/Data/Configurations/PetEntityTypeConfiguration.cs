@@ -21,5 +21,8 @@ public class PetEntityTypeConfiguration : IEntityTypeConfiguration<Pet>
         builder
             .Property(p => p.Price)
             .HasPrecision(18, 2);
+
+        builder
+           .HasIndex(p => p.Status);
     }
 }

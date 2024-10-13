@@ -254,7 +254,8 @@ public class AdoptionRequestService : IAdoptionRequestService
         {
             _logger.LogInformation("Started accepting Adoption Request with Id: {AdoptionRequestId}", adoptionRequestId);
 
-            var adoptionRequest = await _adoptionRequestRepository.GetByIdAsync(adoptionRequestId, cancellationToken);
+            var adoptionRequest = await _adoptionRequestRepository.GetByAdoptionIdAsync(adoptionRequestId, cancellationToken);
+
             if (adoptionRequest is null)
             {
                 _logger.LogWarning("Adoption Request with Id: {AdoptionRequestId} was not found.", adoptionRequestId);
@@ -263,6 +264,14 @@ public class AdoptionRequestService : IAdoptionRequestService
 
             adoptionRequest.Status = AdoptionRequestStatus.Approved;
             adoptionRequest.ResponseDate = DateTime.UtcNow;
+
+            var pet = adoptionRequest.Pet;
+            if (pet is null)
+            {
+                _logger.LogError("Pet with Id: {PetId} not found for Adoption Request with Id: {AdoptionRequestId}", adoptionRequest.PetId, adoptionRequestId);
+                return Result<bool>.Failure(PetErrors.NotFound(adoptionRequest.PetId!.Value));
+            }
+            pet.Status = PetStatus.Approved;
 
             var adoption = new Adoption
             {

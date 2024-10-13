@@ -27,7 +27,7 @@ public static class SeedPets
                 AgeYears = "3-7 Years",
                 About = "Buddy is the perfect adventure buddy! Whether it's a long walk in the park or just chilling at home, he’s always there to make you smile with his playful and loyal personality. Loves belly rubs and fetch!",
                 Price = 0.00m, // Free
-                Status = PetStatus.Available,
+                Status = PetStatus.Approved,
                 CreatedAt = DateTime.UtcNow,
                 LocationId = 1, // Pristina
                 PostedByUserId = userAsd.Id,
@@ -40,7 +40,7 @@ public static class SeedPets
                 AgeYears = "0-3 Months",
                 About = "Max is a little bundle of joy who’s still learning his way around the world! He’s full of energy and loves meeting new people. If you’re looking for a loyal and goofy companion, Max is your guy!",
                 Price = 0.00m, // Free
-                Status = PetStatus.Available,
+                Status = PetStatus.Approved,
                 CreatedAt = DateTime.UtcNow,
                 LocationId = 6, // Tirana
                 PostedByUserId = userAsd.Id,
