@@ -24,7 +24,7 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index(QueryParams queryParams, CancellationToken cancellationToken)
     {
-        var result = await _petService.GetAvailablePetsWithDetailsAsync(queryParams, cancellationToken);
+        var result = await _petService.GetAllPetsWithDetailsAsync(queryParams, cancellationToken);
 
         if (!result.IsSuccess)
         {
