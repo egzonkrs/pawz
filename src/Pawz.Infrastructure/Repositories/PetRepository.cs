@@ -24,7 +24,7 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
     /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
     /// <param name="cancellationToken"></param>
     /// <returns>An <see cref="IQueryable{Pet}"/> containing pets with their related entities.</returns>
-    public async Task<(List<Pet> Pets, int TotalCount)> GetAllPetsWithDetailsAsync(QueryParams queryParams, CancellationToken cancellationToken)
+    public async Task<(List<Pet> Pets, int TotalCount)> GetAvailablePetsWithDetailsAsync(QueryParams queryParams, CancellationToken cancellationToken)
     {
         var query = _dbSet
             .AsNoTracking()
@@ -86,8 +86,9 @@ public class PetRepository : GenericRepository<Pet, int>, IPetRepository
                     UserName = p.User.UserName
                 }
             })
-            .AsQueryable()
-            .Where(p => p.Status != PetStatus.Approved);
+            .Where(p => p.Status == PetStatus.Available)
+            .AsQueryable();
+
 
         query = query.ApplyQueryParams(queryParams);
 
