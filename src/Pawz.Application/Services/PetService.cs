@@ -331,28 +331,4 @@ public class PetService : IPetService
             return Result<PetResponse>.Failure(PetErrors.RetrievalError);
         }
     }
-
-    /// <summary>
-    /// Retrieves a list of available pets (excluding pets with Approved status) along with their related entities.
-    /// </summary>
-    /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>
-    /// A Result object with: Success or Failure.
-    /// </returns>
-    public async Task<Result<List<PetResponse>>> GetAvailablePetsWithDetailsAsync(QueryParams queryParams, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var pets = await _petRepository.GetAvailablePetsWithDetailsAsync(queryParams, cancellationToken);
-            var petResponses = _mapper.Map<List<PetResponse>>(pets.Pets);
-
-            return Result<List<PetResponse>>.Success(petResponses);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while retrieving available pets.");
-            return Result<List<PetResponse>>.Failure(PetErrors.RetrievalError);
-        }
-    }
 }
