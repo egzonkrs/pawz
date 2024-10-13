@@ -58,4 +58,12 @@ public interface IPetRepository : IGenericRepository<Pet, int>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A collection of pets associated with the specified user, along with the user's details.</returns>
     Task<IEnumerable<Pet>> GetPetsByUserIdWithUserDetailsAsync(string userId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Retrieves a list of available pets (excluding pets with Approved status) along with their related entites.
+    /// </summary>
+    /// <param name="queryParams">The parameters used for filtering, sorting, and pagination of pets.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>An <see cref="IQueryable{Pet}"/> containing pets with their related entities.</returns>
+    Task<(List<Pet> Pets, int TotalCount)> GetAvailablePetsWithDetailsAsync(QueryParams queryParams, CancellationToken cancellationToken);
 }
