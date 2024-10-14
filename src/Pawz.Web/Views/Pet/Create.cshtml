@@ -8,8 +8,8 @@
     <div class="row d-flex">
         <div class="col-6">
             <h2 class="pl-3 mt-3">
-                Create New Pet
-                <span class="underline"></span>
+                Create New Pet <i class="fa fa-paw p-2 create-paw" aria-hidden="true"></i>
+                <span class="underline-create"></span>
             </h2>
         </div>
         <div class="col-6">
@@ -25,8 +25,9 @@
             <div class="row justify-content-center">
                 <div class=" col-12 align-item-center">
                     <div class="border mb-4">
-                        <h3 class="p-4 create-pet-header">Add a Pet <i class="fa fa-paw p-2" aria-hidden="true"></i></h3>
+                        <h3 class="bg-gray p-4">Add a Pet </h3>
                         <form asp-action="Create" method="post" enctype="multipart/form-data">
+                            @Html.AntiForgeryToken()
                             <fieldset class="p-4">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -283,10 +284,8 @@
 
     <script type="text/javascript">
         // Cancel Confirm Modal
-        document.addEventListener('DOMContentLoaded', function () {
-            // Attach event listener to the confirmation cancel button
+        document.addEventListener('DOMContentLoaded', function () {    
             document.getElementById('confirmCancelButton').addEventListener('click', function () {
-                // Redirect to profile page after confirmation
                 window.location.href = '@Url.Action("Profile", "Users")';
             });
         });
