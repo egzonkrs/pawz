@@ -65,6 +65,7 @@
     background: #5672f9;
     color: white;
 }
+
 /* Safety tips Widget */
 .widget-tips {
     background: #fff;
@@ -218,18 +219,44 @@
 
 .btn-edit {
     background: transparent;
-    color: #f5dd2c;
-    border: 1px solid #f5dd2c;
+    color: #ccdb38;
+    border: 1px solid #ccdb38;
     font-size: 18px;
     margin-right: 5px;
 }
 
     .btn-edit:hover {
-        background: #f5dd2c;
+        background: #ccdb38;
         color: white;
     }
 
 .btn-view {
+    background: transparent;
+    color: #67a88a;
+    border: 1px solid #67a88a;
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+    .btn-view:hover {
+        background: #67a88a;
+        color: #ededeb;
+    }
+
+.btn-delete {
+    background: transparent;
+    color: #ec3a56;
+    border: 1px solid #ec3a56;
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+    .btn-delete:hover {
+        background: #ec3a56;
+        color: white;
+    }
+
+.btn-request {
     background: transparent;
     color: #5672f9;
     border: 1px solid #5672f9;
@@ -237,23 +264,11 @@
     margin-right: 5px;
 }
 
-    .btn-view:hover {
+    .btn-request:hover {
         background: #5672f9;
-        color: #ededeb;
-    }
-
-.btn-delete {
-    background: transparent;
-    color: #a6194d;
-    border: 1px solid #a6194d;
-    font-size: 18px;
-    margin-right: 5px;
-}
-
-    .btn-delete:hover {
-    background: #a6194d;
         color: white;
     }
+
 
 /* Adoption Request Modal */
 .radio-group label {
@@ -263,6 +278,11 @@
 .modal-dialog {
     max-width: 80%;
 }
+
+.modal-dialog-30 {
+    width: 30% !important;
+}
+
 .modal-dialog-40 {
     width: 40% !important;
 }
@@ -331,6 +351,44 @@
     text-align: right;
 }
 
+.notification-container {
+    position: relative;
+    display: inline-block;
+}
+
+.bell{
+    padding-top: 20px;
+}
+
+.notification-bell {
+    font-size: 24px;
+    color: #343a40;
+}
+
+.notification-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #28a745; /* Ngjyra e gjelbër për njoftimin */
+    color: white;
+    border-radius: 50%;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.badge-danger {
+    position: relative;
+    top: -10px;
+    right: 6px;
+    background-color: #5672f9;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 7px;
+    margin-right: -8px;
+    font-size: 10px;
+    font-weight: bold;
+}
 /* Accept / Reject Adoption Request Buttons*/
 .btn-ar {
     border: none;
@@ -340,7 +398,7 @@
     width: 40px;
 }
 
- .btn-ar:focus, btn-ar:active {
+    .btn-ar:focus, btn-ar:active {
         outline: none;
     }
 
@@ -352,28 +410,70 @@
     margin-left: 5px;
 }
 
+    .btn-ar-accept:hover {
+        background: #67a88a;
+        color: white;
+    }
+
+
 .btn-ar-reject {
     background: transparent;
-    color: #a6194d;
-    border: 1px solid #a6194d;
+    color: #ec3a56;
+    border: 1px solid #ec3a56;
     font-size: 18px;
     margin-right: 5px;
 }
 
-.btn-ar-accept:hover {
-    background: #16a663;
-    color: white;
-}
+    .btn-ar-reject:hover {
+        background: #ec3a56;
+        color: white;
+    }
 
-.btn-ar-reject:hover {
-    background: #ec3a56;
-    color: white;
-}
+
 
 /*Create a new pet */
-.create-pet-header {
-    background: #5672f9;
-    color: white;
+
+/*Underline form Create a Pet*/
+.create-paw {
+    color: #5672f9;
+}
+
+h2.position-relative {
+    display: inline-block;
+}
+
+h2 .underline-create {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: #5672f9;
+    margin: 0 auto;
+    position: absolute;
+    bottom: -1px;
+    left: 6%;
+}
+
+/*Edit a pet */
+.edit-paw {
+    color: #ccdb38;
+}
+
+/*Underline form Edit a Pet*/
+h2.position-relative {
+    display: inline-block;
+}
+
+h2 .underline-edit {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: #ccdb38;
+    margin: 0 auto;
+    position: absolute;
+    bottom: -1px;
+    left: 6%;
 }
 
 /*Most used buttons*/
@@ -421,6 +521,7 @@
 .btn-red-outline {
     background: white;
     color: #ec3a56;
+    border: solid 2px #ec3a56;
 }
 
     .btn-red-outline:focus, btn-action:active {
@@ -434,19 +535,34 @@
         color: white;
     }
 
-/*Underline form Create a Pet*/
-h2.position-relative {
-    display: inline-block;
+.btn-green {
+    background: #67a88a;
+    color: white;
 }
 
-h2 .underline {
-    content: '';
-    display: block;
-    width: 80px; /* Adjust the length of the underline */
-    height: 4px; /* Adjust the thickness of the underline */
-    background-color: #5672f9; /* Adjust the color of the underline */
-    margin: 0 auto; /* Center the underline */
-    position: absolute;
-    bottom: -1px; /* Adjust the distance of the underline from the text */
-    left: 6%;
+    .btn-green:focus, btn-action:active {
+        outline: none;
+        color: white;
+    }
+
+    .btn-green:hover {
+        background: #5a9178;
+        color: white;
+    }
+
+.btn-green-outline {
+    background: white;
+    color: #67a88a;
+    border: solid 2px #67a88a;
 }
+
+    .btn-green-outline:focus, btn-action:active {
+        outline: none;
+        background: #67a88a;
+        color: white;
+    }
+
+
+ 
+
+

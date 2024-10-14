@@ -40,12 +40,12 @@ else
                         <a asp-controller="AdoptionRequest"
                            asp-action="GetPetAdoptionRequests"
                            asp-route-petId="@pet.Id"
-                           class="p-2 mr-3 btn btn-outline-info btn-sm rounded-pill">Requests</a>
+                           class="p-2 mr-3 btn btn-request btn-sm rounded-pill">Requests</a>
                     </td>
                     <td class="action text-center" data-title="Action">
                         <div class="">
                             <ul class="list-inline justify-content-center" style="display: flex; justify-content: center; flex-direction:column gap: 10px;">
-                                <li class="list-inline-item">
+                                <li class="list-inline-item mr-1">
                                     <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">
                                         <button type="submit"
                                                 class="btn-action btn-view"
@@ -89,7 +89,7 @@ else
     </table>
 
     <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-40">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
@@ -101,8 +101,8 @@ else
                     Are you sure you want to delete your pet, <span id="petName"></span>?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="confirmDeleteButton">Confirm</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-green" id="confirmDeleteButton">Confirm</button>
+                    <button type="button" class="btn btn-red-outline" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
