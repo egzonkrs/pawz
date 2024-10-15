@@ -52,11 +52,11 @@ public class PetService : IPetService
     /// </summary>
     /// <param name="queryParams">The <see cref="QueryParams"/>.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    public async Task<Result<List<PetResponse>>> GetAllPetsWithDetailsAsync(QueryParams queryParams, CancellationToken cancellationToken = default)
+    public async Task<Result<List<PetResponse>>> GetAvailablePetsWithDetailsAsync(QueryParams queryParams, CancellationToken cancellationToken = default)
     {
         try
         {
-            var pets = await _petRepository.GetAllPetsWithDetailsAsync(queryParams, cancellationToken);
+            var pets = await _petRepository.GetAvailablePetsWithDetailsAsync(queryParams, cancellationToken);
             var petResponses = _mapper.Map<List<PetResponse>>(pets.Pets);
 
             return Result<List<PetResponse>>.Success(petResponses);

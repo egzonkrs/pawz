@@ -65,6 +65,7 @@
     background: #5672f9;
     color: white;
 }
+
 /* Safety tips Widget */
 .widget-tips {
     background: #fff;
@@ -118,6 +119,7 @@
         color: white;
         background: #4054b8;
     }
+
     .adoption-request-button:focus, adoption-request-button:active {
         outline: none;
     }
@@ -142,7 +144,8 @@
         background: #c23047;
         color: white;
     }
-   .btn-request-cancelled:focus, btn-request-cancelled:active {
+
+    .btn-request-cancelled:focus, btn-request-cancelled:active {
         outline: none;
     }
 
@@ -174,10 +177,10 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.pet-thumbnail:hover {
-    transform: scale(1.08);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-}
+    .pet-thumbnail:hover {
+        transform: scale(1.08);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
 
 /* User Avatar */
 .user-avatar-image-150 {
@@ -216,18 +219,44 @@
 
 .btn-edit {
     background: transparent;
-    color: #f5dd2c;
-    border: 1px solid #f5dd2c;
+    color: #ccdb38;
+    border: 1px solid #ccdb38;
     font-size: 18px;
     margin-right: 5px;
 }
 
     .btn-edit:hover {
-        background: #f5dd2c;
+        background: #ccdb38;
         color: white;
     }
 
 .btn-view {
+    background: transparent;
+    color: #67a88a;
+    border: 1px solid #67a88a;
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+    .btn-view:hover {
+        background: #67a88a;
+        color: #ededeb;
+    }
+
+.btn-delete {
+    background: transparent;
+    color: #ec3a56;
+    border: 1px solid #ec3a56;
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+    .btn-delete:hover {
+        background: #ec3a56;
+        color: white;
+    }
+
+.btn-request {
     background: transparent;
     color: #5672f9;
     border: 1px solid #5672f9;
@@ -235,22 +264,11 @@
     margin-right: 5px;
 }
 
-    .btn-view:hover {
+    .btn-request:hover {
         background: #5672f9;
-        color: #ededeb;
+        color: white;
     }
 
-.btn-delete {
-    background: transparent;
-    color: #a6194d;
-    border: 1px solid #a6194d;
-    font-size: 18px;
-    margin-right: 5px;
-}
-.btn-delete:hover {
-    background: #a6194d;
-    color: white;
-}
 
 /* Adoption Request Modal */
 .radio-group label {
@@ -259,6 +277,14 @@
 
 .modal-dialog {
     max-width: 80%;
+}
+
+.modal-dialog-30 {
+    width: 30% !important;
+}
+
+.modal-dialog-40 {
+    width: 40% !important;
 }
 
 .span-required {
@@ -299,13 +325,13 @@
     transition: background-color 0.3s ease;
 }
 
-.notification-item.unread {
-    background-color: rgba(0, 0, 0, 0.2);
- }
+    .notification-item.unread {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
 
-.notification-item:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
+    .notification-item:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
 
 .notification-content {
     display: flex;
@@ -325,8 +351,45 @@
     text-align: right;
 }
 
-/* Accept / Reject Adoption Request Buttons*/
+.notification-container {
+    position: relative;
+    display: inline-block;
+}
 
+.bell{
+    padding-top: 20px;
+}
+
+.notification-bell {
+    font-size: 24px;
+    color: #343a40;
+}
+
+.notification-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #28a745; /* Ngjyra e gjelbër për njoftimin */
+    color: white;
+    border-radius: 50%;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.badge-danger {
+    position: relative;
+    top: -10px;
+    right: 6px;
+    background-color: #5672f9;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 7px;
+    margin-right: -8px;
+    font-size: 10px;
+    font-weight: bold;
+}
+/* Accept / Reject Adoption Request Buttons*/
 .btn-ar {
     border: none;
     padding: 0px;
@@ -347,20 +410,159 @@
     margin-left: 5px;
 }
 
+    .btn-ar-accept:hover {
+        background: #67a88a;
+        color: white;
+    }
+
+
 .btn-ar-reject {
     background: transparent;
-    color: #a6194d;
-    border: 1px solid #a6194d;
+    color: #ec3a56;
+    border: 1px solid #ec3a56;
     font-size: 18px;
     margin-right: 5px;
 }
 
-.btn-ar-accept:hover {
-    background: #16a663;
+    .btn-ar-reject:hover {
+        background: #ec3a56;
+        color: white;
+    }
+
+
+
+/*Create a new pet */
+
+/*Underline form Create a Pet*/
+.create-paw {
+    color: #5672f9;
+}
+
+h2.position-relative {
+    display: inline-block;
+}
+
+h2 .underline-create {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: #5672f9;
+    margin: 0 auto;
+    position: absolute;
+    bottom: -1px;
+    left: 6%;
+}
+
+/*Edit a pet */
+.edit-paw {
+    color: #ccdb38;
+}
+
+/*Underline form Edit a Pet*/
+h2.position-relative {
+    display: inline-block;
+}
+
+h2 .underline-edit {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: #ccdb38;
+    margin: 0 auto;
+    position: absolute;
+    bottom: -1px;
+    left: 6%;
+}
+
+/*Most used buttons*/
+.btn-blue {
+    background: #5672f9;
     color: white;
 }
 
-.btn-ar-reject:hover {
-    background: #a6194d;
+    .btn-blue:focus, btn-action:active {
+        outline: none;
+        color: white;
+    }
+
+    .btn-blue:hover {
+        background: #465ecf;
+        color: white;
+    }
+
+.btn-blue-outline {
+    border-color: #5672f9;
+    background: white;
+    color: #5672f9;
+}
+
+    .btn-blue-outline:focus, btn-action:active, .btn-blue-outline:hover {
+        background: #5672f9;
+        color: white;
+    }
+
+.btn-red {
+    background: #ec3a56;
     color: white;
 }
+
+    .btn-red:focus, btn-action:active {
+        outline: none;
+        color: white;
+    }
+
+    .btn-red:hover {
+        background: #d1344d;
+        color: white;
+    }
+
+.btn-red-outline {
+    background: white;
+    color: #ec3a56;
+    border: solid 2px #ec3a56;
+}
+
+    .btn-red-outline:focus, btn-action:active {
+        outline: none;
+        background: #ec3a56;
+        color: white;
+    }
+
+    .btn-red-outline:hover {
+        background: #ec3a56;
+        color: white;
+    }
+
+.btn-green {
+    background: #67a88a;
+    color: white;
+}
+
+    .btn-green:focus, btn-action:active {
+        outline: none;
+        color: white;
+    }
+
+    .btn-green:hover {
+        background: #5a9178;
+        color: white;
+    }
+
+.btn-green-outline {
+    background: white;
+    color: #67a88a;
+    border: solid 2px #67a88a;
+}
+
+    .btn-green-outline:focus, btn-action:active {
+        outline: none;
+        background: #67a88a;
+        color: white;
+    }
+
+
+ 
+
+

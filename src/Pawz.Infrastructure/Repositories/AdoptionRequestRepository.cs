@@ -30,6 +30,26 @@ public class AdoptionRequestRepository : GenericRepository<AdoptionRequest, int>
     }
 
     /// <summary>
+    /// Retrieves an adoption request by its Id, including the associated pet and its related entities.
+    /// </summary>
+    /// <param name="id">The Id of the adoption request to retrieve.</param>
+    /// <param name="cancellationToken">A cancellation token for asynchronous operation.</param>
+    /// <returns>The adoption request with the specified Id, including its associated pet, or null if not found.</returns>
+    public async Task<AdoptionRequest> GetByAdoptionIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(ar => ar.Pet)
+                .ThenInclude(p => p.Breed)
+                .ThenInclude(b => b.Species)
+            .Include(ar => ar.Pet)
+                .ThenInclude(p => p.Location)
+                .ThenInclude(l => l.City)
+            .Include(ar => ar.Pet)
+                .ThenInclude(p => p.PetImages)
+            .FirstOrDefaultAsync(ar => ar.Id == id, cancellationToken);
+    }
+
+    /// <summary>
     /// Retrieves all adoption requests associated with a specific pet by its Id.
     /// </summary>
     /// <param name="petId">The Id of the pet whose adoption requests should be retrieved.</param>
