@@ -9,25 +9,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{664D406C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E2DA20AA-28D1-455C-BF50-C49A8F831633}"
 	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
 		.editorconfig = .editorconfig
+		.gitignore = .gitignore
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pawz.Web", "src\Pawz.Web\Pawz.Web.csproj", "{273EFD21-8E94-445D-A69D-3C0663E8AC77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pawz.Web", "src\Pawz.Web\Pawz.Web.csproj", "{273EFD21-8E94-445D-A69D-3C0663E8AC77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pawz.Infrastructure", "src\Pawz.Infrastructure\Pawz.Infrastructure.csproj", "{F480D2ED-86FE-4A03-B346-D04232762542}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pawz.Infrastructure", "src\Pawz.Infrastructure\Pawz.Infrastructure.csproj", "{F480D2ED-86FE-4A03-B346-D04232762542}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pawz.Domain", "src\Pawz.Domain\Pawz.Domain.csproj", "{B0BD2067-9AB0-429C-B776-05947150D021}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pawz.Domain", "src\Pawz.Domain\Pawz.Domain.csproj", "{B0BD2067-9AB0-429C-B776-05947150D021}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pawz.Application", "src\Pawz.Application\Pawz.Application.csproj", "{80CFAD7A-DB00-4AFE-8F57-F8DCC296991B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pawz.Application", "src\Pawz.Application\Pawz.Application.csproj", "{80CFAD7A-DB00-4AFE-8F57-F8DCC296991B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pawz.Application.UnitTests", "Pawz.Application.UnitTests\Pawz.Application.UnitTests.csproj", "{E28D1990-8AF1-4688-853C-6F0EA51B13DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{273EFD21-8E94-445D-A69D-3C0663E8AC77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -46,11 +45,22 @@ Global
 		{80CFAD7A-DB00-4AFE-8F57-F8DCC296991B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80CFAD7A-DB00-4AFE-8F57-F8DCC296991B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80CFAD7A-DB00-4AFE-8F57-F8DCC296991B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E28D1990-8AF1-4688-853C-6F0EA51B13DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E28D1990-8AF1-4688-853C-6F0EA51B13DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E28D1990-8AF1-4688-853C-6F0EA51B13DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E28D1990-8AF1-4688-853C-6F0EA51B13DE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{273EFD21-8E94-445D-A69D-3C0663E8AC77} = {6ED356A7-8B47-4613-AD01-C85CF28491BD}
 		{F480D2ED-86FE-4A03-B346-D04232762542} = {6ED356A7-8B47-4613-AD01-C85CF28491BD}
 		{B0BD2067-9AB0-429C-B776-05947150D021} = {6ED356A7-8B47-4613-AD01-C85CF28491BD}
 		{80CFAD7A-DB00-4AFE-8F57-F8DCC296991B} = {6ED356A7-8B47-4613-AD01-C85CF28491BD}
+		{E28D1990-8AF1-4688-853C-6F0EA51B13DE} = {664D406C-2F83-48F0-BFC3-408D5CB53C65}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {02AEA23E-9EDB-4954-8D2E-63D4B278FEDE}
 	EndGlobalSection
 EndGlobal
