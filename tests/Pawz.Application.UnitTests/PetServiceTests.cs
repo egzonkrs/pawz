@@ -50,7 +50,7 @@ public class PetServiceTests
     }
 
     [Fact]
-    public async Task CreatePetAsync__WithValidData__ReturnsSuccess()
+    public async Task CreatePetAsync_WithValidData_ReturnsSuccess()
     {
         // Arrange
         var validRequest = new PetCreateRequest
@@ -119,7 +119,7 @@ public class PetServiceTests
     }
 
     [Fact]
-    public async Task CreatePetAsync__WithInvalidData__ReturnsFailure()
+    public async Task CreatePetAsync_WithInvalidData_ReturnsFailure()
     {
         // Arrange
         var invalidRequest = new PetCreateRequest
@@ -156,7 +156,7 @@ public class PetServiceTests
     }
 
     [Fact]
-    public async Task CreatePetAsync__WhenLocationInsertFails__ReturnsFailure()
+    public async Task CreatePetAsync_WhenLocationInsertFails_ReturnsFailure()
     {
         // Arrange
         var petCreateRequest = new PetCreateRequest
@@ -263,7 +263,7 @@ public class PetServiceTests
     }*/
 
     [Fact]
-    public async Task CreatePetAsync__WhenUnitOfWorkFails__ThrowsException()
+    public async Task CreatePetAsync_WhenUnitOfWorkFails_ThrowsException()
     {
         // Arrange
         var validRequest = new PetCreateRequest
