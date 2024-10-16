@@ -63,7 +63,7 @@
 
             for (let i = 1; i <= totalPages; i++) {
                 const pageItem = document.createElement('li');
-                pageItem.className = `page-item ${i == currentPage ? 'active' : ''}`;
+                pageItem.className = `page-item ${i === currentPage ? 'active' : ''}`;
 
                 const pageLink = document.createElement('a');
                 pageLink.className = 'page-link';

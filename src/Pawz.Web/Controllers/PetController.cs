@@ -61,7 +61,7 @@ public class PetController : Controller
             return View("Error");
         }
 
-        var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
+        var petViewModels = _mapper.Map<PetListViewModel>(result.Value);
 
         return View(petViewModels);
     }
@@ -99,7 +99,7 @@ public class PetController : Controller
         petViewModel.HasExistingAdoptionRequest = result.Value.HasExistingAdoptionRequest;
         petViewModel.AdoptionRequestId = result.Value.AdoptionRequestId;
 
-        return View(petViewModel); ;
+        return View(petViewModel);
     }
 
     [Authorize]

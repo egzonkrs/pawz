@@ -63,7 +63,7 @@ public class PetService : IPetService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets with related entities.", nameof(PetService));
+            _logger.LogError(ex, "An error occurred in the {ServiceName} while attempting to retrieve all pets with related entities", nameof(PetService));
             return Result<List<PetResponse>>.Failure(PetErrors.RetrievalError);
         }
     }
