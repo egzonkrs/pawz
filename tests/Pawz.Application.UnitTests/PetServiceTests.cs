@@ -191,4 +191,141 @@ public class PetServiceTests
         _mockLocationService.Verify(x => x.CreateLocationAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
+    /*[Fact]
+    public async Task CreatePetAsync__WhenPetCreationFails__ReturnsFailure()
+    {
+        // Arrange
+        var validRequest = new PetCreateRequest
+        {
+            Name = "Test Pet",
+            BreedId = 1,
+            LocationId=1,
+            CityId = 1,
+            Address = "123 Pet St",
+            PostalCode = "12345",
+            ImageFiles = new List<IFormFile>(),
+            Status = PetStatus.Available
+        };
+
+        // Mock pet repository to simulate a valid pet insert
+        _mockPetRepository.Setup(x => x.InsertAsync(It.IsAny<Pet>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(1);
+
+        // Mock unit of work to simulate a failure during the save operation
+        _mockUnitOfWork.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(0);  // Simulate pet creation failure
+
+        // Act
+        var result = await _petService.CreatePetAsync(validRequest, CancellationToken.None);
+
+        // Assert that the operation failed due to pet creation failure
+        Assert.False(result.IsSuccess);
+        Assert.Equal(PetErrors.CreationFailed.Code, result.Errors.First().Code);
+        Assert.Equal(PetErrors.CreationFailed.Description, result.Errors.First().Description);
+
+        // Verify that pet creation failed (UnitOfWork.SaveChangesAsync was called but returned 0)
+        _mockUnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+    }*/
+
+    /*[Fact]
+    public async Task CreatePetAsync__WhenUnitOfWorkFails__ReturnsFailure()
+    {
+        // Arrange
+        var validRequest = new PetCreateRequest
+        {
+            Name = "Test Pet",
+            BreedId = -12,
+            LocationId = 0,
+            CityId = 1,
+            Address = "123 Pet St",
+            PostalCode = "12345",
+            ImageFiles = new List<IFormFile>(),
+            Status = PetStatus.Available
+        };
+
+        // Mock pet repository to simulate a valid pet insert
+        _mockPetRepository.Setup(x => x.InsertAsync(It.IsAny<Pet>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(1);
+
+        // Mock unit of work to simulate a failure during the save operation
+        _mockUnitOfWork.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(0);  // Simulate failure
+
+        // Act
+        var result = await _petService.CreatePetAsync(validRequest, CancellationToken.None);
+
+        // Assert
+        Assert.False(result.IsSuccess);
+        Assert.Equal(PetErrors.CreationUnexpectedError.Code, result.Errors.First().Code);
+        Assert.Equal(PetErrors.CreationUnexpectedError.Description, result.Errors.First().Description);
+
+        _mockUnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+    }*/
+
+    [Fact]
+    public async Task CreatePetAsync__WhenUnitOfWorkFails__ThrowsException()
+    {
+        // Arrange
+        var validRequest = new PetCreateRequest
+        {
+            Name = "Test Pet",
+            BreedId = 0,
+            AgeYears = "2",
+            About = "A friendly test pet",
+            Price = -100,
+            CityId = 1,
+            Address = "123 Test St.",
+            PostalCode = "54321",
+            ImageFiles = new List<IFormFile>(),
+            Status = PetStatus.Available
+        };
+
+        var location = new Location
+        {
+            Id = 1,
+            CityId = validRequest.CityId,
+            Address = validRequest.Address,
+            PostalCode = validRequest.PostalCode
+        };
+
+        var pet = new Pet
+        {
+            Id = 1,
+            Name = validRequest.Name,
+            BreedId = validRequest.BreedId,
+            AgeYears = validRequest.AgeYears,
+            About = validRequest.About,
+            Price = validRequest.Price,
+            Location = location,
+            PostedByUserId = "user-123",
+            Status = PetStatus.Available
+        };
+
+        _mockUserAccessor.Setup(x => x.GetUserId()).Returns("user-123");
+
+        _mockLocationService.Setup(x => x.CreateLocationAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result<Location>.Success(location));
+
+        _mockMapper.Setup(x => x.Map<Pet>(It.IsAny<PetCreateRequest>()))
+            .Returns(pet);
+
+        _mockPetRepository.Setup(x => x.InsertAsync(It.IsAny<Pet>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(1);
+
+        _mockUnitOfWork.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(0); // Simulate a failure (e.g., no rows affected)
+
+        // Act
+        var result = await _petService.CreatePetAsync(validRequest, CancellationToken.None);
+
+        // Assert
+        Assert.False(result.IsSuccess);
+        Assert.Equal(PetErrors.CreationFailed.Code, result.Errors.First().Code);
+        Assert.Equal(PetErrors.CreationFailed.Description, result.Errors.First().Description);
+
+        _mockLocationService.Verify(x => x.CreateLocationAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()), Times.Once);
+        _mockPetRepository.Verify(x => x.InsertAsync(It.IsAny<Pet>(), It.IsAny<CancellationToken>()), Times.Once);
+        _mockUnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+    }
+
 }
