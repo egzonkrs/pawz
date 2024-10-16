@@ -16,4 +16,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Pawz.Application\Pawz.Application.csproj" />
+  </ItemGroup>
+
 </Project>
