@@ -10,7 +10,7 @@
 <div class="container">
     <h2 class="pl-4 pb-5">
         Adoption Requests
-        <button onclick="window.history.back()" class="btn btn-outline-info float-right mr-2">
+        <button onclick="window.history.back()" class="btn btn-blue-outline float-right mr-2">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
             Back to my pets
         </button>
@@ -66,11 +66,11 @@
                                     <td class="text-center align-middle">
                                         @if (request.Status == AdoptionRequestStatusViewModel.Approved)
                                         {
-                                            <span class="badge badge-success">Request Approved</span>
+                                            <button type="button" class="btn btn-blue" disabled>Request Approved</button>
                                         }
                                         else if (request.Status == AdoptionRequestStatusViewModel.Rejected)
                                         {
-                                            <span class="badge badge-danger">Request Rejected</span>
+                                            <button type="button" class="btn btn-red" disabled>Request Rejected</button>
                                         }
                                         else
                                         {
