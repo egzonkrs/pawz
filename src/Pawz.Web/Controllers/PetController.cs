@@ -267,6 +267,7 @@ public class PetController : Controller
         {
             return NotFound();
         }
+
         return View(petResult.Value);
     }
 
@@ -282,7 +283,7 @@ public class PetController : Controller
             result.AddErrorsToModelState(ModelState);
             return View();
         }
+
         return RedirectToAction("Profile", "Users");
     }
 }
-
