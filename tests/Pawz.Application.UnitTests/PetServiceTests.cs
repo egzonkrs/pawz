@@ -64,51 +64,17 @@ public class PetServiceTests
     public async Task CreatePetAsync_WithValidData_ReturnsSuccess()
     {
         // Arrange
-        /*var validRequest = new PetCreateRequest
-        {
-            Name = "Buddy",
-            BreedId = 1,
-            AgeYears = "2",
-            About = "Friendly dog",
-            Price = 100,
-            CityId = 1,
-            Address = "123 Pet St.",
-            PostalCode = "12345",
-            ImageFiles = new List<IFormFile>(),
-            Status = PetStatus.Available
-        };*/
         var validRequest = PetServiceDataHelper.GenerateValidPetCreateRequest();
-        var pet = PetServiceDataHelper.GenerateValidPet();
-        var location = PetServiceDataHelper.GenerateValidLocation();
-
-        /*var location = new Location
-        {
-            Id = 1,
-            CityId = validRequest.CityId,
-            Address = validRequest.Address,
-            PostalCode = validRequest.PostalCode
-        };*/
-
-        /*var pet = new Pet
-        {
-            Id = 1,
-            Name = validRequest.Name,
-            BreedId = validRequest.BreedId,
-            AgeYears = validRequest.AgeYears,
-            About = validRequest.About,
-            Price = validRequest.Price,
-            Location = location,
-            PostedByUserId = "user-123",
-            Status = PetStatus.Available
-        };*/
+        var randomLocation = PetServiceDataHelper.GenerateValidLocation();
+        var randomPet = PetServiceDataHelper.GenerateValidPet();
 
         _mockUserAccessor.Setup(x => x.GetUserId()).Returns("user-123");
 
         _mockLocationService.Setup(x => x.CreateLocationAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Result<Location>.Success(location));
+            .ReturnsAsync(Result<Location>.Success(randomLocation));
 
         _mockMapper.Setup(x => x.Map<Pet>(It.IsAny<PetCreateRequest>()))
-            .Returns(pet);
+            .Returns(randomPet);
 
         _mockPetRepository.Setup(x => x.InsertAsync(It.IsAny<Pet>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(1);
@@ -124,7 +90,7 @@ public class PetServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        Assert.Equal(1, result.Value);
+        Assert.Equal(randomPet.Id, result.Value);
 
         _mockLocationService.Verify(x => x.CreateLocationAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()), Times.Once);
         _mockPetRepository.Verify(x => x.InsertAsync(It.IsAny<Pet>(), It.IsAny<CancellationToken>()), Times.Once);

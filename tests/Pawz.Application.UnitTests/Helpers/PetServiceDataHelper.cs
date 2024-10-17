@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Pawz.Application.UnitTests.Helpers;
+
 public static class PetServiceDataHelper
 {
     public static PetCreateRequest GenerateValidPetCreateRequest()
