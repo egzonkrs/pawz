@@ -21,7 +21,7 @@ public static class PetServiceDataHelper
         {
             Name = faker.Name.FirstName(),
             BreedId = faker.Random.Int(1, 10),
-            AgeYears = faker.Random.Int(1, 10).ToString(),
+            AgeYears = faker.Random.Int(1, 10).ToString() + " months",
             About = faker.Lorem.Sentence(),
             Price = faker.Random.Decimal(50, 500),
             CityId = faker.Random.Int(1, 100),
@@ -53,11 +53,11 @@ public static class PetServiceDataHelper
             Id = faker.Random.Int(1, 1000),
             Name = faker.Name.FirstName(),
             BreedId = faker.Random.Int(1, 10),
-            AgeYears = faker.Random.Int(1, 10).ToString(),
+            AgeYears = faker.Random.Int(1, 10).ToString() + " months",
             About = faker.Lorem.Sentence(),
             Price = faker.Random.Decimal(50, 500),
             Location = GenerateValidLocation(),
-            PostedByUserId = "user-123",
+            PostedByUserId = faker.Name.FullName(),
             Status = PetStatus.Available
         };
     }

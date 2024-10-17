@@ -68,7 +68,7 @@ public class PetServiceTests
         var randomLocation = PetServiceDataHelper.GenerateValidLocation();
         var randomPet = PetServiceDataHelper.GenerateValidPet();
 
-        _mockUserAccessor.Setup(x => x.GetUserId()).Returns("user-123");
+        _mockUserAccessor.Setup(x => x.GetUserId()).Returns(randomPet.PostedByUserId);
 
         _mockLocationService.Setup(x => x.CreateLocationAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result<Location>.Success(randomLocation));
@@ -161,48 +161,17 @@ public class PetServiceTests
     public async Task CreatePetAsync_WhenUnitOfWorkFails_ThrowsException()
     {
         // Arrange
-        var validRequest = new PetCreateRequest
-        {
-            Name = "Test Pet",
-            BreedId = 0,
-            AgeYears = "2",
-            About = "A friendly test pet",
-            Price = -100,
-            CityId = 1,
-            Address = "123 Test St.",
-            PostalCode = "54321",
-            ImageFiles = new List<IFormFile>(),
-            Status = PetStatus.Available
-        };
+        var petCreateRequest = PetServiceDataHelper.GenerateValidPetCreateRequest();
+        var randomLocation = PetServiceDataHelper.GenerateValidLocation();
+        var randomPet = PetServiceDataHelper.GenerateValidPet();
 
-        var location = new Location
-        {
-            Id = 1,
-            CityId = validRequest.CityId,
-            Address = validRequest.Address,
-            PostalCode = validRequest.PostalCode
-        };
-
-        var pet = new Pet
-        {
-            Id = 1,
-            Name = validRequest.Name,
-            BreedId = validRequest.BreedId,
-            AgeYears = validRequest.AgeYears,
-            About = validRequest.About,
-            Price = validRequest.Price,
-            Location = location,
-            PostedByUserId = "user-123",
-            Status = PetStatus.Available
-        };
-
-        _mockUserAccessor.Setup(x => x.GetUserId()).Returns("user-123");
+        _mockUserAccessor.Setup(x => x.GetUserId()).Returns(randomPet.PostedByUserId);
 
         _mockLocationService.Setup(x => x.CreateLocationAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Result<Location>.Success(location));
+            .ReturnsAsync(Result<Location>.Success(randomLocation));
 
         _mockMapper.Setup(x => x.Map<Pet>(It.IsAny<PetCreateRequest>()))
-            .Returns(pet);
+            .Returns(randomPet);
 
         _mockPetRepository.Setup(x => x.InsertAsync(It.IsAny<Pet>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(1);
@@ -211,7 +180,7 @@ public class PetServiceTests
             .ReturnsAsync(0); // Simulate a failure (e.g., no rows affected)
 
         // Act
-        var result = await _petService.CreatePetAsync(validRequest, CancellationToken.None);
+        var result = await _petService.CreatePetAsync(petCreateRequest, CancellationToken.None);
 
         // Assert
         Assert.False(result.IsSuccess);
