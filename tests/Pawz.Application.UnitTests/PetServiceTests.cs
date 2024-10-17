@@ -49,6 +49,16 @@ public class PetServiceTests
         );
     }
 
+    private void VerifyNoOtherCalls()
+    {
+        _mockPetRepository.VerifyNoOtherCalls();
+        _mockUnitOfWork.VerifyNoOtherCalls();
+        _mockFileUploaderService.VerifyNoOtherCalls();
+        _mockLocationService.VerifyNoOtherCalls();
+        _mockUserAccessor.VerifyNoOtherCalls();
+        _mockMapper.VerifyNoOtherCalls();
+    }
+
     [Fact]
     public async Task CreatePetAsync_WithValidData_ReturnsSuccess()
     {
@@ -116,6 +126,10 @@ public class PetServiceTests
         _mockPetRepository.Verify(x => x.InsertAsync(It.IsAny<Pet>(), It.IsAny<CancellationToken>()), Times.Once);
         _mockUnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Exactly(2));
         _mockFileUploaderService.Verify(x => x.UploadFileAsync(It.IsAny<IFormFile>()), Times.Exactly(validRequest.ImageFiles.Count()));
+        _mockUserAccessor.Verify(x => x.GetUserId(), Times.Exactly(2));
+        _mockMapper.Verify(x => x.Map<Pet>(It.IsAny<PetCreateRequest>()), Times.Once);
+
+        VerifyNoOtherCalls();
     }
 
     [Fact]
@@ -153,6 +167,9 @@ public class PetServiceTests
         _mockUnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         _mockFileUploaderService.Verify(x => x.UploadFileAsync(It.IsAny<IFormFile>()), Times.Never);
         _mockLocationService.Verify(x => x.CreateLocationAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()), Times.Once);
+        _mockUserAccessor.Verify(x => x.GetUserId(), Times.Once);
+
+        VerifyNoOtherCalls();
     }
 
     [Fact]
@@ -189,6 +206,9 @@ public class PetServiceTests
         _mockUnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         _mockFileUploaderService.Verify(x => x.UploadFileAsync(It.IsAny<IFormFile>()), Times.Never);
         _mockLocationService.Verify(x => x.CreateLocationAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()), Times.Once);
+        _mockUserAccessor.Verify(x => x.GetUserId(), Times.Once);
+
+        VerifyNoOtherCalls();
     }
 
     /*[Fact]
@@ -326,6 +346,10 @@ public class PetServiceTests
         _mockLocationService.Verify(x => x.CreateLocationAsync(It.IsAny<Location>(), It.IsAny<CancellationToken>()), Times.Once);
         _mockPetRepository.Verify(x => x.InsertAsync(It.IsAny<Pet>(), It.IsAny<CancellationToken>()), Times.Once);
         _mockUnitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _mockUserAccessor.Verify(x => x.GetUserId(), Times.Exactly(2));
+        _mockMapper.Verify(x => x.Map<Pet>(It.IsAny<PetCreateRequest>()), Times.Once);
+
+        VerifyNoOtherCalls();
     }
 
 }
