@@ -55,7 +55,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const totalPages = @Model.TotalPages;
-        let currentPage = parseInt(new URLSearchParams(window.location.search).get('PageNumber')) || @Model.CurrentPage || 1;
+        let currentPage = parseInt(new URLSearchParams(window.location.search).get('PageNumber')) || 1;
 
         function renderPagination() {
             const paginationLinks = document.getElementById('pagination-links');
@@ -71,10 +71,9 @@
                 pageLink.innerText = i;
 
                 pageItem.appendChild(pageLink);
-                paginationLinks.appendChild(pageItem); // Use appendChild for correct placement
+                paginationLinks.parentNode.insertBefore(pageItem, paginationLinks);
             }
 
-            // Disable previous and next links when at boundaries
             document.getElementById('previous-page').classList.toggle('disabled', currentPage <= 1);
             document.getElementById('next-page').classList.toggle('disabled', currentPage >= totalPages);
         }
