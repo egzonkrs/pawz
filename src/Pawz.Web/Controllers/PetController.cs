@@ -61,7 +61,11 @@ public class PetController : Controller
             return View("Error");
         }
 
-        var petViewModels = _mapper.Map<PetListViewModel>(result.Value);
+        var petViewModels = new PetListViewModel
+        {
+            Pets = _mapper.Map<IEnumerable<PetViewModel>>(result.Value.Pets),
+            TotalPages = result.Value.TotalPages,
+        };
 
         return View(petViewModels);
     }
