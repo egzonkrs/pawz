@@ -64,7 +64,7 @@ public static class SeedPets
             new Pet
             {
                 Name = "Rocky",
-                BreedId = 4, // Beagle
+                BreedId = 2, // Beagle
                 AgeYears = "3-6 Months",
                 About = "Rocky is an energetic, curious little pup who loves to explore everything! Whether he's sniffing out new trails or playing in the yard, he’s always on the move. Perfect for active families who love the outdoors!",
                 Price = 0.00m, // Free
