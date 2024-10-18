@@ -61,7 +61,11 @@ public class PetController : Controller
             return View("Error");
         }
 
-        var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
+        var petViewModels = new PetListViewModel
+        {
+            Pets = _mapper.Map<IEnumerable<PetViewModel>>(result.Value.Pets),
+            TotalPages = result.Value.TotalPages,
+        };
 
         return View(petViewModels);
     }
@@ -99,7 +103,7 @@ public class PetController : Controller
         petViewModel.HasExistingAdoptionRequest = result.Value.HasExistingAdoptionRequest;
         petViewModel.AdoptionRequestId = result.Value.AdoptionRequestId;
 
-        return View(petViewModel); ;
+        return View(petViewModel);
     }
 
     [Authorize]
@@ -263,6 +267,7 @@ public class PetController : Controller
         {
             return NotFound();
         }
+
         return View(petResult.Value);
     }
 
@@ -278,7 +283,7 @@ public class PetController : Controller
             result.AddErrorsToModelState(ModelState);
             return View();
         }
+
         return RedirectToAction("Profile", "Users");
     }
 }
-

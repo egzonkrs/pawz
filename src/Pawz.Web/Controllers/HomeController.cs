@@ -31,7 +31,7 @@ public class HomeController : Controller
             return View("Error");
         }
 
-        var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value);
+        var petViewModels = _mapper.Map<IEnumerable<PetViewModel>>(result.Value.Pets);
 
         return View(petViewModels);
     }

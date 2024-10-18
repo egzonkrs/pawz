@@ -27,6 +27,7 @@ public class WebMappingProfile : Profile
         CreateMap<UserPetRequest, UserPetViewModel>().ReverseMap();
 
         CreateMap<PetResponse, PetViewModel>().ReverseMap();
+        CreateMap<PetResponse, PetViewModel>();
         CreateMap<PetRequest, PetViewModel>().ReverseMap();
 
         CreateMap<PetCreateViewModel, PetCreateRequest>().ReverseMap();

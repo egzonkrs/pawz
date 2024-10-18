@@ -1,8 +1,8 @@
-@model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
+@model Pawz.Web.Models.Pet.PetListViewModel
 
 <div class="product-grid-list">
     <div class="row mt-30">
-        @foreach (var pet in Model)
+        @foreach (var pet in Model.Pets)
         {
             <div class="col-lg-4 col-md-6">
                 <div class="product-item">

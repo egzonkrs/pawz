@@ -1,6 +1,6 @@
-@model IEnumerable<Pawz.Web.Models.Pet.PetViewModel>
+@model Pawz.Web.Models.Pet.PetListViewModel
 
-@foreach (var pet in Model)
+@foreach (var pet in Model.Pets)
 {
     <div class="ad-listing-list mt-20">
         <a href="@Url.Action("Details", "Pet", new { id = pet.Id })" class="text-decoration-none text-dark">

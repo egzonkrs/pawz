@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Pawz.Application.Interfaces;
 using Pawz.Application.Services;
 using Pawz.Domain.Abstractions;
+using Pawz.Domain.Helpers;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
 using Pawz.Infrastructure.Repositories;
@@ -39,7 +40,7 @@ public class DataModule : IModule
         );
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+        services.AddScoped<QueryParams>();
         services.AddScoped<IPetRepository, PetRepository>();
         services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
         services.AddScoped<IBreedRepository, BreedRepository>();
