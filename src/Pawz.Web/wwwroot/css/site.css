@@ -100,11 +100,12 @@
 
 /* Adoption Request Button */
 .adoption-request-button {
-    font-size: 30px !important;
+    font-size: 1rem !important;
     width: 80px;
     height: 70px !important;
-    padding: 58px 30px 58px;
+    /*padding: 58px 30px 58px;*/
     margin-bottom: 30px;
+    border-radius: 8px !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -125,10 +126,11 @@
     }
 
 .btn-request-cancelled {
-    font-size: 30px !important;
+    font-size: 1rem !important;
     width: 80px;
     height: 70px !important;
-    padding: 58px 30px 58px;
+    /*padding: 58px 30px 58px;*/
+    border-radius: 8px !important;
     margin-bottom: 30px;
     display: flex;
     align-items: center;

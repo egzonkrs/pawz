@@ -67,7 +67,11 @@
 
                 const pageLink = document.createElement('a');
                 pageLink.className = 'page-link';
-                pageLink.href = `?PageNumber=${i}`;
+
+                // Preserve existing query parameters and update the PageNumber
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('PageNumber', i);
+                pageLink.href = `?${urlParams.toString()}`;
                 pageLink.innerText = i;
 
                 pageItem.appendChild(pageLink);
@@ -84,7 +88,10 @@
             } else if (action === 'next' && currentPage < totalPages) {
                 currentPage++;
             }
-            window.location.search = `?PageNumber=${currentPage}`;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set('PageNumber', currentPage);
+            window.location.search = `?${urlParams.toString()}`;
         }
 
         window.navigateToPage = navigateToPage;

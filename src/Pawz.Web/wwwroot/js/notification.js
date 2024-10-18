@@ -3,7 +3,7 @@ let connection;
 document.addEventListener('DOMContentLoaded', function () {
     if (userIsLoggedIn()) {
         initializeNotificationSystem();
-    } 
+    }
 });
 
 function userIsLoggedIn() {
@@ -69,7 +69,7 @@ function addNotificationToUI(notification) {
     if (notificationList) {
         const notificationElement = document.createElement('div');
         notificationElement.className = 'notification-item' + (notification.isRead ? '' : ' unread');
-        
+
         const notificationId = notification.id || `temp-${Date.now()}`;
         notificationElement.setAttribute('data-notification-id', notificationId);
 
