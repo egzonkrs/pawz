@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Pawz.Infrastructure.Repositories;
 
-public class WishlistRepository : GenericRepository<Wishlist, int>, IWishlistRepository
+public class WishlistRepository : GenericRepository<Wishlist, string>, IWishlistRepository
 {
     public WishlistRepository(AppDbContext context) : base(context)
     {
@@ -25,9 +25,9 @@ public class WishlistRepository : GenericRepository<Wishlist, int>, IWishlistRep
                 {
                     Id = p.Id,
                     Name = p.Name,
-                    AgeYears = p.AgeYears,  // Include the required AgeYears property
-                    About = p.About,        // Include the required About property
-                    PostedByUserId = p.PostedByUserId,  // Include the required PostedByUserId property
+                    AgeYears = p.AgeYears,
+                    About = p.About,
+                    PostedByUserId = p.PostedByUserId,
                     Breed = new Breed
                     {
                         Name = p.Breed.Name,

@@ -41,9 +41,17 @@ public class DataModule : IModule
                 .AddInterceptors(new SoftDeleteInterceptor())
         );
 
+        services.AddSingleton<IConnectionMultiplexer>(config =>
+        {
+            var connString = _configuration.GetConnectionString("Redis") ??
+                             throw new Exception("Cannot get redis connection string"); //change this later so the app runs even if Redis is not available
+            var configuration = ConfigurationOptions.Parse(connString, true);
+            return ConnectionMultiplexer.Connect(configuration);
+        });
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        services.AddScoped<IWishlistService, WishlistService>();
+        services.AddSingleton<IWishlistService, WishlistService>();
 
         services.AddScoped<IWishlistRepository, WishlistRepository>();
         services.AddScoped<IPetRepository, PetRepository>();

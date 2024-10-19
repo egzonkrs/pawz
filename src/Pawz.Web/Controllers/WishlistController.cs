@@ -1,9 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Identity.Client;
 using Pawz.Application.Interfaces;
-using System;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Pawz.Web.Controllers;
@@ -11,53 +7,59 @@ namespace Pawz.Web.Controllers;
 public class WishlistController : Controller
 {
     private readonly IWishlistService _wishlistService;
-    private readonly ILogger<WishlistController> _logger;
-    public WishlistController(IWishlistService wishlistService, ILogger<WishlistController> logger)
+    public WishlistController(IWishlistService wishlistService)
     {
         _wishlistService = wishlistService;
-        _logger = logger;
     }
 
-    [HttpGet]
     public async Task<IActionResult> Index()
     {
         var result = await _wishlistService.GetWishlistForUserAsync();
 
         if (!result.IsSuccess)
         {
-            return BadRequest(result.Errors);
+            return BadRequest("Failed to get wishlist.");
         }
 
-        // Log or inspect result.Value before returning it to the view
-        _logger.LogInformation($"Fetched wishlist: {JsonSerializer.Serialize(result.Value)}");
-
-        return View("Index", result.Value);
+        return View(result.Value);
     }
 
-
     [HttpPost]
-    public async Task<IActionResult> AddToWishlist(int petId)
+    public async Task<IActionResult> AddPetToWishlist(int petId)
     {
         var result = await _wishlistService.AddPetToWishlistAsync(petId);
 
         if (!result.IsSuccess)
         {
-            return BadRequest(result.Errors);
+            return BadRequest("Failed to add pet to wishlist.");
         }
 
-        return View("Index", result.Value);
+        return RedirectToAction("Index");
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> RemoveFromWishlist(int petId)
+    [HttpPost]
+    public async Task<IActionResult> RemovePetFromWishlist(int petId)
     {
         var result = await _wishlistService.RemovePetFromWishlistAsync(petId);
 
         if (!result.IsSuccess)
         {
-            return BadRequest(result.Errors);
+            return BadRequest("Failed to remove pet from wishlist.");
         }
 
-        return View("Index", result.Value);
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ClearWishlist(string Id)
+    {
+        var success = await _wishlistService.DeleteWishlistAsync(Id);
+
+        if (!success)
+        {
+            return BadRequest("Failed to clear wishlist.");
+        }
+
+        return RedirectToAction("Index");
     }
 }
