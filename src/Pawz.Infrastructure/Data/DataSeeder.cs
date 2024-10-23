@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Pawz.Infrastructure.Data;
 
-public class DataSeeder
+public static class DataSeeder
 {
-    public static async Task SeedData(AppDbContext context, IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
+    public static async Task SeedData(AppDbContext context, IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, IRedisRepository redisRepository)
     {
         await SeedUsers.SeedUserData(userManager);
         await SeedSpecies.SeedSpeciesData(context);
@@ -21,6 +21,8 @@ public class DataSeeder
         await SeedAdoptionRequests.SeedAdoptionRequestData(context);
         await SeedAdoptions.SeedAdoptionData(context);
         await SeedWishlists.SeedWishlistData(context);
+
+        await SeedRedisData.SeedWishlistsToRedis(context, redisRepository);
 
         await unitOfWork.SaveChangesAsync();
     }

@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Pawz.Domain.Entities;
 using Pawz.Domain.Interfaces;
 using Pawz.Infrastructure.Data;
-using Pawz.Infrastructure.Data.Seed;
 using System;
 using System.Threading.Tasks;
 
@@ -27,11 +26,12 @@ public static class ApplicationBuilderExtensions
             var context = services.GetRequiredService<AppDbContext>();
             var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
             var unitOfWork = services.GetRequiredService<IUnitOfWork>();
+            var redisRepository = services.GetRequiredService<IRedisRepository>();
 
             await context.Database.MigrateAsync();
             logger.LogInformation("Database migration completed.");
 
-            await DataSeeder.SeedData(context, unitOfWork, userManager);
+            await DataSeeder.SeedData(context, unitOfWork, userManager, redisRepository);
             logger.LogInformation("Data seeding completed.");
         }
         catch (Exception ex)

@@ -51,9 +51,10 @@ public class DataModule : IModule
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        services.AddSingleton<IWishlistService, WishlistService>();
+        services.AddScoped<IWishlistService, WishlistService>();
 
         services.AddScoped<IWishlistRepository, WishlistRepository>();
+        services.AddScoped<IRedisRepository, RedisRepository>();
         services.AddScoped<IPetRepository, PetRepository>();
         services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
         services.AddScoped<IBreedRepository, BreedRepository>();

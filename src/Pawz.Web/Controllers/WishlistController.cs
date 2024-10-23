@@ -51,11 +51,11 @@ public class WishlistController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> ClearWishlist(string Id)
+    public async Task<IActionResult> ClearWishlist(string id)
     {
-        var success = await _wishlistService.DeleteWishlistAsync(Id);
+        var result = await _wishlistService.DeleteWishlistAsync(id);
 
-        if (!success)
+        if (!result.IsSuccess)
         {
             return BadRequest("Failed to clear wishlist.");
         }

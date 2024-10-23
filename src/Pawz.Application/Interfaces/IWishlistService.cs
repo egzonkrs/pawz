@@ -9,7 +9,5 @@ public interface IWishlistService
     Task<Result<Wishlist>> GetWishlistForUserAsync();
     Task<Result<Wishlist>> AddPetToWishlistAsync(int petId);
     Task<Result<Wishlist>> RemovePetFromWishlistAsync(int petId);
-    Task<Wishlist> SetWishlistAsync(Wishlist wishlist);
-    Task<Wishlist> GetWishlistAsync(string key);
-    Task<bool> DeleteWishlistAsync(string key);
+    Task<Result<bool>> DeleteWishlistAsync(string userId);
 }
