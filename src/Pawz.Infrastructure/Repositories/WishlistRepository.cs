@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Pawz.Infrastructure.Repositories;
 
-public class WishlistRepository : GenericRepository<Wishlist, string>, IWishlistRepository
+public class WishlistRepository : GenericRepository<Wishlist, int>, IWishlistRepository
 {
     public WishlistRepository(AppDbContext context) : base(context)
     {

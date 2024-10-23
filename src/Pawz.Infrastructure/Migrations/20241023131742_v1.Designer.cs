@@ -12,8 +12,8 @@ using Pawz.Infrastructure.Data;
 namespace Pawz.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241009180348_WishlistAndPetJointTable")]
-    partial class WishlistAndPetJointTable
+    [Migration("20241023131742_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -333,6 +333,9 @@ namespace Pawz.Infrastructure.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("WishlistId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -655,7 +658,8 @@ namespace Pawz.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Wishlists");
                 });
@@ -863,8 +867,8 @@ namespace Pawz.Infrastructure.Migrations
             modelBuilder.Entity("Pawz.Domain.Entities.Wishlist", b =>
                 {
                     b.HasOne("Pawz.Domain.Entities.ApplicationUser", "User")
-                        .WithMany("WishlistedPets")
-                        .HasForeignKey("UserId")
+                        .WithOne("Wishlist")
+                        .HasForeignKey("Pawz.Domain.Entities.Wishlist", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -898,7 +902,8 @@ namespace Pawz.Infrastructure.Migrations
 
                     b.Navigation("Pets");
 
-                    b.Navigation("WishlistedPets");
+                    b.Navigation("Wishlist")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Pawz.Domain.Entities.Breed", b =>

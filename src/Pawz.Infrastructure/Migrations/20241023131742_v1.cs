@@ -35,6 +35,7 @@ namespace Pawz.Infrastructure.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    WishlistId = table.Column<int>(type: "int", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -193,6 +194,27 @@ namespace Pawz.Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Wishlists",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Wishlists", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Wishlists_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -411,31 +433,27 @@ namespace Pawz.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Wishlists",
+                name: "WishlistPets",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PetId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    WishlistId = table.Column<int>(type: "int", nullable: false),
+                    PetId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Wishlists", x => x.Id);
+                    table.PrimaryKey("PK_WishlistPets", x => new { x.WishlistId, x.PetId });
                     table.ForeignKey(
-                        name: "FK_Wishlists_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Wishlists_Pets_PetId",
+                        name: "FK_WishlistPets_Pets_PetId",
                         column: x => x.PetId,
                         principalTable: "Pets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WishlistPets_Wishlists_WishlistId",
+                        column: x => x.WishlistId,
+                        principalTable: "Wishlists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -582,14 +600,15 @@ namespace Pawz.Infrastructure.Migrations
                 column: "PostedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Wishlists_PetId",
-                table: "Wishlists",
+                name: "IX_WishlistPets_PetId",
+                table: "WishlistPets",
                 column: "PetId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Wishlists_UserId",
                 table: "Wishlists",
-                column: "UserId");
+                column: "UserId",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -620,13 +639,16 @@ namespace Pawz.Infrastructure.Migrations
                 name: "PetImages");
 
             migrationBuilder.DropTable(
-                name: "Wishlists");
+                name: "WishlistPets");
 
             migrationBuilder.DropTable(
                 name: "AdoptionRequests");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Wishlists");
 
             migrationBuilder.DropTable(
                 name: "Pets");
