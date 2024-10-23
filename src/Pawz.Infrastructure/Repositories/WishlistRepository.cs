@@ -29,6 +29,7 @@ public class WishlistRepository : GenericRepository<Wishlist, int>, IWishlistRep
                     AgeYears = p.AgeYears,
                     About = p.About,
                     PostedByUserId = p.PostedByUserId,
+
                     Breed = new Breed
                     {
                         Name = p.Breed.Name,
@@ -37,18 +38,35 @@ public class WishlistRepository : GenericRepository<Wishlist, int>, IWishlistRep
                             Name = p.Breed.Species.Name,
                             Description = p.Breed.Species.Description
                         }
+                    },
+
+                    PetImages = p.PetImages.Select(img => new PetImage
+                    {
+                        Id = img.Id,
+                        ImageUrl = img.ImageUrl,
+                        IsPrimary = img.IsPrimary
+                    }).ToList(),
+
+                    User = new ApplicationUser
+                    {
+                        FirstName = p.User.FirstName,
+                        LastName = p.User.LastName
+                    },
+
+                    Location = new Location
+                    {
+                        Address = p.Location.Address,
+                        City = new City
+                        {
+                            Name = p.Location.City.Name,
+                            Country = new Country
+                            {
+                                Name = p.Location.City.Country.Name
+                            }
+                        }
                     }
                 }).ToList()
             })
             .FirstOrDefaultAsync(cancellationToken);
-    }
-
-    public async Task<Wishlist?> GetWishlistPetsWithRelatedEntities(string userId, CancellationToken cancellationToken = default)
-    {
-        return await _dbSet
-            .Include(w => w.Pets)
-            .ThenInclude(p => p.Breed)
-            .ThenInclude(p => p.Species)
-            .FirstOrDefaultAsync(w => w.UserId == userId && !w.IsDeleted, cancellationToken);
     }
 }
