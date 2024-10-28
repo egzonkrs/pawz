@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Pawz.Application.Models;
 using Pawz.Application.Models.BreedModels;
 using Pawz.Application.Models.NotificationModels;
@@ -15,6 +16,7 @@ using Pawz.Web.Models.Pet;
 using Pawz.Web.Models.PetImage;
 using Pawz.Web.Models.Species;
 using Pawz.Web.Models.User;
+using Pawz.Web.Models.Wishlist;
 
 namespace Pawz.Web.Mapping;
 
@@ -54,6 +56,8 @@ public class WebMappingProfile : Profile
         CreateMap<City, CityViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
 
         CreateMap<Country, CountryViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
+
+        CreateMap<Wishlist, WishlistViewModel>().ReverseMap(); //I've added this temporarily to solve an automapper issue for now
 
         CreateMap<PetCreateViewModel, PetCreateRequest>();
         CreateMap<Pet, AdoptionRequestCreateModel>();

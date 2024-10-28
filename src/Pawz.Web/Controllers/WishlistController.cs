@@ -1,5 +1,7 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Pawz.Application.Interfaces;
+using Pawz.Web.Models.Wishlist;
 using System.Threading.Tasks;
 
 namespace Pawz.Web.Controllers;
@@ -7,9 +9,11 @@ namespace Pawz.Web.Controllers;
 public class WishlistController : Controller
 {
     private readonly IWishlistService _wishlistService;
-    public WishlistController(IWishlistService wishlistService)
+    private readonly IMapper _mapper;
+    public WishlistController(IWishlistService wishlistService, IMapper mapper)
     {
         _wishlistService = wishlistService;
+        _mapper = mapper;
     }
 
     public async Task<IActionResult> Index()
@@ -21,7 +25,9 @@ public class WishlistController : Controller
             return BadRequest("Failed to get wishlist.");
         }
 
-        return View(result.Value);
+        var wishlistViewModel = _mapper.Map<WishlistViewModel>(result.Value);
+
+        return View(wishlistViewModel);
     }
 
     [HttpPost]

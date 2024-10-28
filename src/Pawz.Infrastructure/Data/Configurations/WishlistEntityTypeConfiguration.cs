@@ -17,17 +17,16 @@ public class WishlistEntityTypeConfiguration : IEntityTypeConfiguration<Wishlist
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(w => w.Pets)
-            .WithMany(p => p.WishlistedByUsers);
-
-        builder.HasMany(w => w.Pets)
             .WithMany(p => p.WishlistedByUsers)
             .UsingEntity<Dictionary<string, object>>(
                 "WishlistPets",
-                j => j.HasOne<Pet>()
+                j => j
+                    .HasOne<Pet>()
                     .WithMany()
                     .HasForeignKey("PetId")
                     .OnDelete(DeleteBehavior.Cascade),
-                j => j.HasOne<Wishlist>()
+                j => j
+                    .HasOne<Wishlist>()
                     .WithMany()
                     .HasForeignKey("WishlistId")
                     .OnDelete(DeleteBehavior.Cascade),
@@ -35,7 +34,6 @@ public class WishlistEntityTypeConfiguration : IEntityTypeConfiguration<Wishlist
                 {
                     j.HasKey("WishlistId", "PetId");
                     j.ToTable("WishlistPets");
-                }
-            );
+                });
     }
 }

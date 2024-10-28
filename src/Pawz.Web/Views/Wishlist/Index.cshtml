@@ -1,4 +1,4 @@
-@model Wishlist
+@model Pawz.Web.Models.Wishlist.WishlistViewModel
 
 @{
     ViewBag.Title = "Your Wishlist";
@@ -15,7 +15,7 @@
                     <div class="product-item">
                         <div class="card" data-pet-id="@pet.Id">
                             <img class="card-img-top img-fluid hover-effects"
-                                 src="/images/pets/@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")"
+                                 src="@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")"
                                  alt="Pet Image"/>
 
                             <!-- Remove from wishlist button (Filled heart icon) -->
