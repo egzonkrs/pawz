@@ -88,37 +88,4 @@ else
     </section>
 }
 
-<script>
-    $(document).ready(function () {
-        // Remove from wishlist via AJAX when image is clicked
-        $('.card-img-top').click(function (event) {
-            event.preventDefault(); // Prevent default action
-
-            // Get pet ID from the closest card's data attribute
-            var petId = $(this).closest('.card').data('pet-id');
-
-            // Confirm the action with the user
-            if (!confirm("Are you sure you want to remove this pet from your wishlist?")) {
-                return;
-            }
-
-            // AJAX request to remove pet from wishlist
-            $.ajax({
-                url: '/Wishlist/RemoveFromWishlist',
-                type: 'POST',
-                data: { petId: petId },
-                success: function (result) {
-                    if (result.success) {
-                        // Fade out and remove the card for the removed pet
-                        $('[data-pet-id="' + petId + '"]').fadeOut();
-                    } else {
-                        alert(result.message || "Error removing from wishlist");
-                    }
-                },
-                error: function () {
-                    alert("Error removing from wishlist");
-                }
-            });
-        });
-    });
-</script>
+<script src="~/js/petFunctions.js"></script>
