@@ -7,6 +7,18 @@
 
 @if (Model != null && Model.Pets.Any())
 {
+    <section class="page-search">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <form asp-action="ClearWishlist" method="post">
+                        <input type="hidden" name="Id" value="@Model.UserId"/>
+                        <input type="submit" value="Clear Wishlist" class="btn btn-outline-light w-100"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
     <div class="container">
         <div class="row mt-30">
             @foreach (var pet in Model.Pets)
@@ -15,8 +27,9 @@
                     <div class="product-item">
                         <div class="card" data-pet-id="@pet.Id">
                             <img class="card-img-top img-fluid hover-effects"
-                                 src="@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")"
-                                 alt="Pet Image"/>
+                                 src="@(string.IsNullOrEmpty(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl) ? "/images/default-image.webp" : $"/images/pets/{pet.PetImages.FirstOrDefault(img => img.IsPrimary)?.ImageUrl}")"
+                                 alt="Pet Image"
+                                 onclick="removeFromWishlist('@pet.Id')"/>
 
                             <!-- Remove from wishlist button (Filled heart icon) -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="wishlist-heart bi bi-heart-fill remove-from-wishlist" viewBox="0 0 16 16">
@@ -32,50 +45,71 @@
                             </h4>
                             <p class="card-text">@pet.About</p>
                             <ul class="list-inline">
-                                <li><strong>Species:</strong> @(pet.Breed.Species.Name)</li>
-                                <li><strong>Breed:</strong> @(pet.Breed.Name)</li>
-                                <li><strong>Location:</strong> @pet.Location?.Address, @pet.Location?.City?.Name,
-                                    @pet.Location?.City?.Country?.Name </li>
-                                <li><strong>Age:</strong> @pet.AgeYears</li>
-                                <li><strong>Posted by:</strong> @(pet.User?.FirstName) @(pet.User?.LastName)</li>
-                                <li><strong>Date:</strong> @pet.CreatedAt.ToString("d MMMM yyyy")</li>
-                                <li><strong>Price:</strong> @pet.Price.ToString("C")</li>
+                                <li>
+                                    <strong>Species:</strong> @(pet.Breed.Species.Name)
+                                </li>
+                                <li>
+                                    <strong>Breed:</strong> @(pet.Breed.Name)
+                                </li>
+                                <li>
+                                    <strong>Location:</strong> @pet.Location?.Address, @pet.Location?.City?.Name,
+                                    @pet.Location?.City?.Country?.Name
+                                </li>
+                                <li>
+                                    <strong>Age:</strong> @pet.AgeYears
+                                </li>
+                                <li>
+                                    <strong>Posted by:</strong> @(pet.User?.FirstName) @(pet.User?.LastName)
+                                </li>
+                                <li>
+                                    <strong>Date:</strong> @pet.CreatedAt.ToString("d MMMM yyyy")
+                                </li>
+                                <li>
+                                    <strong>Price:</strong> @pet.Price.ToString("C")
+                                </li>
                             </ul>
-                            <form asp-action="RemovePetFromWishlist" method="post">
-                                <input type="hidden" name="petId" value="@pet.Id" />
-                                <input type="submit" value="Remove from Wishlist" class="btn btn-danger" />
-                            </form>
                         </div>
                     </div>
                 </div>
             }
         </div>
-        <form asp-action="ClearWishlist" method="post" class="text-right">
-            <input type="hidden" name="Id" value="@Model.UserId" />
-            <input type="submit" value="Clear Wishlist" class="btn btn-warning" />
-        </form>
     </div>
 }
 else
 {
-    <p>Your wishlist is empty.</p>
+    <section class="page-search">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    Your wishlist is empty
+                </div>
+            </div>
+        </div>
+    </section>
 }
 
 <script>
     $(document).ready(function () {
-        // Remove from wishlist via AJAX
-        $('.remove-from-wishlist').click(function (event) {
-            event.preventDefault(); // Prevent form submission
+        // Remove from wishlist via AJAX when image is clicked
+        $('.card-img-top').click(function (event) {
+            event.preventDefault(); // Prevent default action
 
+            // Get pet ID from the closest card's data attribute
             var petId = $(this).closest('.card').data('pet-id');
 
+            // Confirm the action with the user
+            if (!confirm("Are you sure you want to remove this pet from your wishlist?")) {
+                return;
+            }
+
+            // AJAX request to remove pet from wishlist
             $.ajax({
                 url: '/Wishlist/RemoveFromWishlist',
-                type: 'POST', // Changed from DELETE to POST
+                type: 'POST',
                 data: { petId: petId },
                 success: function (result) {
                     if (result.success) {
-                        // Remove the card from the UI
+                        // Fade out and remove the card for the removed pet
                         $('[data-pet-id="' + petId + '"]').fadeOut();
                     } else {
                         alert(result.message || "Error removing from wishlist");

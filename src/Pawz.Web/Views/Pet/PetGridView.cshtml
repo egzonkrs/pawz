@@ -9,8 +9,9 @@
 
                     <div class="card" data-pet-id="@pet.Id">
                         <img class="card-img-top img-fluid hover-effects"
-                             src="/images/pets/@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "/images/default-image.webp")"
-                             alt="Pet Image"/>
+                             src="/images/pets/@(pet.PetImages?.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ?? "default-image.webp")"
+                             alt="Pet Image"
+                             onclick="addToWishlist('@pet.Id')" />
 
                         <!-- Empty heart icon (for adding to wishlist) -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="wishlist-heart bi bi-heart add-to-wishlist" viewBox="0 0 16 16">
@@ -47,54 +48,4 @@
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        // Add to wishlist
-        $('.add-to-wishlist').click(function () {
-            var petId = $(this).closest('.card').data('pet-id');
 
-            $.ajax({
-                url: '/Wishlist/AddToWishlist',
-                type: 'POST',
-                data: { petId: petId },
-                success: function (result) {
-                    if (result.success) {
-                        // Hide the empty heart and show the filled heart
-                        $('[data-pet-id="' + petId + '"] .add-to-wishlist').hide();
-                        $('[data-pet-id="' + petId + '"] .remove-from-wishlist').show();
-                    } else {
-                        alert(result.message || "Error adding to wishlist");
-                    }
-                },
-                error: function () {
-                    alert("Error adding to wishlist");
-                }
-            });
-        });
-
-        // Remove from wishlist
-        $('.remove-from-wishlist').click(function () {
-            var petId = $(this).closest('.card').data('pet-id');
-
-            $.ajax({
-                url: '/Wishlist/RemoveFromWishlist',
-                type: 'POST', // Changed from DELETE to POST
-                data: { petId: petId },
-                success: function (result) {
-                    if (result.success) {
-                        // Hide the filled heart and show the empty heart
-                        $('[data-pet-id="' + petId + '"] .remove-from-wishlist').hide();
-                        $('[data-pet-id="' + petId + '"] .add-to-wishlist').show();
-                    } else {
-                        alert(result.message || "Error removing from wishlist");
-                    }
-                },
-                error: function () {
-                    alert("Error removing from wishlist");
-                }
-            });
-        });
-    });
-
-
-</script>
